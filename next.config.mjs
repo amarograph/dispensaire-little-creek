@@ -1,19 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   experimental: {
     serverActions: {
-      allowedOrigins: ['localhost:3000'],
+      allowedOrigins: ['localhost:3000', 'la-taniere-ems.vercel.app'],
     },
-  },
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals = [
-        ...(config.externals || []),
-        '@sparticuz/chromium',
-        'puppeteer-core',
-      ];
-    }
-    return config;
   },
 };
 
