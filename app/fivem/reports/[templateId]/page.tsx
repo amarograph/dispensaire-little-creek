@@ -10,7 +10,7 @@ const templateConfigs: Record<string, {
   fields: { key: string; label: string; type: string; placeholder: string; required?: boolean }[];
   systemPrompt: string;
 }> = {
-  intervention: {
+  traumatologie: {
     title: 'Traumatologie',
     icon: '🦴',
     fields: [
@@ -255,20 +255,18 @@ export default function TemplatePage() {
       .join('\n');
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('/api/generate-report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: config.systemPrompt,
-          messages: [{ role: 'user', content: `Voici les informations du rapport :\n\n${userContent}\n\nGénère le rapport médical complet.` }],
+          systemPrompt: config.systemPrompt,
+          userContent,
         }),
       });
 
       const data = await response.json();
-      const text = data.content?.[0]?.text || '';
-      setGeneratedReport(text);
+      if (data.error) throw new Error(data.error);
+      setGeneratedReport(data.report);
       setStep('preview');
     } catch (err) {
       setError('Erreur lors de la génération du rapport.');
