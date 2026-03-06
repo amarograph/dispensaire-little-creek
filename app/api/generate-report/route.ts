@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-6',
+        model: 'claude-3-5-sonnet-20241022',
         max_tokens: 2000,
         system: systemPrompt,
         messages: [{ role: 'user', content: `Voici les informations du rapport :\n\n${userContent}\n\nGénère le rapport médical complet.` }],
