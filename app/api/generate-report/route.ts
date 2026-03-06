@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const runtime = 'nodejs';
+
 export async function POST(req: NextRequest) {
   try {
     const { systemPrompt, userContent } = await req.json();
@@ -8,7 +10,7 @@ export async function POST(req: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY!,
+        'x-api-key': process.env.ANTHROPIC_API_KEY ?? '',
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
@@ -20,15 +22,10 @@ export async function POST(req: NextRequest) {
     });
 
     const data = await response.json();
-    const report = data.content?.[0]?.text || '';
+    const report = data.content?.[0]?.text ?? '';
 
     return NextResponse.json({ report });
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: 'Erreur génération' }, { status: 500 });
   }
 }
-```
-
-Ensuite ajoutez dans `.env.local` :
-```
-ANTHROPIC_API_KEY=sb_publishable_oSpjrx45XnK0Ge-pWqgtCQ_AYsAmM6n
