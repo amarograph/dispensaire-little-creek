@@ -64,6 +64,7 @@ const TEMPLATE = `⚕️ RAPPORT D'INTERVENTION MÉDICALE — SAMS
 🏥 Patient : {{civilite}} {{prenom}} {{nom}}
 📋 Motif : {{motif}}
 📍 Localisation : {{localisation}}
+🚦 Triage : {{triage}}
 ⚠️ Gravité : {{gravite}}
 
 ---
@@ -76,6 +77,7 @@ Type de blessure : {{types_blessure}}
 Blessure / symptôme principal : {{diagnostic}}
 Localisation : {{localisation_precise}} {{localisation_libre}}
 Niveau de douleur : {{douleur}}/10
+Douleur par zone : {{douleur_zones_detail}}
 Signes cliniques observés : {{signes_cliniques}}
 Observations complémentaires : {{observations}}
 
@@ -280,9 +282,21 @@ export default function TemplatePage() {
     // Fusionner les motifs multi-sélection + champ libre
     const motifParts = [vals.motifs_selection, vals.motif_libre].filter(Boolean);
     const motif = motifParts.join(' — ') || '—';
+    // Triage formaté
+    const triageMap: Record<string,string> = { VERT:'🟢 Blessures mineures', JAUNE:'🟡 Urgence différée', ROUGE:'🔴 Urgence vitale', NOIR:'⚫ Décès' };
+    const triage = triageMap[vals.triage||''] || '—';
+    // Douleur par zone
+    const zones = (vals.douleur_zones||'').split(',').map((s:string)=>s.trim()).filter(Boolean);
+    const douleur_zones_detail = zones.length > 0
+      ? zones.map((z:string)=>{
+          const key = `douleur_${z.replace(/[^a-zA-Z0-9]/g,'_')}`;
+          const v = vals[key]||'—';
+          return `${z}: ${v}/10`;
+        }).join(' | ')
+      : '—';
     try {
       const res = await fetch('/api/generate-report',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({template:TEMPLATE,values:{...vals,gravite:gt,motif}})});
+        body:JSON.stringify({template:TEMPLATE,values:{...vals,gravite:gt,motif,triage,douleur_zones_detail}})});
       const data = await res.json();
       if(data.error) throw new Error(data.error);
       setReport(data.report); setStep('preview');
@@ -389,6 +403,23 @@ export default function TemplatePage() {
             <input value={vals.motif_libre||''} onChange={e=>set('motif_libre',e.target.value)} placeholder="Autre motif ou précisions..." className={baseInput}/>
           </div>
           <div><L t="Lieu d'intervention"/><FI k="localisation" v={vals} s={set} ph="Adresse ou quartier..."/></div>
+          {/* TRIAGE */}
+          <div className="col-span-2">
+            <L t="Triage"/>
+            <div className="flex flex-wrap gap-3 mt-1">
+              {[
+                { val: 'VERT',  label: 'Blessures mineures',  dot: 'bg-emerald-400', active: 'border-emerald-500 bg-emerald-500/15 text-emerald-400', icon: '🟢' },
+                { val: 'JAUNE', label: 'Urgence différée',    dot: 'bg-yellow-400',  active: 'border-yellow-400 bg-yellow-400/15 text-yellow-400',   icon: '🟡' },
+                { val: 'ROUGE', label: 'Urgence vitale',       dot: 'bg-red-500',     active: 'border-red-500 bg-red-500/15 text-red-400',             icon: '🔴' },
+                { val: 'NOIR',  label: 'Décès',                dot: 'bg-gray-400',    active: 'border-gray-400 bg-gray-400/15 text-gray-300',          icon: '⚫' },
+              ].map(t=>(
+                <button key={t.val} onClick={()=>set('triage', vals.triage===t.val?'':t.val)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-bold tracking-wide transition ${vals.triage===t.val ? t.active : 'border-white/10 text-gray-600 hover:border-white/20'}`}>
+                  <span className={`w-2.5 h-2.5 rounded-full ${t.dot}`}></span>{t.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </Section>
 
         {/* S2 BLESSURES */}
@@ -463,15 +494,36 @@ export default function TemplatePage() {
             </div>
           </div>
           <div>
-            <L t="Douleur par zone"/>
-            <div className="flex flex-wrap gap-2">
+            <L t="Douleur par zone (sélectionnez les zones atteintes)"/>
+            <div className="flex flex-wrap gap-2 mb-3">
               {['Tête','Visage','Cou','Épaule G.','Épaule D.','Thorax','Abdomen','Dos','Bras G.','Bras D.','Main G.','Main D.','Bassin','Jambe G.','Jambe D.','Pied G.','Pied D.'].map(z=>(
-                <Chip key={z} label={z} active={vals.douleur_zones?.includes(z)} onClick={()=>{toggleList('douleur_zones',z);if(!vals.douleur)set('douleur','5');}} ac="border-purple-400 bg-purple-500/15 text-purple-300"/>
+                <Chip key={z} label={z} active={(vals.douleur_zones||'').includes(z)} onClick={()=>toggleList('douleur_zones',z)} ac="border-purple-400 bg-purple-500/15 text-purple-300"/>
               ))}
             </div>
+            {/* Champ de douleur dynamique par zone sélectionnée */}
+            {(vals.douleur_zones||'').split(',').map(s=>s.trim()).filter(Boolean).length > 0 && (
+              <div className="mt-2 space-y-2">
+                <p className="text-xs text-gray-500 mb-2">Intensité de douleur par zone (0–10)</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {(vals.douleur_zones||'').split(',').map(s=>s.trim()).filter(Boolean).map(zone=>{
+                    const key = `douleur_${zone.replace(/[^a-zA-Z0-9]/g,'_')}`;
+                    const v = vals[key]||'';
+                    const n = parseFloat(v);
+                    const col = !v||isNaN(n)?'border-gray-700 bg-gray-900 text-gray-400':n>=8?'border-red-500/60 bg-red-500/10 text-red-400':n>=5?'border-yellow-400/60 bg-yellow-400/10 text-yellow-400':'border-emerald-500/60 bg-emerald-500/10 text-emerald-400';
+                    return (
+                      <div key={zone} className={`flex items-center border rounded-xl overflow-hidden ${col}`}>
+                        <span className="px-3 text-xs font-semibold text-gray-400 whitespace-nowrap">{zone}</span>
+                        <input type="number" min="0" max="10" value={v} onChange={e=>set(key,e.target.value)} placeholder="0–10" className="flex-1 bg-transparent px-2 py-2 text-current placeholder-gray-700 focus:outline-none text-sm font-mono text-right"/>
+                        <span className="px-3 text-xs opacity-50">/10</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div><L t="Douleur (/10)"/><FI k="douleur" v={vals} s={set} ph="Ex: 7"/></div>
+            <div><L t="Douleur globale (/10)"/><FI k="douleur" v={vals} s={set} ph="Ex: 7"/></div>
             <div><L t="État des constantes"/><FI k="etat_constantes" v={vals} s={set} ph="Ex: Constantes stables"/></div>
           </div>
         </Section>
