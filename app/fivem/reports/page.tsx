@@ -7,14 +7,14 @@ const MONO = "'Share Tech Mono', 'Courier New', monospace";
 const DISPLAY = "'Rajdhani', 'Arial', sans-serif";
 
 const TYPES = [
-  { id: 'traumatologie', icon: '🦴', label: 'Traumatologie',      desc: 'Fractures, plaies, blessures par balle ou arme blanche.', urgency: 'HAUTE',    color: '#F97316' },
-  { id: 'chirurgie',     icon: '🔪', label: 'Chirurgie',          desc: 'Interventions chirurgicales, sutures profondes.',          urgency: 'CRITIQUE', color: '#EF4444' },
-  { id: 'consultation',  icon: '🩺', label: 'Consultation',       desc: 'Consultation générale, examens, bilans de santé.',         urgency: 'STANDARD', color: '#38BDF8' },
-  { id: 'urgence',       icon: '🚨', label: 'Urgence vitale',     desc: 'Arrêt cardiaque, détresse respiratoire, coma.',            urgency: 'VITAL',    color: '#EF4444' },
-  { id: 'intoxication',  icon: '☠️', label: 'Intoxication',       desc: 'Overdose, empoisonnement, intoxication chimique.',         urgency: 'HAUTE',    color: '#A855F7' },
-  { id: 'psychiatrie',   icon: '🧠', label: 'Psychiatrie',        desc: 'Troubles mentaux, crises psychiatriques.',                 urgency: 'MODÉRÉE',  color: '#14B8A6' },
-  { id: 'legiste',       icon: '🔍', label: 'Médecin légiste',    desc: 'Examens légaux, rapports médico-légaux, autopsies.',       urgency: 'LÉGISTE',  color: '#94A3B8' },
-  { id: 'deces',         icon: '📋', label: 'Certificat de décès',desc: 'Constatation officielle du décès, rapport de cause.',      urgency: 'OFFICIEL', color: '#64748B' },
+  { id: 'traumatologie', icon: '🦴', label: 'Traumatologie',       desc: 'Fractures, plaies, blessures par balle ou arme blanche.', urgency: 'HAUTE',    color: '#F97316' },
+  { id: 'chirurgie',     icon: '🔪', label: 'Chirurgie',           desc: 'Interventions chirurgicales, sutures profondes.',          urgency: 'CRITIQUE', color: '#EF4444' },
+  { id: 'consultation',  icon: '🩺', label: 'Consultation',        desc: 'Consultation générale, examens, bilans de santé.',         urgency: 'STANDARD', color: '#38BDF8' },
+  { id: 'urgence',       icon: '🚨', label: 'Urgence vitale',      desc: 'Arrêt cardiaque, détresse respiratoire, coma.',            urgency: 'VITAL',    color: '#EF4444' },
+  { id: 'intoxication',  icon: '☠️', label: 'Intoxication',        desc: 'Overdose, empoisonnement, intoxication chimique.',         urgency: 'HAUTE',    color: '#A855F7' },
+  { id: 'psychiatrie',   icon: '🧠', label: 'Psychiatrie',         desc: 'Troubles mentaux, crises psychiatriques.',                 urgency: 'MODÉRÉE',  color: '#14B8A6' },
+  { id: 'legiste',       icon: '🔍', label: 'Médecin légiste',     desc: 'Examens légaux, rapports médico-légaux, autopsies.',       urgency: 'LÉGISTE',  color: '#94A3B8' },
+  { id: 'deces',         icon: '📋', label: 'Certificat de décès', desc: 'Constatation officielle du décès, rapport de cause.',      urgency: 'OFFICIEL', color: '#64748B' },
 ];
 
 export default function ReportsPage() {
@@ -25,42 +25,37 @@ export default function ReportsPage() {
     <div style={{ fontFamily: DISPLAY }}>
 
       {/* ── Header ── */}
-      <div style={{ marginBottom: 32 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+      <div style={{ marginBottom: 36 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18 }}>
           <button
             onClick={() => router.push('/fivem')}
             style={{
-              fontFamily: MONO, fontSize: 10,
+              fontFamily: MONO, fontSize: 13,
               background: 'transparent',
               border: '1px solid rgba(249,115,22,0.35)',
-              color: '#64748B',
-              padding: '6px 14px',
-              cursor: 'pointer',
-              letterSpacing: '0.1em',
+              color: '#64748B', padding: '9px 20px',
+              cursor: 'pointer', letterSpacing: '0.1em',
             }}
           >
             ← RETOUR
           </button>
-          <span style={{ fontFamily: MONO, fontSize: 9, color: '#F97316', letterSpacing: '0.2em' }}>
+          <span style={{ fontFamily: MONO, fontSize: 13, color: '#F97316', letterSpacing: '0.18em' }}>
             MDT › RAPPORTS
           </span>
         </div>
 
-        <h1 style={{
-          fontFamily: DISPLAY, fontWeight: 700, fontSize: 30,
-          color: '#E2E8F0', margin: 0, letterSpacing: '0.03em',
-        }}>
+        <h1 style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 38, color: '#E2E8F0', margin: 0, letterSpacing: '0.03em' }}>
           <span style={{ color: '#F97316' }}>⚕</span> Nouveau rapport médical
         </h1>
-        <p style={{ fontFamily: MONO, fontSize: 10, color: '#334155', letterSpacing: '0.1em', marginTop: 8 }}>
+        <p style={{ fontFamily: MONO, fontSize: 13, color: '#475569', letterSpacing: '0.1em', marginTop: 10 }}>
           SÉLECTIONNEZ LE TYPE DE RAPPORT À CRÉER
         </p>
       </div>
 
-      {/* ── Grille 2 colonnes ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 14 }}>
+      {/* ── Grille ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 18 }}>
         {TYPES.map(t => {
-          const isHov = hover === t.id;
+          const h = hover === t.id;
           return (
             <div
               key={t.id}
@@ -68,50 +63,48 @@ export default function ReportsPage() {
               onMouseEnter={() => setHover(t.id)}
               onMouseLeave={() => setHover(null)}
               style={{
-                background: isHov ? '#0C1628' : '#060C1A',
-                border: `2px solid ${isHov ? t.color + '80' : 'rgba(255,255,255,0.12)'}`,
-                borderLeft: `3px solid ${isHov ? t.color : t.color + '50'}`,
-                borderRadius: 0,
-                padding: '20px 22px',
+                background: h ? '#0C1628' : '#060C1A',
+                border: `2px solid ${h ? t.color + '90' : 'rgba(255,255,255,0.14)'}`,
+                borderLeft: `4px solid ${h ? t.color : t.color + '60'}`,
+                padding: '26px 28px',
                 cursor: 'pointer',
                 transition: 'all 0.18s',
-                transform: isHov ? 'translateY(-2px)' : 'none',
-                boxShadow: isHov ? `0 6px 24px rgba(0,0,0,0.5), 0 0 16px ${t.color}18` : '0 2px 8px rgba(0,0,0,0.3)',
-                display: 'flex', alignItems: 'center', gap: 18,
+                transform: h ? 'translateY(-2px)' : 'none',
+                boxShadow: h ? `0 8px 30px rgba(0,0,0,0.5), 0 0 20px ${t.color}20` : '0 2px 8px rgba(0,0,0,0.35)',
+                display: 'flex', alignItems: 'center', gap: 24,
               }}
             >
               {/* Icône */}
               <div style={{
-                width: 60, height: 60, flexShrink: 0,
+                width: 76, height: 76, flexShrink: 0,
                 background: t.color + '18',
-                border: `2px solid ${t.color + '55'}`,
+                border: `2px solid ${t.color + '60'}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 26,
+                fontSize: 34,
               }}>
                 {t.icon}
               </div>
 
               {/* Contenu */}
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 7 }}>
-                  <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 19, color: '#E2E8F0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+                  <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 26, color: '#E2E8F0' }}>
                     {t.label}
                   </span>
                   <span style={{
-                    fontFamily: MONO, fontSize: 8,
-                    padding: '3px 8px',
-                    background: t.color + '20',
-                    color: t.color,
+                    fontFamily: MONO, fontSize: 12,
+                    padding: '4px 10px',
+                    background: t.color + '22', color: t.color,
                     border: `1px solid ${t.color + '55'}`,
                     letterSpacing: '0.12em', flexShrink: 0,
                   }}>
                     {t.urgency}
                   </span>
                 </div>
-                <div style={{ fontSize: 13, color: '#475569', lineHeight: 1.55 }}>
+                <div style={{ fontSize: 15, color: '#64748B', lineHeight: 1.55 }}>
                   {t.desc}
                 </div>
-                <div style={{ fontFamily: MONO, fontSize: 9, color: isHov ? t.color : '#1E293B', marginTop: 9, letterSpacing: '0.1em', transition: 'color 0.15s' }}>
+                <div style={{ fontFamily: MONO, fontSize: 13, color: h ? t.color : '#334155', marginTop: 12, letterSpacing: '0.1em', transition: 'color 0.15s' }}>
                   → CRÉER LE RAPPORT
                 </div>
               </div>
