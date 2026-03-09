@@ -22,12 +22,9 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
 
   return (
     <>
-      {/* ════ STYLES SCOPÉS FIVEM UNIQUEMENT ════ */}
       <style>{`
-        /* ── Fonts ── */
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@300;400;500;600&display=swap');
 
-        /* ── Variables FiveM ── */
         .fivem-root {
           --f-bg:          #0A0F1E;
           --f-card:        #0D1526;
@@ -50,7 +47,6 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           position: relative;
         }
 
-        /* ── FOND GLOBAL ── */
         .fivem-root::before {
           content: '';
           position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -61,7 +57,6 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
             linear-gradient(135deg, #03071A 0%, #050D22 35%, #060F28 60%, #04091C 100%);
         }
 
-        /* ── MOTIF HEXAGONAL (fondu vers la droite) ── */
         .fivem-root::after {
           content: '';
           position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -71,10 +66,8 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 55%, transparent 75%);
         }
 
-        /* ── Contenu au-dessus du fond ── */
         .fivem-root > * { position: relative; z-index: 1; }
 
-        /* ── HUD MÉDICAL ── */
         .fivem-hud {
           position: fixed;
           left: -100px; top: 50%;
@@ -83,6 +76,7 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           z-index: 0; pointer-events: none;
           opacity: 0.22;
         }
+
         @keyframes hud-rot-cw  { from{transform-box:fill-box;transform-origin:center;transform:rotate(0deg)}   to{transform-box:fill-box;transform-origin:center;transform:rotate(360deg)}  }
         @keyframes hud-rot-ccw { from{transform-box:fill-box;transform-origin:center;transform:rotate(0deg)}   to{transform-box:fill-box;transform-origin:center;transform:rotate(-360deg)} }
         @keyframes hud-pulse   { 0%,100%{opacity:.4} 50%{opacity:1} }
@@ -97,13 +91,13 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           0%,100% { filter: drop-shadow(0 0 3px rgba(249,115,22,0.6)); }
           50%      { filter: drop-shadow(0 0 10px rgba(249,115,22,1)) drop-shadow(0 0 20px rgba(249,115,22,0.5)); }
         }
+
         .hud-ring1 { animation: hud-rot-cw  18s linear infinite; transform-box: fill-box; transform-origin: 340px 340px; }
         .hud-ring2 { animation: hud-rot-ccw 12s linear infinite; transform-box: fill-box; transform-origin: 340px 340px; }
         .hud-ring3 { animation: hud-rot-cw  30s linear infinite; transform-box: fill-box; transform-origin: 340px 340px; }
         .hud-pulse { animation: hud-pulse 2.5s ease-in-out infinite; }
         .hud-flow  { animation: hud-flow 3s linear infinite; stroke-dasharray: 12 8; }
 
-        /* ── Scrollbar ── */
         .fivem-root ::-webkit-scrollbar { width: 4px; }
         .fivem-root ::-webkit-scrollbar-track { background: transparent; }
         .fivem-root ::-webkit-scrollbar-thumb { background: rgba(249,115,22,0.3); border-radius: 2px; }
@@ -118,18 +112,16 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           box-shadow: 0 1px 24px rgba(249,115,22,0.05);
         }
 
-        /* ── ECG supprimé — remplacé par SVG dans le HUD ── */
-        .fivem-ecg { display: none; }
-
-        /* ── Nav inner ── */
-         .fivem-nav-inner {
-         max-width: 1600px; margin: 0 auto;
-         padding: 0 32px;
-         }
-        .fivem-main {
-         max-width: 1600px; margin: 0 auto;
-         padding: 28px 32px 80px;
-         }
+        /* ── Nav inner — UNE SEULE DÉFINITION, pleine largeur ── */
+        .fivem-nav-inner {
+          width: 100%;
+          padding: 0 40px;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          height: 56px;
+          box-sizing: border-box;
+        }
 
         /* ── Logo ── */
         .fivem-logo-box {
@@ -151,12 +143,13 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
         /* ── Nav links ── */
         .fivem-nav { display: flex; align-items: center; gap: 2px; flex: 1; }
         .fivem-nav a {
-          font-family: var(--f-display); font-weight: 600; font-size: 12px;
+          font-family: var(--f-display); font-weight: 600; font-size: 11px;
           letter-spacing: 0.07em; text-transform: uppercase;
           color: var(--f-muted); text-decoration: none;
-          padding: 5px 12px; border-radius: 7px;
+          padding: 5px 10px; border-radius: 7px;
           border: 1px solid transparent;
           transition: all 0.18s;
+          white-space: nowrap;
         }
         .fivem-nav a:hover {
           color: var(--f-accent);
@@ -186,13 +179,13 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           background: rgba(74,222,128,0.07); letter-spacing: 0.1em;
         }
 
-        /* ── MAIN ── */
+        /* ── MAIN — UNE SEULE DÉFINITION, pleine largeur ── */
         .fivem-main {
-          max-width: 1100px; margin: 0 auto;
-          padding: 28px 24px 80px;
+          width: 100%;
+          padding: 28px 40px 80px;
+          box-sizing: border-box;
         }
 
-        /* ── Fade-in entrée ── */
         .fivem-fade {
           animation: fivem-fadein 0.35s ease forwards;
         }
@@ -342,15 +335,14 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
         .fivem-footer {
           border-top: 1px solid var(--f-border);
           background: rgba(10,15,30,0.55);
-          padding: 10px 24px;
+          padding: 10px 40px;
           position: relative; z-index: 1;
         }
         .fivem-footer-inner {
-          max-width: 100%; margin: 0 auto;
+          width: 100%;
           display: flex; justify-content: space-between; align-items: center;
         }
 
-        /* ── Divider gradient ── */
         .fivem-divider {
           height: 1px;
           background: linear-gradient(90deg, transparent, var(--f-border), transparent);
@@ -373,11 +365,9 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
             </filter>
           </defs>
 
-          {/* Anneau extérieur tournant CW */}
           <g className="hud-ring1">
             <circle cx="340" cy="340" r="300" stroke="rgba(249,115,22,0.3)" strokeWidth="0.8"/>
             <circle cx="340" cy="340" r="300" stroke="rgba(249,115,22,0.8)" strokeWidth="1.5" strokeDasharray="18 22" filter="url(#glow-orange)"/>
-            {/* Segments marqueurs */}
             {[0,45,90,135,180,225,270,315].map((a,i) => {
               const rad = a * Math.PI / 180;
               const x1 = 340 + 290 * Math.cos(rad); const y1 = 340 + 290 * Math.sin(rad);
@@ -386,7 +376,6 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
             })}
           </g>
 
-          {/* Anneau milieu tournant CCW */}
           <g className="hud-ring2">
             <circle cx="340" cy="340" r="240" stroke="rgba(56,189,248,0.25)" strokeWidth="0.7"/>
             <circle cx="340" cy="340" r="240" stroke="rgba(56,189,248,0.7)" strokeWidth="1.2" strokeDasharray="30 15" filter="url(#glow-blue)"/>
@@ -398,131 +387,57 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
             })}
           </g>
 
-          {/* Anneau intérieur lent CW */}
           <g className="hud-ring3">
             <circle cx="340" cy="340" r="180" stroke="rgba(249,115,22,0.2)" strokeWidth="0.6"/>
             <circle cx="340" cy="340" r="180" stroke="rgba(249,115,22,0.5)" strokeWidth="1" strokeDasharray="8 16"/>
           </g>
 
-          {/* Cercle intermédiaire fixe */}
           <circle cx="340" cy="340" r="130" stroke="rgba(56,189,248,0.35)" strokeWidth="1.5"/>
           <circle cx="340" cy="340" r="130" stroke="rgba(56,189,248,0.6)" strokeWidth="0.8" strokeDasharray="4 8" filter="url(#glow-blue)"/>
-
-          {/* Halo central pulsant */}
           <circle cx="340" cy="340" r="70" stroke="rgba(249,115,22,0.5)" strokeWidth="1" className="hud-pulse" filter="url(#glow-orange)"/>
           <circle cx="340" cy="340" r="55" fill="rgba(249,115,22,0.06)" stroke="rgba(249,115,22,0.6)" strokeWidth="1.5" filter="url(#glow-orange)"/>
-
-          {/* Hexagone central */}
           <polygon points="340,310 366,325 366,355 340,370 314,355 314,325" fill="rgba(249,115,22,0.12)" stroke="rgba(249,115,22,0.9)" strokeWidth="1.5" filter="url(#glow-orange)"/>
-
-          {/* Croix médicale centrale */}
           <line x1="340" y1="322" x2="340" y2="358" stroke="rgba(255,255,255,0.9)" strokeWidth="3" filter="url(#glow-blue)"/>
           <line x1="323" y1="340" x2="357" y2="340" stroke="rgba(255,255,255,0.9)" strokeWidth="3" filter="url(#glow-blue)"/>
-
-          {/* Lignes de connexion vers hexagones satellites */}
           <line x1="406" y1="340" x2="470" y2="280" stroke="rgba(56,189,248,0.5)" strokeWidth="0.8" className="hud-flow"/>
           <line x1="406" y1="340" x2="490" y2="340" stroke="rgba(249,115,22,0.5)" strokeWidth="0.8" className="hud-flow"/>
           <line x1="406" y1="340" x2="470" y2="400" stroke="rgba(56,189,248,0.5)" strokeWidth="0.8" className="hud-flow"/>
           <line x1="340" y1="305" x2="340" y2="240" stroke="rgba(56,189,248,0.4)" strokeWidth="0.8" className="hud-flow"/>
           <line x1="274" y1="340" x2="210" y2="300" stroke="rgba(249,115,22,0.35)" strokeWidth="0.6" className="hud-flow"/>
-
-          {/* Hexagone satellite 1 — ADN */}
           <polygon points="490,255 510,266 510,288 490,299 470,288 470,266" fill="rgba(56,189,248,0.08)" stroke="rgba(56,189,248,0.7)" strokeWidth="1" filter="url(#glow-blue)"/>
           <text x="490" y="283" textAnchor="middle" fontSize="14" fill="rgba(56,189,248,0.9)">⊕</text>
-
-          {/* Hexagone satellite 2 — molécule */}
           <polygon points="510,315 530,326 530,348 510,359 490,348 490,326" fill="rgba(249,115,22,0.08)" stroke="rgba(249,115,22,0.7)" strokeWidth="1" filter="url(#glow-orange)"/>
           <text x="510" y="343" textAnchor="middle" fontSize="13" fill="rgba(249,115,22,0.9)">◈</text>
-
-          {/* Hexagone satellite 3 — pilule */}
           <polygon points="490,375 510,386 510,408 490,419 470,408 470,386" fill="rgba(56,189,248,0.08)" stroke="rgba(56,189,248,0.7)" strokeWidth="1" filter="url(#glow-blue)"/>
           <text x="490" y="403" textAnchor="middle" fontSize="14" fill="rgba(56,189,248,0.9)">⊗</text>
-
-          {/* Hexagone satellite 4 — haut */}
           <polygon points="340,215 360,226 360,248 340,259 320,248 320,226" fill="rgba(249,115,22,0.06)" stroke="rgba(249,115,22,0.55)" strokeWidth="1"/>
           <text x="340" y="242" textAnchor="middle" fontSize="12" fill="rgba(249,115,22,0.8)">✦</text>
-
-          {/* Petits hexagones décoratifs */}
           <polygon points="420,190 430,196 430,208 420,214 410,208 410,196" fill="none" stroke="rgba(56,189,248,0.4)" strokeWidth="0.8"/>
           <polygon points="555,290 563,295 563,305 555,310 547,305 547,295" fill="none" stroke="rgba(249,115,22,0.35)" strokeWidth="0.7"/>
           <polygon points="560,380 568,385 568,395 560,400 552,395 552,385" fill="none" stroke="rgba(56,189,248,0.35)" strokeWidth="0.7"/>
           <polygon points="390,450 398,455 398,465 390,470 382,465 382,455" fill="none" stroke="rgba(249,115,22,0.3)" strokeWidth="0.6"/>
-
-          {/* Points lumineux sur connexions */}
           <circle cx="450" cy="298" r="2.5" fill="rgba(56,189,248,0.9)" className="hud-pulse" filter="url(#glow-blue)"/>
           <circle cx="460" cy="340" r="2.5" fill="rgba(249,115,22,0.9)" className="hud-pulse" filter="url(#glow-orange)"/>
           <circle cx="450" cy="382" r="2.5" fill="rgba(56,189,248,0.9)" className="hud-pulse" filter="url(#glow-blue)"/>
           <circle cx="340" cy="268" r="2"   fill="rgba(56,189,248,0.7)" className="hud-pulse"/>
-
-          {/* Arc de données externe orange */}
           <path d="M 100,340 A 240,240 0 0,1 340,100" stroke="rgba(249,115,22,0.4)" strokeWidth="1.2" strokeDasharray="6 10" filter="url(#glow-orange)"/>
           <path d="M 340,580 A 240,240 0 0,1 580,340" stroke="rgba(56,189,248,0.35)" strokeWidth="1" strokeDasharray="4 12" filter="url(#glow-blue)"/>
-
-          {/* Graduation fine extérieure */}
           {Array.from({length: 60}, (_,i) => {
             const a = (i * 6) * Math.PI / 180;
             const len = i % 5 === 0 ? 12 : 6;
             const r1 = 315; const r2 = r1 + len;
             return <line key={i} x1={340+r1*Math.cos(a)} y1={340+r1*Math.sin(a)} x2={340+r2*Math.cos(a)} y2={340+r2*Math.sin(a)} stroke={i%5===0?"rgba(249,115,22,0.5)":"rgba(56,189,248,0.25)"} strokeWidth={i%5===0?1:0.5}/>;
           })}
-
-          {/* ══ LIGNE ECG — part du centre du HUD vers la droite ══ */}
-          {/* Chemin ECG réaliste : ligne de base puis pic QRS + onde T */}
-          {/* Coordonnée de départ : centre hexagone = 340,340 → traverse tout l'écran */}
           <path
-            d="M 340,340
-               L 380,340
-               L 395,340 L 400,336 L 405,340 L 408,340
-               L 415,340 L 418,322 L 422,362 L 426,328 L 430,340
-               L 435,340 L 440,337 L 445,340
-               L 460,340
-               L 465,340 L 468,336 L 473,340 L 476,340
-               L 483,340 L 486,322 L 490,362 L 494,328 L 498,340
-               L 503,340 L 508,337 L 513,340
-               L 530,340
-               L 535,340 L 538,337 L 542,340
-               L 545,340 L 548,322 L 552,362 L 556,328 L 560,340
-               L 565,340 L 570,338 L 575,340
-               L 600,340 L 650,340 L 720,340 L 800,340 L 900,340 L 1100,340 L 1400,340 L 1800,340 L 2200,340"
-            stroke="#F97316"
-            strokeWidth="2"
-            fill="none"
-            strokeDasharray="1200"
-            strokeDashoffset="1200"
-            style={{
-              animation: 'ecg-travel 3.2s ease-out infinite',
-              animationDelay: '0s',
-              filter: 'drop-shadow(0 0 4px rgba(249,115,22,0.9)) drop-shadow(0 0 12px rgba(249,115,22,0.5))',
-            }}
+            d="M 340,340 L 380,340 L 395,340 L 400,336 L 405,340 L 408,340 L 415,340 L 418,322 L 422,362 L 426,328 L 430,340 L 435,340 L 440,337 L 445,340 L 460,340 L 465,340 L 468,336 L 473,340 L 476,340 L 483,340 L 486,322 L 490,362 L 494,328 L 498,340 L 503,340 L 508,337 L 513,340 L 530,340 L 535,340 L 538,337 L 542,340 L 545,340 L 548,322 L 552,362 L 556,328 L 560,340 L 565,340 L 570,338 L 575,340 L 600,340 L 650,340 L 720,340 L 800,340 L 900,340 L 1100,340 L 1400,340 L 1800,340 L 2200,340"
+            stroke="#F97316" strokeWidth="2" fill="none" strokeDasharray="1200" strokeDashoffset="1200"
+            style={{ animation: 'ecg-travel 3.2s ease-out infinite', animationDelay: '0s', filter: 'drop-shadow(0 0 4px rgba(249,115,22,0.9)) drop-shadow(0 0 12px rgba(249,115,22,0.5))' }}
           />
-          {/* Deuxième passe décalée pour effet continu */}
           <path
-            d="M 340,340
-               L 380,340
-               L 395,340 L 400,336 L 405,340 L 408,340
-               L 415,340 L 418,322 L 422,362 L 426,328 L 430,340
-               L 435,340 L 440,337 L 445,340
-               L 460,340
-               L 465,340 L 468,336 L 473,340 L 476,340
-               L 483,340 L 486,322 L 490,362 L 494,328 L 498,340
-               L 503,340 L 508,337 L 513,340
-               L 530,340
-               L 535,340 L 538,337 L 542,340
-               L 545,340 L 548,322 L 552,362 L 556,328 L 560,340
-               L 565,340 L 570,338 L 575,340
-               L 600,340 L 650,340 L 720,340 L 800,340 L 900,340 L 1100,340 L 1400,340 L 1800,340 L 2200,340"
-            stroke="rgba(249,115,22,0.55)"
-            strokeWidth="1.2"
-            fill="none"
-            strokeDasharray="1200"
-            strokeDashoffset="1200"
-            style={{
-              animation: 'ecg-travel 3.2s ease-out infinite',
-              animationDelay: '1.6s',
-              filter: 'drop-shadow(0 0 6px rgba(249,115,22,0.7))',
-            }}
+            d="M 340,340 L 380,340 L 395,340 L 400,336 L 405,340 L 408,340 L 415,340 L 418,322 L 422,362 L 426,328 L 430,340 L 435,340 L 440,337 L 445,340 L 460,340 L 465,340 L 468,336 L 473,340 L 476,340 L 483,340 L 486,322 L 490,362 L 494,328 L 498,340 L 503,340 L 508,337 L 513,340 L 530,340 L 535,340 L 538,337 L 542,340 L 545,340 L 548,322 L 552,362 L 556,328 L 560,340 L 565,340 L 570,338 L 575,340 L 600,340 L 650,340 L 720,340 L 800,340 L 900,340 L 1100,340 L 1400,340 L 1800,340 L 2200,340"
+            stroke="rgba(249,115,22,0.55)" strokeWidth="1.2" fill="none" strokeDasharray="1200" strokeDashoffset="1200"
+            style={{ animation: 'ecg-travel 3.2s ease-out infinite', animationDelay: '1.6s', filter: 'drop-shadow(0 0 6px rgba(249,115,22,0.7))' }}
           />
-          {/* Point de départ lumineux au centre = cœur de l'hexagone */}
           <circle cx="340" cy="340" r="5" fill="rgba(249,115,22,0.9)"
             style={{ animation: 'ecg-glow-pulse 3.2s ease-in-out infinite', filter: 'drop-shadow(0 0 8px #F97316)' }}
           />
@@ -530,7 +445,6 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
 
         {/* ════ HEADER ════ */}
         <header className="fivem-header">
-          {/* ECG déplacé dans le HUD SVG */}
           <div className="fivem-nav-inner">
 
             {/* Logo */}

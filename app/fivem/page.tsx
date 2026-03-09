@@ -16,24 +16,24 @@ const MODULES = [
 ];
 
 const VITALS = [
-  { label: 'UNITÉS EN SERVICE',   value: '14',   unit: '',    color: '#4ADE80' },
-  { label: 'INTERVENTIONS / 24H', value: '1200',   unit: '',    color: '#F97316' },
+  { label: 'UNITÉS EN SERVICE',   value: '14',    unit: '',    color: '#4ADE80' },
+  { label: 'INTERVENTIONS / 24H', value: '1200',  unit: '',    color: '#F97316' },
   { label: 'TAUX DE SURVIE',      value: '97.35', unit: '%',   color: '#F87171' },
-  { label: 'TEMPS MOYEN RÉPONSE', value: '4:30', unit: 'MIN', color: '#38BDF8' },
+  { label: 'TEMPS MOYEN RÉPONSE', value: '4:30',  unit: 'MIN', color: '#38BDF8' },
 ];
 
 const LOGS = [
   { time: '08:42', msg: 'Zone Vinewood — polytraumatisme signalé', dot: '#EF4444' },
-  { time: '07:15', msg: 'Rapport validé',       dot: '#4ADE80' },
-  { time: '06:58', msg: 'Unité ALS AMBULANCE de retour disponible',      dot: '#38BDF8' },
+  { time: '07:15', msg: 'Rapport validé',                          dot: '#4ADE80' },
+  { time: '06:58', msg: 'Unité ALS AMBULANCE de retour disponible', dot: '#38BDF8' },
   { time: '06:30', msg: 'Protocole sepsis mis à jour',             dot: '#F97316' },
 ];
 
 const UNITS = [
-  { id: 'ALS AMBULANCE',   loc: 'Pillbox Hill', status: 'DISPONIBLE', col: '#4ADE80' },
-  { id: 'MEDIC 13',        loc: 'Sandy Shores', status: 'EN ROUTE',   col: '#F97316' },
-  { id: 'RESCUE UNIT',     loc: 'Vinewood',     status: 'OCCUPÉ',     col: '#EF4444' },
-  { id: 'WATER RESCUE',    loc: 'Marina',   status: 'DISPONIBLE', col: '#4ADE80' },
+  { id: 'ALS AMBULANCE', loc: 'Pillbox Hill', status: 'DISPONIBLE', col: '#4ADE80' },
+  { id: 'MEDIC 13',      loc: 'Sandy Shores', status: 'EN ROUTE',   col: '#F97316' },
+  { id: 'RESCUE UNIT',   loc: 'Vinewood',     status: 'OCCUPÉ',     col: '#EF4444' },
+  { id: 'WATER RESCUE',  loc: 'Marina',       status: 'DISPONIBLE', col: '#4ADE80' },
 ];
 
 export default function FiveMPage() {
@@ -74,8 +74,9 @@ export default function FiveMPage() {
           {/* ── HEADER ── */}
           <div style={{ ...panel, borderLeft: '4px solid #F97316', padding: '22px 28px', display: 'flex', alignItems: 'center', gap: 24 }}>
             <div style={{ flex: 1 }}>
+              {/* Texte modifié ici */}
               <div style={{ fontFamily: MONO, fontSize: 14, color: '#F97316', letterSpacing: '0.18em', marginBottom: 8 }}>
-                ■ SAMS — FIVEM / MDT TERMINAL v2.0
+                ■ MDT — TERMINAL — EMS
               </div>
               <div style={{ fontFamily: DISPLAY, fontSize: 40, fontWeight: 700, color: '#E2E8F0', lineHeight: 1, letterSpacing: '0.04em' }}>
                 DISPATCH MÉDICAL <span style={{ color: '#F97316' }}>EMS</span>
@@ -276,3 +277,4 @@ export default function FiveMPage() {
     </div>
   );
 }
+
