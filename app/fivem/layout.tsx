@@ -346,7 +346,7 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           position: relative; z-index: 1;
         }
         .fivem-footer-inner {
-          max-width: 1100px; margin: 0 auto;
+          max-width: 100%; margin: 0 auto;
           display: flex; justify-content: space-between; align-items: center;
         }
 
