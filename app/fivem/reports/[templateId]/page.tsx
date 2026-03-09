@@ -8,217 +8,544 @@ const templateConfigs: Record<string, {
   title: string;
   icon: string;
   fields: { key: string; label: string; type: string; placeholder: string; required?: boolean }[];
-  systemPrompt: string;
+  template: string;
 }> = {
   traumatologie: {
     title: 'Traumatologie',
     icon: '🦴',
     fields: [
-      { key: 'patient_name', label: 'Nom du patient', type: 'text', placeholder: 'Ex: Mlle Sullivan Eleanor', required: true },
-      { key: 'date', label: 'Date de prise en charge', type: 'date', placeholder: '', required: true },
-      { key: 'heure', label: 'Heure de l\'incident', type: 'time', placeholder: '' },
-      { key: 'motif', label: 'Motif / type d\'accident', type: 'text', placeholder: 'Ex: AVP moto à haute vitesse', required: true },
-      { key: 'antecedents', label: 'Antécédents du patient', type: 'textarea', placeholder: 'Ex: antécédents chirurgicaux au genou droit' },
-      { key: 'examen', label: 'Examen clinique (symptômes observés)', type: 'textarea', placeholder: 'Ex: douleur genou droit, gêne à la marche...', required: true },
-      { key: 'examens_complementaires', label: 'Examens complémentaires', type: 'textarea', placeholder: 'Ex: radio genou - microlésions rotule, IRM...' },
-      { key: 'traitement', label: 'Traitement administré', type: 'textarea', placeholder: 'Ex: attelle Zimmer, antalgiques...' },
-      { key: 'prescription', label: 'Prescription de sortie', type: 'textarea', placeholder: 'Ex: Ibuprofène 400mg, Paracétamol 1g...' },
-      { key: 'suivi', label: 'Suivi prévu', type: 'text', placeholder: 'Ex: revoir le 26/02/2026' },
-      { key: 'medecin', label: 'Médecin responsable', type: 'text', placeholder: 'Ex: Dr Tellez Eziel', required: true },
-      { key: 'etudiant', label: 'Étudiant (optionnel)', type: 'text', placeholder: 'Ex: Skoll Ethan' },
+      { key: 'date', label: 'Date', type: 'date', placeholder: '', required: true },
+      { key: 'heure', label: 'Heure', type: 'time', placeholder: '' },
+      { key: 'nom', label: 'Nom du patient', type: 'text', placeholder: 'Ex: Sullivan', required: true },
+      { key: 'prenom', label: 'Prénom', type: 'text', placeholder: 'Ex: Eleanor', required: true },
+      { key: 'age', label: 'Âge / Date de naissance', type: 'text', placeholder: 'Ex: 28 ans' },
+      { key: 'motif', label: 'Motif de consultation', type: 'textarea', placeholder: 'Ex: AVP moto à haute vitesse', required: true },
+      { key: 'antecedents', label: 'Antécédents médicaux', type: 'textarea', placeholder: 'Ex: antécédents chirurgicaux au genou droit' },
+      { key: 'traitements_cours', label: 'Traitements en cours', type: 'text', placeholder: 'Ex: aucun' },
+      { key: 'circonstances', label: 'Circonstances de l\'événement', type: 'textarea', placeholder: 'Ex: chute de moto à ~100km/h' },
+      { key: 'fc', label: 'FC (fréquence cardiaque)', type: 'text', placeholder: 'Ex: 88 bpm' },
+      { key: 'ta', label: 'TA (tension artérielle)', type: 'text', placeholder: 'Ex: 120/80 mmHg' },
+      { key: 'spo2', label: 'SpO₂', type: 'text', placeholder: 'Ex: 98%' },
+      { key: 'temperature', label: 'Température', type: 'text', placeholder: 'Ex: 37.2°C' },
+      { key: 'douleur', label: 'Douleur (EVA /10)', type: 'text', placeholder: 'Ex: 7/10' },
+      { key: 'examen', label: 'Examen clinique', type: 'textarea', placeholder: 'État général, observations...', required: true },
+      { key: 'radiographie', label: 'Radiographie', type: 'textarea', placeholder: 'Ex: microlésions rotule...' },
+      { key: 'irm', label: 'IRM / Scanner', type: 'textarea', placeholder: 'Ex: microdéchirures...' },
+      { key: 'analyses', label: 'Analyses', type: 'text', placeholder: 'Ex: bilan sanguin normal' },
+      { key: 'diagnostic_principal', label: 'Diagnostic principal', type: 'text', placeholder: 'Ex: traumatisme genou droit', required: true },
+      { key: 'diagnostic_secondaire', label: 'Diagnostic secondaire', type: 'text', placeholder: 'Ex: contusion tibiale' },
+      { key: 'soins', label: 'Soins effectués', type: 'textarea', placeholder: 'Ex: nettoyage plaie, suture...' },
+      { key: 'chirurgie', label: 'Intervention chirurgicale', type: 'text', placeholder: 'Ex: aucune / réduction fracture' },
+      { key: 'traitements_admin', label: 'Traitements administrés', type: 'textarea', placeholder: 'Ex: morphine 5mg IV' },
+      { key: 'antalgique', label: 'Antalgique prescrit', type: 'text', placeholder: 'Ex: Paracétamol 1g x3/jour' },
+      { key: 'anti_inflammatoire', label: 'Anti-inflammatoire', type: 'text', placeholder: 'Ex: Ibuprofène 400mg x3/jour' },
+      { key: 'antibiotique', label: 'Antibiotique', type: 'text', placeholder: 'Ex: aucun' },
+      { key: 'autre_traitement', label: 'Autre traitement', type: 'text', placeholder: 'Ex: attelle Zimmer' },
+      { key: 'repos', label: 'Repos / immobilisation', type: 'text', placeholder: 'Ex: attelle 3 semaines' },
+      { key: 'restrictions', label: 'Restrictions physiques', type: 'text', placeholder: 'Ex: pas d\'appui' },
+      { key: 'surveillance', label: 'Surveillance particulière', type: 'text', placeholder: 'Ex: surveiller œdème' },
+      { key: 'suivi_date', label: 'Date du prochain contrôle', type: 'date', placeholder: '' },
+      { key: 'examens_suivi', label: 'Examens de suivi', type: 'text', placeholder: 'Ex: radio de contrôle' },
+      { key: 'conclusion', label: 'Conclusion', type: 'textarea', placeholder: 'Résumé de l\'état et évolution attendue', required: true },
+      { key: 'medecin', label: 'Médecin', type: 'text', placeholder: 'Ex: Dr Tellez Eziel', required: true },
+      { key: 'assistant', label: 'Assistant / Étudiant', type: 'text', placeholder: 'Ex: Skoll Ethan' },
     ],
-    systemPrompt: `Tu es un médecin urgentiste qui rédige des rapports médicaux professionnels pour un serveur de roleplay FiveM (GTA RP médical). 
-Génère un rapport médical complet, structuré et professionnel en français avec les sections suivantes :
-- RAPPORT MÉDICAL (titre)
-- Identification (patient, date, heure, motif)
-- Contexte et antécédents
-- Examen clinique initial (en points)
-- Examens complémentaires (si fournis)
-- Diagnostic retenu
-- Prise en charge réalisée
-- Prescription de sortie (avec posologie détaillée)
-- Suivi / réévaluation
-- Validation (médecin, étudiant, date)
-Le rapport doit être réaliste, détaillé et professionnel. Utilise des termes médicaux appropriés.`
+    template: `RAPPORT MÉDICAL
+===============
+
+Date : {{date}}                    Heure : {{heure}}
+
+IDENTITÉ DU PATIENT
+-------------------
+Nom : {{nom}}
+Prénom : {{prenom}}
+Âge / Date de naissance : {{age}}
+
+MOTIF DE CONSULTATION
+---------------------
+{{motif}}
+
+CONTEXTE / ANTÉCÉDENTS
+----------------------
+Antécédents médicaux connus : {{antecedents}}
+Traitements en cours : {{traitements_cours}}
+Circonstances de l'événement : {{circonstances}}
+
+CONSTANTES VITALES
+------------------
+FC : {{fc}}
+TA : {{ta}}
+SpO₂ : {{spo2}}
+Température : {{temperature}}
+Douleur (EVA /10) : {{douleur}}
+
+EXAMEN CLINIQUE
+---------------
+{{examen}}
+
+EXAMENS COMPLÉMENTAIRES
+-----------------------
+Radiographie : {{radiographie}}
+IRM / Scanner : {{irm}}
+Analyses : {{analyses}}
+
+DIAGNOSTIC
+----------
+Diagnostic principal : {{diagnostic_principal}}
+Diagnostic secondaire : {{diagnostic_secondaire}}
+
+PRISE EN CHARGE / ACTES RÉALISÉS
+---------------------------------
+Soins effectués : {{soins}}
+Intervention chirurgicale : {{chirurgie}}
+Traitements administrés : {{traitements_admin}}
+
+TRAITEMENT PRESCRIT
+-------------------
+Antalgique : {{antalgique}}
+Anti-inflammatoire : {{anti_inflammatoire}}
+Antibiotique : {{antibiotique}}
+Autre traitement : {{autre_traitement}}
+
+RECOMMANDATIONS
+---------------
+Repos / immobilisation : {{repos}}
+Restrictions physiques : {{restrictions}}
+Surveillance particulière : {{surveillance}}
+
+SUIVI MÉDICAL
+-------------
+Date du prochain contrôle : {{suivi_date}}
+Examens de suivi nécessaires : {{examens_suivi}}
+
+CONCLUSION
+----------
+{{conclusion}}
+
+PERSONNEL MÉDICAL
+-----------------
+Médecin : {{medecin}}
+Assistant / Étudiant : {{assistant}}
+
+Signature : ___________________________`,
   },
   chirurgie: {
     title: 'Chirurgie',
     icon: '🔪',
     fields: [
-      { key: 'patient_name', label: 'Nom du patient', type: 'text', placeholder: 'Ex: M. Dupont Jean', required: true },
-      { key: 'date', label: 'Date de l\'intervention', type: 'date', placeholder: '', required: true },
-      { key: 'type_intervention', label: 'Type d\'intervention', type: 'text', placeholder: 'Ex: appendicectomie, suture...', required: true },
+      { key: 'date', label: 'Date', type: 'date', placeholder: '', required: true },
+      { key: 'heure', label: 'Heure', type: 'time', placeholder: '' },
+      { key: 'nom', label: 'Nom du patient', type: 'text', placeholder: 'Ex: M. Dupont', required: true },
+      { key: 'prenom', label: 'Prénom', type: 'text', placeholder: 'Ex: Jean', required: true },
+      { key: 'age', label: 'Âge', type: 'text', placeholder: 'Ex: 35 ans' },
+      { key: 'type_intervention', label: 'Type d\'intervention', type: 'text', placeholder: 'Ex: appendicectomie', required: true },
       { key: 'indication', label: 'Indication opératoire', type: 'textarea', placeholder: 'Pourquoi cette opération ?' },
       { key: 'deroulement', label: 'Déroulement de l\'opération', type: 'textarea', placeholder: 'Comment s\'est passée l\'opération ?', required: true },
       { key: 'complications', label: 'Complications éventuelles', type: 'textarea', placeholder: 'Ex: aucune / saignement contrôlé...' },
       { key: 'postop', label: 'Consignes post-opératoires', type: 'textarea', placeholder: 'Ex: repos, pansement à changer...' },
       { key: 'medecin', label: 'Chirurgien', type: 'text', placeholder: 'Ex: Dr Martin', required: true },
+      { key: 'assistant', label: 'Assistant / Étudiant', type: 'text', placeholder: 'Ex: Skoll Ethan' },
     ],
-    systemPrompt: `Tu es un chirurgien qui rédige des comptes-rendus opératoires professionnels pour un serveur de roleplay FiveM.
-Génère un compte-rendu opératoire complet et structuré en français avec :
-- COMPTE-RENDU OPÉRATOIRE (titre)
-- Identification du patient
-- Indication opératoire
-- Déroulement de l'intervention (détaillé)
-- Complications peropératoires
-- Consignes post-opératoires
-- Validation
-Utilise un langage chirurgical professionnel et réaliste.`
+    template: `COMPTE-RENDU OPÉRATOIRE
+=======================
+
+Date : {{date}}                    Heure : {{heure}}
+
+IDENTITÉ DU PATIENT
+-------------------
+Nom : {{nom}}
+Prénom : {{prenom}}
+Âge : {{age}}
+
+TYPE D'INTERVENTION
+-------------------
+{{type_intervention}}
+
+INDICATION OPÉRATOIRE
+---------------------
+{{indication}}
+
+DÉROULEMENT DE L'INTERVENTION
+------------------------------
+{{deroulement}}
+
+COMPLICATIONS PEROPÉRATOIRES
+-----------------------------
+{{complications}}
+
+CONSIGNES POST-OPÉRATOIRES
+---------------------------
+{{postop}}
+
+PERSONNEL MÉDICAL
+-----------------
+Chirurgien : {{medecin}}
+Assistant / Étudiant : {{assistant}}
+
+Signature : ___________________________`,
   },
   consultation: {
     title: 'Consultation générale',
     icon: '🩺',
     fields: [
-      { key: 'patient_name', label: 'Nom du patient', type: 'text', placeholder: 'Ex: Mme Lefebvre Marie', required: true },
       { key: 'date', label: 'Date', type: 'date', placeholder: '', required: true },
-      { key: 'motif', label: 'Motif de consultation', type: 'text', placeholder: 'Ex: douleurs abdominales, fièvre...', required: true },
+      { key: 'heure', label: 'Heure', type: 'time', placeholder: '' },
+      { key: 'nom', label: 'Nom du patient', type: 'text', placeholder: 'Ex: Mme Lefebvre', required: true },
+      { key: 'prenom', label: 'Prénom', type: 'text', placeholder: 'Ex: Marie', required: true },
+      { key: 'age', label: 'Âge', type: 'text', placeholder: 'Ex: 42 ans' },
+      { key: 'motif', label: 'Motif de consultation', type: 'text', placeholder: 'Ex: douleurs abdominales', required: true },
       { key: 'symptomes', label: 'Symptômes décrits', type: 'textarea', placeholder: 'Ce que le patient ressent', required: true },
+      { key: 'antecedents', label: 'Antécédents', type: 'textarea', placeholder: 'Ex: aucun' },
       { key: 'examen', label: 'Examen clinique', type: 'textarea', placeholder: 'Résultats de votre examen' },
       { key: 'diagnostic', label: 'Diagnostic', type: 'text', placeholder: 'Ex: gastro-entérite aiguë', required: true },
       { key: 'traitement', label: 'Traitement prescrit', type: 'textarea', placeholder: 'Médicaments, posologie...' },
+      { key: 'conseils', label: 'Conseils au patient', type: 'textarea', placeholder: 'Ex: repos, hydratation...' },
+      { key: 'suivi', label: 'Suivi', type: 'text', placeholder: 'Ex: revoir dans 1 semaine si pas d\'amélioration' },
       { key: 'medecin', label: 'Médecin', type: 'text', placeholder: 'Ex: Dr Bernard', required: true },
+      { key: 'assistant', label: 'Assistant / Étudiant', type: 'text', placeholder: 'Ex: Skoll Ethan' },
     ],
-    systemPrompt: `Tu es un médecin généraliste qui rédige des comptes-rendus de consultation professionnels pour un serveur de roleplay FiveM.
-Génère un compte-rendu de consultation complet en français avec :
-- COMPTE-RENDU DE CONSULTATION (titre)
-- Identification
-- Motif de consultation
-- Anamnèse
-- Examen clinique
-- Diagnostic
-- Traitement et prescriptions
-- Conseils au patient
-- Validation
-Sois professionnel et utilise le vocabulaire médical approprié.`
+    template: `COMPTE-RENDU DE CONSULTATION
+============================
+
+Date : {{date}}                    Heure : {{heure}}
+
+IDENTITÉ DU PATIENT
+-------------------
+Nom : {{nom}}
+Prénom : {{prenom}}
+Âge : {{age}}
+
+MOTIF DE CONSULTATION
+---------------------
+{{motif}}
+
+SYMPTÔMES DÉCRITS
+-----------------
+{{symptomes}}
+
+ANTÉCÉDENTS
+-----------
+{{antecedents}}
+
+EXAMEN CLINIQUE
+---------------
+{{examen}}
+
+DIAGNOSTIC
+----------
+{{diagnostic}}
+
+TRAITEMENT PRESCRIT
+-------------------
+{{traitement}}
+
+CONSEILS AU PATIENT
+-------------------
+{{conseils}}
+
+SUIVI
+-----
+{{suivi}}
+
+PERSONNEL MÉDICAL
+-----------------
+Médecin : {{medecin}}
+Assistant / Étudiant : {{assistant}}
+
+Signature : ___________________________`,
   },
   urgence: {
     title: 'Urgence vitale',
     icon: '🚨',
     fields: [
-      { key: 'patient_name', label: 'Nom du patient', type: 'text', placeholder: 'Ex: M. Garcia Pablo', required: true },
       { key: 'date', label: 'Date', type: 'date', placeholder: '', required: true },
       { key: 'heure', label: 'Heure d\'arrivée', type: 'time', placeholder: '', required: true },
+      { key: 'nom', label: 'Nom du patient', type: 'text', placeholder: 'Ex: M. Garcia', required: true },
+      { key: 'prenom', label: 'Prénom', type: 'text', placeholder: 'Ex: Pablo', required: true },
+      { key: 'age', label: 'Âge', type: 'text', placeholder: 'Ex: 30 ans' },
       { key: 'motif', label: 'Nature de l\'urgence', type: 'text', placeholder: 'Ex: arrêt cardiaque, polytraumatisme...', required: true },
-      { key: 'constantes', label: 'Constantes vitales à l\'arrivée', type: 'textarea', placeholder: 'Ex: TA 80/50, FC 120, SpO2 88%...', required: true },
+      { key: 'fc', label: 'FC', type: 'text', placeholder: 'Ex: 120 bpm' },
+      { key: 'ta', label: 'TA', type: 'text', placeholder: 'Ex: 80/50 mmHg' },
+      { key: 'spo2', label: 'SpO₂', type: 'text', placeholder: 'Ex: 88%' },
+      { key: 'temperature', label: 'Température', type: 'text', placeholder: 'Ex: 38.5°C' },
+      { key: 'douleur', label: 'Douleur (EVA /10)', type: 'text', placeholder: 'Ex: 9/10' },
       { key: 'gestes', label: 'Gestes d\'urgence réalisés', type: 'textarea', placeholder: 'Ex: intubation, massage cardiaque...', required: true },
       { key: 'medicaments', label: 'Médicaments administrés', type: 'textarea', placeholder: 'Ex: adrénaline 1mg IV...' },
       { key: 'evolution', label: 'Évolution', type: 'textarea', placeholder: 'Ex: stabilisation, transfert...', required: true },
       { key: 'medecin', label: 'Médecin urgentiste', type: 'text', placeholder: 'Ex: Dr Rousseau', required: true },
+      { key: 'assistant', label: 'Assistant / Étudiant', type: 'text', placeholder: 'Ex: Skoll Ethan' },
     ],
-    systemPrompt: `Tu es un médecin urgentiste qui rédige des rapports d'urgence vitale pour un serveur de roleplay FiveM.
-Génère un rapport d'urgence complet et structuré en français avec :
-- RAPPORT D'URGENCE VITALE (titre)
-- Identification et contexte
-- Bilan initial (constantes, état clinique)
-- Gestes d'urgence réalisés (chronologie)
-- Médicaments administrés
-- Évolution et orientation
-- Validation
-Le ton doit être urgent, précis et factuel. Utilise la terminologie des urgences.`
+    template: `RAPPORT D'URGENCE VITALE
+========================
+
+Date : {{date}}                    Heure d'arrivée : {{heure}}
+
+IDENTITÉ DU PATIENT
+-------------------
+Nom : {{nom}}
+Prénom : {{prenom}}
+Âge : {{age}}
+
+NATURE DE L'URGENCE
+-------------------
+{{motif}}
+
+CONSTANTES VITALES À L'ARRIVÉE
+-------------------------------
+FC : {{fc}}
+TA : {{ta}}
+SpO₂ : {{spo2}}
+Température : {{temperature}}
+Douleur (EVA /10) : {{douleur}}
+
+GESTES D'URGENCE RÉALISÉS
+--------------------------
+{{gestes}}
+
+MÉDICAMENTS ADMINISTRÉS
+------------------------
+{{medicaments}}
+
+ÉVOLUTION ET ORIENTATION
+------------------------
+{{evolution}}
+
+PERSONNEL MÉDICAL
+-----------------
+Médecin urgentiste : {{medecin}}
+Assistant / Étudiant : {{assistant}}
+
+Signature : ___________________________`,
   },
   intoxication: {
     title: 'Intoxication',
     icon: '☠️',
     fields: [
-      { key: 'patient_name', label: 'Nom du patient', type: 'text', placeholder: 'Ex: M. Torres Diego', required: true },
       { key: 'date', label: 'Date', type: 'date', placeholder: '', required: true },
-      { key: 'substance', label: 'Substance(s) en cause', type: 'text', placeholder: 'Ex: alcool, cocaïne, médicaments...', required: true },
+      { key: 'heure', label: 'Heure', type: 'time', placeholder: '' },
+      { key: 'nom', label: 'Nom du patient', type: 'text', placeholder: 'Ex: M. Torres', required: true },
+      { key: 'prenom', label: 'Prénom', type: 'text', placeholder: 'Ex: Diego', required: true },
+      { key: 'age', label: 'Âge', type: 'text', placeholder: 'Ex: 25 ans' },
+      { key: 'substance', label: 'Substance(s) en cause', type: 'text', placeholder: 'Ex: alcool, cocaïne...', required: true },
       { key: 'dose', label: 'Dose / quantité estimée', type: 'text', placeholder: 'Ex: ~500ml alcool fort' },
-      { key: 'symptomes', label: 'Symptômes observés', type: 'textarea', placeholder: 'Ex: confusion, vomissements, tachycardie...', required: true },
-      { key: 'constantes', label: 'Constantes vitales', type: 'textarea', placeholder: 'Ex: FC 110, TA 95/60...' },
+      { key: 'symptomes', label: 'Symptômes observés', type: 'textarea', placeholder: 'Ex: confusion, vomissements...', required: true },
+      { key: 'fc', label: 'FC', type: 'text', placeholder: 'Ex: 110 bpm' },
+      { key: 'ta', label: 'TA', type: 'text', placeholder: 'Ex: 95/60 mmHg' },
+      { key: 'spo2', label: 'SpO₂', type: 'text', placeholder: 'Ex: 94%' },
       { key: 'traitement', label: 'Traitement administré', type: 'textarea', placeholder: 'Ex: perfusion, charbon activé...', required: true },
-      { key: 'antidote', label: 'Antidote utilisé', type: 'text', placeholder: 'Ex: Narcan (naloxone) si overdose opioïdes' },
+      { key: 'antidote', label: 'Antidote utilisé', type: 'text', placeholder: 'Ex: Narcan (naloxone)' },
       { key: 'evolution', label: 'Évolution', type: 'textarea', placeholder: 'Ex: amélioration progressive...' },
+      { key: 'recommandations', label: 'Recommandations de suivi', type: 'textarea', placeholder: 'Ex: consultation addictologie...' },
       { key: 'medecin', label: 'Médecin', type: 'text', placeholder: 'Ex: Dr Chen', required: true },
+      { key: 'assistant', label: 'Assistant / Étudiant', type: 'text', placeholder: 'Ex: Skoll Ethan' },
     ],
-    systemPrompt: `Tu es un médecin toxicologue qui rédige des rapports d'intoxication pour un serveur de roleplay FiveM.
-Génère un rapport d'intoxication complet en français avec :
-- RAPPORT D'INTOXICATION (titre)
-- Identification
-- Substance(s) et circonstances
-- Tableau clinique
-- Prise en charge et traitement
-- Évolution
-- Recommandations de suivi
-- Validation
-Utilise la terminologie toxicologique appropriée.`
+    template: `RAPPORT D'INTOXICATION
+======================
+
+Date : {{date}}                    Heure : {{heure}}
+
+IDENTITÉ DU PATIENT
+-------------------
+Nom : {{nom}}
+Prénom : {{prenom}}
+Âge : {{age}}
+
+SUBSTANCE(S) EN CAUSE
+---------------------
+Substance(s) : {{substance}}
+Dose / quantité estimée : {{dose}}
+
+TABLEAU CLINIQUE
+----------------
+Symptômes observés : {{symptomes}}
+
+CONSTANTES VITALES
+------------------
+FC : {{fc}}
+TA : {{ta}}
+SpO₂ : {{spo2}}
+
+PRISE EN CHARGE ET TRAITEMENT
+------------------------------
+{{traitement}}
+
+ANTIDOTE UTILISÉ
+----------------
+{{antidote}}
+
+ÉVOLUTION
+---------
+{{evolution}}
+
+RECOMMANDATIONS DE SUIVI
+------------------------
+{{recommandations}}
+
+PERSONNEL MÉDICAL
+-----------------
+Médecin : {{medecin}}
+Assistant / Étudiant : {{assistant}}
+
+Signature : ___________________________`,
   },
   psychiatrie: {
     title: 'Psychiatrie',
     icon: '🧠',
     fields: [
-      { key: 'patient_name', label: 'Nom du patient', type: 'text', placeholder: 'Ex: Mme Blanc Sophie', required: true },
       { key: 'date', label: 'Date', type: 'date', placeholder: '', required: true },
-      { key: 'motif', label: 'Motif de consultation', type: 'text', placeholder: 'Ex: crise anxieuse, comportement agité...', required: true },
-      { key: 'comportement', label: 'Comportement et état mental observé', type: 'textarea', placeholder: 'Ex: agitation, discours incohérent, pleurs...', required: true },
-      { key: 'antecedents', label: 'Antécédents psychiatriques', type: 'textarea', placeholder: 'Ex: dépression connue, hospitalisations...' },
-      { key: 'diagnostic', label: 'Diagnostic psychiatrique', type: 'text', placeholder: 'Ex: épisode dépressif majeur, trouble anxieux...', required: true },
-      { key: 'traitement', label: 'Traitement prescrit', type: 'textarea', placeholder: 'Ex: anxiolytiques, antidépresseurs...' },
+      { key: 'heure', label: 'Heure', type: 'time', placeholder: '' },
+      { key: 'nom', label: 'Nom du patient', type: 'text', placeholder: 'Ex: Mme Blanc', required: true },
+      { key: 'prenom', label: 'Prénom', type: 'text', placeholder: 'Ex: Sophie', required: true },
+      { key: 'age', label: 'Âge', type: 'text', placeholder: 'Ex: 32 ans' },
+      { key: 'motif', label: 'Motif de consultation', type: 'text', placeholder: 'Ex: crise anxieuse', required: true },
+      { key: 'comportement', label: 'Comportement et état mental observé', type: 'textarea', placeholder: 'Ex: agitation, discours incohérent...', required: true },
+      { key: 'antecedents', label: 'Antécédents psychiatriques', type: 'textarea', placeholder: 'Ex: dépression connue...' },
+      { key: 'diagnostic', label: 'Diagnostic psychiatrique', type: 'text', placeholder: 'Ex: épisode dépressif majeur', required: true },
+      { key: 'traitement', label: 'Traitement prescrit', type: 'textarea', placeholder: 'Ex: anxiolytiques...' },
       { key: 'suivi', label: 'Suivi recommandé', type: 'textarea', placeholder: 'Ex: consultation psychiatre dans 1 semaine...' },
       { key: 'medecin', label: 'Médecin psychiatre', type: 'text', placeholder: 'Ex: Dr Moreau', required: true },
+      { key: 'assistant', label: 'Assistant / Étudiant', type: 'text', placeholder: 'Ex: Skoll Ethan' },
     ],
-    systemPrompt: `Tu es un médecin psychiatre qui rédige des bilans psychiatriques pour un serveur de roleplay FiveM.
-Génère un bilan psychiatrique complet en français avec :
-- BILAN PSYCHIATRIQUE (titre)
-- Identification
-- Motif de consultation
-- Anamnèse et antécédents
-- Examen psychiatrique (état mental, comportement)
-- Diagnostic
-- Plan de traitement
-- Recommandations et suivi
-- Validation
-Utilise un langage psychiatrique professionnel et empathique.`
+    template: `BILAN PSYCHIATRIQUE
+===================
+
+Date : {{date}}                    Heure : {{heure}}
+
+IDENTITÉ DU PATIENT
+-------------------
+Nom : {{nom}}
+Prénom : {{prenom}}
+Âge : {{age}}
+
+MOTIF DE CONSULTATION
+---------------------
+{{motif}}
+
+EXAMEN PSYCHIATRIQUE
+--------------------
+Comportement et état mental : {{comportement}}
+
+ANTÉCÉDENTS PSYCHIATRIQUES
+---------------------------
+{{antecedents}}
+
+DIAGNOSTIC
+----------
+{{diagnostic}}
+
+PLAN DE TRAITEMENT
+------------------
+{{traitement}}
+
+RECOMMANDATIONS ET SUIVI
+------------------------
+{{suivi}}
+
+PERSONNEL MÉDICAL
+-----------------
+Médecin psychiatre : {{medecin}}
+Assistant / Étudiant : {{assistant}}
+
+Signature : ___________________________`,
   },
   legiste: {
     title: 'Médecin légiste',
     icon: '🔍',
     fields: [
-      { key: 'patient_name', label: 'Nom de la victime', type: 'text', placeholder: 'Ex: M. Noir Inconnu', required: true },
       { key: 'date', label: 'Date d\'examen', type: 'date', placeholder: '', required: true },
-      { key: 'lieu', label: 'Lieu de découverte', type: 'text', placeholder: 'Ex: rue principale, entrepôt abandonné...' },
+      { key: 'heure', label: 'Heure', type: 'time', placeholder: '' },
+      { key: 'nom', label: 'Nom de la victime', type: 'text', placeholder: 'Ex: M. Noir', required: true },
+      { key: 'prenom', label: 'Prénom', type: 'text', placeholder: 'Ex: Inconnu' },
+      { key: 'age', label: 'Âge estimé', type: 'text', placeholder: 'Ex: ~40 ans' },
+      { key: 'lieu', label: 'Lieu de découverte', type: 'text', placeholder: 'Ex: entrepôt abandonné...' },
       { key: 'circonstances', label: 'Circonstances', type: 'textarea', placeholder: 'Ex: retrouvé sans vie, blessure par balle...' },
-      { key: 'examen_externe', label: 'Examen externe du corps', type: 'textarea', placeholder: 'Ex: blessures visibles, état du corps...', required: true },
-      { key: 'lesions', label: 'Lésions constatées', type: 'textarea', placeholder: 'Ex: plaie pénétrante thoracique gauche...', required: true },
+      { key: 'examen_externe', label: 'Examen externe du corps', type: 'textarea', placeholder: 'Ex: blessures visibles...', required: true },
+      { key: 'lesions', label: 'Lésions constatées', type: 'textarea', placeholder: 'Ex: plaie pénétrante thoracique...', required: true },
       { key: 'cause_deces', label: 'Cause probable du décès', type: 'text', placeholder: 'Ex: hémorragie interne massive', required: true },
       { key: 'conclusions', label: 'Conclusions médico-légales', type: 'textarea', placeholder: 'Ex: mort violente, homicide probable...', required: true },
       { key: 'medecin', label: 'Médecin légiste', type: 'text', placeholder: 'Ex: Dr Legrand', required: true },
     ],
-    systemPrompt: `Tu es un médecin légiste qui rédige des rapports médico-légaux pour un serveur de roleplay FiveM.
-Génère un rapport légiste complet en français avec :
-- RAPPORT MÉDICO-LÉGAL (titre)
-- Identification de la victime
-- Circonstances de découverte
-- Examen externe
-- Lésions traumatiques constatées
-- Cause et mécanisme du décès
-- Conclusions médico-légales
-- Validation
-Utilise une terminologie légale et médicale précise et factuelle.`
+    template: `RAPPORT MÉDICO-LÉGAL
+====================
+
+Date d'examen : {{date}}           Heure : {{heure}}
+
+IDENTITÉ DE LA VICTIME
+----------------------
+Nom : {{nom}}
+Prénom : {{prenom}}
+Âge estimé : {{age}}
+
+CIRCONSTANCES DE DÉCOUVERTE
+----------------------------
+Lieu : {{lieu}}
+Circonstances : {{circonstances}}
+
+EXAMEN EXTERNE
+--------------
+{{examen_externe}}
+
+LÉSIONS TRAUMATIQUES CONSTATÉES
+--------------------------------
+{{lesions}}
+
+CAUSE ET MÉCANISME DU DÉCÈS
+----------------------------
+Cause probable : {{cause_deces}}
+
+CONCLUSIONS MÉDICO-LÉGALES
+---------------------------
+{{conclusions}}
+
+PERSONNEL MÉDICAL
+-----------------
+Médecin légiste : {{medecin}}
+
+Signature : ___________________________`,
   },
   deces: {
     title: 'Certificat de décès',
     icon: '📋',
     fields: [
-      { key: 'patient_name', label: 'Nom et prénom du défunt', type: 'text', placeholder: 'Ex: M. Durant Pierre', required: true },
+      { key: 'nom', label: 'Nom du défunt', type: 'text', placeholder: 'Ex: M. Durant', required: true },
+      { key: 'prenom', label: 'Prénom', type: 'text', placeholder: 'Ex: Pierre', required: true },
       { key: 'date_naissance', label: 'Date de naissance', type: 'date', placeholder: '' },
       { key: 'date_deces', label: 'Date du décès', type: 'date', placeholder: '', required: true },
       { key: 'heure_deces', label: 'Heure du décès', type: 'time', placeholder: '' },
-      { key: 'lieu_deces', label: 'Lieu du décès', type: 'text', placeholder: 'Ex: Hôpital de Los Santos, chambre 4', required: true },
+      { key: 'lieu_deces', label: 'Lieu du décès', type: 'text', placeholder: 'Ex: Hôpital de Los Santos', required: true },
       { key: 'cause_immediate', label: 'Cause immédiate du décès', type: 'text', placeholder: 'Ex: arrêt cardiaque', required: true },
-      { key: 'cause_initiale', label: 'Cause initiale / maladie sous-jacente', type: 'text', placeholder: 'Ex: polytraumatisme suite à AVP' },
+      { key: 'cause_initiale', label: 'Cause initiale', type: 'text', placeholder: 'Ex: polytraumatisme suite à AVP' },
       { key: 'medecin', label: 'Médecin certificateur', type: 'text', placeholder: 'Ex: Dr Petit', required: true },
     ],
-    systemPrompt: `Tu es un médecin qui rédige des certificats de décès officiels pour un serveur de roleplay FiveM.
-Génère un certificat de décès complet et formel en français avec :
-- CERTIFICAT DE DÉCÈS (titre)
-- Identité du défunt
-- Constatation du décès (date, heure, lieu)
-- Cause immédiate du décès
-- Cause initiale / pathologie sous-jacente
-- Déclaration officielle
-- Validation et cachet médical
-Le ton doit être formel, officiel et sobre.`
+    template: `CERTIFICAT DE DÉCÈS
+===================
+
+IDENTITÉ DU DÉFUNT
+------------------
+Nom : {{nom}}
+Prénom : {{prenom}}
+Date de naissance : {{date_naissance}}
+
+CONSTATATION DU DÉCÈS
+---------------------
+Date du décès : {{date_deces}}
+Heure du décès : {{heure_deces}}
+Lieu du décès : {{lieu_deces}}
+
+CAUSE DU DÉCÈS
+--------------
+Cause immédiate : {{cause_immediate}}
+Cause initiale / pathologie sous-jacente : {{cause_initiale}}
+
+DÉCLARATION OFFICIELLE
+----------------------
+Je soussigné(e), certifie avoir constaté le décès de la personne désignée ci-dessus.
+
+MÉDECIN CERTIFICATEUR
+---------------------
+Médecin : {{medecin}}
+
+Signature : ___________________________`,
   },
 };
 
@@ -246,21 +573,13 @@ export default function TemplatePage() {
     setLoading(true);
     setError('');
 
-    const userContent = Object.entries(values)
-      .filter(([_, v]) => v)
-      .map(([k, v]) => {
-        const field = config.fields.find(f => f.key === k);
-        return `${field?.label || k}: ${v}`;
-      })
-      .join('\n');
-
     try {
       const response = await fetch('/api/generate-report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          systemPrompt: config.systemPrompt,
-          userContent,
+          template: config.template,
+          values,
         }),
       });
 
@@ -283,7 +602,7 @@ export default function TemplatePage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { setError('Non authentifié'); setSaving(false); return; }
 
-    const patientName = values['patient_name'] || 'Inconnu';
+    const patientName = `${values['nom'] || ''} ${values['prenom'] || ''}`.trim() || 'Inconnu';
     const filename = `${templateId}_${patientName.replace(/\s/g, '_')}_${Date.now()}.txt`;
     const storagePath = `${user.id}/${filename}`;
 
@@ -325,7 +644,7 @@ export default function TemplatePage() {
       {step === 'form' && (
         <>
           <div className="bg-slate-800/30 border border-orange-900/30 rounded-xl p-4 mb-6">
-            <p className="text-sm text-orange-300">💡 Remplissez les informations clés — l'IA se chargera de rédiger le rapport complet et professionnel.</p>
+            <p className="text-sm text-orange-300">💡 Remplissez les informations — le rapport se génère automatiquement.</p>
           </div>
 
           <div className="space-y-4">
@@ -363,7 +682,7 @@ export default function TemplatePage() {
               disabled={loading}
               className="w-full bg-orange-700 hover:bg-orange-600 disabled:opacity-50 text-white font-medium rounded-xl px-8 py-4 transition text-lg"
             >
-              {loading ? '⏳ Génération en cours...' : '✨ Générer le rapport'}
+              {loading ? '⏳ Génération en cours...' : '📄 Générer le rapport'}
             </button>
           </div>
         </>
