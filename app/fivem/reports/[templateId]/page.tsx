@@ -72,8 +72,6 @@ const TEMPLATE = `⚕️ RAPPORT D'INTERVENTION MÉDICALE — SAMS
 
 État de conscience du patient : {{conscience}}
 
-Description de l'état général à l'arrivée : {{etat_general}}
-
 Blessure / symptôme principal : {{diagnostic}}
 Localisation précise : {{localisation_precise}}
 Niveau de douleur : {{douleur}}/10
@@ -100,25 +98,15 @@ Type d'examen : {{type_examen}}
 
 Résultats : {{resultats_examen}}
 
-Observations médicales : {{observations_examen}}
-
 ---
 
 🔪 Prise en charge et protocole de soins
 
 {{protocole}}
 
-Déroulement de la procédure : {{deroulement}}
-
 ---
 
 🩹 État final du patient
-
-État général après prise en charge : {{etat_final}}
-
-Constantes : {{constantes_finales}}
-
-Évolution de la douleur : {{evolution_douleur}}
 
 Complications éventuelles : {{complications}}
 
@@ -172,7 +160,6 @@ const fields = [
   { key: 'localisation', label: 'Localisation générale', type: 'text', placeholder: 'Ex: Torse — flanc droit abdominal' },
   { key: 'gravite', label: '⚠️ Gravité', type: 'text', placeholder: 'Ex: 🔴 Rouge' },
   { key: 'conscience', label: 'État de conscience', type: 'text', placeholder: 'Ex: Conscient, orienté et coopérant' },
-  { key: 'etat_general', label: "État général à l'arrivée", type: 'textarea', placeholder: 'Description générale du patient à l\'admission...' },
   { key: 'diagnostic', label: 'Blessure / symptôme principal', type: 'text', placeholder: 'Ex: Plaie par balle non traversante', required: true },
   { key: 'localisation_precise', label: 'Localisation précise', type: 'text', placeholder: 'Ex: Flanc droit abdominal' },
   { key: 'douleur', label: 'Douleur (/10)', type: 'text', placeholder: 'Ex: 7' },
@@ -185,12 +172,7 @@ const fields = [
   { key: 'etat_constantes', label: 'État des constantes', type: 'text', placeholder: "Ex: Constantes stables à l'admission" },
   { key: 'type_examen', label: "Type d'examen réalisé", type: 'textarea', placeholder: 'Ex: Exploration clinique, radiologie...' },
   { key: 'resultats_examen', label: 'Résultats', type: 'textarea', placeholder: "Ex: Aucune atteinte d'organe interne..." },
-  { key: 'observations_examen', label: 'Observations médicales', type: 'textarea', placeholder: 'Ex: Tissu mou intact...' },
   { key: 'protocole', label: 'Protocole de soins (liste avec •)', type: 'textarea', placeholder: '• Désinfection\n• Suture\n• Pansement...' },
-  { key: 'deroulement', label: 'Déroulement de la procédure', type: 'textarea', placeholder: "Ex: La procédure s'est déroulée sans complication..." },
-  { key: 'etat_final', label: 'État final du patient', type: 'textarea', placeholder: 'Ex: Patient stabilisé après prise en charge...' },
-  { key: 'constantes_finales', label: 'Constantes finales', type: 'text', placeholder: 'Ex: Constantes satisfaisantes' },
-  { key: 'evolution_douleur', label: 'Évolution de la douleur', type: 'text', placeholder: 'Ex: Douleur contrôlée après antalgiques' },
   { key: 'complications', label: 'Complications éventuelles', type: 'text', placeholder: 'Ex: Aucune complication' },
   { key: 'antalgique', label: 'Antalgique', type: 'text', placeholder: 'Ex: Paracétamol 1g x3/jour' },
   { key: 'anti_inflammatoire', label: 'Anti-inflammatoire', type: 'text', placeholder: 'Ex: Ibuprofène 400mg x3/jour' },
