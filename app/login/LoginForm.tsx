@@ -39,7 +39,7 @@ export default function LoginPage() {
     if (error) {
       setError('Email ou mot de passe incorrect.');
     } else {
-      router.push('/dashboard');
+      router.push('/fivem'); // ← redirige vers la MDT FiveM
       router.refresh();
     }
     setLoading(false);
