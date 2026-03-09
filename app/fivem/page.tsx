@@ -16,24 +16,24 @@ const MODULES = [
 ];
 
 const VITALS = [
-  { label: 'UNITÉS EN SERVICE',   value: '04',   unit: '',    color: '#4ADE80' },
-  { label: 'INTERVENTIONS / 24H', value: '12',   unit: '',    color: '#F97316' },
-  { label: 'TAUX DE SURVIE',      value: '97.3', unit: '%',   color: '#F87171' },
+  { label: 'UNITÉS EN SERVICE',   value: '14',   unit: '',    color: '#4ADE80' },
+  { label: 'INTERVENTIONS / 24H', value: '1200',   unit: '',    color: '#F97316' },
+  { label: 'TAUX DE SURVIE',      value: '97.35', unit: '%',   color: '#F87171' },
   { label: 'TEMPS MOYEN RÉPONSE', value: '4:30', unit: 'MIN', color: '#38BDF8' },
 ];
 
 const LOGS = [
   { time: '08:42', msg: 'Zone Vinewood — polytraumatisme signalé', dot: '#EF4444' },
-  { time: '07:15', msg: 'Rapport validé — Sullivan Eleanor',       dot: '#4ADE80' },
-  { time: '06:58', msg: 'Unité Alpha-3 de retour disponible',      dot: '#38BDF8' },
+  { time: '07:15', msg: 'Rapport validé',       dot: '#4ADE80' },
+  { time: '06:58', msg: 'Unité ALS AMBULANCE de retour disponible',      dot: '#38BDF8' },
   { time: '06:30', msg: 'Protocole sepsis mis à jour',             dot: '#F97316' },
 ];
 
 const UNITS = [
-  { id: 'ALPHA-1', loc: 'Pillbox Hill', status: 'DISPONIBLE', col: '#4ADE80' },
-  { id: 'ALPHA-3', loc: 'Sandy Shores', status: 'EN ROUTE',   col: '#F97316' },
-  { id: 'BRAVO-2', loc: 'Vinewood',     status: 'OCCUPÉ',     col: '#EF4444' },
-  { id: 'BRAVO-4', loc: 'Paleto Bay',   status: 'DISPONIBLE', col: '#4ADE80' },
+  { id: 'ALS AMBULANCE',   loc: 'Pillbox Hill', status: 'DISPONIBLE', col: '#4ADE80' },
+  { id: 'MEDIC 13',        loc: 'Sandy Shores', status: 'EN ROUTE',   col: '#F97316' },
+  { id: 'RESCUE UNIT',     loc: 'Vinewood',     status: 'OCCUPÉ',     col: '#EF4444' },
+  { id: 'WATER RESCUE',    loc: 'Marina',   status: 'DISPONIBLE', col: '#4ADE80' },
 ];
 
 export default function FiveMPage() {
