@@ -343,6 +343,26 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           display: flex; justify-content: space-between; align-items: center;
         }
 
+        /* ── BTN SWITCH REDM ── */
+        .fivem-redm-btn {
+          display: flex; align-items: center; gap: 6px;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 10px; letter-spacing: 0.12em;
+          padding: 5px 13px; border-radius: 6px;
+          border: 1px solid rgba(220,38,38,0.55);
+          background: rgba(220,38,38,0.10);
+          color: #F87171;
+          text-decoration: none;
+          transition: all 0.18s;
+          white-space: nowrap;
+        }
+        .fivem-redm-btn:hover {
+          background: rgba(220,38,38,0.22);
+          border-color: rgba(220,38,38,0.85);
+          box-shadow: 0 0 14px rgba(220,38,38,0.35);
+          color: #FCA5A5;
+        }
+
         .fivem-divider {
           height: 1px;
           background: linear-gradient(90deg, transparent, var(--f-border), transparent);
@@ -473,27 +493,7 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
               </div>
 
               {/* Switch RedM */}
-              <Link href="/redm" style={{
-                display: 'flex', alignItems: 'center', gap: 6,
-                fontFamily: "'Share Tech Mono', monospace",
-                fontSize: 10, letterSpacing: '0.12em',
-                padding: '5px 13px', borderRadius: '6px',
-                border: '1px solid rgba(220,38,38,0.55)',
-                background: 'rgba(220,38,38,0.10)',
-                color: '#F87171',
-                textDecoration: 'none',
-                transition: 'all 0.18s',
-              }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLElement).style.background = 'rgba(220,38,38,0.22)';
-                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(220,38,38,0.85)';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 0 14px rgba(220,38,38,0.35)';
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLElement).style.background = 'rgba(220,38,38,0.10)';
-                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(220,38,38,0.55)';
-                (e.currentTarget as HTMLElement).style.boxShadow = 'none';
-              }}>
+              <Link href="/redm" className="fivem-redm-btn">
                 <span style={{ fontSize: 9 }}>⬡</span> REDM
               </Link>
 
