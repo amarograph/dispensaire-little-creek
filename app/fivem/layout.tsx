@@ -465,12 +465,38 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
               ))}
             </nav>
 
-            {/* Status */}
+            {/* Status + Switch + Quitter */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span className="fivem-dot" />
                 <span className="fivem-badge">ACTIF</span>
               </div>
+
+              {/* Switch RedM */}
+              <Link href="/redm" style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                fontFamily: "'Share Tech Mono', monospace",
+                fontSize: 10, letterSpacing: '0.12em',
+                padding: '5px 13px', borderRadius: '6px',
+                border: '1px solid rgba(220,38,38,0.55)',
+                background: 'rgba(220,38,38,0.10)',
+                color: '#F87171',
+                textDecoration: 'none',
+                transition: 'all 0.18s',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.background = 'rgba(220,38,38,0.22)';
+                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(220,38,38,0.85)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 0 14px rgba(220,38,38,0.35)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.background = 'rgba(220,38,38,0.10)';
+                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(220,38,38,0.55)';
+                (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+              }}>
+                <span style={{ fontSize: 9 }}>⬡</span> REDM
+              </Link>
+
               <Link href="/login" className="fivem-btn-sec" style={{ padding: '4px 12px', fontSize: 10 }}>
                 ⏻ Quitter
               </Link>
