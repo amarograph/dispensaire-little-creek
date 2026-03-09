@@ -87,6 +87,16 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
         @keyframes hud-rot-ccw { from{transform-box:fill-box;transform-origin:center;transform:rotate(0deg)}   to{transform-box:fill-box;transform-origin:center;transform:rotate(-360deg)} }
         @keyframes hud-pulse   { 0%,100%{opacity:.4} 50%{opacity:1} }
         @keyframes hud-flow    { from{stroke-dashoffset:160} to{stroke-dashoffset:0} }
+        @keyframes ecg-travel  {
+          0%   { stroke-dashoffset: 1200; opacity: 0; }
+          5%   { opacity: 1; }
+          85%  { opacity: 1; }
+          100% { stroke-dashoffset: 0; opacity: 0; }
+        }
+        @keyframes ecg-glow-pulse {
+          0%,100% { filter: drop-shadow(0 0 3px rgba(249,115,22,0.6)); }
+          50%      { filter: drop-shadow(0 0 10px rgba(249,115,22,1)) drop-shadow(0 0 20px rgba(249,115,22,0.5)); }
+        }
         .hud-ring1 { animation: hud-rot-cw  18s linear infinite; transform-box: fill-box; transform-origin: 340px 340px; }
         .hud-ring2 { animation: hud-rot-ccw 12s linear infinite; transform-box: fill-box; transform-origin: 340px 340px; }
         .hud-ring3 { animation: hud-rot-cw  30s linear infinite; transform-box: fill-box; transform-origin: 340px 340px; }
@@ -108,23 +118,8 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           box-shadow: 0 1px 24px rgba(249,115,22,0.05);
         }
 
-        /* ── Ligne ECG animée ── */
-        .fivem-ecg {
-          height: 2px;
-          background: linear-gradient(90deg,
-            transparent 0%, transparent 20%,
-            rgba(249,115,22,0.12) 22%, rgba(249,115,22,0.7) 27%,
-            #F97316 29%, rgba(249,115,22,0.25) 31%,
-            rgba(249,115,22,0.7) 33%, rgba(249,115,22,0.08) 36%,
-            transparent 40%, transparent 100%
-          );
-          background-size: 300% 100%;
-          animation: fivem-ecg 2.8s linear infinite;
-        }
-        @keyframes fivem-ecg {
-          0%   { background-position: 130% 0; }
-          100% { background-position: -130% 0; }
-        }
+        /* ── ECG supprimé — remplacé par SVG dans le HUD ── */
+        .fivem-ecg { display: none; }
 
         /* ── Nav inner ── */
         .fivem-nav-inner {
@@ -468,11 +463,72 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
             const r1 = 315; const r2 = r1 + len;
             return <line key={i} x1={340+r1*Math.cos(a)} y1={340+r1*Math.sin(a)} x2={340+r2*Math.cos(a)} y2={340+r2*Math.sin(a)} stroke={i%5===0?"rgba(249,115,22,0.5)":"rgba(56,189,248,0.25)"} strokeWidth={i%5===0?1:0.5}/>;
           })}
+
+          {/* ══ LIGNE ECG — part du centre du HUD vers la droite ══ */}
+          {/* Chemin ECG réaliste : ligne de base puis pic QRS + onde T */}
+          {/* Coordonnée de départ : centre hexagone = 340,340 → traverse tout l'écran */}
+          <path
+            d="M 340,340
+               L 380,340
+               L 395,340 L 400,336 L 405,340 L 408,340
+               L 415,340 L 418,322 L 422,362 L 426,328 L 430,340
+               L 435,340 L 440,337 L 445,340
+               L 460,340
+               L 465,340 L 468,336 L 473,340 L 476,340
+               L 483,340 L 486,322 L 490,362 L 494,328 L 498,340
+               L 503,340 L 508,337 L 513,340
+               L 530,340
+               L 535,340 L 538,337 L 542,340
+               L 545,340 L 548,322 L 552,362 L 556,328 L 560,340
+               L 565,340 L 570,338 L 575,340
+               L 600,340 L 650,340 L 720,340 L 800,340 L 900,340 L 1100,340 L 1400,340 L 1800,340 L 2200,340"
+            stroke="#F97316"
+            strokeWidth="2"
+            fill="none"
+            strokeDasharray="1200"
+            strokeDashoffset="1200"
+            style={{
+              animation: 'ecg-travel 3.2s ease-out infinite',
+              animationDelay: '0s',
+              filter: 'drop-shadow(0 0 4px rgba(249,115,22,0.9)) drop-shadow(0 0 12px rgba(249,115,22,0.5))',
+            }}
+          />
+          {/* Deuxième passe décalée pour effet continu */}
+          <path
+            d="M 340,340
+               L 380,340
+               L 395,340 L 400,336 L 405,340 L 408,340
+               L 415,340 L 418,322 L 422,362 L 426,328 L 430,340
+               L 435,340 L 440,337 L 445,340
+               L 460,340
+               L 465,340 L 468,336 L 473,340 L 476,340
+               L 483,340 L 486,322 L 490,362 L 494,328 L 498,340
+               L 503,340 L 508,337 L 513,340
+               L 530,340
+               L 535,340 L 538,337 L 542,340
+               L 545,340 L 548,322 L 552,362 L 556,328 L 560,340
+               L 565,340 L 570,338 L 575,340
+               L 600,340 L 650,340 L 720,340 L 800,340 L 900,340 L 1100,340 L 1400,340 L 1800,340 L 2200,340"
+            stroke="rgba(249,115,22,0.55)"
+            strokeWidth="1.2"
+            fill="none"
+            strokeDasharray="1200"
+            strokeDashoffset="1200"
+            style={{
+              animation: 'ecg-travel 3.2s ease-out infinite',
+              animationDelay: '1.6s',
+              filter: 'drop-shadow(0 0 6px rgba(249,115,22,0.7))',
+            }}
+          />
+          {/* Point de départ lumineux au centre = cœur de l'hexagone */}
+          <circle cx="340" cy="340" r="5" fill="rgba(249,115,22,0.9)"
+            style={{ animation: 'ecg-glow-pulse 3.2s ease-in-out infinite', filter: 'drop-shadow(0 0 8px #F97316)' }}
+          />
         </svg>
 
         {/* ════ HEADER ════ */}
         <header className="fivem-header">
-          <div className="fivem-ecg" />
+          {/* ECG déplacé dans le HUD SVG */}
           <div className="fivem-nav-inner">
 
             {/* Logo */}
