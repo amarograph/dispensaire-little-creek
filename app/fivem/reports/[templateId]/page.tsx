@@ -71,8 +71,10 @@ const TEMPLATE = `⚕️ RAPPORT D'INTERVENTION MÉDICALE — SAMS
 🩺 État initial à l'admission
 
 État de conscience : {{conscience}}
+Cause de la blessure : {{causes_blessure}}
+Type de blessure : {{types_blessure}}
 Blessure / symptôme principal : {{diagnostic}}
-Localisation précise : {{localisation_precise}}
+Localisation : {{localisation_precise}} {{localisation_libre}}
 Niveau de douleur : {{douleur}}/10
 Signes cliniques observés : {{signes_cliniques}}
 Observations complémentaires : {{observations}}
@@ -238,14 +240,35 @@ export default function TemplatePage() {
 
   function applyB(b: typeof blessures[0]) {
     setVals(p=>({...p,
-      motif:b.motif, gravite:b.gravite, conscience:b.conscience, diagnostic:b.diagnostic,
-      localisation_precise:b.localisation_precise, douleur:b.douleur,
-      signes_cliniques:b.signes_cliniques, observations:b.observations,
-      fc:b.fc, ta:b.ta, spo2:b.spo2, temperature:b.temperature, etat_constantes:b.etat_constantes,
-      type_examen:b.type_examen, resultats_examen:b.resultats_examen, protocole:b.protocole,
-      complications:b.complications, repos:b.repos, antalgique:b.antalgique,
-      anti_inflammatoire:b.anti_inflammatoire, antibiotique:b.antibiotique,
-      soins_locaux:b.soins_locaux, ata:b.ata, restrictions:b.restrictions, surveillance:b.surveillance,
+      // ── Ce que le raccourci NE touche PAS ──────────────────
+      // motifs_selection, motif_libre, localisation (lieu), nom, prenom, date, heure, civilite, redacteur
+      // ── Ce que le raccourci REMPLIT ────────────────────────
+      gravite:        b.gravite,
+      conscience:     b.conscience,
+      diagnostic:     b.diagnostic,        // description médicale de la blessure
+      types_blessure: b.label.includes('Fracture') ? 'Fracture'
+                    : b.label.includes('Brûlure')  ? 'Brulure'
+                    : b.label.includes('BPB') || b.label.includes('balle') ? 'Balle'
+                    : b.label.includes('Couteau') || b.label.includes('blanche') ? 'Couteau'
+                    : b.label.includes('Noyade') ? 'Noyade'
+                    : b.label.includes('Intox') || b.label.includes('allerg') ? 'Intoxication'
+                    : b.label.includes('AVP') ? 'AVP'
+                    : b.label.includes('Chute') ? 'Chute'
+                    : 'Autre',
+      // Localisation : chips vides, champ libre vide
+      localisation_precise: '',
+      localisation_libre:   '',
+      // Observations ← localisation précise médicale du raccourci
+      observations:         b.localisation_precise,
+      douleur:              b.douleur,
+      signes_cliniques:     b.signes_cliniques,
+      fc:b.fc, ta:b.ta, spo2:b.spo2, temperature:b.temperature,
+      etat_constantes:b.etat_constantes,
+      type_examen:b.type_examen, resultats_examen:b.resultats_examen,
+      protocole:b.protocole, complications:b.complications, repos:b.repos,
+      antalgique:b.antalgique, anti_inflammatoire:b.anti_inflammatoire,
+      antibiotique:b.antibiotique, soins_locaux:b.soins_locaux,
+      ata:b.ata, restrictions:b.restrictions, surveillance:b.surveillance,
     }));
     setShowB(false);
   }
@@ -253,9 +276,12 @@ export default function TemplatePage() {
   async function generate() {
     setLoading(true); setErr('');
     const gt = vals.gravite==='GRAVE'?'🔴 GRAVE':vals.gravite==='MOYENNE'?'🟡 MOYENNE':'🟢 LÉGÈRE';
+    // Fusionner les motifs multi-sélection + champ libre
+    const motifParts = [vals.motifs_selection, vals.motif_libre].filter(Boolean);
+    const motif = motifParts.join(' — ') || '—';
     try {
       const res = await fetch('/api/generate-report',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({template:TEMPLATE,values:{...vals,gravite:gt}})});
+        body:JSON.stringify({template:TEMPLATE,values:{...vals,gravite:gt,motif}})});
       const data = await res.json();
       if(data.error) throw new Error(data.error);
       setReport(data.report); setStep('preview');
@@ -351,40 +377,59 @@ export default function TemplatePage() {
           <div><L t="Nom du patient" req/><FI k="nom" v={vals} s={set} ph="Nom Prénom"/></div>
           <div><L t="Prénom"/><FI k="prenom" v={vals} s={set} ph="Ex: Jackson"/></div>
           <div>
+            {/* MOTIF : multi-sélection + champ libre. Le raccourci ne touche PAS ce champ. */}
             <L t="Motif de déclenchement"/>
             <div className="flex flex-wrap gap-2 mb-2">
               {['Blessure par balle','Couteau','AVP','Chute','Noyade','Rixe','Acc. travail','Malaise','Brulure','Overdose'].map(m=>(
-                <Chip key={m} label={m} active={vals.motif===m} onClick={()=>set('motif',vals.motif===m?'':m)}/>
+                <Chip key={m} label={m} active={(vals.motifs_selection||'').includes(m)} onClick={()=>toggleList('motifs_selection',m)}/>
               ))}
             </div>
-            <input value={vals.motif||''} onChange={e=>set('motif',e.target.value)} placeholder="Autre motif ou précisions..." className={baseInput}/>
+            <input value={vals.motif_libre||''} onChange={e=>set('motif_libre',e.target.value)} placeholder="Autre motif ou précisions..." className={baseInput}/>
           </div>
           <div><L t="Lieu d'intervention"/><FI k="localisation" v={vals} s={set} ph="Adresse ou quartier..."/></div>
         </Section>
 
         {/* S2 BLESSURES */}
         <Section icon="🩹" title="Blessures" color="red">
+
+          {/* CAUSE DE LA BLESSURE (multi-select) */}
+          <div>
+            <L t="Cause de la blessure"/>
+            <div className="flex flex-wrap gap-2">
+              {['Blessure par balle','Couteau','AVP','Chute','Noyade','Rixe','Acc. travail','Malaise','Brulure','Overdose'].map(c=>(
+                <Chip key={c} label={c} active={(vals.causes_blessure||'').includes(c)} onClick={()=>toggleList('causes_blessure',c)} ac="border-orange-500 bg-orange-500/15 text-orange-300"/>
+              ))}
+            </div>
+          </div>
+
+          {/* TYPE DE BLESSURE (multi-select) */}
           <div>
             <L t="Type de blessure(s)" req/>
             <div className="flex flex-wrap gap-2 mb-2">
               {['Balle','Couteau','Brulure','Fracture','AVP','Chute','Noyade','Intoxication','Autre'].map(t=>(
-                <Chip key={t} label={t} active={vals.diagnostic===t} onClick={()=>set('diagnostic',vals.diagnostic===t?'':t)} ac="border-red-500 bg-red-500/15 text-red-300"/>
+                <Chip key={t} label={t} active={(vals.types_blessure||'').includes(t)} onClick={()=>toggleList('types_blessure',t)} ac="border-red-500 bg-red-500/15 text-red-300"/>
               ))}
             </div>
+            {/* champ texte libre pour le diagnostic principal (rempli par raccourci) */}
             <input value={vals.diagnostic||''} onChange={e=>set('diagnostic',e.target.value)} placeholder="Blessure / symptôme principal..." className={baseInput}/>
           </div>
+
+          {/* LOCALISATION : chips multi-select + champ vide au départ */}
           <div>
             <L t="Localisation" req/>
             <div className="flex flex-wrap gap-2 mb-2">
               {['Tête','Visage','Cou','Épaule G.','Épaule D.','Thorax','Abdomen','Dos','Bras G.','Bras D.','Main G.','Main D.','Bassin','Jambe G.','Jambe D.','Pied G.','Pied D.'].map(l=>(
-                <Chip key={l} label={l} active={vals.localisation_precise?.includes(l)} onClick={()=>toggleList('localisation_precise',l)} ac="border-red-500 bg-red-500/15 text-red-300"/>
+                <Chip key={l} label={l} active={(vals.localisation_precise||'').includes(l)} onClick={()=>toggleList('localisation_precise',l)} ac="border-red-500 bg-red-500/15 text-red-300"/>
               ))}
             </div>
-            <input value={vals.localisation_precise||''} onChange={e=>set('localisation_precise',e.target.value)} placeholder="Précisez si nécessaire..." className={baseInput}/>
+            {/* champ toujours vide à l'init et après raccourci */}
+            <input value={vals.localisation_libre||''} onChange={e=>set('localisation_libre',e.target.value)} placeholder="Précisez si nécessaire..." className={baseInput}/>
           </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div><L t="Signes cliniques"/><FT k="signes_cliniques" v={vals} s={set} ph="Observations cliniques..." rows={3}/></div>
-            <div><L t="Observations"/><FT k="observations" v={vals} s={set} ph="Précisions..." rows={3}/></div>
+            {/* Observations = localisation précise médicale venue du raccourci */}
+            <div><L t="Observations"/><FT k="observations" v={vals} s={set} ph="Ex : Segment osseux atteint, zone lésée..." rows={3}/></div>
           </div>
         </Section>
 
