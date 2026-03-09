@@ -66,7 +66,7 @@ export default function FiveMPage() {
 
   return (
     <div style={{ fontFamily: DISPLAY }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 18, alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 18, alignItems: 'start' }}>
 
         {/* ═══ COLONNE GAUCHE ═══ */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

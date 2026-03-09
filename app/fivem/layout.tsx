@@ -122,12 +122,14 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
         .fivem-ecg { display: none; }
 
         /* ── Nav inner ── */
-        .fivem-nav-inner {
-          max-width: 1100px; margin: 0 auto;
-          padding: 0 24px;
-          display: flex; align-items: center; gap: 20px;
-          height: 56px;
-        }
+         .fivem-nav-inner {
+         max-width: 1600px; margin: 0 auto;
+         padding: 0 32px;
+         }
+        .fivem-main {
+         max-width: 1600px; margin: 0 auto;
+         padding: 28px 32px 80px;
+         }
 
         /* ── Logo ── */
         .fivem-logo-box {
