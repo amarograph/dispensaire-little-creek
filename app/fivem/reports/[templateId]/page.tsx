@@ -85,7 +85,10 @@ Observations complémentaires : {{observations}}
 
 🫀 Constantes vitales
 
-FC : {{fc}} bpm | TA : {{ta}} mmHg | SpO₂ : {{spo2}} % | Température : {{temperature}} °C
+FC : {{fc}} bpm
+TA : {{ta}} mmHg
+SpO₂ : {{spo2}} %
+Température : {{temperature}} °C
 État des constantes : {{etat_constantes}}
 
 ---
@@ -281,22 +284,55 @@ export default function TemplatePage() {
     const gt = vals.gravite==='CRITIQUE'?'🟣 CRITIQUE':vals.gravite==='ELEVEE'?'🔴 ÉLEVÉE':vals.gravite==='MOYENNE'?'🟡 MOYENNE':'🟢 FAIBLE';
     // Fusionner les motifs multi-sélection + champ libre
     const motifParts = [vals.motifs_selection, vals.motif_libre].filter(Boolean);
-    const motif = motifParts.join(' — ') || '—';
+    const motif = motifParts.join(' — ') || '';
     // Triage formaté
     const triageMap: Record<string,string> = { VERT:'🟢 Blessures mineures', JAUNE:'🟡 Urgence différée', ROUGE:'🔴 Urgence vitale', NOIR:'⚫ Décès' };
-    const triage = triageMap[vals.triage||''] || '—';
+    const triage = triageMap[vals.triage||''] || '';
     // Douleur par zone
     const zones = (vals.douleur_zones||'').split(',').map((s:string)=>s.trim()).filter(Boolean);
     const douleur_zones_detail = zones.length > 0
       ? zones.map((z:string)=>{
           const key = `douleur_${z.replace(/[^a-zA-Z0-9]/g,'_')}`;
-          const v = vals[key]||'—';
-          return `${z}: ${v}/10`;
-        }).join(' | ')
-      : '—';
+          const v = vals[key]||'';
+          return v ? `${z}: ${v}/10` : null;
+        }).filter(Boolean).join(' | ')
+      : '';
+
+    // Toutes les valeurs fusionnées
+    const allVals: Record<string,string> = {
+      ...vals, gravite: gt, motif, triage, douleur_zones_detail,
+    };
+
+    // Remplacer toutes les balises {{key}} puis supprimer les lignes sans valeur
+    function cleanTemplate(tpl: string): string {
+      // 1. Remplacer chaque balise par sa valeur (ou chaîne vide)
+      let result = tpl.replace(/\{\{(\w+)\}\}/g, (_: string, key: string) => {
+        const v = allVals[key];
+        return (v !== undefined && v !== null && String(v).trim() !== '') ? String(v).trim() : '__EMPTY__';
+      });
+
+      // 2. Supprimer les lignes qui contiennent __EMPTY__ (champ vide)
+      // Cas 1 : ligne du type "Label : __EMPTY__" → supprimée entièrement
+      // Cas 2 : ligne contenant UNIQUEMENT __EMPTY__ (ex: {{protocole}} seul) → supprimée
+      result = result.split('\n').filter(line => {
+        const trimmed = line.trim();
+        // Si la ligne contient encore __EMPTY__, on la vire
+        if (trimmed.includes('__EMPTY__')) return false;
+        return true;
+      }).join('\n');
+
+      // 3. Nettoyer les blocs --- orphelins (--- suivi immédiatement d'un autre --- ou fin)
+      result = result.replace(/---\s*\n(\s*\n)*---/g, '---');
+      // 4. Nettoyer les doubles lignes vides excessives
+      result = result.replace(/\n{3,}/g, '\n\n');
+
+      return result;
+    }
+
     try {
+      const cleanedTemplate = cleanTemplate(TEMPLATE);
       const res = await fetch('/api/generate-report',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({template:TEMPLATE,values:{...vals,gravite:gt,motif,triage,douleur_zones_detail}})});
+        body:JSON.stringify({template:cleanedTemplate,values:allVals})});
       const data = await res.json();
       if(data.error) throw new Error(data.error);
       setReport(data.report); setStep('preview');
