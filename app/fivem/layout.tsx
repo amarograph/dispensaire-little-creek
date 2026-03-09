@@ -164,8 +164,8 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
 
         /* ── MAIN ── */
         .fivem-main {
-          max-width: 920px; margin: 0 auto;
-          padding: 36px 24px 80px;
+          max-width: 1100px; margin: 0 auto;
+          padding: 28px 24px 80px;
         }
 
         /* ── Fade-in entrée ── */
