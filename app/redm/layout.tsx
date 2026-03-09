@@ -22,7 +22,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IM+Fell+English:ital@0;1&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Special+Elite&display=swap');
 
         .redm-root {
           --r-bg:       #1A1008;
@@ -33,24 +33,23 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           --r-rust:     #8B3A1A;
           --r-ink:      #E8DCC8;
           --r-ink-d:    #B8A888;
-          --r-ink-dd:   #7A6850;
+          --r-ink-dd:   #8A7560;
           --r-sepia:    #4A3520;
           --r-border:   rgba(200,147,42,0.30);
           --r-border-s: rgba(200,147,42,0.60);
           --r-glow:     rgba(200,147,42,0.12);
-          --r-serif:    'Playfair Display', 'Georgia', serif;
-          --r-fell:     'IM Fell English', 'Georgia', serif;
-          --r-mono:     'Courier Prime', 'Courier New', monospace;
+          --r-display:  'Rye', 'Georgia', serif;
+          --r-body:     'Josefin Slab', 'Georgia', serif;
+          --r-mono:     'Special Elite', 'Courier New', monospace;
 
           min-height: 100vh;
           background: var(--r-bg);
           color: var(--r-ink);
-          font-family: var(--r-fell);
+          font-family: var(--r-body);
           position: relative;
           overflow-x: hidden;
         }
 
-        /* ── FOND ── */
         .redm-root::before {
           content: '';
           position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -61,7 +60,6 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
             linear-gradient(160deg, #0E0803 0%, #1A1008 30%, #1E1309 60%, #120900 100%);
         }
 
-        /* ── PAPIER VIEILLI ── */
         .redm-root::after {
           content: '';
           position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -73,7 +71,6 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
 
         .redm-root > * { position: relative; z-index: 1; }
 
-        /* ── ORNEMENT FOND ── */
         .redm-ornament {
           position: fixed;
           left: -60px; top: 50%;
@@ -83,17 +80,14 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           opacity: 0.08;
         }
 
-        /* ── SCROLLBAR ── */
         .redm-root ::-webkit-scrollbar { width: 5px; }
         .redm-root ::-webkit-scrollbar-track { background: #0E0803; }
         .redm-root ::-webkit-scrollbar-thumb { background: rgba(200,147,42,0.35); border-radius: 2px; }
 
-        /* ═══════════════════
-           HEADER
-        ═══════════════════ */
+        /* ── HEADER ── */
         .redm-header {
           position: sticky; top: 0; z-index: 50;
-          background: rgba(18,9,3,0.96);
+          background: rgba(14,8,3,0.97);
           backdrop-filter: blur(10px);
           border-bottom: 1px solid var(--r-border);
           box-shadow: 0 2px 30px rgba(0,0,0,0.7);
@@ -115,7 +109,6 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           box-sizing: border-box;
         }
 
-        /* ── LOGO ── */
         .redm-logo-box {
           width: 40px; height: 40px; flex-shrink: 0;
           background: linear-gradient(135deg, #8B3A1A, #5A1F08);
@@ -126,26 +119,24 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
         }
         .redm-logo-title {
-          font-family: var(--r-serif); font-weight: 700; font-size: 15px;
+          font-family: var(--r-display); font-size: 13px;
           color: var(--r-ink); line-height: 1; letter-spacing: 0.05em;
         }
         .redm-logo-sub {
           font-family: var(--r-mono); font-size: 11px;
-          color: var(--r-gold); letter-spacing: 0.15em; line-height: 1.4;
+          color: var(--r-gold); letter-spacing: 0.12em; line-height: 1.4;
           text-transform: uppercase;
         }
 
-        /* ── NAV LINKS ── */
         .redm-nav { display: flex; align-items: center; gap: 2px; flex: 1; }
         .redm-nav a {
-          font-family: var(--r-serif); font-weight: 400; font-size: 14px;
-          letter-spacing: 0.05em;
+          font-family: var(--r-body); font-weight: 600; font-size: 14px;
+          letter-spacing: 0.06em; text-transform: uppercase;
           color: var(--r-ink-dd); text-decoration: none;
           padding: 6px 13px; border-radius: 3px;
           border: 1px solid transparent;
           transition: all 0.2s;
           white-space: nowrap;
-          font-style: italic;
         }
         .redm-nav a:hover {
           color: var(--r-gold-l);
@@ -153,23 +144,21 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           background: rgba(200,147,42,0.06);
         }
 
-        /* ── BADGE STATUT ── */
         .redm-status-badge {
-          font-family: var(--r-mono); font-size: 11px;
+          font-family: var(--r-mono); font-size: 12px;
           padding: 4px 12px;
           border: 1px solid rgba(200,147,42,0.40);
           background: rgba(200,147,42,0.07);
           color: var(--r-gold);
-          letter-spacing: 0.12em;
+          letter-spacing: 0.10em;
           text-transform: uppercase;
           white-space: nowrap;
         }
 
-        /* ── BTN SWITCH FIVEM ── */
         .redm-fivem-btn {
           display: flex; align-items: center; gap: 6px;
           font-family: var(--r-mono);
-          font-size: 12px; letter-spacing: 0.12em;
+          font-size: 12px; letter-spacing: 0.10em;
           padding: 6px 15px;
           border: 1px solid rgba(249,115,22,0.50);
           background: rgba(249,115,22,0.08);
@@ -186,10 +175,9 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           color: #FED7AA;
         }
 
-        /* ── BTN QUITTER ── */
         .redm-quit-btn {
           font-family: var(--r-mono); font-size: 12px;
-          letter-spacing: 0.1em; text-transform: uppercase;
+          letter-spacing: 0.10em; text-transform: uppercase;
           padding: 6px 15px;
           border: 1px solid rgba(255,255,255,0.08);
           background: transparent;
@@ -203,9 +191,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           color: var(--r-gold);
         }
 
-        /* ═══════════════════
-           MAIN
-        ═══════════════════ */
+        /* ── MAIN ── */
         .redm-main {
           width: 100%;
           padding: 32px 40px 80px;
@@ -220,22 +206,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ═══════════════════
-           COMPOSANTS PARTAGÉS
-        ═══════════════════ */
-        .redm-card {
-          background: var(--r-card);
-          border: 1px solid var(--r-border);
-          position: relative; overflow: hidden;
-          cursor: pointer;
-          transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-        }
-        .redm-card:hover {
-          transform: translateY(-2px);
-          border-color: var(--r-gold-d);
-          box-shadow: 0 6px 28px rgba(0,0,0,0.6), 0 0 18px rgba(200,147,42,0.10);
-        }
-
+        /* ── COMPOSANTS PARTAGÉS ── */
         .redm-section {
           background: rgba(36,21,9,0.80);
           border: 1px solid var(--r-border);
@@ -249,9 +220,9 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           background: rgba(200,147,42,0.04);
         }
         .redm-section-title {
-          font-family: var(--r-serif); font-size: 14px; font-weight: 700;
-          letter-spacing: 0.12em; text-transform: uppercase;
-          color: var(--r-gold); font-style: italic;
+          font-family: var(--r-display); font-size: 13px;
+          letter-spacing: 0.10em; text-transform: uppercase;
+          color: var(--r-gold);
         }
         .redm-section-body {
           padding: 20px 22px;
@@ -277,20 +248,20 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
 
         .redm-label {
           display: block;
-          font-family: var(--r-serif); font-size: 13px; font-weight: 600;
-          font-style: italic; letter-spacing: 0.10em; text-transform: uppercase;
+          font-family: var(--r-body); font-size: 13px; font-weight: 600;
+          letter-spacing: 0.10em; text-transform: uppercase;
           color: var(--r-ink-dd); margin-bottom: 6px;
         }
 
         .redm-btn {
           background: linear-gradient(135deg, #8B3A1A 0%, #5A1F08 100%);
           color: var(--r-gold-l);
-          font-family: var(--r-serif); font-weight: 700; font-style: italic;
-          font-size: 15px; letter-spacing: 0.08em;
+          font-family: var(--r-display); font-size: 14px; letter-spacing: 0.08em;
           border: 1px solid rgba(200,147,42,0.45);
           padding: 13px 30px;
           cursor: pointer; transition: all 0.2s;
           box-shadow: 0 0 16px rgba(139,58,26,0.30), 0 3px 12px rgba(0,0,0,0.4);
+          text-transform: uppercase;
         }
         .redm-btn:hover {
           background: linear-gradient(135deg, #A84520 0%, #6B2A0A 100%);
@@ -303,8 +274,8 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           background: transparent;
           border: 1px solid rgba(200,147,42,0.25);
           color: var(--r-ink-dd);
-          font-family: var(--r-serif); font-style: italic;
-          font-size: 14px; letter-spacing: 0.07em;
+          font-family: var(--r-body); font-weight: 600;
+          font-size: 13px; letter-spacing: 0.07em; text-transform: uppercase;
           padding: 9px 18px;
           cursor: pointer; transition: all 0.2s;
         }
@@ -314,9 +285,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           background: var(--r-glow);
         }
 
-        /* ═══════════════════
-           FOOTER
-        ═══════════════════ */
+        /* ── FOOTER ── */
         .redm-footer {
           border-top: 1px solid var(--r-border);
           background: rgba(10,5,0,0.6);
@@ -333,24 +302,11 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           width: 100%;
           display: flex; justify-content: space-between; align-items: center;
         }
-
-        .redm-ornament-divider {
-          display: flex; align-items: center; gap: 12px; margin: 4px 0;
-        }
-        .redm-ornament-divider::before,
-        .redm-ornament-divider::after {
-          content: ''; flex: 1; height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(200,147,42,0.35), transparent);
-        }
-        .redm-ornament-divider span {
-          font-family: var(--r-serif); font-size: 16px;
-          color: var(--r-gold-d); font-style: italic;
-        }
       `}</style>
 
       <div className="redm-root">
 
-        {/* ════ ORNEMENT SVG FOND ════ */}
+        {/* ════ ORNEMENT SVG ════ */}
         <svg className="redm-ornament" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="250" cy="250" r="230" stroke="#C8932A" strokeWidth="0.8" strokeDasharray="6 8"/>
           <circle cx="250" cy="250" r="200" stroke="#C8932A" strokeWidth="1.2"/>
@@ -368,12 +324,9 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           })}
           {[0,90,180,270].map((a,i) => {
             const rad = a * Math.PI / 180;
-            const cx = 250 + 160 * Math.cos(rad);
-            const cy = 250 + 160 * Math.sin(rad);
+            const cx = 250 + 160 * Math.cos(rad); const cy = 250 + 160 * Math.sin(rad);
             return <g key={i}><circle cx={cx} cy={cy} r="10" stroke="#C8932A" strokeWidth="1" fill="none"/><circle cx={cx} cy={cy} r="4" fill="#C8932A" fillOpacity="0.6"/></g>;
           })}
-          <path d="M 250,175 C 260,185 240,195 250,205 C 260,215 240,225 250,235" stroke="#C8932A" strokeWidth="1.5" fill="none"/>
-          <line x1="245" y1="175" x2="255" y2="175" stroke="#C8932A" strokeWidth="1.5"/>
           <path id="textCircle" d="M 250,250 m -165,0 a 165,165 0 1,1 330,0 a 165,165 0 1,1 -330,0" fill="none"/>
           <text fontSize="9" fill="#C8932A" fontFamily="Georgia, serif" letterSpacing="6">
             <textPath href="#textCircle">✦ DISPENSAIRE MÉDICAL · ANNO DOMINI MDCCCXC ✦ DISPENSAIRE MÉDICAL · ANNO DOMINI MDCCCXC ✦</textPath>
@@ -383,7 +336,6 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
         {/* ════ HEADER ════ */}
         <header className="redm-header">
           <div className="redm-nav-inner">
-
             <Link href="/redm" style={{ display: 'flex', alignItems: 'center', gap: 11, textDecoration: 'none', flexShrink: 0 }}>
               <div className="redm-logo-box">✚</div>
               <div>
@@ -402,31 +354,24 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
               <span className="redm-status-badge">✦ Ouvert</span>
-              <Link href="/fivem" className="redm-fivem-btn">
-                <span style={{ fontSize: 10 }}>◈</span> FiveM
-              </Link>
-              <Link href="/login" className="redm-quit-btn">
-                ⏻ Quitter
-              </Link>
+              <Link href="/fivem" className="redm-fivem-btn">◈ FiveM</Link>
+              <Link href="/login" className="redm-quit-btn">⏻ Quitter</Link>
             </div>
-
           </div>
         </header>
 
         {/* ════ CONTENU ════ */}
         <main className="redm-main">
-          <div className="redm-fade">
-            {children}
-          </div>
+          <div className="redm-fade">{children}</div>
         </main>
 
         {/* ════ FOOTER ════ */}
         <footer className="redm-footer">
           <div className="redm-footer-inner">
-            <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: 13, color: '#4A3520', fontStyle: 'italic' }}>
+            <span style={{ fontFamily: "'Special Elite', monospace", fontSize: 13, color: '#4A3520' }}>
               ✚ La Tanière de l'EMS — Dispensaire RedM
             </span>
-            <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: 13, color: '#4A3520', letterSpacing: '0.1em' }}>
+            <span style={{ fontFamily: "'Special Elite', monospace", fontSize: 13, color: '#4A3520', letterSpacing: '0.1em' }}>
               AMAROGRAPH · DISPENSAIRE MEDICAL
             </span>
           </div>
