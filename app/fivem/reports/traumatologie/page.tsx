@@ -75,22 +75,22 @@ function Section({ icon, title, color = 'orange', children }: {
       background: T.card,
       border: `1px solid ${T.border}`,
       borderLeft: `3px solid ${c.accent}`,
-      marginBottom: 14,
+      marginBottom: 18,
       overflow: 'hidden',
     }}>
       <div style={{
         display: 'flex', alignItems: 'center', gap: 10,
-        padding: '11px 20px',
+        padding: '14px 28px',
         borderBottom: `1px solid ${T.border}`,
         background: c.glow,
       }}>
         <span style={{ fontSize: 14 }}>{icon}</span>
         <span style={{
-          fontFamily: MONO, fontSize: 13, fontWeight: 700,
-          color: c.accent, letterSpacing: '0.16em', textTransform: 'uppercase',
+          fontFamily: MONO, fontSize: 18, fontWeight: 700,
+          color: c.accent, letterSpacing: '0.14em', textTransform: 'uppercase',
         }}>{title}</span>
       </div>
-      <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div style={{ padding: '22px 28px', display: 'flex', flexDirection: 'column', gap: 18 }}>
         {children}
       </div>
     </div>
@@ -101,7 +101,7 @@ function Section({ icon, title, color = 'orange', children }: {
 function L({ t, req }: { t: string; req?: boolean }) {
   return (
     <label style={{
-      display: 'block', fontFamily: MONO, fontSize: 11, fontWeight: 700,
+      display: 'block', fontFamily: MONO, fontSize: 16, fontWeight: 700,
       letterSpacing: '0.13em', textTransform: 'uppercase', color: T.dim, marginBottom: 6,
     }}>
       {t}{req && <span style={{ color: '#F87171', marginLeft: 4 }}>*</span>}
@@ -114,9 +114,9 @@ const inputStyle: React.CSSProperties = {
   width: '100%', boxSizing: 'border-box',
   background: 'rgba(0,0,0,0.35)',
   border: `1px solid ${T.borderSub}`,
-  padding: '9px 14px',
+  padding: '12px 18px',
   color: T.text,
-  fontFamily: DISPLAY, fontSize: 14,
+  fontFamily: DISPLAY, fontSize: 18,
   outline: 'none',
   transition: 'border-color 0.15s',
 };
@@ -164,8 +164,8 @@ function Chip({ label, active, onClick, ac }: {
     <button
       onClick={onClick}
       style={{
-        fontFamily: MONO, fontSize: 12, letterSpacing: '0.08em',
-        padding: '5px 12px',
+        fontFamily: MONO, fontSize: 16, letterSpacing: '0.07em',
+        padding: '9px 18px',
         cursor: 'pointer', transition: 'all 0.15s',
         ...(active ? activeStyle : inactiveStyle),
       }}
@@ -391,20 +391,20 @@ export default function TraumatologiePage() {
     border: 'none', outline: 'none',
   };
 
-  const grid2: React.CSSProperties = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 };
+  const grid2: React.CSSProperties = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 };
 
   return (
-    <div style={{ fontFamily: DISPLAY, maxWidth: 720, margin: '0 auto', paddingBottom: 60 }}>
+    <div style={{ fontFamily: DISPLAY, maxWidth: 1100, margin: '0 auto', paddingBottom: 80 }}>
 
       {/* ── HEADER ─────────────────────────────────────────────────────────── */}
-      <div style={{ marginBottom: 28, display: 'flex', alignItems: 'center', gap: 14 }}>
+      <div style={{ marginBottom: 28, display: 'flex', alignItems: 'center', gap: 18 }}>
         <button
           onClick={() => step === 'preview' ? setStep('form') : router.back()}
           style={{
-            ...btnBase, fontSize: 13,
+            ...btnBase, fontSize: 17,
             background: 'transparent',
             border: `1px solid ${T.border}`,
-            color: T.muted, padding: '8px 18px',
+            color: T.muted, padding: '11px 26px',
           }}
           onMouseEnter={e => { (e.target as HTMLElement).style.color = T.orange; (e.target as HTMLElement).style.borderColor = T.orange; }}
           onMouseLeave={e => { (e.target as HTMLElement).style.color = T.muted; (e.target as HTMLElement).style.borderColor = T.border; }}
@@ -413,17 +413,17 @@ export default function TraumatologiePage() {
         </button>
 
         <div style={{ flex: 1 }}>
-          <div style={{ fontFamily: MONO, fontSize: 13, color: T.orange, letterSpacing: '0.18em', marginBottom: 6 }}>
+          <div style={{ fontFamily: MONO, fontSize: 16, color: T.orange, letterSpacing: '0.18em', marginBottom: 6 }}>
             ■ MDT › RAPPORTS › TRAUMATOLOGIE
           </div>
-          <div style={{ fontFamily: DISPLAY, fontSize: 32, fontWeight: 700, color: T.text, letterSpacing: '0.03em', lineHeight: 1 }}>
+          <div style={{ fontFamily: DISPLAY, fontSize: 40, fontWeight: 700, color: T.text, letterSpacing: '0.03em', lineHeight: 1 }}>
             🦴 Traumatologie
           </div>
         </div>
 
         <div style={{
-          fontFamily: MONO, fontSize: 12,
-          padding: '5px 14px',
+          fontFamily: MONO, fontSize: 17,
+          padding: '6px 16px',
           border: `1px solid ${T.border}`,
           color: T.orange, background: T.orangeDim,
           letterSpacing: '0.12em',
@@ -442,7 +442,7 @@ export default function TraumatologiePage() {
             style={{
               ...btnBase, width: '100%',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '12px 20px', fontSize: 13,
+              padding: '13px 20px', fontSize: 17,
               background: 'rgba(56,189,248,0.04)',
               border: '1px solid rgba(56,189,248,0.25)',
               color: '#38BDF8',
@@ -463,7 +463,7 @@ export default function TraumatologiePage() {
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
                 {categories.map(c => (
                   <button key={c} onClick={() => setCat(c)} style={{
-                    ...btnBase, fontSize: 11, padding: '4px 12px',
+                    ...btnBase, fontSize: 16, padding: '5px 14px',
                     background: cat === c ? T.orangeDim : 'transparent',
                     border: `1px solid ${cat === c ? T.orange : T.borderSub}`,
                     color: cat === c ? T.orange : T.dim,
@@ -478,7 +478,7 @@ export default function TraumatologiePage() {
                   const gc = gs(b.gravite);
                   return (
                     <button key={b.label} onClick={() => applyB(b)} style={{
-                      ...btnBase, fontSize: 11, padding: '5px 12px',
+                      ...btnBase, fontSize: 16, padding: '9px 18px',
                       background: gc.bg, border: `1px solid ${gc.border}`,
                       color: gc.text, fontWeight: 400,
                     }}>{b.label}</button>
@@ -489,7 +489,7 @@ export default function TraumatologiePage() {
               {/* Légende */}
               <div style={{ display: 'flex', gap: 20, marginTop: 12, paddingTop: 12, borderTop: `1px solid ${T.borderSub}` }}>
                 {Object.entries(GC).reverse().map(([k, c]) => (
-                  <span key={k} style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: MONO, fontSize: 11, color: c.text }}>
+                  <span key={k} style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: MONO, fontSize: 16, color: c.text }}>
                     <span style={{ width: 8, height: 8, borderRadius: '50%', background: c.dot, display: 'inline-block' }} />
                     {k}
                   </span>
@@ -516,7 +516,7 @@ export default function TraumatologiePage() {
                 <button
                   onClick={() => set('heure', new Date().toTimeString().slice(0, 5))}
                   style={{
-                    ...btnBase, fontSize: 11, padding: '0 12px',
+                    ...btnBase, fontSize: 16, padding: '0 18px',
                     background: T.orangeDim, border: `1px solid ${T.border}`,
                     color: T.orange, whiteSpace: 'nowrap',
                   }}
@@ -530,7 +530,7 @@ export default function TraumatologiePage() {
             <div style={{ display: 'flex', gap: 8 }}>
               {['Monsieur', 'Madame'].map(c => (
                 <button key={c} onClick={() => set('civilite', c)} style={{
-                  ...btnBase, fontSize: 13, padding: '7px 20px',
+                  ...btnBase, fontSize: 18, padding: '8px 22px',
                   background: vals.civilite === c ? T.orange : 'transparent',
                   border: `1px solid ${vals.civilite === c ? T.orange : T.borderSub}`,
                   color: vals.civilite === c ? '#fff' : T.dim,
@@ -546,7 +546,7 @@ export default function TraumatologiePage() {
 
           <div>
             <L t="Motif de déclenchement" />
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
               {['Blessure par balle', 'Couteau', 'AVP', 'Chute', 'Noyade', 'Rixe', 'Acc. travail', 'Malaise', 'Brulure', 'Overdose'].map(m => (
                 <Chip key={m} label={m}
                   active={(vals.motifs_selection || '').includes(m)}
@@ -596,7 +596,7 @@ export default function TraumatologiePage() {
 
           <div>
             <L t="Type de blessure(s)" req />
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
               {['Balle', 'Couteau', 'Brulure', 'Fracture', 'AVP', 'Chute', 'Noyade', 'Intoxication', 'Autre'].map(t => (
                 <Chip key={t} label={t}
                   active={(vals.types_blessure || '').includes(t)}
@@ -610,7 +610,7 @@ export default function TraumatologiePage() {
 
           <div>
             <L t="Localisation" req />
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
               {['Tête', 'Visage', 'Cou', 'Épaule G.', 'Épaule D.', 'Thorax', 'Abdomen', 'Dos', 'Bras G.', 'Bras D.', 'Main G.', 'Main D.', 'Bassin', 'Jambe G.', 'Jambe D.', 'Pied G.', 'Pied D.'].map(l => (
                 <Chip key={l} label={l}
                   active={(vals.localisation_precise || '').includes(l)}
@@ -648,12 +648,12 @@ export default function TraumatologiePage() {
                       placeholder={p}
                       style={{
                         flex: 1, background: 'transparent', border: 'none', outline: 'none',
-                        padding: '9px 14px', color: c.color,
-                        fontFamily: MONO, fontSize: 14,
+                        padding: '12px 18px', color: c.color,
+                        fontFamily: MONO, fontSize: 17,
                       }} />
-                    <span style={{ padding: '0 12px', fontFamily: MONO, fontSize: 11, color: c.color, opacity: 0.6 }}>{u}</span>
+                    <span style={{ padding: '0 12px', fontFamily: MONO, fontSize: 16, color: c.color, opacity: 0.7 }}>{u}</span>
                   </div>
-                  <p style={{ fontFamily: MONO, fontSize: 11, color: T.dimmer, marginTop: 4 }}>{n}</p>
+                  <p style={{ fontFamily: MONO, fontSize: 16, color: T.muted, marginTop: 5 }}>{n}</p>
                 </div>
               );
             })}
@@ -670,17 +670,17 @@ export default function TraumatologiePage() {
                     <input type="text" value={vals.ta?.split('/')[0] || ''}
                       onChange={e => set('ta', `${e.target.value}/${vals.ta?.split('/')[1] || ''}`)}
                       placeholder="120"
-                      style={{ width: 56, background: 'transparent', border: 'none', outline: 'none', padding: '9px 10px', color: c.color, fontFamily: MONO, fontSize: 14, textAlign: 'right' }} />
+                      style={{ width: 56, background: 'transparent', border: 'none', outline: 'none', padding: '9px 10px', color: c.color, fontFamily: MONO, fontSize: 17, textAlign: 'right' }} />
                     <span style={{ color: T.dim, fontWeight: 700 }}>/</span>
                     <input type="text" value={vals.ta?.split('/')[1] || ''}
                       onChange={e => set('ta', `${vals.ta?.split('/')[0] || ''}/${e.target.value}`)}
                       placeholder="80"
                       style={{ width: 56, background: 'transparent', border: 'none', outline: 'none', padding: '9px 10px', color: c.color, fontFamily: MONO, fontSize: 14 }} />
-                    <span style={{ padding: '0 12px', fontFamily: MONO, fontSize: 11, color: c.color, opacity: 0.6 }}>mmHg</span>
+                    <span style={{ padding: '0 12px', fontFamily: MONO, fontSize: 16, color: c.color, opacity: 0.7 }}>mmHg</span>
                   </div>
                 );
               })()}
-              <p style={{ fontFamily: MONO, fontSize: 11, color: T.dimmer, marginTop: 4 }}>Normal : 120/80</p>
+              <p style={{ fontFamily: MONO, fontSize: 16, color: T.muted, marginTop: 5 }}>Normal : 120/80</p>
             </div>
           </div>
 
@@ -707,11 +707,11 @@ export default function TraumatologiePage() {
                     : { border: 'rgba(74,222,128,0.45)', bg: 'rgba(74,222,128,0.06)', color: '#4ADE80' };
                   return (
                     <div key={zone} style={{ display: 'flex', alignItems: 'center', border: `1px solid ${col.border}`, background: col.bg, overflow: 'hidden' }}>
-                      <span style={{ padding: '0 10px', fontFamily: MONO, fontSize: 11, color: T.muted, whiteSpace: 'nowrap' }}>{zone}</span>
+                      <span style={{ padding: '0 12px', fontFamily: MONO, fontSize: 16, color: T.muted, whiteSpace: 'nowrap' }}>{zone}</span>
                       <input type="number" min="0" max="10" value={v} onChange={e => set(key, e.target.value)}
                         placeholder="0–10"
-                        style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', padding: '8px 6px', color: col.color, fontFamily: MONO, fontSize: 13, textAlign: 'right' }} />
-                      <span style={{ padding: '0 10px', fontFamily: MONO, fontSize: 11, color: col.color, opacity: 0.5 }}>/10</span>
+                        style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', padding: '8px 6px', color: col.color, fontFamily: MONO, fontSize: 16, textAlign: 'right' }} />
+                      <span style={{ padding: '0 10px', fontFamily: MONO, fontSize: 16, color: col.color, opacity: 0.6 }}>/10</span>
                     </div>
                   );
                 })}
@@ -748,7 +748,7 @@ export default function TraumatologiePage() {
                 const active = vals.gravite === gv;
                 return (
                   <button key={gv} onClick={() => set('gravite', gv)} style={{
-                    ...btnBase, fontSize: 12, padding: '7px 16px',
+                    ...btnBase, fontSize: 17, padding: '8px 18px',
                     display: 'flex', alignItems: 'center', gap: 7,
                     background: active ? gc.bg : 'transparent',
                     border: `1px solid ${active ? gc.border : T.borderSub}`,
@@ -764,7 +764,7 @@ export default function TraumatologiePage() {
 
           <div>
             <L t="État de conscience" />
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
               {['Conscient orienté', 'Conscient douloureux', 'Inconscient', 'Non coopératif', 'Altéré'].map(c => (
                 <Chip key={c} label={c}
                   active={vals.conscience === c}
@@ -799,14 +799,14 @@ export default function TraumatologiePage() {
           <div><L t="Nom & Grade" req /><FI k="redacteur" v={vals} s={set} ph="Ex: Ambulancier Ethan Skoll" /></div>
         </Section>
 
-        {err && <p style={{ fontFamily: MONO, fontSize: 13, color: '#F87171', marginTop: 8 }}>{err}</p>}
+        {err && <p style={{ fontFamily: MONO, fontSize: 16, color: '#F87171', marginTop: 8 }}>{err}</p>}
 
         {/* ── BOUTON GÉNÉRER ───────────────────────────────────────────────── */}
         <button
           onClick={generate} disabled={loading}
           style={{
             ...btnBase, width: '100%', marginTop: 8,
-            padding: '16px 28px', fontSize: 14,
+            padding: '20px 36px', fontSize: 19,
             background: loading ? T.orangeDim : 'linear-gradient(135deg, #F97316, #C2410C)',
             border: `1px solid ${T.orange}`,
             color: '#fff',
@@ -822,14 +822,14 @@ export default function TraumatologiePage() {
       {step === 'preview' && (<>
         {/* Badge gravité + patient */}
         <div style={{
-          padding: '12px 20px', marginBottom: 14,
+          padding: '12px 20px', marginBottom: 18,
           display: 'flex', alignItems: 'center', gap: 14,
           background: g.bg, border: `1px solid ${g.border}`,
           borderLeft: `3px solid ${g.dot}`,
         }}>
-          <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: g.text, letterSpacing: '0.12em' }}>{g.label}</span>
+          <span style={{ fontFamily: MONO, fontSize: 17, fontWeight: 700, color: g.text, letterSpacing: '0.12em' }}>{g.label}</span>
           <span style={{ color: T.borderSub }}>—</span>
-          <span style={{ fontFamily: DISPLAY, fontSize: 15, color: T.muted }}>{vals.civilite} {vals.prenom} {vals.nom}</span>
+          <span style={{ fontFamily: DISPLAY, fontSize: 19, color: T.muted }}>{vals.civilite} {vals.prenom} {vals.nom}</span>
         </div>
 
         {/* Rapport */}
@@ -843,17 +843,17 @@ export default function TraumatologiePage() {
             style={{
               width: '100%', boxSizing: 'border-box',
               background: 'transparent', border: 'none', outline: 'none',
-              color: T.text, fontFamily: MONO, fontSize: 13,
+              color: T.text, fontFamily: MONO, fontSize: 17,
               lineHeight: 1.7, resize: 'vertical',
             }}
           />
         </div>
 
-        {err && <p style={{ fontFamily: MONO, fontSize: 13, color: '#F87171', marginTop: 8 }}>{err}</p>}
+        {err && <p style={{ fontFamily: MONO, fontSize: 16, color: '#F87171', marginTop: 8 }}>{err}</p>}
 
         <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
           <button onClick={save} disabled={saving} style={{
-            ...btnBase, flex: 1, padding: '15px 28px', fontSize: 13,
+            ...btnBase, flex: 1, padding: '18px 36px', fontSize: 18,
             background: saving ? T.orangeDim : 'linear-gradient(135deg, #F97316, #C2410C)',
             border: `1px solid ${T.orange}`, color: '#fff',
             opacity: saving ? 0.6 : 1,
@@ -862,7 +862,7 @@ export default function TraumatologiePage() {
             {saving ? '💾 SAUVEGARDE...' : '💾 SAUVEGARDER DANS LES ARCHIVES'}
           </button>
           <button onClick={() => setStep('form')} style={{
-            ...btnBase, padding: '15px 20px', fontSize: 13,
+            ...btnBase, padding: '18px 28px', fontSize: 18,
             background: 'transparent',
             border: `1px solid ${T.borderSub}`,
             color: T.muted,
