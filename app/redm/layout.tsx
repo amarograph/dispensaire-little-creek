@@ -55,21 +55,19 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           background-size: cover;
           background-position: center center;
           background-repeat: no-repeat;
-          /* Assombrir et teinter en rouge/sépia */
-          filter: sepia(100%) brightness(0.10) contrast(1.3) hue-rotate(320deg);
+          /* Sépia rouge sombre — assez visible pour transparaître */
+          filter: sepia(80%) brightness(0.45) contrast(1.1) hue-rotate(300deg) saturate(0.6);
+          opacity: 0.55;
         }
 
-        /* Voile noir opaque par-dessus */
+        /* Voile noir léger */
         .redm-bg-overlay {
           position: fixed; inset: 0; z-index: 0; pointer-events: none;
-          background: rgba(5, 2, 4, 0.80);
+          background: rgba(4, 1, 2, 0.52);
         }
 
-        /* Très légère teinte rouge, sans dégradé */
-        .redm-bg-tint {
-          position: fixed; inset: 0; z-index: 0; pointer-events: none;
-          background: rgba(60, 5, 5, 0.15);
-        }
+        /* Tint supprimé */
+        .redm-bg-tint { display: none; }
 
         .redm-root > * { position: relative; z-index: 1; }
 
