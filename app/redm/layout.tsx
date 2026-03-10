@@ -56,14 +56,14 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           background-position: center center;
           background-repeat: no-repeat;
           /* Sépia rouge sombre — assez visible pour transparaître */
-          filter: sepia(80%) brightness(0.45) contrast(1.1) hue-rotate(300deg) saturate(0.6);
-          opacity: 0.55;
+          filter: brightness(0.18) contrast(1.4) sepia(60%) hue-rotate(310deg);
+          opacity: 1;
         }
 
         /* Voile noir léger */
         .redm-bg-overlay {
           position: fixed; inset: 0; z-index: 0; pointer-events: none;
-          background: rgba(4, 1, 2, 0.52);
+          background: rgba(3, 1, 2, 0.58);
         }
 
         /* Tint supprimé */
