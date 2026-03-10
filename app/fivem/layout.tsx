@@ -132,21 +132,21 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           box-shadow: 0 0 16px rgba(249,115,22,0.35);
         }
         .fivem-logo-title {
-          font-family: var(--f-display); font-weight: 700; font-size: 14px;
+          font-family: var(--f-display); font-weight: 700; font-size: 17px;
           color: var(--f-text); line-height: 1; letter-spacing: 0.04em;
         }
         .fivem-logo-sub {
-          font-family: var(--f-mono); font-size: 9px;
-          color: var(--f-accent); letter-spacing: 0.14em; line-height: 1.2;
+          font-family: var(--f-mono); font-size: 12px;
+          color: var(--f-accent); letter-spacing: 0.14em; line-height: 1.4;
         }
 
         /* ── Nav links ── */
         .fivem-nav { display: flex; align-items: center; gap: 2px; flex: 1; }
         .fivem-nav a {
-          font-family: var(--f-display); font-weight: 600; font-size: 11px;
+          font-family: var(--f-display); font-weight: 600; font-size: 14px;
           letter-spacing: 0.07em; text-transform: uppercase;
           color: var(--f-muted); text-decoration: none;
-          padding: 5px 10px; border-radius: 7px;
+          padding: 6px 12px; border-radius: 7px;
           border: 1px solid transparent;
           transition: all 0.18s;
           white-space: nowrap;
@@ -173,8 +173,8 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           50%       { opacity: 0.6; box-shadow: 0 0 0 4px rgba(74,222,128,0); }
         }
         .fivem-badge {
-          font-family: var(--f-mono); font-size: 9px;
-          padding: 3px 9px; border-radius: 4px;
+          font-family: var(--f-mono); font-size: 12px;
+          padding: 4px 11px; border-radius: 4px;
           color: #4ADE80; border: 1px solid rgba(74,222,128,0.35);
           background: rgba(74,222,128,0.07); letter-spacing: 0.1em;
         }
@@ -231,7 +231,7 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           background: rgba(249,115,22,0.04);
         }
         .fivem-section-title {
-          font-family: var(--f-display); font-size: 10px; font-weight: 700;
+          font-family: var(--f-display); font-size: 14px; font-weight: 700;
           letter-spacing: 0.14em; text-transform: uppercase;
           color: var(--f-accent);
         }
@@ -262,14 +262,14 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
         /* ── LABEL ── */
         .fivem-label {
           display: block;
-          font-family: var(--f-display); font-size: 10px; font-weight: 600;
+          font-family: var(--f-display); font-size: 13px; font-weight: 600;
           letter-spacing: 0.11em; text-transform: uppercase;
           color: var(--f-muted); margin-bottom: 5px;
         }
 
         /* ── CHIPS ── */
         .fivem-chip {
-          font-size: 11px; padding: 5px 11px;
+          font-size: 13px; padding: 5px 13px;
           border-radius: 999px; border: 1px solid rgba(255,255,255,0.09);
           color: #475569; background: transparent;
           cursor: pointer; transition: all 0.14s;
@@ -287,7 +287,7 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
         .fivem-btn {
           background: linear-gradient(135deg, #F97316 0%, #C2410C 100%);
           color: #fff; font-family: var(--f-display); font-weight: 700;
-          font-size: 12px; letter-spacing: 0.11em; text-transform: uppercase;
+          font-size: 14px; letter-spacing: 0.11em; text-transform: uppercase;
           border: none; border-radius: 11px; padding: 13px 28px;
           cursor: pointer; transition: all 0.18s;
           box-shadow: 0 0 18px rgba(249,115,22,0.28), 0 3px 12px rgba(0,0,0,0.3);
@@ -305,8 +305,8 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           border: 1px solid rgba(255,255,255,0.10);
           color: var(--f-muted);
           font-family: var(--f-display); font-weight: 600;
-          font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase;
-          border-radius: 9px; padding: 8px 16px;
+          font-size: 14px; letter-spacing: 0.09em; text-transform: uppercase;
+          border-radius: 9px; padding: 9px 18px;
           cursor: pointer; transition: all 0.18s;
         }
         .fivem-btn-sec:hover {
@@ -326,7 +326,7 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
           padding: 9px 14px; color: inherit;
           font-family: var(--f-mono); font-size: 14px;
         }
-        .fivem-vital-unit { padding: 0 10px; font-size: 10px; opacity: 0.5; }
+        .fivem-vital-unit { padding: 0 10px; font-size: 13px; opacity: 0.6; }
         .fivem-v-ok    { color: #4ADE80; border-color: rgba(74,222,128,0.38);   background: rgba(74,222,128,0.05); }
         .fivem-v-alert { color: #F87171; border-color: rgba(248,113,113,0.38);  background: rgba(248,113,113,0.05); }
         .fivem-v-empty { color: #475569; border-color: rgba(71,85,105,0.45);    background: rgba(0,0,0,0.28); }
@@ -347,8 +347,8 @@ export default async function FiveMLayout({ children }: { children: React.ReactN
         .fivem-redm-btn {
           display: flex; align-items: center; gap: 6px;
           font-family: 'Share Tech Mono', monospace;
-          font-size: 10px; letter-spacing: 0.12em;
-          padding: 5px 13px; border-radius: 6px;
+          font-size: 13px; letter-spacing: 0.12em;
+          padding: 6px 14px; border-radius: 6px;
           border: 1px solid rgba(220,38,38,0.55);
           background: rgba(220,38,38,0.10);
           color: #F87171;

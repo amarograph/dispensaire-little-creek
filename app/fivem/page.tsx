@@ -3,11 +3,11 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-const MONO = "'Share Tech Mono', 'Courier New', monospace";
+const MONO    = "'Share Tech Mono', 'Courier New', monospace";
 const DISPLAY = "'Rajdhani', 'Arial', sans-serif";
 
 const MODULES = [
-  { id: 'reports',      href: '/fivem/reports',      icon: '📋', label: 'Rapports',       sub: 'CRÉER / RÉDIGER', desc: 'Rapport d\'intervention, protocoles, prescriptions.', color: '#F97316', badge: 'MDT' },
+  { id: 'reports',      href: '/fivem/reports',      icon: '📋', label: 'Rapports',       sub: 'CRÉER / RÉDIGER', desc: "Rapport d'intervention, protocoles, prescriptions.", color: '#F97316', badge: 'MDT' },
   { id: 'archives',     href: '/fivem/archives',      icon: '🗃', label: 'Archives',        sub: 'HISTORIQUE',      desc: 'Consulter et filtrer les rapports enregistrés.',      color: '#38BDF8', badge: 'DB'  },
   { id: 'bibliotheque', href: '/fivem/bibliotheque',  icon: '📚', label: 'Bibliothèque',    sub: 'PROTOCOLES',      desc: 'Templates, fiches de soins et protocoles médicaux.',  color: '#4ADE80', badge: 'REF' },
   { id: 'symptomes',    href: '/fivem/symptomes',     icon: '🔬', label: 'Symptômes',       sub: 'DIAGNOSTIC',      desc: 'Classification des symptômes et pathologies.',        color: '#A855F7', badge: 'DX'  },
@@ -23,10 +23,10 @@ const VITALS = [
 ];
 
 const LOGS = [
-  { time: '08:42', msg: 'Zone Vinewood — polytraumatisme signalé', dot: '#EF4444' },
-  { time: '07:15', msg: 'Rapport validé',                          dot: '#4ADE80' },
-  { time: '06:58', msg: 'Unité ALS AMBULANCE de retour disponible', dot: '#38BDF8' },
-  { time: '06:30', msg: 'Protocole sepsis mis à jour',             dot: '#F97316' },
+  { time: '08:42', msg: 'Zone Vinewood — polytraumatisme signalé',          dot: '#EF4444' },
+  { time: '07:15', msg: 'Rapport validé',                                   dot: '#4ADE80' },
+  { time: '06:58', msg: 'Unité ALS AMBULANCE de retour disponible',         dot: '#38BDF8' },
+  { time: '06:30', msg: 'Protocole sepsis mis à jour',                      dot: '#F97316' },
 ];
 
 const UNITS = [
@@ -38,8 +38,8 @@ const UNITS = [
 
 export default function FiveMPage() {
   const router = useRouter();
-  const [time, setTime] = useState('──:──:──');
-  const [date, setDate] = useState('');
+  const [time, setTime]   = useState('──:──:──');
+  const [date, setDate]   = useState('');
   const [hover, setHover] = useState<string | null>(null);
 
   useEffect(() => {
@@ -53,48 +53,48 @@ export default function FiveMPage() {
     return () => clearInterval(id);
   }, []);
 
-  const panel = { background: '#060C1A', border: '1px solid rgba(249,115,22,0.22)' };
-  const panelHead = {
-    padding: '14px 20px',
-    borderBottom: '1px solid rgba(249,115,22,0.14)',
+  const panel: React.CSSProperties = { background: '#060C1A', border: '1px solid rgba(249,115,22,0.22)' };
+
+  const panelHead: React.CSSProperties = {
+    padding: '14px 22px',
+    borderBottom: '1px solid rgba(249,115,22,0.16)',
     fontFamily: MONO,
-    fontSize: 14,
+    fontSize: 16,
     color: '#F97316',
     letterSpacing: '0.16em',
-    background: 'rgba(249,115,22,0.04)',
+    background: 'rgba(249,115,22,0.05)',
   };
 
   return (
     <div style={{ fontFamily: DISPLAY }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 18, alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: 18, alignItems: 'start' }}>
 
         {/* ═══ COLONNE GAUCHE ═══ */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
           {/* ── HEADER ── */}
-          <div style={{ ...panel, borderLeft: '4px solid #F97316', padding: '22px 28px', display: 'flex', alignItems: 'center', gap: 24 }}>
+          <div style={{ ...panel, borderLeft: '4px solid #F97316', padding: '24px 30px', display: 'flex', alignItems: 'center', gap: 24 }}>
             <div style={{ flex: 1 }}>
-              {/* Texte modifié ici */}
-              <div style={{ fontFamily: MONO, fontSize: 14, color: '#F97316', letterSpacing: '0.18em', marginBottom: 8 }}>
+              <div style={{ fontFamily: MONO, fontSize: 16, color: '#F97316', letterSpacing: '0.18em', marginBottom: 10 }}>
                 ■ MDT — TERMINAL — EMS
               </div>
-              <div style={{ fontFamily: DISPLAY, fontSize: 40, fontWeight: 700, color: '#E2E8F0', lineHeight: 1, letterSpacing: '0.04em' }}>
+              <div style={{ fontFamily: DISPLAY, fontSize: 44, fontWeight: 700, color: '#E2E8F0', lineHeight: 1, letterSpacing: '0.04em' }}>
                 DISPATCH MÉDICAL <span style={{ color: '#F97316' }}>EMS</span>
               </div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontFamily: MONO, fontSize: 36, color: '#F97316', lineHeight: 1, letterSpacing: '0.06em' }}>
+              <div style={{ fontFamily: MONO, fontSize: 40, color: '#F97316', lineHeight: 1, letterSpacing: '0.06em' }}>
                 {time}
               </div>
-              <div style={{ fontFamily: MONO, fontSize: 13, color: '#475569', letterSpacing: '0.1em', marginTop: 5 }}>
+              <div style={{ fontFamily: MONO, fontSize: 15, color: '#94A3B8', letterSpacing: '0.1em', marginTop: 6 }}>
                 {date}
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#4ADE80', boxShadow: '0 0 10px #4ADE80' }} />
+              <div style={{ width: 13, height: 13, borderRadius: '50%', background: '#4ADE80', boxShadow: '0 0 10px #4ADE80' }} />
               <div>
-                <div style={{ fontFamily: MONO, fontSize: 13, color: '#4ADE80', letterSpacing: '0.12em' }}>ACTIF</div>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: '#334155', letterSpacing: '0.1em' }}>EN LIGNE</div>
+                <div style={{ fontFamily: MONO, fontSize: 15, color: '#4ADE80', letterSpacing: '0.12em' }}>ACTIF</div>
+                <div style={{ fontFamily: MONO, fontSize: 13, color: '#64748B', letterSpacing: '0.1em' }}>EN LIGNE</div>
               </div>
             </div>
           </div>
@@ -102,13 +102,13 @@ export default function FiveMPage() {
           {/* ── VITALS ── */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
             {VITALS.map(v => (
-              <div key={v.label} style={{ ...panel, padding: '18px 20px', borderBottom: `3px solid ${v.color}50` }}>
-                <div style={{ fontFamily: MONO, fontSize: 12, color: '#475569', letterSpacing: '0.09em', marginBottom: 10 }}>
+              <div key={v.label} style={{ ...panel, padding: '18px 20px', borderBottom: `3px solid ${v.color}60` }}>
+                <div style={{ fontFamily: MONO, fontSize: 13, color: '#94A3B8', letterSpacing: '0.09em', marginBottom: 10 }}>
                   {v.label}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 5 }}>
-                  <span style={{ fontFamily: MONO, fontSize: 34, color: v.color, lineHeight: 1 }}>{v.value}</span>
-                  {v.unit && <span style={{ fontFamily: MONO, fontSize: 14, color: v.color, opacity: 0.7 }}>{v.unit}</span>}
+                  <span style={{ fontFamily: MONO, fontSize: 38, color: v.color, lineHeight: 1 }}>{v.value}</span>
+                  {v.unit && <span style={{ fontFamily: MONO, fontSize: 16, color: v.color, opacity: 0.8 }}>{v.unit}</span>}
                 </div>
               </div>
             ))}
@@ -116,9 +116,9 @@ export default function FiveMPage() {
 
           {/* ── SÉPARATEUR ── */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontFamily: MONO, fontSize: 14, color: '#F97316', letterSpacing: '0.16em', whiteSpace: 'nowrap' }}>◈ MODULES DISPONIBLES</span>
+            <span style={{ fontFamily: MONO, fontSize: 15, color: '#F97316', letterSpacing: '0.16em', whiteSpace: 'nowrap' }}>◈ MODULES DISPONIBLES</span>
             <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, rgba(249,115,22,0.4), transparent)' }} />
-            <span style={{ fontFamily: MONO, fontSize: 12, color: '#334155', letterSpacing: '0.1em' }}>{MODULES.length} MODULES</span>
+            <span style={{ fontFamily: MONO, fontSize: 13, color: '#94A3B8', letterSpacing: '0.1em' }}>{MODULES.length} MODULES</span>
           </div>
 
           {/* ── MODULES ── */}
@@ -134,7 +134,7 @@ export default function FiveMPage() {
                   style={{
                     background: h ? '#0C1628' : '#060C1A',
                     border: `2px solid ${h ? m.color + '80' : 'rgba(255,255,255,0.10)'}`,
-                    borderTop: `3px solid ${h ? m.color : m.color + '50'}`,
+                    borderTop: `3px solid ${h ? m.color : m.color + '55'}`,
                     padding: '22px 20px 18px',
                     cursor: 'pointer',
                     transition: 'all 0.18s',
@@ -145,17 +145,17 @@ export default function FiveMPage() {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{
-                      width: 56, height: 56,
+                      width: 58, height: 58,
                       background: m.color + '15',
                       border: `2px solid ${m.color + '55'}`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 26,
+                      fontSize: 28,
                     }}>
                       {m.icon}
                     </div>
                     <div style={{
-                      fontFamily: MONO, fontSize: 12,
-                      padding: '4px 11px',
+                      fontFamily: MONO, fontSize: 13,
+                      padding: '4px 12px',
                       background: m.color + '18', color: m.color,
                       border: `1px solid ${m.color + '45'}`,
                       letterSpacing: '0.12em',
@@ -165,13 +165,13 @@ export default function FiveMPage() {
                   </div>
 
                   <div>
-                    <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 24, color: '#E2E8F0', lineHeight: 1, marginBottom: 5 }}>
+                    <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 26, color: '#E2E8F0', lineHeight: 1, marginBottom: 6 }}>
                       {m.label}
                     </div>
-                    <div style={{ fontFamily: MONO, fontSize: 12, color: m.color, letterSpacing: '0.13em', marginBottom: 10 }}>
+                    <div style={{ fontFamily: MONO, fontSize: 13, color: m.color, letterSpacing: '0.13em', marginBottom: 10 }}>
                       {m.sub}
                     </div>
-                    <div style={{ fontSize: 14, color: '#64748B', lineHeight: 1.55 }}>
+                    <div style={{ fontFamily: DISPLAY, fontSize: 16, color: '#94A3B8', lineHeight: 1.55 }}>
                       {m.desc}
                     </div>
                   </div>
@@ -180,8 +180,8 @@ export default function FiveMPage() {
                     paddingTop: 12, borderTop: `1px solid ${m.color + '28'}`,
                     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   }}>
-                    <span style={{ fontFamily: MONO, fontSize: 11, color: '#1E293B', letterSpacing: '0.1em' }}>ACTIF</span>
-                    <span style={{ fontFamily: MONO, fontSize: 13, color: h ? m.color : '#334155', transition: 'color 0.15s' }}>→ ACCÉDER</span>
+                    <span style={{ fontFamily: MONO, fontSize: 12, color: '#475569', letterSpacing: '0.1em' }}>ACTIF</span>
+                    <span style={{ fontFamily: MONO, fontSize: 14, color: h ? m.color : '#64748B', transition: 'color 0.15s' }}>→ ACCÉDER</span>
                   </div>
                 </div>
               );
@@ -192,24 +192,24 @@ export default function FiveMPage() {
           <div
             onClick={() => router.push('/fivem/reports/urgence')}
             style={{
-              background: 'rgba(239,68,68,0.06)',
-              border: '1px solid rgba(239,68,68,0.30)',
+              background: 'rgba(239,68,68,0.07)',
+              border: '1px solid rgba(239,68,68,0.35)',
               borderLeft: '4px solid #EF4444',
-              padding: '20px 28px',
+              padding: '22px 30px',
               display: 'flex', alignItems: 'center', gap: 20,
               cursor: 'pointer',
             }}
           >
-            <div style={{ fontSize: 32 }}>🚨</div>
+            <div style={{ fontSize: 36 }}>🚨</div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 22, color: '#F87171', letterSpacing: '0.06em' }}>
+              <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 24, color: '#F87171', letterSpacing: '0.06em' }}>
                 INTERVENTION RAPIDE
               </div>
-              <div style={{ fontFamily: MONO, fontSize: 13, color: '#475569', letterSpacing: '0.08em', marginTop: 4 }}>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: '#94A3B8', letterSpacing: '0.08em', marginTop: 6 }}>
                 CRÉER UN RAPPORT D'URGENCE VITALE IMMÉDIATEMENT
               </div>
             </div>
-            <div style={{ fontFamily: MONO, fontSize: 16, color: '#EF4444' }}>→ LANCER</div>
+            <div style={{ fontFamily: MONO, fontSize: 18, color: '#EF4444' }}>→ LANCER</div>
           </div>
 
         </div>
@@ -217,10 +217,10 @@ export default function FiveMPage() {
         {/* ═══ COLONNE DROITE ═══ */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-          {/* Statut */}
+          {/* Statut système */}
           <div style={panel}>
             <div style={panelHead}>◈ STATUT SYSTÈME</div>
-            <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ padding: '16px 22px', display: 'flex', flexDirection: 'column', gap: 16 }}>
               {[
                 { label: 'Base de données', val: 'CONNECTÉE' },
                 { label: 'API Supabase',    val: 'EN LIGNE'  },
@@ -228,45 +228,45 @@ export default function FiveMPage() {
                 { label: 'Univers FiveM',   val: 'ACTIF'     },
               ].map(s => (
                 <div key={s.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontFamily: MONO, fontSize: 13, color: '#475569' }}>{s.label}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 12, color: '#4ADE80', letterSpacing: '0.08em' }}>● {s.val}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 15, color: '#94A3B8' }}>{s.label}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: '#4ADE80', letterSpacing: '0.08em' }}>● {s.val}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Log */}
+          {/* Log d'activité */}
           <div style={panel}>
             <div style={panelHead}>◈ LOG D'ACTIVITÉ</div>
             <div>
               {LOGS.map((l, i) => (
                 <div key={i} style={{
-                  padding: '12px 20px',
-                  borderBottom: i < LOGS.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                  padding: '13px 22px',
+                  borderBottom: i < LOGS.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
                   display: 'flex', alignItems: 'flex-start', gap: 12,
                 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: l.dot, marginTop: 5, flexShrink: 0 }} />
+                  <div style={{ width: 9, height: 9, borderRadius: '50%', background: l.dot, marginTop: 6, flexShrink: 0 }} />
                   <div>
-                    <div style={{ fontFamily: MONO, fontSize: 12, color: '#334155', letterSpacing: '0.08em', marginBottom: 3 }}>{l.time}</div>
-                    <div style={{ fontSize: 14, color: '#64748B', lineHeight: 1.45 }}>{l.msg}</div>
+                    <div style={{ fontFamily: MONO, fontSize: 13, color: '#64748B', letterSpacing: '0.08em', marginBottom: 4 }}>{l.time}</div>
+                    <div style={{ fontFamily: DISPLAY, fontSize: 16, color: '#94A3B8', lineHeight: 1.45 }}>{l.msg}</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Unités */}
+          {/* Unités actives */}
           <div style={panel}>
             <div style={panelHead}>◈ UNITÉS ACTIVES</div>
-            <div style={{ padding: '14px 20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ padding: '16px 22px', display: 'flex', flexDirection: 'column', gap: 16 }}>
               {UNITS.map(u => (
                 <div key={u.id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: u.col, boxShadow: `0 0 7px ${u.col}`, flexShrink: 0 }} />
+                  <div style={{ width: 9, height: 9, borderRadius: '50%', background: u.col, boxShadow: `0 0 7px ${u.col}`, flexShrink: 0 }} />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontFamily: MONO, fontSize: 13, color: '#94A3B8' }}>{u.id}</div>
-                    <div style={{ fontSize: 13, color: '#334155' }}>{u.loc}</div>
+                    <div style={{ fontFamily: MONO, fontSize: 15, color: '#CBD5E1' }}>{u.id}</div>
+                    <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#64748B' }}>{u.loc}</div>
                   </div>
-                  <div style={{ fontFamily: MONO, fontSize: 12, color: u.col, letterSpacing: '0.07em' }}>{u.status}</div>
+                  <div style={{ fontFamily: MONO, fontSize: 13, color: u.col, letterSpacing: '0.07em' }}>{u.status}</div>
                 </div>
               ))}
             </div>
@@ -277,4 +277,3 @@ export default function FiveMPage() {
     </div>
   );
 }
-
