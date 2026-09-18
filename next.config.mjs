@@ -8,10 +8,9 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ['localhost:3000', 'la-taniere-ems.vercel.app'],
+      allowedOrigins: ['localhost:3000', 'dispensaire-little-creek.vercel.app'],
     },
   },
-  output: 'standalone',
 };
 
 export default nextConfig;
