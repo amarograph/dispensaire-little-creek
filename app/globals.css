@@ -25,3 +25,47 @@
     border-radius: 3px;
   }
 }
+/* Supplied artwork stays confined to the sign-in page. */
+.login-scene {
+  color-scheme: light;
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: max(48px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(48px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+  background: #eddfbd url('/login-background.png') center center / cover no-repeat;
+  color: #172f3c;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+.login-content { width: min(100%, 430px); position: relative; }
+.login-ornament { color: #59603e; font-size: 42px; line-height: 1; margin-bottom: 18px; text-shadow: 0 0 10px #f6ebd4, 0 0 4px #f6ebd4; }
+.login-title { font-size: clamp(29px, 3vw, 40px); line-height: 1.12; font-weight: 700; text-wrap: balance; text-shadow: 0 0 10px #f6ebd4, 0 0 4px #f6ebd4; }
+.login-subtitle { color: #4d503d; font-size: 13px; margin-top: 12px; line-height: 1.6; text-shadow: 0 0 8px #f6ebd4, 0 0 3px #f6ebd4; }
+.login-panel { padding: clamp(22px, 4vw, 32px); background: #f6ebd4e8; border: 1px solid #a58d59; outline: 1px solid #a58d5970; outline-offset: 5px; box-shadow: 0 8px 28px #352b1612; }
+.login-heading { font-size: 22px; text-align: center; margin-bottom: 24px; }
+.login-discord { display: flex; width: 100%; justify-content: center; align-items: center; gap: 10px; min-height: 48px; padding: 12px 14px; color: #fff7e5; background: #183b46; border: 1px solid #183b46; font-size: 14px; cursor: pointer; transition: background .2s; }
+.login-discord svg { flex-shrink: 0; }
+.login-discord:hover { background: #2c5154; }
+.login-discord:disabled { opacity: .65; cursor: wait; }
+.login-discord:focus-visible { outline: 3px solid #97713d; outline-offset: 4px; }
+.login-privacy { color: #55523f; font-size: 12px; line-height: 1.7; text-align: center; margin-top: 18px; }
+.login-footer { text-align: center; font-size: 11px; color: #4d503d; margin-top: 28px; letter-spacing: .08em; text-shadow: 0 0 8px #f6ebd4, 0 0 3px #f6ebd4; }
+.login-error { background: #f8e3d7; border: 1px solid #ad6b56; color: #782f20; padding: 12px; margin-bottom: 18px; font-size: 13px; line-height: 1.5; }
+/* Dedicated portrait artwork covers vertical screens directly, no cropping tricks needed. */
+@media (max-aspect-ratio: 1/1) {
+  .login-scene { background: #eddfbd url('/login-background-portrait.webp') center center / cover no-repeat; }
+}
+@media (max-width: 420px) {
+  .login-title { font-size: 29px; }
+  .login-scene { padding-left: 30px; padding-right: 30px; }
+  .login-content > .text-center { margin-bottom: 24px; }
+  .login-discord { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) { .login-discord { transition: none; } }
+
+.login-brand { margin: 0 auto 22px; }
+.login-logo { display: block; width: min(100%, 410px); height: auto; margin: 0 auto; object-fit: contain; }
+@media (max-height: 700px) and (min-aspect-ratio: 1/1) { .login-logo { width: min(100%, 290px); } .login-brand { margin-bottom: 16px; } }
+@media (max-width: 420px) { .login-logo { width: min(100%, 330px); } }

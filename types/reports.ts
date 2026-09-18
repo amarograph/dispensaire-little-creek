@@ -1,18 +1,9 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
 import { generatePDF } from '@/lib/pdf-generator';
 import { renderTemplate } from '@/lib/template-engine';
+import { requireApprovedMember as getAuthenticatedUser } from '@/lib/auth';
 import type { Template } from '@/types';
-
-async function getAuthenticatedUser() {
-  const supabase = await createClient();
-  const { data: { user }, error } = await supabase.auth.getUser();
-  if (error || !user || user.email !== process.env.NEXT_PUBLIC_ALLOWED_EMAIL) {
-    throw new Error('Unauthorized');
-  }
-  return { supabase, user };
-}
 
 export async function submitReport(
   templateId: string,

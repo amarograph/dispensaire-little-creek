@@ -13,7 +13,7 @@ const DEFAULT_KEYS = [
 ];
 
 export default function SettingsPage() {
-  const [universe, setUniverse] = useState<Universe>('fivem');
+  const universe: Universe = 'redm';
   const [settings, setSettings] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -36,25 +36,7 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold mb-6">Paramètres univers</h1>
-
-      <div className="flex gap-2 mb-6">
-        {(['fivem', 'redm'] as Universe[]).map(u => (
-          <button
-            key={u}
-            onClick={() => setUniverse(u)}
-            className={`px-4 py-2 rounded-lg text-sm transition ${
-              universe === u
-                ? u === 'fivem'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-amber-600 text-white'
-                : 'bg-gray-800 text-gray-400 hover:text-white'
-            }`}
-          >
-            {u === 'fivem' ? '🏥 FiveM' : '⚕️ RedM'}
-          </button>
-        ))}
-      </div>
+      <h1 className="text-2xl font-bold mb-6">Paramètres — RedM</h1>
 
       <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-4">
         {DEFAULT_KEYS.map(key => (

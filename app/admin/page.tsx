@@ -1,13 +1,15 @@
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { requirePermission } from '@/lib/auth';
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  try {
+    await requirePermission('direction');
+  } catch {
+    redirect('/redm');
+  }
+
   const sections = [
-    {
-      href: '/admin/templates?universe=fivem',
-      icon: '📄',
-      title: 'Templates FiveM',
-      desc: 'Hôpital',
-    },
     {
       href: '/admin/templates?universe=redm',
       icon: '📜',
@@ -19,6 +21,12 @@ export default function AdminPage() {
       icon: '⚙️',
       title: 'Paramètres',
       desc: 'NOM_HOPITAL, adresse...',
+    },
+    {
+      href: '/admin/access',
+      icon: '🛡️',
+      title: 'Demandes d\'accès',
+      desc: 'Valider les connexions Discord',
     },
   ];
 

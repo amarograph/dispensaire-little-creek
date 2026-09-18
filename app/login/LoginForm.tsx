@@ -1,173 +1,70 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [mode, setMode] = useState<'login' | 'reset'>('login');
-  const [resetSent, setResetSent] = useState(false);
 
   useEffect(() => {
     if (searchParams.get('error') === 'unauthorized') {
       setError('Accès non autorisé. Ce système est privé.');
+    } else if (searchParams.get('error') === 'oauth') {
+      setError('La connexion Discord a échoué. Réessaie.');
     }
   }, [searchParams]);
 
   const supabase = createClient();
 
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleDiscordLogin() {
     setLoading(true);
     setError('');
 
-    const allowedEmail = process.env.NEXT_PUBLIC_ALLOWED_EMAIL;
-    if (email !== allowedEmail) {
-      setError('Accès non autorisé.');
-      setLoading(false);
-      return;
-    }
-
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      setError('Email ou mot de passe incorrect.');
-    } else {
-      router.push('/fivem'); // ← redirige vers la MDT FiveM
-      router.refresh();
-    }
-    setLoading(false);
-  }
-
-  async function handleReset(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
+    await supabase.auth.signInWithOAuth({
+      provider: 'discord',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+        scopes: 'identify',
+      },
     });
-
-    if (error) {
-      setError("Erreur lors de l'envoi du mail de réinitialisation.");
-    } else {
-      setResetSent(true);
-    }
-    setLoading(false);
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="text-5xl mb-4">⚕️</div>
-          <h1 className="text-2xl font-bold text-white">La Tanière de l'EMS</h1>
-          <p className="text-gray-400 text-sm mt-1">Système de gestion documentaire privé</p>
-        </div>
+    <div className="login-scene">
+      <div className="login-content">
+        <h1 className="login-brand">
+          <img src="/login-logo.png" alt="Dispensaire de Little Creek — Soins & remèdes" width="1254" height="1254" className="login-logo" />
+        </h1>
 
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 shadow-2xl">
-          {mode === 'login' ? (
-            <>
-              <h2 className="text-lg font-semibold text-white mb-6">Connexion</h2>
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    required
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition"
-                    placeholder="email@exemple.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">Mot de passe</label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    required
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition"
-                    placeholder="••••••••"
-                  />
-                </div>
+        <div className="login-panel">
+          <h2 className="login-heading">Connexion</h2>
 
-                {error && (
-                  <div className="bg-red-900/30 border border-red-700 text-red-400 text-sm rounded-lg px-4 py-3">
-                    {error}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-medium rounded-lg py-2.5 transition"
-                >
-                  {loading ? 'Connexion...' : 'Se connecter'}
-                </button>
-              </form>
-
-              <button
-                onClick={() => { setMode('reset'); setError(''); }}
-                className="mt-4 text-sm text-gray-500 hover:text-gray-300 transition w-full text-center"
-              >
-                Mot de passe oublié ?
-              </button>
-            </>
-          ) : (
-            <>
-              <h2 className="text-lg font-semibold text-white mb-6">
-                Réinitialiser le mot de passe
-              </h2>
-              {resetSent ? (
-                <div className="text-center">
-                  <div className="text-4xl mb-3">📧</div>
-                  <p className="text-gray-300">Email envoyé ! Vérifiez votre boîte mail.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleReset} className="space-y-4">
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-1">Email</label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      required
-                      className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition"
-                    />
-                  </div>
-                  {error && (
-                    <div className="bg-red-900/30 border border-red-700 text-red-400 text-sm rounded-lg px-4 py-3">
-                      {error}
-                    </div>
-                  )}
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-medium rounded-lg py-2.5 transition"
-                  >
-                    {loading ? 'Envoi...' : 'Envoyer le lien'}
-                  </button>
-                </form>
-              )}
-              <button
-                onClick={() => { setMode('login'); setError(''); }}
-                className="mt-4 text-sm text-gray-500 hover:text-gray-300 transition w-full text-center"
-              >
-                ← Retour à la connexion
-              </button>
-            </>
+          {error && (
+            <div role="alert" className="login-error">
+              {error}
+            </div>
           )}
+
+          <button
+            onClick={handleDiscordLogin}
+            disabled={loading}
+            className="login-discord"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+            </svg>
+            {loading ? 'Connexion...' : 'Se connecter avec Discord'}
+          </button>
+
+          <p className="login-privacy">
+            Ton pseudo et ton identifiant Discord seront utilisés pour valider ton accès.
+          </p>
         </div>
 
-        <p className="text-center text-xs text-gray-600 mt-6">
+        <p className="login-footer">
           Système privé — Accès restreint
         </p>
       </div>

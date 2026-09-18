@@ -2,13 +2,8 @@ import { getTemplates } from '@/actions/templates';
 import Link from 'next/link';
 import { TemplateList } from '@/components/admin/TemplateList';
 
-export default async function AdminTemplatesPage({
-  searchParams,
-}: {
-  searchParams: { universe?: string };
-}) {
-  const universe =
-    searchParams.universe === 'redm' ? 'redm' : 'fivem';
+export default async function AdminTemplatesPage() {
+  const universe = 'redm' as const;
   const templates = await getTemplates(universe);
 
   return (
@@ -26,24 +21,6 @@ export default async function AdminTemplatesPage({
         >
           + Nouveau template
         </Link>
-      </div>
-
-      <div className="flex gap-2 mb-6">
-        {(['fivem', 'redm'] as const).map(u => (
-          <Link
-            key={u}
-            href={`/admin/templates?universe=${u}`}
-            className={`px-4 py-2 rounded-lg text-sm transition ${
-              universe === u
-                ? u === 'fivem'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-amber-600 text-white'
-                : 'bg-gray-800 text-gray-400 hover:text-white'
-            }`}
-          >
-            {u === 'fivem' ? '🏥 FiveM' : '⚕️ RedM'}
-          </Link>
-        ))}
       </div>
 
       <TemplateList templates={templates} universe={universe} />

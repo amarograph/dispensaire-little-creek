@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { getMemberStatus } from '@/lib/auth';
 import Link from 'next/link';
 
 const NAV = [
@@ -15,8 +16,13 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user || user.email !== process.env.NEXT_PUBLIC_ALLOWED_EMAIL) {
+  if (!user) {
     redirect('/login');
+  }
+
+  const status = await getMemberStatus(user.id);
+  if (status !== 'approved') {
+    redirect('/pending');
   }
 
   return (
@@ -141,19 +147,6 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           color: var(--r-red-l);
           letter-spacing: 0.10em; text-transform: uppercase; white-space: nowrap;
         }
-        .redm-fivem-btn {
-          display: flex; align-items: center; gap: 6px;
-          font-family: var(--r-mono); font-size: 11px; letter-spacing: 0.10em;
-          padding: 5px 14px;
-          border: 1px solid rgba(249,115,22,0.40);
-          background: rgba(249,115,22,0.06);
-          color: #FB923C; text-decoration: none;
-          transition: all 0.2s; white-space: nowrap; text-transform: uppercase;
-        }
-        .redm-fivem-btn:hover {
-          background: rgba(249,115,22,0.14);
-          border-color: rgba(249,115,22,0.70);
-        }
         .redm-quit-btn {
           font-family: var(--r-mono); font-size: 11px;
           letter-spacing: 0.10em; text-transform: uppercase;
@@ -265,7 +258,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
             <Link href="/redm" style={{ display: 'flex', alignItems: 'center', gap: 11, textDecoration: 'none', flexShrink: 0 }}>
               <div className="redm-logo-box">✚</div>
               <div>
-                <div className="redm-logo-title">LA TANIÈRE</div>
+                <div className="redm-logo-title">LITTLE CREEK</div>
                 <div className="redm-logo-sub">Dispensaire · RedM · 1890</div>
               </div>
             </Link>
@@ -280,7 +273,6 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
               <span className="redm-status-badge">✦ Ouvert</span>
-              <Link href="/fivem" className="redm-fivem-btn">◈ FiveM</Link>
               <Link href="/login" className="redm-quit-btn">⏻ Quitter</Link>
             </div>
           </div>
@@ -295,7 +287,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
         <footer className="redm-footer">
           <div className="redm-footer-inner">
             <span style={{ fontFamily: "'Special Elite', monospace", fontSize: 12, color: '#3A2018' }}>
-              ✚ La Tanière de l'EMS — Dispensaire RedM
+              ✚ Dispensaire de Little Creek
             </span>
             <span style={{ fontFamily: "'Special Elite', monospace", fontSize: 12, color: '#3A2018', letterSpacing: '0.10em' }}>
               DISPENSAIRE MEDICAL · 1890

@@ -9,16 +9,16 @@ interface UniverseContextType {
 }
 
 const UniverseContext = createContext<UniverseContextType>({
-  universe: 'fivem',
+  universe: 'redm',
   setUniverse: () => {},
 });
 
 export function UniverseProvider({ children }: { children: React.ReactNode }) {
-  const [universe, setUniverseState] = useState<Universe>('fivem');
+  const [universe, setUniverseState] = useState<Universe>('redm');
 
   useEffect(() => {
     const saved = localStorage.getItem('ems_universe') as Universe;
-    if (saved === 'fivem' || saved === 'redm') {
+    if (saved === 'redm') {
       setUniverseState(saved);
     }
   }, []);

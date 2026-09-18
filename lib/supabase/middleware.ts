@@ -30,6 +30,7 @@ export async function updateSession(request: NextRequest) {
   const isAuthRoute =
     request.nextUrl.pathname.startsWith('/login') ||
     request.nextUrl.pathname.startsWith('/auth');
+  const isPendingRoute = request.nextUrl.pathname.startsWith('/pending');
 
   if (!user && !isAuthRoute) {
     const url = request.nextUrl.clone();
@@ -37,19 +38,25 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (user) {
-    const allowedEmail = process.env.NEXT_PUBLIC_ALLOWED_EMAIL;
-    if (user.email !== allowedEmail) {
-      await supabase.auth.signOut();
-      const url = request.nextUrl.clone();
-      url.pathname = '/login';
-      url.searchParams.set('error', 'unauthorized');
-      return NextResponse.redirect(url);
+  if (user && !isAuthRoute) {
+    const { data: member } = await supabase
+      .from('members')
+      .select('status')
+      .eq('user_id', user.id)
+      .single();
+
+    if (member?.status !== 'approved') {
+      if (!isPendingRoute) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/pending';
+        return NextResponse.redirect(url);
+      }
+      return supabaseResponse;
     }
 
-    if (isAuthRoute && request.nextUrl.pathname === '/login') {
+    if (isPendingRoute || (isAuthRoute && request.nextUrl.pathname === '/login')) {
       const url = request.nextUrl.clone();
-      url.pathname = '/'; 
+      url.pathname = '/redm';
       return NextResponse.redirect(url);
     }
   }

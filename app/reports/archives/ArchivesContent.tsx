@@ -91,7 +91,6 @@ export default function ArchivesPage() {
               className="w-full mt-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
             >
               <option value="all">Tous</option>
-              <option value="fivem">🏥 FiveM</option>
               <option value="redm">⚕️ RedM</option>
             </select>
           </div>

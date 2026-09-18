@@ -1,13 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { createTemplate } from '@/actions/templates';
 
 export default function NewTemplatePage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const defaultUniverse = searchParams.get('universe') ?? 'fivem';
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -33,17 +31,7 @@ export default function NewTemplatePage() {
         onSubmit={handleSubmit}
         className="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-4"
       >
-        <div>
-          <label className="text-sm text-gray-400">Univers</label>
-          <select
-            name="universe"
-            defaultValue={defaultUniverse}
-            className="w-full mt-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
-          >
-            <option value="fivem">🏥 FiveM — Hôpital moderne</option>
-            <option value="redm">⚕️ RedM — Dispensaire 1890</option>
-          </select>
-        </div>
+        <input type="hidden" name="universe" value="redm" />
         <div>
           <label className="text-sm text-gray-400">Nom du template</label>
           <input

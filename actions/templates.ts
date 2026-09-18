@@ -1,17 +1,8 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { requireApprovedMember as getAuthenticatedUser } from '@/lib/auth';
 import type { Template, Universe } from '@/types';
-
-async function getAuthenticatedUser() {
-  const supabase = await createClient();
-  const { data: { user }, error } = await supabase.auth.getUser();
-  if (error || !user || user.email !== process.env.NEXT_PUBLIC_ALLOWED_EMAIL) {
-    throw new Error('Unauthorized');
-  }
-  return { supabase, user };
-}
 
 export async function getTemplates(universe: Universe) {
   const { supabase, user } = await getAuthenticatedUser();
