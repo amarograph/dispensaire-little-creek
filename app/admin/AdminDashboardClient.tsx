@@ -94,7 +94,7 @@ function LogsPanel() {
 
       {noTable && (
         <p className="text-sm text-orange-400">
-          ⚠ Table de logs manquante — voir <code>/api/redm/logs</code> pour la migration SQL à exécuter.
+          Table de logs manquante — voir <code>/api/redm/logs</code> pour la migration SQL à exécuter.
         </p>
       )}
       {loading && <p className="text-sm text-gray-500">Chargement…</p>}
@@ -136,7 +136,6 @@ export default function AdminDashboardClient({ members }: { members: Member[] })
       <div className="flex items-center justify-between flex-wrap gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-3">
-            <span className="text-yellow-500">⚙</span>
             <span className="text-yellow-500 tracking-wide">PANNEAU ADMIN</span>
           </h1>
           <p className="text-xs uppercase tracking-widest text-gray-500 mt-1">
@@ -153,7 +152,6 @@ export default function AdminDashboardClient({ members }: { members: Member[] })
       {/* Accès rapide */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
         <Link href="/admin/redm-dashboard" className="bg-gray-900 border border-gray-800 hover:border-yellow-700/60 rounded-xl p-5 transition group flex items-center gap-4">
-          <span className="text-3xl">📖</span>
           <div className="flex-1">
             <div className="font-medium text-gray-200 group-hover:text-yellow-400 transition">Tableau de Bord RedM</div>
             <div className="text-xs text-gray-500 mt-1">Éditer le contenu de la page d&apos;accueil RedM</div>
@@ -165,8 +163,8 @@ export default function AdminDashboardClient({ members }: { members: Member[] })
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <StatCard value={members.length} label="Utilisateurs" color="#E8D9C0" />
-        <StatCard value={pending.length} label="En attente" color="#D4A840" />
-        <StatCard value={approved.length} label="Actifs" color="#5A9A58" />
+        <StatCard value={pending.length} label="En attente" color="#D1B77C" />
+        <StatCard value={approved.length} label="Actifs" color="#B7C3A4" />
       </div>
 
       {/* Onglets */}
@@ -188,7 +186,7 @@ export default function AdminDashboardClient({ members }: { members: Member[] })
         <div className="space-y-10">
           <div>
             <h2 className="text-sm uppercase tracking-wide text-gray-500 mb-3">
-              ⏳ En attente de whitelist ({pending.length})
+              En attente de whitelist ({pending.length})
             </h2>
             {pending.length === 0 ? (
               <p className="text-gray-500 text-sm">Aucun utilisateur en attente.</p>
@@ -201,7 +199,7 @@ export default function AdminDashboardClient({ members }: { members: Member[] })
 
           <div>
             <h2 className="text-sm uppercase tracking-wide text-gray-500 mb-3">
-              👥 Membres du dispensaire ({approved.length})
+              Membres du dispensaire ({approved.length})
             </h2>
             {approved.length === 0 ? (
               <p className="text-gray-500 text-sm">Aucun membre pour le moment.</p>

@@ -3,11 +3,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
-const MONO    = "'Share Tech Mono', 'Courier New', monospace";
-const DISPLAY = "'Rajdhani', 'Arial', sans-serif";
+const MONO    = "'Libre Baskerville', Georgia, serif";
+const DISPLAY = "'Central Station', Georgia, serif";
 const T = {
-  bg: '#08090D', card: '#10121A', border: 'rgba(128,104,45,0.18)',
-  gold: '#80682D', muted: '#5A6A80', red: '#C85050', green: '#50C878',
+  bg: '#102B3B', card: '#183746', border: 'rgba(180,160,113,0.40)',
+  gold: '#EADCB9', muted: '#C8BEA5', red: '#EFA895', green: '#B7C3A4',
   sepia: '#D4C090',
 };
 
@@ -94,7 +94,7 @@ function inp(extra?: React.CSSProperties): React.CSSProperties {
   return {
     padding: '9px 13px',
     background: 'rgba(255,255,255,0.06)',
-    border: '1px solid rgba(128,104,45,0.30)',
+    border: '1px solid rgba(180,160,113,0.30)',
     borderRadius: 7,
     color: '#E8D8B0',
     fontFamily: MONO,
@@ -116,17 +116,17 @@ function ColorSelect({ value, onChange, options }: {
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       <span style={{ display: 'inline-block', width: 12, height: 12, borderRadius: '50%', background: value, flexShrink: 0 }} />
       <select value={value} onChange={e => onChange(e.target.value)}
-        style={{ padding: '9px 10px', background: '#1A1C28', border: '1px solid rgba(128,104,45,0.30)', borderRadius: 7, color: '#E8D8B0', fontFamily: MONO, fontSize: 14, cursor: 'pointer', width: 160 }}>
+        style={{ padding: '9px 10px', background: '#102B3B', border: '1px solid rgba(180,160,113,0.30)', borderRadius: 7, color: '#E8D8B0', fontFamily: MONO, fontSize: 14, cursor: 'pointer', width: 160 }}>
         {options.map(o => <option key={o.val} value={o.val}>{o.label}</option>)}
       </select>
     </div>
   );
 }
 
-function SectionTitle({ title, icon }: { title: string; icon: string }) {
+function SectionTitle({ title }: { title: string }) {
   return (
     <div style={{ fontFamily: DISPLAY, color: T.gold, fontSize: 22, fontWeight: 700, letterSpacing: 2, marginBottom: 18, display: 'flex', alignItems: 'center', gap: 10 }}>
-      {icon} {title}
+      {title}
     </div>
   );
 }
@@ -270,7 +270,7 @@ export default function RedmDashboardAdmin() {
 
   const btnAdd: React.CSSProperties = {
     marginTop: 8, padding: '9px 18px',
-    background: 'rgba(128,104,45,0.07)', border: `1px solid ${T.border}`,
+    background: 'rgba(180,160,113,0.07)', border: `1px solid ${T.border}`,
     borderRadius: 8, color: T.gold, cursor: 'pointer', fontSize: 15,
     alignSelf: 'flex-start', fontFamily: MONO,
   };
@@ -287,7 +287,7 @@ export default function RedmDashboardAdmin() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: T.bg, fontFamily: MONO, padding: '40px 56px' }} ref={formRef}>
+    <div style={{ minHeight: '100vh', background: T.bg, color: '#EADCB9', fontFamily: MONO, padding: '40px 56px' }} ref={formRef}>
 
       {/* Toast */}
       {toast && (
@@ -299,9 +299,9 @@ export default function RedmDashboardAdmin() {
       {/* Erreur DB */}
       {dbError && (
         <div style={{ marginBottom: 28, padding: '18px 24px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.40)', borderRadius: 12, color: T.red, fontSize: 16 }}>
-          <div style={{ fontWeight: 700, marginBottom: 8 }}>⚠ Erreur base de données — la table <code style={{ background: 'rgba(0,0,0,0.3)', padding: '2px 7px', borderRadius: 4 }}>site_config</code> n'existe pas encore.</div>
-          <div style={{ color: '#A05050', fontSize: 14, marginBottom: 12 }}>Erreur : {dbError}</div>
-          <div style={{ fontSize: 14, color: '#A05050' }}>Exécute ce SQL dans Supabase :</div>
+          <div style={{ fontWeight: 700, marginBottom: 8 }}>Erreur base de données — la table <code style={{ background: 'rgba(0,0,0,0.3)', padding: '2px 7px', borderRadius: 4 }}>site_config</code> n'existe pas encore.</div>
+          <div style={{ color: '#EFA895', fontSize: 14, marginBottom: 12 }}>Erreur : {dbError}</div>
+          <div style={{ fontSize: 14, color: '#EFA895' }}>Exécute ce SQL dans Supabase :</div>
           <pre style={{ background: 'rgba(0,0,0,0.4)', padding: '12px 16px', borderRadius: 8, marginTop: 8, fontSize: 13, color: '#E0C0C0', overflowX: 'auto' }}>
 {`CREATE TABLE site_config (
   key   text PRIMARY KEY,
@@ -314,12 +314,12 @@ export default function RedmDashboardAdmin() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 40 }}>
         <div>
-          <div style={{ fontFamily: DISPLAY, color: T.gold, fontSize: 48, fontWeight: 700, letterSpacing: 4, lineHeight: 1 }}>🏥 TABLEAU DE BORD REDM</div>
+          <div style={{ fontFamily: DISPLAY, color: T.gold, fontSize: 48, fontWeight: 700, letterSpacing: 4, lineHeight: 1 }}>TABLEAU DE BORD REDM</div>
           <div style={{ color: T.muted, fontSize: 16, letterSpacing: 3, marginTop: 8 }}>Édition du contenu de la page d'accueil RedM</div>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
           <button onClick={save} disabled={saving} style={btnSave}>
-            {saving ? '...' : '✓ Sauvegarder tout'}
+            {saving ? '...' : 'Sauvegarder tout'}
           </button>
           <a href="/admin" style={{ padding: '14px 24px', background: 'transparent', border: `1px solid ${T.border}`, borderRadius: 10, color: T.muted, fontFamily: MONO, fontSize: 17, textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
             ← Admin
@@ -332,7 +332,7 @@ export default function RedmDashboardAdmin() {
 
         {/* TITRES */}
         <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: '28px 32px' }}>
-          <SectionTitle title="TITRES DE LA PAGE" icon="✏️" />
+          <SectionTitle title="TITRES DE LA PAGE" />
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
             {([
               ['titres.surtitle',      'Sous-titre au-dessus du titre principal',  cfg.titres.surtitle],
@@ -353,7 +353,7 @@ export default function RedmDashboardAdmin() {
 
         {/* INFORMATION DISPENSAIRE */}
         <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: '28px 32px' }}>
-          <SectionTitle title="INFORMATION DISPENSAIRE" icon="🏚" />
+          <SectionTitle title="INFORMATION DISPENSAIRE" />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             <div>
               <Label>Libellé — Médecins</Label>
@@ -394,7 +394,7 @@ export default function RedmDashboardAdmin() {
             </div>
 
             <div style={{ fontSize: 13, color: T.muted, lineHeight: 1.6 }}>
-              ℹ Le nombre de médecins est calculé automatiquement depuis « Direction · Liste des médecins ».
+              Le nombre de médecins est calculé automatiquement depuis « Direction · Liste des médecins ».
               L'épidémie en cours et le risque sanitaire se sélectionnent depuis « Direction · Alerte Sanitaire »
               (liste déroulante + bouton CRITIQUE), réservé à la direction. Le message affiché à tous dépend du
               type (épidémie / risque sanitaire) et du niveau (normal / critique).
@@ -404,7 +404,7 @@ export default function RedmDashboardAdmin() {
 
         {/* REGISTRE DU JOUR */}
         <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: '28px 32px' }}>
-          <SectionTitle title="REGISTRE DU JOUR" icon="📋" />
+          <SectionTitle title="REGISTRE DU JOUR" />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {cfg.registre.map((r, i) => (
               <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
@@ -420,7 +420,7 @@ export default function RedmDashboardAdmin() {
 
         {/* PATIENTS EN SALLE */}
         <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: '28px 32px' }}>
-          <SectionTitle title="PATIENTS EN SALLE" icon="🛏" />
+          <SectionTitle title="PATIENTS EN SALLE" />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {cfg.patients.map((p, i) => (
               <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
@@ -436,7 +436,7 @@ export default function RedmDashboardAdmin() {
 
         {/* STATISTIQUES */}
         <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: '28px 32px' }}>
-          <SectionTitle title="STATISTIQUES (chiffres)" icon="📊" />
+          <SectionTitle title="STATISTIQUES (chiffres)" />
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14 }}>
             {cfg.stats.map((s, i) => (
               <div key={i} style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 10, padding: '16px 18px' }}>
@@ -452,7 +452,7 @@ export default function RedmDashboardAdmin() {
 
         {/* CITATION */}
         <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: '28px 32px' }}>
-          <SectionTitle title="CITATION" icon="💬" />
+          <SectionTitle title="CITATION" />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div>
               <Label>Texte</Label>
