@@ -10,14 +10,14 @@ const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 
 const MODULES = [
-  { id: 'comptabilite', href: '/redm/comptabilite',  icon: '💰', label: 'Comptabilité', sub: 'HONORAIRES & RECETTES', desc: 'Enregistrer les honoraires, suivre les paiements et consulter les comptes du dispensaire.', color: '#D1B77C', badge: 'FIN' },
   { id: 'registre-caisses', href: '/redm/registre-caisses', icon: '📖', label: 'Registre des Caisses', sub: 'SUIVI HEBDOMADAIRE', desc: "Faire sa caisse du jour et suivre son nombre de caisses et son salaire de la semaine.", color: '#B7C3A4', badge: 'RGC' },
-  { id: 'inventaire',   href: '/redm/inventaire',    icon: '📦', label: 'Inventaire',             sub: 'STOCKS DU DISPENSAIRE', desc: "Consulter l'état des stocks de plantes et de produits médicaux du dispensaire.", color: '#D1B77C', badge: 'INV' },
+  { id: 'comptabilite', href: '/redm/comptabilite',  icon: '💰', label: 'Comptabilité', sub: 'HONORAIRES & RECETTES', desc: 'Enregistrer les honoraires, suivre les paiements et consulter les comptes du dispensaire.', color: '#D1B77C', badge: 'FIN' },
   { id: 'bibliotheque', href: '/redm/bibliotheque',  icon: '📚', label: 'Bibliothèque',           sub: 'TRAITÉS & MANUELS', desc: "Traités médicaux, formulaires de remèdes et guides de soins de l'époque.",    color: '#AAB9C6', badge: 'REF' },
-  { id: 'archives',     href: '/redm/archives',      icon: '🗄', label: 'Archives',               sub: 'REGISTRES',         desc: 'Consulter les registres de consultations et dossiers des patients.',           color: '#A8B991', badge: 'REG' },
   { id: 'agenda',       href: '/redm/agenda',        icon: '📅', label: 'Agenda',                 sub: 'RENDEZ-VOUS',       desc: 'Planifier et consulter les rendez-vous du dispensaire. RDV du cabinet anonymisés.', color: '#A8B991', badge: 'AGD' },
+  { id: 'archives',     href: '/redm/archives',      icon: '🗄', label: 'Archives',               sub: 'REGISTRES',         desc: 'Consulter les registres de consultations et dossiers des patients.',           color: '#A8B991', badge: 'REG' },
   { id: 'cabinet',      href: '/redm/cabinet',       icon: '🛋', label: 'Cabinet Thérapeutique',  sub: "SOINS DE L'ÂME",   desc: "Suivi psychologique, consultations de l'esprit et thérapies de l'époque.",   color: '#A8B991', badge: 'PSY' },
   { id: 'direction',    href: '/redm/direction',     icon: '🏛', label: 'Direction',              sub: 'ACCÈS RÉSERVÉ',     desc: 'Comptabilité et gestion administrative du dispensaire — direction & co-direction.', color: '#D1B77C', badge: 'DIR' },
+  { id: 'inventaire',   href: '/redm/inventaire',    icon: '📦', label: 'Inventaire',             sub: 'STOCKS DU DISPENSAIRE', desc: "Consulter l'état des stocks de plantes et de produits médicaux du dispensaire.", color: '#D1B77C', badge: 'INV' },
 ];
 
 const DEFAULT_DISPENSAIRE = {

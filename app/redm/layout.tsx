@@ -8,21 +8,11 @@ import ZoomPicker from '@/components/layout/ZoomPicker';
 import ZoomWrapper from '@/components/layout/ZoomWrapper';
 import Notifier from './_components/Notifier';
 import AlerteSanitaire from './_components/AlerteSanitaire';
-import DirectionNav from './_components/DirectionNav';
 import { RedmSessionProvider } from './_components/RedmSessionProvider';
 import { caisseRateForRoles } from '@/lib/caisse-rates';
+import { canRead, isAdmin as checkIsAdmin } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
-
-const NAV = [
-  { href: '/redm',                  label: 'Accueil',               icon: '⌂'  },
-  { href: '/redm/registre-malades', label: 'Registre Patient',      icon: '📋' },
-  { href: '/redm/comptabilite',     label: 'Caisse et Comptabilité',icon: '💰' },
-  { href: '/redm/bibliotheque',     label: 'Bibliothèque',          icon: '📚' },
-  { href: '/redm/archives',         label: 'Archives',              icon: '🗄' },
-  { href: '/redm/agenda',           label: 'Agenda',                icon: '📅' },
-  { href: '/redm/cabinet',          label: 'Cabinet Thérapeutique', icon: '🛋' },
-];
 
 export default async function RedMLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -40,14 +30,23 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
   };
 
   const roles: string[] = member.roles ?? [];
-  const isPreparateurOnly = roles.length === 1 && roles[0] === 'redm_preparateur_caisse';
-  const hasCaisseAccess   = caisseRateForRoles(roles) !== null;
+  const isPreparateurOnly  = roles.length === 1 && roles[0] === 'redm_preparateur_caisse';
+  const hasCaisseAccess    = caisseRateForRoles(roles) !== null;
+  const hasDirectionAccess = checkIsAdmin(roles) || canRead(roles, 'redm_direction');
 
   const navItems = isPreparateurOnly
     ? [{ href: '/redm/registre-caisses', label: 'Registre des Caisses', icon: '💰' }]
     : [
-        ...NAV,
+        { href: '/redm',                  label: 'Accueil',               icon: '⌂'  },
         ...(hasCaisseAccess ? [{ href: '/redm/registre-caisses', label: 'Registre des Caisses', icon: '💰' }] : []),
+        { href: '/redm/comptabilite',     label: 'Comptabilité',          icon: '💰' },
+        { href: '/redm/bibliotheque',     label: 'Bibliothèque',          icon: '📚' },
+        { href: '/redm/agenda',           label: 'Agenda',                icon: '📅' },
+        { href: '/redm/archives',         label: 'Archives',              icon: '🗄' },
+        { href: '/redm/cabinet',          label: 'Cabinet Thérapeutique', icon: '🛋' },
+        ...(hasDirectionAccess ? [{ href: '/redm/direction', label: 'Direction', icon: '🏛' }] : []),
+        { href: '/redm/inventaire',       label: 'Inventaire',            icon: '📦' },
+        { href: '/redm/registre-malades', label: 'Registre Patient',      icon: '📋' },
       ];
 
   return (
@@ -302,7 +301,6 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
                   <span>{n.icon}</span>{n.label}
                 </Link>
               ))}
-              <DirectionNav />
             </ZoomWrapper>
             <ZoomPicker accentRgb="120,20,20" activeColor="#EADCB9" mutedColor="#C8BEA5" font="'Libre Baskerville', monospace" />
           </div>
