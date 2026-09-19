@@ -31,3 +31,18 @@ export async function requireCabinetActor(): Promise<{ discordId: string; isAdmi
   if (!ok) return null;
   return { discordId: session.discordId, isAdmin: admin };
 }
+
+const REDM_STAFF_ROLES = [
+  'redm_directeur', 'redm_co_directeur', 'redm_medecin_chef', 'redm_medecin',
+  'redm_infirmier', 'redm_apprenti', 'redm_therapeute',
+];
+
+/** N'importe quel membre du personnel RedM (ou dev) — profil, portrait… */
+export async function requireRedmStaff(): Promise<{ discordId: string; roles: string[]; isAdmin: boolean } | null> {
+  const session = await getApiSession();
+  if (!session) return null;
+  const admin = isAdmin(session.roles);
+  const ok = admin || session.roles.some(r => REDM_STAFF_ROLES.includes(r));
+  if (!ok) return null;
+  return { discordId: session.discordId, roles: session.roles, isAdmin: admin };
+}
