@@ -35,7 +35,7 @@ const NONE_MAP: PermMap = {
 };
 
 export const ROLES = [
-  'admin',
+  'dev',
   'redm_directeur',
   'redm_co_directeur',
   'redm_medecin_chef',
@@ -48,8 +48,16 @@ export const ROLES = [
 
 export type Role = typeof ROLES[number];
 
+/**
+ * Rôles proposables via l'interface (validation des accès / attribution des
+ * rôles). "dev" en est volontairement exclu : il ne doit figurer dans aucun
+ * registre ni être attribuable manuellement — seul le bootstrap via
+ * ADMIN_DISCORD_IDS peut l'accorder.
+ */
+export const ASSIGNABLE_ROLES = ROLES.filter(r => r !== 'dev') as Exclude<Role, 'dev'>[];
+
 export const ROLE_LABELS: Record<Role, string> = {
-  admin: 'Dev',
+  dev: 'Dev',
   redm_directeur: 'Directeur',
   redm_co_directeur: 'Co-directeur',
   redm_medecin_chef: 'Médecin en Chef',
@@ -66,8 +74,8 @@ export function isRole(value: string): value is Role {
 
 export const ROLE_PERMISSIONS: Record<Role, PermMap> = {
 
-  // ── Système ──────────────────────────────────────────────────────────────
-  admin: ALL_MANAGER,
+  // ── Système (rôle caché, non listé, jamais attribuable via l'UI) ──────────
+  dev: ALL_MANAGER,
 
   // ── Directeur dispensaire : tout ─────────────────────────────────────────
   redm_directeur: ALL_MANAGER,
@@ -167,7 +175,7 @@ export const canEdit   = (roles: string[], s: Section) => getPermission(roles, s
 export const canManage = (roles: string[], s: Section) => getPermission(roles, s) >= PERM.MANAGER;
 
 export function isAdmin(roles: string[]): boolean {
-  return roles.includes('admin');
+  return roles.includes('dev');
 }
 
 export function isDirection(roles: string[]): boolean {

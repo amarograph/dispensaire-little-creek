@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { decideMember, updateMemberRoles } from '@/actions/members';
-import { ROLES, ROLE_LABELS, type Role } from '@/lib/permissions';
+import { ROLES, ASSIGNABLE_ROLES, ROLE_LABELS, type Role } from '@/lib/permissions';
 
 type Member = {
   user_id: string;
@@ -113,7 +113,7 @@ export default function MemberRow({ member }: { member: Member }) {
       {showRolePicker && (
         <div className="mt-3 pt-3 border-t border-gray-800">
           <div className="flex flex-wrap gap-2 mb-3">
-            {ROLES.map(role => (
+            {ASSIGNABLE_ROLES.map(role => (
               <button
                 key={role}
                 type="button"

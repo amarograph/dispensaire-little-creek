@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
-import { isDirection, isRole, type Role } from '@/lib/permissions';
+import { isDirection, isRole, ASSIGNABLE_ROLES, type Role } from '@/lib/permissions';
 
 async function requireDirection() {
   const supabase = await createClient();
@@ -23,7 +23,12 @@ async function requireDirection() {
 }
 
 function sanitizeRoles(roles: string[]): Role[] {
-  return Array.from(new Set(roles)).filter(isRole);
+  // "dev" n'est jamais attribuable via cette interface — uniquement via le
+  // bootstrap ADMIN_DISCORD_IDS. On le filtre même si un client malveillant
+  // l'envoie directement à l'action serveur.
+  return Array.from(new Set(roles)).filter(
+    (r): r is Role => isRole(r) && (ASSIGNABLE_ROLES as readonly string[]).includes(r)
+  );
 }
 
 export async function listMembers() {
