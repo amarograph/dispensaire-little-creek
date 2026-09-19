@@ -202,7 +202,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
             <div style={{ width: 46, height: 46, background: 'rgba(128,104,45,0.12)', border: '1px solid rgba(128,104,45,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>⚕</div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontFamily: DISPLAY, fontSize: 19, color: '#80682D', lineHeight: 1.3 }}>Serment d'Hippocrate</div>
-              <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#596451' }}>Prêté par Apollon, Esculape, Hygie et Panacée — Valentine, 1890</div>
+              <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#596451' }}>Prêté par Apollon, Esculape, Hygie et Panacée</div>
             </div>
             <span style={{ fontFamily: MONO, fontSize: 13, color: '#80682D', letterSpacing: '0.1em', flexShrink: 0 }}>CONSULTER →</span>
           </div>
