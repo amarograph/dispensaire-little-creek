@@ -22,6 +22,7 @@ export default function RPProfileButton({ universe, accentColor, accentRgb }: Pr
   const [editNom,    setEditNom]    = useState('');
   const [editPrenom, setEditPrenom] = useState('');
   const [saving,     setSaving]     = useState(false);
+  const [saveError,  setSaveError]  = useState('');
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,20 +47,29 @@ export default function RPProfileButton({ universe, accentColor, accentRgb }: Pr
   function openModal() {
     setEditNom(nomRp);
     setEditPrenom(prenomRp);
+    setSaveError('');
     setOpen(true);
   }
 
   async function save() {
     setSaving(true);
+    setSaveError('');
     try {
-      await fetch('/api/user/rp-profile', {
+      const res = await fetch('/api/user/rp-profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ universe, nom_rp: editNom, prenom_rp: editPrenom }),
       });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        setSaveError(d.error || `Erreur ${res.status}`);
+        return;
+      }
       setNomRp(editNom);
       setPrenomRp(editPrenom);
       setOpen(false);
+    } catch {
+      setSaveError('Erreur réseau — réessayez.');
     } finally {
       setSaving(false);
     }
@@ -169,6 +179,12 @@ export default function RPProfileButton({ universe, accentColor, accentRgb }: Pr
               }}
             />
           </div>
+
+          {saveError && (
+            <div style={{ fontFamily: MONO, fontSize: 12, color: '#F87171', marginBottom: 10, lineHeight: 1.5 }}>
+              ⚠ {saveError}
+            </div>
+          )}
 
           {/* Save */}
           <button
