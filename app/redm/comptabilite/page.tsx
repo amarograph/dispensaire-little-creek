@@ -328,7 +328,7 @@ export default function CaisseComptabilitePage() {
               </div>
 
               <div>
-                <label style={lbl}>PRIS EN CHARGE PAR</label>
+                <label style={lbl}>FONCTION DU PATIENT</label>
                 <select style={{...inp,cursor:'pointer'}} value={form.payeur} onChange={e=>setForm(f=>({...f,payeur:e.target.value as Payeur}))}>
                   {PAYEURS.map(p=><option key={p} value={p}>{p}</option>)}
                 </select>
