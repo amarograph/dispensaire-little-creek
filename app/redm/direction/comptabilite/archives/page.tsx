@@ -13,7 +13,7 @@ const T = { bg: '#1A1208', card: '#1F1610', border: 'rgba(139,90,43,0.30)', gold
 
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
 type TypeCategorie  = 'vente' | 'achat';
-type Payeur         = 'Civil' | 'Shérif' | 'Écurie Little Creek' | 'Écurie Valentine' | 'Mairie West Elizabeth';
+type Payeur         = 'Civil' | 'Shérif' | 'Mairie West Elizabeth';
 
 const STATUT_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#4A6048', 'EN ATTENTE': '#C8A850', 'ANNULÉ': '#8B4040' };
 const STATUT_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
