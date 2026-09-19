@@ -18,15 +18,15 @@ function loadPatients(): Dossier[] { try { return JSON.parse(localStorage.getIte
 function savePatients(d: Dossier[]){ try { localStorage.setItem(LS_PATIENTS, JSON.stringify(d)); } catch {} }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function rpDate(d = new Date()) {
-  const s = d.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2]) - 134); return s.join('/');
+  const s = d.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2]) - 136); return s.join('/');
 }
-/** Convertit une date DD/MM/YYYY → DD/MM/YYYY en année RP (−134), peu importe si déjà en 1892 */
+/** Convertit une date DD/MM/YYYY → DD/MM/YYYY en année RP (−136), peu importe si déjà en 1890 */
 function rpDisplay(date: string): string {
   const p = date.split('/');
   if (p.length !== 3) return date;
   const y = Number(p[2]);
   if (isNaN(y)) return date;
-  p[2] = String(y >= 1900 ? y - 134 : y);
+  p[2] = String(y >= 1900 ? y - 136 : y);
   return p.join('/');
 }
 
@@ -146,7 +146,7 @@ export default function ExamenPsychiquePage() {
   const [age,       setAge]       = useState('');
   const [fonction,  setFonction]  = useState('Sherif');
   const [county,    setCounty]    = useState('');
-  const [lieu,      setLieu]      = useState('Saint Denis');
+  const [lieu,      setLieu]      = useState('Little Creek');
   const [date,      setDate]      = useState(rpDate());
   const [docteur,   setDocteur]   = useState('Dr François De Millet');
   const [reponses,  setReponses]  = useState<Reponses>({});
@@ -224,7 +224,7 @@ export default function ExamenPsychiquePage() {
 
   function reset() {
     setNom(''); setPrenom(''); setAge(''); setFonction('Sherif'); setCounty('');
-    setDate(rpDate()); setLieu('Saint Denis'); setDocteur('Dr François De Millet'); setReponses({});
+    setDate(rpDate()); setLieu('Little Creek'); setDocteur('Dr François De Millet'); setReponses({});
     setEtatEmotionnel(''); setStabiliteNerveuse(''); setElementsRetenus('');
     setConclusion(''); setRecommandations('');
     setView('form');
@@ -335,7 +335,7 @@ export default function ExamenPsychiquePage() {
           {/* En-tête */}
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <div style={{ fontSize: 20, letterSpacing: '0.12em', marginBottom: 4, fontWeight: 'bold' }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
-            <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Saint Denis — Blackwater</div>
+            <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
             <div style={{ fontSize: 13, color: '#6A5030', lineHeight: 1.7 }}>
               Sous la direction du Docteur François De Millet<br />
               Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales
@@ -351,7 +351,7 @@ export default function ExamenPsychiquePage() {
 
           {/* Corps */}
           <div style={{ fontSize: 15, lineHeight: 2 }}>
-            <p style={{ margin: '0 0 16px' }}>Je soussigné, <strong>Docteur François De Millet</strong>, médecin – thérapeute exerçant au sein du L'ORDRES DES MÉDECINS - Hôpital de Saint Denis - Dispensaire de Valentine, certifie avoir procédé, en date du <strong>{rpDisplay(current.date)}</strong>, à un examen attentif des facultés psychiques, morales et comportementales de :</p>
+            <p style={{ margin: '0 0 16px' }}>Je soussigné, <strong>Docteur François De Millet</strong>, médecin – thérapeute exerçant au sein du L'ORDRES DES MÉDECINS - Hôpital de Little Creek - Dispensaire de Valentine, certifie avoir procédé, en date du <strong>{rpDisplay(current.date)}</strong>, à un examen attentif des facultés psychiques, morales et comportementales de :</p>
             <p style={{ paddingLeft: 28, margin: '0 0 16px' }}>
               <strong>Nom et Prénom :</strong> {current.prenom} {current.nom}<br />
               <strong>Fonction :</strong> {current.fonction}{current.county ? ` du comté de ${current.county}` : ''}
@@ -398,7 +398,7 @@ export default function ExamenPsychiquePage() {
             {/* Signature */}
             <div style={{ marginTop: 52, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
               <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>
-                Fait à <strong>{current.lieu || 'Saint Denis'}</strong>, le <strong>{rpDisplay(current.date)}</strong>
+                Fait à <strong>{current.lieu || 'Little Creek'}</strong>, le <strong>{rpDisplay(current.date)}</strong>
               </div>
               {/* Cachet + signature image */}
               <div style={{ textAlign: 'right' }}>
@@ -473,7 +473,7 @@ export default function ExamenPsychiquePage() {
           </button>
         </div>
         <div style={{ background: T.card, border: `1px solid ${T.border}`, borderTop: `4px solid ${COL}`, padding: '28px 32px', textAlign: 'center' }}>
-          <div style={{ fontFamily: MONO, fontSize: 13, color: COL, letterSpacing: '0.2em', marginBottom: 8 }}>DISPENSAIRE MÉDICAL · 1892</div>
+          <div style={{ fontFamily: MONO, fontSize: 13, color: COL, letterSpacing: '0.2em', marginBottom: 8 }}>DISPENSAIRE MÉDICAL · 1890</div>
           <h1 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 6px' }}>Examen Psychique & Moral</h1>
           <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 4 }}>FORMULAIRE OFFICIEL — AGENTS DE L'ORDRE (SHERIF)</div>
           <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim }}>Score max : {MAX_SCORE} pts · APTE ≥ 76 · À SURVEILLER 41–75 · INAPTE ≤ 40</div>
@@ -498,14 +498,14 @@ export default function ExamenPsychiquePage() {
           <div><label style={lbl}>COMTÉ</label>
             <select style={{ ...inp, cursor: 'pointer' }} value={county} onChange={e => setCounty(e.target.value)}>
               <option value="">— Sélectionner —</option>
-              <option value="New Hanover">New Hanover</option>
-              <option value="West Elisabeth">West Elisabeth</option>
+              <option value="East Wellster's">East Wellster's</option>
+              <option value="West Elizabeth">West Elizabeth</option>
             </select>
           </div>
           <div><label style={lbl}>DATE DE L'EXAMEN</label><input style={inp} value={date} onChange={e => setDate(e.target.value)} /></div>
           <div><label style={lbl}>LIEU DE L'EXAMEN</label>
             <select style={{ ...inp, cursor: 'pointer' }} value={lieu} onChange={e => setLieu(e.target.value)}>
-              <option value="Saint Denis">Saint Denis</option>
+              <option value="Little Creek">Little Creek</option>
               <option value="Blackwater">Blackwater</option>
             </select>
           </div>

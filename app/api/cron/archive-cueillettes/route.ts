@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
     const d = new Date();
     d.setUTCDate(d.getUTCDate() - 1);
     const base = d.toISOString().slice(0, 10);
-    dateStr = `1892${base.slice(4)}`;
+    dateStr = `1890${base.slice(4)}`;
   }
 
   const supabase = await createServiceClient();

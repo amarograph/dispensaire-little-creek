@@ -28,7 +28,7 @@ const DEFAULT_DISPENSAIRE = {
 };
 
 const DEFAULT_CITATION = {
-  text:   'Primum non nocere. La médecine de 1892 exige autant de courage que de science.',
+  text:   'Primum non nocere. La médecine de 1890 exige autant de courage que de science.',
   author: 'Dr. James Herrington, 1889',
 };
 
@@ -69,7 +69,7 @@ export default function RedMDashboardClient({ roles }: { roles: string[] }) {
   type RDV = { id: string; patientNom: string; date: string; heure: string; type: string; statut: string; };
   const [rdvs, setRdvs] = useState<RDV[]>([]);
   const [TITRES] = useState({
-    surtitle:      'Dispensaire Medical · Territoire de New Hanover',
+    surtitle:      "Dispensaire Medical · Territoire de East Wellster's",
     title:         'Carnet du dispensaire',
     subtitle:      'Registre des soins, actes medicaux et comptabilite',
     modules:       'Modules du Dispensaire',
@@ -111,7 +111,7 @@ export default function RedMDashboardClient({ roles }: { roles: string[] }) {
         if (parts.length !== 3) return false;
         const [d, m, y] = parts.map(Number);
         if (!d || !m || !y) return false;
-        return new Date(y + 134, m - 1, d) >= todayMidnight;
+        return new Date(y + 136, m - 1, d) >= todayMidnight;
       }
 
       const communUpcoming = (commun ?? []).filter(isUpcoming);
@@ -121,8 +121,8 @@ export default function RedMDashboardClient({ roles }: { roles: string[] }) {
       const merged = [...communUpcoming, ...cabinetUpcoming].sort((a, b) => {
         const pa = a.date.split('/').map(Number);
         const pb = b.date.split('/').map(Number);
-        const da = new Date(pa[2] + 134, pa[1] - 1, pa[0]).getTime();
-        const db = new Date(pb[2] + 134, pb[1] - 1, pb[0]).getTime();
+        const da = new Date(pa[2] + 136, pa[1] - 1, pa[0]).getTime();
+        const db = new Date(pb[2] + 136, pb[1] - 1, pb[0]).getTime();
         return da !== db ? da - db : a.heure.localeCompare(b.heure);
       });
       setRdvs(merged);
@@ -134,7 +134,7 @@ export default function RedMDashboardClient({ roles }: { roles: string[] }) {
       const n = new Date();
       setTime(n.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }));
       const dateStr = n.toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
-      setDate(dateStr.replace(String(n.getFullYear()), String(n.getFullYear() - 134)));
+      setDate(dateStr.replace(String(n.getFullYear()), String(n.getFullYear() - 136)));
     };
     tick();
     const id = setInterval(tick, 1000);
@@ -201,7 +201,7 @@ export default function RedMDashboardClient({ roles }: { roles: string[] }) {
             <div style={{ width: 46, height: 46, background: 'rgba(200,168,80,0.12)', border: '1px solid rgba(200,168,80,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>⚕</div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontFamily: DISPLAY, fontSize: 19, color: '#C8A850', lineHeight: 1.3 }}>Serment d'Hippocrate</div>
-              <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#A09080' }}>Prêté par Apollon, Esculape, Hygie et Panacée — Valentine, 1892</div>
+              <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#A09080' }}>Prêté par Apollon, Esculape, Hygie et Panacée — Valentine, 1890</div>
             </div>
             <span style={{ fontFamily: MONO, fontSize: 13, color: '#C8A850', letterSpacing: '0.1em', flexShrink: 0 }}>CONSULTER →</span>
           </div>

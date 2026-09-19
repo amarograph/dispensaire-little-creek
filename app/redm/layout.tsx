@@ -268,7 +268,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
               <img src="/logo-redm.png" alt="Dispensaire de Little Creek" style={{ width: 62, height: 62, objectFit: 'contain', flexShrink: 0 }} />
               <div>
                 <div className="redm-logo-title">LITTLE CREEK</div>
-                <div className="redm-logo-sub">Dispensaire · RedM · 1892</div>
+                <div className="redm-logo-sub">Dispensaire · RedM · 1890</div>
               </div>
             </Link>
 

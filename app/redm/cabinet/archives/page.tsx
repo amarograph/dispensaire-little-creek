@@ -38,7 +38,7 @@ export default function CabinetArchivesHubPage() {
         </div>
         <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#C8A850', margin: 0 }}>🗄 Archives</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: '#5A4A35', letterSpacing: '0.12em', marginTop: 8 }}>
-          MÉMOIRE DU CABINET · 1892 — SÉLECTIONNEZ UNE SECTION
+          MÉMOIRE DU CABINET · 1890 — SÉLECTIONNEZ UNE SECTION
         </p>
       </div>
 

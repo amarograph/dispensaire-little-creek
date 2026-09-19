@@ -78,7 +78,7 @@ function uid() {
 
 function rpDate(d = new Date()) {
   const s = d.toLocaleDateString('fr-FR').split('/');
-  s[2] = String(Number(s[2]) - 134);
+  s[2] = String(Number(s[2]) - 136);
   return s.join('/');
 }
 
@@ -180,7 +180,7 @@ function ReglementDocument() {
         ))}
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ DOCUMENT OFFICIEL ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 8px', letterSpacing: '0.05em' }}>📜 Règlement Général du Dispensaire</h2>
-        <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>Révisé et approuvé en l'an de grâce 1892</div>
+        <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>Révisé et approuvé en l'an de grâce 1890</div>
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>SOUS LA DIRECTION DU DOCTEUR FRANÇOIS DE MILLET · MÉDECIN FORMÉ À PARIS</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${T.gold}, transparent)`, margin: '0 auto 14px' }} />
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>TERRITOIRE DE LEMOYNE</div>
@@ -270,7 +270,7 @@ function ReglementDocument() {
       {/* Chapitre V */}
       <div id="chap-V" style={{ marginBottom: 36, background: T.paper, border: `1px solid ${REGLEMENT_CHAPITRES[4].col}40`, borderTop: `3px solid ${REGLEMENT_CHAPITRES[4].col}`, padding: '28px 32px' }}>
         <RegSectionHeader {...REGLEMENT_CHAPITRES[4]} />
-        <RegPara>L'étude et l'usage des plantes médicinales font partie intégrante de l'enseignement dispensé à Lemoyne.</RegPara>
+        <RegPara>L'étude et l'usage des plantes médicinales font partie intégrante de l'enseignement dispensé à West Elizabeth.</RegPara>
         <RegPara>Les décoctions, infusions, onguents et élixirs préparés au dispensaire devront être consignés dans les registres du laboratoire.</RegPara>
         <RegPara>Parmi les plantes les plus couramment employées figurent notamment :</RegPara>
         <RegList items={['Camomille', 'Mélisse', 'Verveine', 'Tilleul', 'Arnica', 'Saule blanc', 'Menthe', 'Thym', 'Valériane']} />
@@ -294,7 +294,7 @@ function ReglementDocument() {
         ]} />
         <RegPara>Toute administration de médicament devra être adaptée à l'état du patient et consignée dans les registres du dispensaire.</RegPara>
         <RegPara>Le dispensaire considère que la médecine moderne et l'herboristerie ne s'opposent pas, mais se complètent. Les praticiens sont encouragés à employer le traitement le plus approprié à chaque situation, qu'il provienne des remèdes naturels ou des progrès récents de la science médicale.</RegPara>
-        <RegPara>Les plantes médicinales demeurent toutefois au cœur de l'enseignement dispensé à Lemoyne. Elles constituent souvent le premier recours dans le traitement des affections bénignes et représentent un savoir précieux transmis depuis plusieurs générations de praticiens.</RegPara>
+        <RegPara>Les plantes médicinales demeurent toutefois au cœur de l'enseignement dispensé à West Elizabeth. Elles constituent souvent le premier recours dans le traitement des affections bénignes et représentent un savoir précieux transmis depuis plusieurs générations de praticiens.</RegPara>
         <RegPara>Tout médecin ou étudiant du dispensaire devra posséder des connaissances suffisantes en botanique médicale afin de reconnaître les principales plantes thérapeutiques, leurs usages, leurs bienfaits ainsi que leurs dangers potentiels.</RegPara>
       </div>
 
@@ -367,7 +367,7 @@ function ReglementDocument() {
 
       {/* Signature */}
       <div style={{ textAlign: 'center', padding: '8px 0 0' }}>
-        <RegPara>Fait à Lemoyne, en l'an de grâce 1892.</RegPara>
+        <RegPara>Fait à West Elizabeth, en l'an de grâce 1890.</RegPara>
         <div style={{ fontFamily: DISPLAY, fontSize: 19, color: T.sepia, marginBottom: 2 }}>Docteur François De Millet</div>
         <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.16em', marginBottom: 22 }}>DIRECTEUR DU DISPENSAIRE DE LEMOYNE</div>
         <RegCitation text="La science éclaire le chemin du médecin, mais la compassion guide sa main." author="Docteur François De Millet" />
@@ -384,7 +384,7 @@ function SermentHippocrateDocument() {
       <div style={{ maxWidth: 1000, width: '100%', background: T.card, border: `1px solid ${T.gold}`, padding: 18, boxShadow: '0 0 40px rgba(0,0,0,0.45)' }}>
         <img
           src="/serment-hippocrate.png"
-          alt="Serment d'Hippocrate — Dispensaire, 1892"
+          alt="Serment d'Hippocrate — Dispensaire, 1890"
           style={{ width: '100%', height: 'auto', display: 'block', border: `1px solid ${T.border}` }}
         />
       </div>
@@ -436,7 +436,7 @@ function GuideHerboristeDocument() {
         <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>Plantes, racines et champignons du Dispensaire</div>
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>RECUEIL ÉTABLI PAR MÈRE AGATHE VOCLAIN · HERBORISTE DU DISPENSAIRE</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${T.gold}, transparent)`, margin: '0 auto 14px' }} />
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>TERRITOIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>TERRITOIRE DE LEMOYNE · 1890</div>
       </div>
 
       {/* Sommaire */}
@@ -457,7 +457,7 @@ function GuideHerboristeDocument() {
         </div>
         <RegBlock col="rgba(200,168,80,0.35)">
           <RegPara>Conformément au Chapitre V du Règlement Général, tout médecin, infirmier ou apprenti du dispensaire doit posséder des connaissances suffisantes en botanique médicale.</RegPara>
-          <RegPara>Le présent guide recense les plantes, racines et champignons les plus couramment employés ou rencontrés sur le territoire de Lemoyne : leur apparence, leurs vertus reconnues, leur mode de préparation, ainsi que les précautions à observer.</RegPara>
+          <RegPara>Le présent guide recense les plantes, racines et champignons les plus couramment employés ou rencontrés sur le territoire de West Elizabeth : leur apparence, leurs vertus reconnues, leur mode de préparation, ainsi que les précautions à observer.</RegPara>
           <RegPara>Il ne remplace en aucun cas le jugement du médecin. En cas de doute sur l'identification d'une plante ou sur le dosage d'une préparation, mieux vaut s'abstenir que risquer la santé d'un patient.</RegPara>
         </RegBlock>
       </div>
@@ -485,7 +485,7 @@ function GuideHerboristeDocument() {
         <PlantFiche
           nom="Perce-Neige Violet"
           icon="🔔"
-          apparence="Petite fleur d'hiver aux clochettes violacées, poussant à l'ombre des rochers dans les hauteurs enneigées de Lemoyne et fleurissant dès les premiers redoux."
+          apparence="Petite fleur d'hiver aux clochettes violacées, poussant à l'ombre des rochers dans les hauteurs enneigées de West Elizabeth et fleurissant dès les premiers redoux."
           vertus="En infusion très diluée, elle calme les tremblements nerveux et les douleurs musculaires profondes ; certains anciens du territoire l'emploient contre les crises de mal tombant."
           preparation="Quelques pétales séchés infusés longuement dans l'eau frémissante, jamais plus d'une tasse par jour."
           danger="La plante entière est toxique consommée fraîche ou en trop grande quantité : nausées, vertiges et troubles du rythme cardiaque. À réserver aux praticiens expérimentés."
@@ -494,7 +494,7 @@ function GuideHerboristeDocument() {
           nom="Aubépine"
           latin="Crataegus monogyna"
           icon="🍒"
-          apparence="Arbuste épineux aux petites fleurs blanches odorantes au printemps, puis aux baies rouges (cenelles) à l'automne, très commun dans les haies de Lemoyne."
+          apparence="Arbuste épineux aux petites fleurs blanches odorantes au printemps, puis aux baies rouges (cenelles) à l'automne, très commun dans les haies de West Elizabeth."
           vertus="L'infusion de fleurs et de baies calme les palpitations, apaise l'anxiété et soutient un cœur fatigué ; particulièrement recommandée aux patients âgés ou éprouvés par un choc émotionnel."
           preparation="Infusion de fleurs séchées, ou légère décoction de baies, à prendre le soir avant le coucher."
         />
@@ -559,7 +559,7 @@ function GuideHerboristeDocument() {
           nom="Échinacée"
           latin="Echinacea purpurea"
           icon="🌸"
-          apparence="Grande fleur aux pétales pourpres retombants autour d'un cœur épineux, poussant dans les prairies herbeuses de Lemoyne."
+          apparence="Grande fleur aux pétales pourpres retombants autour d'un cœur épineux, poussant dans les prairies herbeuses de West Elizabeth."
           vertus="Stimule les défenses naturelles de l'organisme ; recommandée dès les premiers signes de rhume, d'angine ou d'infection pour en freiner la progression."
           preparation="Décoction de racine et de fleurs séchées, à prendre dès l'apparition des symptômes et poursuivie plusieurs jours."
         />
@@ -670,7 +670,7 @@ function SpecialitesDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ CATALOGUE MÉDICAL ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 8px', letterSpacing: '0.05em' }}>Spécialités Proposées</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>Disciplines médicales du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DOMAINES D'EXPERTISE DU CORPS MÉDICAL · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DOMAINES D'EXPERTISE DU CORPS MÉDICAL · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${T.gold}, transparent)`, margin: '0 auto 14px' }} />
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>TERRITOIRE DE LEMOYNE</div>
       </div>
@@ -750,7 +750,7 @@ function DoctrinePureteDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: DC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ DOCTRINE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: DC, margin: '0 0 8px', letterSpacing: '0.04em' }}>🌿 Doctrine de Pureté et de Santé Naturelle</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Fondée sur les travaux du Docteur Pasteur et la sagesse des plantes</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE THÉRAPEUTIQUE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE THÉRAPEUTIQUE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${DC}, transparent)`, margin: '0 auto 18px' }} />
         {/* Toggle version */}
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${DC}50` }}>
@@ -999,7 +999,7 @@ function BotaniqueMedicaleDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: BC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE BOTANIQUE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: BC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🌱 Les Plantes Purificatrices</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Tradition des herboristes &amp; science de l'hygiène naturelle</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE BLACKWATER · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE BLACKWATER · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${BC}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${BC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${BC}28` : 'transparent', color: version === 'complete' ? BC_LIGHT : T.dim, borderRight: `1px solid ${BC}40` }}>
@@ -1153,7 +1153,7 @@ function ManuelInfirmiersDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: MC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ FORMATION MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: MC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩹 Manuel des Soins Infirmiers</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Les Fondamentaux et Soins Autorisés</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${MC}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${MC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${MC}28` : 'transparent', color: version === 'complete' ? MC_LIGHT : T.dim, borderRight: `1px solid ${MC}40` }}>
@@ -1534,7 +1534,7 @@ function DoctrineCataplasmeDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: CC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE MÉDECINE VÉGÉTALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: CC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🫙 Doctrine des Cataplasmes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>et de leur Usage Thérapeutique</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${CC}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${CC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${CC}28` : 'transparent', color: version === 'complete' ? CC_LIGHT : T.dim, borderRight: `1px solid ${CC}40` }}>
@@ -1743,7 +1743,7 @@ function ManuelMedecinDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: MMC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ FORMATION MÉDICALE SUPÉRIEURE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: MMC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩺 Manuel de Médecine à Base de Plantes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>et de Pharmacologie Médicale</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${MMC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${MMC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${MMC}30` : 'transparent', color: version === 'complete' ? MMC_LIGHT : T.dim, borderRight: `1px solid ${MMC}40` }}>
@@ -1850,7 +1850,7 @@ function ManuelMedecinDocument() {
           {/* À retenir */}
           <div style={{ background: `${MMC}08`, border: `1px solid ${MMC}40`, borderLeft: `4px solid ${MMC}`, padding: '18px 22px' }}>
             <div style={{ fontFamily: DISPLAY, fontSize: 18, color: MMC_LIGHT, marginBottom: 10 }}>À retenir</div>
-            <RegPara>Le médecin de 1892 ne se limite plus aux plantes médicinales. Il doit savoir associer :</RegPara>
+            <RegPara>Le médecin de 1890 ne se limite plus aux plantes médicinales. Il doit savoir associer :</RegPara>
             <RegList items={["La médecine végétale.", "Les médicaments modernes.", "Les règles d'hygiène de Pasteur et Lister.", "L'observation clinique.", "L'expérience pratique."]} />
             <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted, fontStyle: 'italic', marginTop: 10 }}>Un bon médecin n'est pas celui qui connaît le plus de remèdes, mais celui qui sait choisir le traitement le plus adapté à chaque malade.</div>
           </div>
@@ -1914,7 +1914,7 @@ function ManuelMedecinDocument() {
 
             {subSection('3. Pathologie Générale', <>
               <RegPara>Le médecin doit connaître les maladies infectieuses, les affections respiratoires, les maladies digestives, les traumatismes, les troubles nerveux et les maladies chroniques.</RegPara>
-              <RegPara>Les principales affections rencontrées en 1892 sont :</RegPara>
+              <RegPara>Les principales affections rencontrées en 1890 sont :</RegPara>
               <RegList items={["Tuberculose.", "Typhoïde.", "Diphtérie.", "Pneumonie.", "Choléra.", "Syphilis.", "Grippe.", "Fièvres diverses."]} />
             </>)}
 
@@ -2028,7 +2028,7 @@ function ManuelMedecinDocument() {
               <div style={{ flex: 1, height: 1, background: `${MMC}35` }} />
             </div>
             <RegBlock col={`${MMC}45`}>
-              <RegPara>Le médecin de 1892 ne se limite plus à la simple connaissance des plantes. Il doit maîtriser les progrès récents de la médecine, comprendre les maladies, appliquer les règles d'hygiène modernes et utiliser avec discernement les ressources de la pharmacologie comme celles de la nature.</RegPara>
+              <RegPara>Le médecin de 1890 ne se limite plus à la simple connaissance des plantes. Il doit maîtriser les progrès récents de la médecine, comprendre les maladies, appliquer les règles d'hygiène modernes et utiliser avec discernement les ressources de la pharmacologie comme celles de la nature.</RegPara>
               <RegPara>La compétence d'un praticien ne se mesure pas seulement à son savoir, mais également à sa capacité d'observer, de comprendre et d'adapter ses soins aux besoins de chaque malade.</RegPara>
             </RegBlock>
           </div>
@@ -2187,7 +2187,7 @@ function MedecineGeneraleDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: GMC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE MÉDECINE GÉNÉRALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: GMC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>📋 Traitement des Affections Communes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>et leurs Remèdes</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${GMC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${GMC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${GMC}28` : 'transparent', color: version === 'complete' ? GMC_LIGHT : T.dim, borderRight: `1px solid ${GMC}40` }}>
@@ -2224,7 +2224,7 @@ function MedecineGeneraleDocument() {
           <div style={{ background: `${GMC}08`, border: `1px solid ${GMC}40`, borderLeft: `4px solid ${GMC}`, padding: '18px 22px' }}>
             <div style={{ fontFamily: DISPLAY, fontSize: 18, color: GMC_LIGHT, marginBottom: 10 }}>Principes fondamentaux</div>
             <RegList items={["Maintenir une hygiène rigoureuse.", "Observer attentivement les symptômes.", "Adapter le traitement à chaque malade.", "Associer médecine végétale et médecine moderne.", "Réserver la chirurgie aux situations nécessaires.", "Toujours surveiller l'évolution du patient."]} />
-            <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted, fontStyle: 'italic', marginTop: 10 }}>Le médecin de 1892 doit savoir combiner les remèdes traditionnels, les médicaments modernes, les principes d'hygiène de Pasteur et l'observation clinique afin d'offrir le traitement le plus adapté à chaque patient.</div>
+            <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted, fontStyle: 'italic', marginTop: 10 }}>Le médecin de 1890 doit savoir combiner les remèdes traditionnels, les médicaments modernes, les principes d'hygiène de Pasteur et l'observation clinique afin d'offrir le traitement le plus adapté à chaque patient.</div>
           </div>
         </div>
       )}
@@ -2305,7 +2305,7 @@ function MedecineGeneraleDocument() {
             </div>
             <RegBlock col={`${GMC}45`}>
               <RegPara>La médecine générale est la base de toute pratique médicale. Elle permet au praticien de reconnaître les affections courantes, d'apporter les premiers soins et d'orienter le malade vers un traitement adapté.</RegPara>
-              <RegPara>Le médecin de 1892 ne se limite plus aux seuls remèdes traditionnels. Il associe désormais les connaissances de la médecine moderne, les principes d'hygiène de Pasteur et Lister, ainsi que les ressources de la pharmacologie et de la médecine végétale afin d'offrir les meilleurs soins possibles à ses patients.</RegPara>
+              <RegPara>Le médecin de 1890 ne se limite plus aux seuls remèdes traditionnels. Il associe désormais les connaissances de la médecine moderne, les principes d'hygiène de Pasteur et Lister, ainsi que les ressources de la pharmacologie et de la médecine végétale afin d'offrir les meilleurs soins possibles à ses patients.</RegPara>
             </RegBlock>
           </div>
         </div>
@@ -2391,7 +2391,7 @@ function PharmacieAntidouleurDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: PAC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE PHARMACIE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: PAC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>⚗ Doctrine des Anti-Douleurs</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Naturels et Pharmaceutiques</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${PAC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${PAC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${PAC}28` : 'transparent', color: version === 'complete' ? PAC_LIGHT : T.dim, borderRight: `1px solid ${PAC}40` }}>
@@ -2484,7 +2484,7 @@ function PharmacieAntidouleurDocument() {
 
           <div style={{ background: `${PAC}06`, border: `1px solid ${PAC}35`, padding: '16px 22px' }}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: PAC_LIGHT, letterSpacing: '0.18em', marginBottom: 8 }}>À RETENIR</div>
-            <div style={{ fontFamily: BODY, fontSize: 15, color: T.sepia, fontStyle: 'italic', lineHeight: 1.8 }}>Le médecin de 1892 doit associer les remèdes naturels aux progrès récents de la pharmacie. Le bon praticien ne cherche pas à faire disparaître la douleur à tout prix, mais à soulager le malade tout en traitant la cause véritable de sa souffrance.</div>
+            <div style={{ fontFamily: BODY, fontSize: 15, color: T.sepia, fontStyle: 'italic', lineHeight: 1.8 }}>Le médecin de 1890 doit associer les remèdes naturels aux progrès récents de la pharmacie. Le bon praticien ne cherche pas à faire disparaître la douleur à tout prix, mais à soulager le malade tout en traitant la cause véritable de sa souffrance.</div>
           </div>
         </div>
       )}
@@ -2785,7 +2785,7 @@ function PharmacieSedartifsDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: SC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE PHARMACIE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: SC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>💤 Doctrine des Sédatifs</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Naturels et Pharmaceutiques</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${SC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${SC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${SC}28` : 'transparent', color: version === 'complete' ? SC_LIGHT : T.dim, borderRight: `1px solid ${SC}40` }}>
@@ -2870,7 +2870,7 @@ function PharmacieSedartifsDocument() {
             </table>
           </div>
 
-          <RegCitation text="Le sédatif endort la douleur — il n'en guérit pas la cause. Soignez d'abord, sédatez ensuite." author="Doctrine du Dispensaire, 1892" />
+          <RegCitation text="Le sédatif endort la douleur — il n'en guérit pas la cause. Soignez d'abord, sédatez ensuite." author="Doctrine du Dispensaire, 1890" />
         </div>
       )}
 
@@ -3077,7 +3077,7 @@ function PharmacieSedartifsDocument() {
             <RegPara>Face à un surdosage : maintenir le patient sur le côté pour éviter l'asphyxie, stimuler par friction vigoureuse, appliquer de l'eau froide sur le visage, ne jamais laisser seul. En cas d'arrêt respiratoire après chloroforme : réanimation par insufflation et compressions thoraciques immédiates.</RegPara>
           </div>
 
-          <RegCitation text="Le sédatif est un outil de miséricorde entre les mains du médecin compétent et un instrument de mort entre les mains de l'ignorant. Que chaque praticien du Dispensaire use de ces remèdes avec la sagesse que la vie humaine mérite." author="Doctrine du Dispensaire, 1892" />
+          <RegCitation text="Le sédatif est un outil de miséricorde entre les mains du médecin compétent et un instrument de mort entre les mains de l'ignorant. Que chaque praticien du Dispensaire use de ces remèdes avec la sagesse que la vie humaine mérite." author="Doctrine du Dispensaire, 1890" />
         </div>
       )}
     </div>
@@ -3114,7 +3114,7 @@ function ChirurgieDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: CHC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE CHIRURGIE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: CHC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🔪 Doctrine des Points de Suture</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Antisepsie et Cicatrisation</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${CHC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -3133,8 +3133,8 @@ function ChirurgieDocument() {
             <RegPara>Savoir refermer une plaie, c'est comprendre le langage du corps.</RegPara>
             <RegPara>Une plaie mal préparée se corrompt ; une plaie proprement traitée retrouve peu à peu son intégrité. Chaque point de suture représente un engagement entre le savoir du chirurgien, la résistance du malade et les lois de la nature.</RegPara>
             <RegPara>Les progrès récents de la chirurgie, notamment les enseignements de <strong>Joseph Lister</strong>, ont démontré que la propreté des mains, des instruments et des pansements est aussi importante que l'habileté du praticien. Une chirurgie propre sauve davantage de vies qu'une chirurgie rapide.</RegPara>
-            <RegPara>Au sein de l'ORDRES DES MÉDECINS - Hôpital de Saint Denis - Dispensaire, la suture n'est jamais un acte de précipitation. Elle doit être réalisée avec calme, méthode et discernement, en associant les règles modernes de l'antisepsie aux propriétés reconnues des plantes médicinales.</RegPara>
-            <RegCitation text="Car sans propreté, même le meilleur fil devient un danger." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>Au sein de l'ORDRES DES MÉDECINS - Hôpital de Little Creek - Dispensaire, la suture n'est jamais un acte de précipitation. Elle doit être réalisée avec calme, méthode et discernement, en associant les règles modernes de l'antisepsie aux propriétés reconnues des plantes médicinales.</RegPara>
+            <RegCitation text="Car sans propreté, même le meilleur fil devient un danger." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Conditions préalables */}
@@ -3268,7 +3268,7 @@ function ChirurgieDocument() {
           <RegBlock col={`${CHC}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: CHC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Le véritable chirurgien ne se contente pas de fermer une plaie. Il prépare soigneusement son intervention, applique les règles de l'antisepsie, choisit le point de suture adapté, surveille quotidiennement son malade et accompagne la guérison par les ressources de la médecine comme de la nature.</RegPara>
-            <RegCitation text="Le fil rapproche les chairs. La science prévient la corruption. Les plantes soutiennent la guérison. Ainsi, le chirurgien de 1892 unit le savoir moderne aux traditions éprouvées." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Le fil rapproche les chairs. La science prévient la corruption. Les plantes soutiennent la guérison. Ainsi, le chirurgien de 1890 unit le savoir moderne aux traditions éprouvées." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -3374,7 +3374,7 @@ function ObstetriqueiDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: OBC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE I ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: OBC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>👶 Reconnaissance de la Grossesse</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Suivi de la mère · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${OBC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -3392,8 +3392,8 @@ function ObstetriqueiDocument() {
             <div style={{ fontFamily: MONO, fontSize: 11, color: OBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>L'obstétrique est l'art de veiller sur deux vies à la fois.</RegPara>
             <RegPara>Le médecin ne doit point seulement reconnaître l'état de grossesse ; il lui appartient également d'accompagner la mère tout au long de cette période, d'observer l'évolution de l'enfant et de prévenir les dangers pouvant menacer l'un comme l'autre.</RegPara>
-            <RegPara>En cette année 1892, aucun procédé chimique ni appareil ne permet de confirmer précocement une grossesse. Le diagnostic repose donc sur l'observation, l'expérience et l'examen clinique.</RegPara>
-            <RegCitation text="Le médecin doit toujours agir avec discrétion, patience et respect." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>En cette année 1890, aucun procédé chimique ni appareil ne permet de confirmer précocement une grossesse. Le diagnostic repose donc sur l'observation, l'expérience et l'examen clinique.</RegPara>
+            <RegCitation text="Le médecin doit toujours agir avec discrétion, patience et respect." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Signes présomptifs */}
@@ -3552,15 +3552,15 @@ function ObstetriqueiDocument() {
             {obTitle('CHAPITRE X', 'Éthique de l\'Obstétricien')}
             <RegPara>Le praticien doit :</RegPara>
             <RegList items={['Respecter la dignité de la mère.', 'Préserver le secret médical.', 'Rassurer sans promettre l\'impossible.', 'Agir avec douceur et patience.', 'Protéger simultanément la mère et l\'enfant.']} />
-            <RegCitation text="L'obstétricien ne soigne jamais un seul patient : il veille sur deux existences dont les destins sont intimement liés." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="L'obstétricien ne soigne jamais un seul patient : il veille sur deux existences dont les destins sont intimement liés." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
           <RegBlock col={`${OBC}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: OBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Reconnaître une grossesse constitue la première mission de l'obstétricien, mais certainement pas la dernière. Son devoir est d'accompagner la future mère tout au long de sa grossesse, d'observer avec rigueur chaque évolution, de prévenir les complications et de préparer les meilleures conditions possibles pour la naissance de l'enfant.</RegPara>
-            <RegPara>En cette année 1892, la science progresse rapidement grâce aux travaux de Pasteur, Lister et des grands médecins européens. Pourtant, aucun instrument ne remplacera jamais le regard attentif, la main expérimentée et le jugement éclairé du praticien.</RegPara>
-            <RegCitation text="La véritable obstétrique est avant tout l'alliance de la science, de l'observation et de l'humanité." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>En cette année 1890, la science progresse rapidement grâce aux travaux de Pasteur, Lister et des grands médecins européens. Pourtant, aucun instrument ne remplacera jamais le regard attentif, la main expérimentée et le jugement éclairé du praticien.</RegPara>
+            <RegCitation text="La véritable obstétrique est avant tout l'alliance de la science, de l'observation et de l'humanité." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -3683,7 +3683,7 @@ function ObstetriqueIIDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: OBC2_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE II ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: OBC2_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🤱 De l'Accouchement</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Complications obstétricales · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${OBC2_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -3701,7 +3701,7 @@ function ObstetriqueIIDocument() {
             <div style={{ fontFamily: MONO, fontSize: 11, color: OBC2_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>L'accouchement est l'aboutissement naturel de la grossesse. Bien qu'il soit un phénomène physiologique, il peut à tout instant devenir une urgence mettant en péril la vie de la mère, de l'enfant ou des deux.</RegPara>
             <RegPara>Le rôle du médecin n'est pas de précipiter la naissance, mais de l'accompagner avec discernement, d'intervenir lorsque la nature ne suffit plus et d'assurer les meilleures conditions d'hygiène possibles.</RegPara>
-            <RegCitation text="Depuis les travaux de Pasteur et de Lister, la propreté des mains, des instruments et du linge est devenue une règle fondamentale de toute pratique obstétricale." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Depuis les travaux de Pasteur et de Lister, la propreté des mains, des instruments et du linge est devenue une règle fondamentale de toute pratique obstétricale." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Préparation */}
@@ -3864,15 +3864,15 @@ function ObstetriqueIIDocument() {
           {ob2Block(<>
             {ob2Title('CHAPITRE VII', 'Éthique de l\'Obstétricien')}
             <RegList items={['Agir avec calme et sang-froid.', 'N\'intervenir jamais sans nécessité.', 'Privilégier toujours la sécurité de la mère et de l\'enfant.', 'Conserver une attitude rassurante et digne.']} />
-            <RegCitation text="L'obstétricien ne lutte pas contre la nature ; il lui prête assistance lorsqu'elle ne peut plus agir seule." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="L'obstétricien ne lutte pas contre la nature ; il lui prête assistance lorsqu'elle ne peut plus agir seule." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
           <RegBlock col={`${OBC2}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: OBC2_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>L'accouchement demeure l'un des actes les plus exigeants de la médecine. Le praticien doit connaître les mécanismes naturels de la naissance, reconnaître rapidement les complications et intervenir avec discernement.</RegPara>
-            <RegPara>En cette année 1892, les progrès de l'antisepsie, de l'observation clinique et de la chirurgie permettent de sauver un nombre croissant de mères et d'enfants.</RegPara>
-            <RegCitation text="Le véritable obstétricien unit la science, l'expérience et l'humanité afin d'assurer la venue au monde de chaque enfant dans les meilleures conditions possibles." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>En cette année 1890, les progrès de l'antisepsie, de l'observation clinique et de la chirurgie permettent de sauver un nombre croissant de mères et d'enfants.</RegPara>
+            <RegCitation text="Le véritable obstétricien unit la science, l'expérience et l'humanité afin d'assurer la venue au monde de chaque enfant dans les meilleures conditions possibles." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -4003,7 +4003,7 @@ function ObstetriqueIIIDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: OBC3_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE III ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: OBC3_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🍼 Soins de la Mère et du Nouveau-né</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Post-partum · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${OBC3_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -4021,7 +4021,7 @@ function ObstetriqueIIIDocument() {
             <div style={{ fontFamily: MONO, fontSize: 11, color: OBC3_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>La naissance ne marque point la fin des devoirs du médecin, mais le commencement d'une nouvelle surveillance.</RegPara>
             <RegPara>Les heures et les jours qui suivent l'accouchement sont parmi les plus dangereux pour la mère comme pour l'enfant. Une hémorragie, une infection ou une faiblesse du nouveau-né peuvent rapidement compromettre des vies que l'accouchement avait pourtant préservées.</RegPara>
-            <RegCitation text="Le praticien doit poursuivre ses soins avec la même vigilance qu'au cours de la grossesse et de la naissance." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Le praticien doit poursuivre ses soins avec la même vigilance qu'au cours de la grossesse et de la naissance." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Premiers soins à la mère */}
@@ -4171,15 +4171,15 @@ function ObstetriqueIIIDocument() {
             {ob3Title('CHAPITRE IX', 'Éthique de l\'Obstétricien')}
             <RegPara>Le devoir du médecin ne s'arrête pas à la naissance. Il accompagne la mère dans sa convalescence et veille au bon développement du nouveau-né.</RegPara>
             <RegList items={['Faire preuve de douceur.', 'Respecter la dignité de la famille.', 'Préserver le secret médical.', 'Rassurer sans négliger les signes de gravité.']} />
-            <RegCitation text="La vigilance des premiers jours conditionne souvent la santé des semaines à venir." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La vigilance des premiers jours conditionne souvent la santé des semaines à venir." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
           <RegBlock col={`${OBC3}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: OBC3_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Le succès d'un accouchement ne se mesure pas uniquement à la naissance de l'enfant. Il se juge également à la bonne santé de la mère durant les suites de couches et au développement harmonieux du nouveau-né.</RegPara>
-            <RegPara>En cette année 1892, les progrès de l'antisepsie et de l'observation clinique permettent de réduire considérablement les complications du post-partum, à condition que le médecin demeure attentif, méthodique et rigoureux.</RegPara>
-            <RegCitation text="Prendre soin de la mère, c'est protéger la famille. Prendre soin de l'enfant, c'est préparer l'avenir." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>En cette année 1890, les progrès de l'antisepsie et de l'observation clinique permettent de réduire considérablement les complications du post-partum, à condition que le médecin demeure attentif, méthodique et rigoureux.</RegPara>
+            <RegCitation text="Prendre soin de la mère, c'est protéger la famille. Prendre soin de l'enfant, c'est préparer l'avenir." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -4303,7 +4303,7 @@ function TraitementPhysioDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: TPC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE TRAITEMENT PHYSIOLOGIQUE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: TPC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🦴 Soins des Fractures et Convalescence</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Chirurgie osseuse · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${TPC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -4322,7 +4322,7 @@ function TraitementPhysioDocument() {
             <RegPara>Une fracture ne brise pas seulement un os ; elle éprouve la force du corps tout entier.</RegPara>
             <RegPara>Le devoir du médecin est de rétablir l'alignement des os, prévenir l'infection, soulager la douleur et accompagner le malade jusqu'à sa complète guérison.</RegPara>
             <RegPara>Les progrès récents de la chirurgie et de l'antisepsie, enseignés par les travaux de Lister et de Pasteur, ont considérablement réduit les complications des fractures. Cependant, les plantes médicinales demeurent de précieuses alliées durant la consolidation et la convalescence.</RegPara>
-            <RegCitation text="Le véritable praticien associe désormais les connaissances modernes aux ressources éprouvées de la médecine végétale." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Le véritable praticien associe désormais les connaissances modernes aux ressources éprouvées de la médecine végétale." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Reconnaissance */}
@@ -4388,7 +4388,7 @@ function TraitementPhysioDocument() {
               <div style={{ background: `${TPC}08`, border: `1px solid ${TPC}30`, borderLeft: `4px solid ${TPC}`, padding: '18px 22px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 17, color: TPC_LIGHT, marginBottom: 10 }}>Réduction</div>
                 <RegPara>La réduction consiste à replacer les fragments osseux dans leur position naturelle. Elle doit être réalisée avec douceur. Aucune traction excessive ne doit être exercée.</RegPara>
-                <RegCitation text="Toute réduction difficile doit être confiée au médecin le plus expérimenté." author="Doctrine du Dispensaire, 1892" />
+                <RegCitation text="Toute réduction difficile doit être confiée au médecin le plus expérimenté." author="Doctrine du Dispensaire, 1890" />
               </div>
               {/* Immobilisation */}
               <div style={{ background: `${TPC}08`, border: `1px solid ${TPC}30`, borderLeft: `4px solid ${TPC}`, padding: '18px 22px' }}>
@@ -4510,15 +4510,15 @@ function TraitementPhysioDocument() {
             {tpTitle('CHAPITRE VIII', 'Éthique du Praticien')}
             <RegPara>Le médecin traite autant la fracture que le malade.</RegPara>
             <RegList items={['Soulager la douleur.', 'Prévenir l\'infection.', 'Surveiller quotidiennement la consolidation.', 'Adapter les traitements selon l\'évolution.']} />
-            <RegCitation text="La patience demeure l'un des meilleurs remèdes de la chirurgie osseuse." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La patience demeure l'un des meilleurs remèdes de la chirurgie osseuse." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
           <RegBlock col={`${TPC}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: TPC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Le traitement d'une fracture repose sur quatre principes fondamentaux : reconnaître correctement la blessure, réduire l'os avec précision, immobiliser solidement le membre, prévenir toute infection.</RegPara>
-            <RegPara>En cette année 1892, l'association de l'antisepsie moderne, des techniques chirurgicales et de la médecine végétale permet d'obtenir une consolidation plus sûre et une convalescence plus rapide.</RegPara>
-            <RegCitation text="Le véritable médecin ne cherche pas seulement à réparer un os : il accompagne le malade jusqu'à ce qu'il retrouve pleinement sa force et son autonomie." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>En cette année 1890, l'association de l'antisepsie moderne, des techniques chirurgicales et de la médecine végétale permet d'obtenir une consolidation plus sûre et une convalescence plus rapide.</RegPara>
+            <RegCitation text="Le véritable médecin ne cherche pas seulement à réparer un os : il accompagne le malade jusqu'à ce qu'il retrouve pleinement sa force et son autonomie." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -4661,7 +4661,7 @@ function TraumatologieDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: TRU_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE TRAUMATOLOGIE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: TRU_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩹 Traumatismes des Membres</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Foulures, entorses, luxations · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${TRU_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -4679,7 +4679,7 @@ function TraumatologieDocument() {
             <div style={{ fontFamily: MONO, fontSize: 11, color: TRU_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Les membres de l'homme sont les premiers instruments de son travail, de sa défense et de sa subsistance. Ils sont également les plus exposés aux blessures causées par les chutes, les chevaux, les armes, les outils ou les efforts excessifs.</RegPara>
             <RegPara>Le médecin doit reconnaître rapidement la nature du traumatisme, soulager la douleur, prévenir les complications et favoriser une récupération complète.</RegPara>
-            <RegCitation text="Les progrès récents de la chirurgie, de l'antisepsie et de la pharmacologie permettent désormais d'obtenir une guérison plus rapide, à condition de respecter les règles de la médecine moderne sans négliger les bienfaits de la médecine végétale." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Les progrès récents de la chirurgie, de l'antisepsie et de la pharmacologie permettent désormais d'obtenir une guérison plus rapide, à condition de respecter les règles de la médecine moderne sans négliger les bienfaits de la médecine végétale." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Reconnaissance */}
@@ -4876,7 +4876,7 @@ function TraumatologieDocument() {
           {truBlock(<>
             {truTitle('CHAPITRE IX', 'Éthique du Traumatologue')}
             <RegPara>Le praticien ne cherche jamais à forcer une articulation ou un membre. Il agit avec méthode, patience et douceur.</RegPara>
-            <RegCitation text="La qualité d'un traitement dépend autant de la précision du geste que de la surveillance quotidienne." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La qualité d'un traitement dépend autant de la précision du geste que de la surveillance quotidienne." author="Doctrine du Dispensaire, 1890" />
             <RegPara>Le repos, la médecine moderne et les plantes médicinales sont complémentaires dans le traitement des traumatismes.</RegPara>
           </>)}
 
@@ -4884,7 +4884,7 @@ function TraumatologieDocument() {
           <RegBlock col={`${TRU}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: TRU_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Le traitement des traumatismes des membres repose sur cinq principes essentiels : reconnaître correctement la blessure, soulager la douleur avec discernement, réduire sans brutalité, immobiliser efficacement, accompagner la rééducation jusqu'au retour complet des fonctions.</RegPara>
-            <RegCitation text="L'expérience, la patience et l'observation demeurent les premières qualités d'un bon traumatologue." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="L'expérience, la patience et l'observation demeurent les premières qualités d'un bon traumatologue." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -5041,7 +5041,7 @@ function ZoonosesDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: ZON_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ GUIDE DES ZOONOSES ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: ZON_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🐾 Maladies de l'Animal à l'Homme</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Médecine rurale · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${ZON_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -5059,7 +5059,7 @@ function ZoonosesDocument() {
             <div style={{ fontFamily: MONO, fontSize: 11, color: ZON_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Les habitants des campagnes vivent quotidiennement au contact des animaux domestiques et sauvages. Cette proximité favorise la transmission de certaines maladies appelées zoonoses, pouvant atteindre aussi bien les éleveurs que les chasseurs, les bouchers, les vétérinaires ou les simples habitants.</RegPara>
             <RegPara>Le médecin rural doit savoir reconnaître ces affections, protéger la population, limiter leur propagation et appliquer les règles modernes d'hygiène désormais enseignées par la médecine.</RegPara>
-            <RegCitation text="La prévention demeure le meilleur traitement." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La prévention demeure le meilleur traitement." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Rage */}
@@ -5202,14 +5202,14 @@ function ZoonosesDocument() {
           {zonBlock(<>
             {zonTitle('CHAPITRE VIII', 'Devoir du Médecin')}
             <RegList items={['Reconnaître rapidement les maladies contagieuses.', 'Protéger les familles.', 'Isoler les malades lorsque cela est nécessaire.', 'Informer les autorités en cas d\'épizootie.', 'Instruire les habitants des mesures d\'hygiène.']} />
-            <RegCitation text="Le médecin rural protège autant la population que les troupeaux." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Le médecin rural protège autant la population que les troupeaux." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
           <RegBlock col={`${ZON}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: ZON_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
-            <RegPara>La médecine de 1892 ne sépare plus les progrès scientifiques des ressources de la nature. L'observation clinique, l'antisepsie, la pharmacologie moderne et les plantes médicinales constituent les quatre piliers de la lutte contre les zoonoses.</RegPara>
-            <RegCitation text="Le médecin éclairé sait que prévenir une maladie vaut toujours mieux que tenter de la guérir. Par la vigilance, l'hygiène et le savoir, il protège les hommes comme les animaux dont dépend la vie des campagnes." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>La médecine de 1890 ne sépare plus les progrès scientifiques des ressources de la nature. L'observation clinique, l'antisepsie, la pharmacologie moderne et les plantes médicinales constituent les quatre piliers de la lutte contre les zoonoses.</RegPara>
+            <RegCitation text="Le médecin éclairé sait que prévenir une maladie vaut toujours mieux que tenter de la guérir. Par la vigilance, l'hygiène et le savoir, il protège les hommes comme les animaux dont dépend la vie des campagnes." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -5370,7 +5370,7 @@ function ChirurgieTraumaDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: CTR_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE CHIRURGIE TRAUMATOLOGIQUE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: CTR_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩻 Chirurgie Traumatologique</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Plaies Graves · Blessures par Balle · Infections Chirurgicales</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${CTR_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -5386,9 +5386,9 @@ function ChirurgieTraumaDocument() {
           {/* Préambule */}
           <RegBlock col={`${CTR_LIGHT}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: CTR_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
-            <RegPara>La chirurgie traumatique est sans doute l'épreuve la plus exigeante de l'art médical. Dans les territoires de New Hanover et de Lemoyne, les blessures sont nombreuses : accidents agricoles, chutes de cheval, morsures, coups de couteau, tirs d'armes à feu ou explosions minières.</RegPara>
+            <RegPara>La chirurgie traumatique est sans doute l'épreuve la plus exigeante de l'art médical. Dans les territoires de East Wellster's et de West Elizabeth, les blessures sont nombreuses : accidents agricoles, chutes de cheval, morsures, coups de couteau, tirs d'armes à feu ou explosions minières.</RegPara>
             <RegPara>Le chirurgien ne doit jamais se laisser guider par la précipitation. Une plaie mal observée, mal nettoyée ou refermée trop tôt devient rapidement le siège de la corruption des chairs, de la gangrène ou de la septicémie.</RegPara>
-            <RegCitation text="Grâce aux enseignements de Pasteur et de Lister, le devoir du médecin est d'empêcher la pénétration des germes, de détruire ceux déjà présents et d'accompagner les forces naturelles de guérison." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Grâce aux enseignements de Pasteur et de Lister, le devoir du médecin est d'empêcher la pénétration des germes, de détruire ceux déjà présents et d'accompagner les forces naturelles de guérison." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Principes */}
@@ -5699,15 +5699,15 @@ function ChirurgieTraumaDocument() {
           {ctrBlock(<>
             {ctrTitle('CHAPITRE XVI', 'Devoir du Chirurgien')}
             <RegList items={['Maintenir une observation attentive.', 'Appliquer une antisepsie irréprochable.', 'Pratiquer une technique opératoire réfléchie.', 'Assurer une surveillance quotidienne.', 'Conduire les soins avec calme et méthode.']} />
-            <RegCitation text="La science guide sa main, mais la patience demeure sa première qualité." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La science guide sa main, mais la patience demeure sa première qualité." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
           <RegBlock col={`${CTR_LIGHT}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: CTR_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
-            <RegPara>La chirurgie traumatique de l'année 1892 ne repose plus uniquement sur l'habileté du bistouri. Les découvertes de Pasteur et de Lister ont démontré que la propreté, l'antisepsie et la prévention des infections sont les fondements de toute intervention réussie.</RegPara>
+            <RegPara>La chirurgie traumatique de l'année 1890 ne repose plus uniquement sur l'habileté du bistouri. Les découvertes de Pasteur et de Lister ont démontré que la propreté, l'antisepsie et la prévention des infections sont les fondements de toute intervention réussie.</RegPara>
             <RegPara>Le praticien doit associer la chirurgie moderne aux ressources de la pharmacologie et de la médecine végétale : ils se complètent pour offrir au malade les meilleures chances de guérison.</RegPara>
-            <RegCitation text="Le véritable chirurgien ne se contente pas de refermer une plaie : il préserve la vie, restaure la fonction du membre et accompagne le malade jusqu'à son complet rétablissement." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Le véritable chirurgien ne se contente pas de refermer une plaie : il préserve la vie, restaure la fonction du membre et accompagne le malade jusqu'à son complet rétablissement." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -5932,7 +5932,7 @@ function DesinfectionDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: DSI_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ MANUEL DE DÉSINFECTION ET DE STÉRILISATION ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: DSI_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🔬 Désinfection et Stérilisation</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Selon les principes de Pasteur, Lister et de l'Antisepsie Moderne</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${DSI_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -5950,7 +5950,7 @@ function DesinfectionDocument() {
             <div style={{ fontFamily: MONO, fontSize: 11, color: DSI_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Les progrès de la médecine ont démontré que la plupart des infections chirurgicales ne proviennent ni du mauvais air, ni d'une faiblesse du malade, mais de micro-organismes invisibles introduits dans les plaies.</RegPara>
             <RegPara>Les travaux de Louis Pasteur ont établi la théorie des germes, tandis que Joseph Lister a démontré qu'une antisepsie rigoureuse réduit considérablement les infections et la mortalité opératoire.</RegPara>
-            <RegCitation text="Le médecin de 1892 doit désormais faire de la propreté une véritable méthode scientifique." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Le médecin de 1890 doit désormais faire de la propreté une véritable méthode scientifique." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Principes */}
@@ -6126,14 +6126,14 @@ function DesinfectionDocument() {
           {dsiBlock(<>
             {dsiTitle('CHAPITRE X', 'Devoir du Médecin')}
             <RegList items={['Maintenir une propreté irréprochable.', 'Appliquer les règles d\'antisepsie à chaque intervention.', 'Enseigner les mesures d\'hygiène aux familles.', 'Protéger les autres malades contre les infections.']} />
-            <RegCitation text="La négligence est souvent plus dangereuse que la maladie elle-même." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La négligence est souvent plus dangereuse que la maladie elle-même." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
           <RegBlock col={`${DSI_LIGHT}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: DSI_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
-            <RegPara>L'antisepsie constitue l'un des plus grands progrès de la médecine moderne. En appliquant rigoureusement les principes de Pasteur et de Lister, le médecin de 1892 réduit considérablement les infections, améliore la cicatrisation et augmente les chances de survie de ses malades.</RegPara>
-            <RegCitation text="La propreté, la discipline et la méthode demeurent les premiers instruments du praticien, avant même le bistouri." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>L'antisepsie constitue l'un des plus grands progrès de la médecine moderne. En appliquant rigoureusement les principes de Pasteur et de Lister, le médecin de 1890 réduit considérablement les infections, améliore la cicatrisation et augmente les chances de survie de ses malades.</RegPara>
+            <RegCitation text="La propreté, la discipline et la méthode demeurent les premiers instruments du praticien, avant même le bistouri." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -6322,7 +6322,7 @@ function FievresDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: FIE_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ TRAITÉ DES FIÈVRES COMMUNES ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: FIE_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🌡️ Fièvres Communes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Diagnostic, Traitement et Prévention · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${FIE_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -6340,7 +6340,7 @@ function FievresDocument() {
             <div style={{ fontFamily: MONO, fontSize: 11, color: FIE_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Les fièvres demeurent l'une des principales causes de consultation dans les campagnes. Elles peuvent résulter d'infections, d'eaux souillées, d'aliments contaminés, d'épidémies saisonnières ou de maladies propres aux régions marécageuses.</RegPara>
             <RegPara>Depuis les travaux de Pasteur et de Koch, le médecin sait désormais que de nombreuses fièvres sont provoquées par des micro-organismes invisibles. L'hygiène, la désinfection et l'observation clinique sont devenues les premiers moyens de lutte contre ces maladies.</RegPara>
-            <RegCitation text="Le praticien doit reconnaître rapidement l'origine de la fièvre, prévenir les complications et soutenir les forces du malade jusqu'à sa guérison." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Le praticien doit reconnaître rapidement l'origine de la fièvre, prévenir les complications et soutenir les forces du malade jusqu'à sa guérison." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Fièvre typhoïde */}
@@ -6464,7 +6464,7 @@ function FievresDocument() {
                 </div>
               ))}
             </div>
-            <RegCitation text="La prévention demeure le meilleur traitement." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La prévention demeure le meilleur traitement." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* VI. Traitements */}
@@ -6500,14 +6500,14 @@ function FievresDocument() {
           {fieBlock(<>
             {fieTitle('CHAPITRE VII', 'Devoir du Médecin')}
             <RegList items={['Identifier rapidement l\'origine de la fièvre.', 'Maintenir une bonne hydratation.', 'Surveiller quotidiennement le malade.', 'Prévenir les complications.', 'Protéger l\'entourage contre les maladies contagieuses.']} />
-            <RegCitation text="L'observation attentive permet souvent de distinguer une fièvre bénigne d'une affection mettant la vie en danger." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="L'observation attentive permet souvent de distinguer une fièvre bénigne d'une affection mettant la vie en danger." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
           <RegBlock col={`${FIE}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: FIE_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
-            <RegPara>Les fièvres communes demeurent parmi les maladies les plus fréquentes des campagnes. Grâce aux progrès de l'antisepsie, à une meilleure compréhension des maladies infectieuses, à la Quinine contre le paludisme et aux ressources de la médecine végétale, le médecin de 1892 dispose désormais de moyens plus efficaces pour soulager ses malades.</RegPara>
-            <RegCitation text="Le véritable praticien associe toujours l'hygiène, l'observation clinique, la pharmacologie moderne et les plantes médicinales afin d'offrir les meilleurs soins possibles." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>Les fièvres communes demeurent parmi les maladies les plus fréquentes des campagnes. Grâce aux progrès de l'antisepsie, à une meilleure compréhension des maladies infectieuses, à la Quinine contre le paludisme et aux ressources de la médecine végétale, le médecin de 1890 dispose désormais de moyens plus efficaces pour soulager ses malades.</RegPara>
+            <RegCitation text="Le véritable praticien associe toujours l'hygiène, l'observation clinique, la pharmacologie moderne et les plantes médicinales afin d'offrir les meilleurs soins possibles." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -6692,7 +6692,7 @@ function MaladiesInfantilesDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: MIC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DES MALADIES INFANTILES ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: MIC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🧒 Maladies Infantiles Courantes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Diagnostic, Traitement et Prévention · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE NEW HANOVER ET DE LEMOYNE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${MIC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -6709,8 +6709,8 @@ function MaladiesInfantilesDocument() {
           <RegBlock col={`${MIC}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: MIC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Les enfants constituent les patients les plus fragiles du dispensaire. Leur jeune âge, leur faible résistance aux maladies contagieuses et les conditions de vie parfois précaires des campagnes rendent indispensable une surveillance médicale attentive.</RegPara>
-            <RegPara>Le médecin doit reconnaître rapidement les maladies infantiles, limiter leur propagation, soulager les symptômes et prévenir les complications qui demeurent, en cette année 1892, une cause fréquente de mortalité.</RegPara>
-            <RegCitation text="L'hygiène, l'antisepsie, une alimentation adaptée et l'observation clinique demeurent les meilleurs alliés du praticien." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>Le médecin doit reconnaître rapidement les maladies infantiles, limiter leur propagation, soulager les symptômes et prévenir les complications qui demeurent, en cette année 1890, une cause fréquente de mortalité.</RegPara>
+            <RegCitation text="L'hygiène, l'antisepsie, une alimentation adaptée et l'observation clinique demeurent les meilleurs alliés du praticien." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Rougeole */}
@@ -6873,14 +6873,14 @@ function MaladiesInfantilesDocument() {
           {micBlock(<>
             {micTitle('CHAPITRE VII', 'Devoir du Médecin')}
             <RegList items={['Reconnaître rapidement les maladies contagieuses.', 'Protéger les autres enfants.', 'Surveiller les complications.', 'Rassurer les familles.', 'Appliquer les règles d\'antisepsie.']} />
-            <RegCitation text="La douceur, la patience et l'observation sont les premières qualités du médecin des enfants." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La douceur, la patience et l'observation sont les premières qualités du médecin des enfants." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
           <RegBlock col={`${MIC}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: MIC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
-            <RegPara>Les maladies infantiles demeurent parmi les principales causes de mortalité en cette année 1892. Le médecin ne peut empêcher toutes les épidémies, mais il peut en limiter les conséquences grâce à une reconnaissance précoce, une hygiène rigoureuse, l'antisepsie moderne et des soins adaptés.</RegPara>
-            <RegCitation text="Protéger l'enfant, c'est préserver l'avenir de la famille et de la communauté." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>Les maladies infantiles demeurent parmi les principales causes de mortalité en cette année 1890. Le médecin ne peut empêcher toutes les épidémies, mais il peut en limiter les conséquences grâce à une reconnaissance précoce, une hygiène rigoureuse, l'antisepsie moderne et des soins adaptés.</RegPara>
+            <RegCitation text="Protéger l'enfant, c'est préserver l'avenir de la famille et de la communauté." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -7050,7 +7050,7 @@ function TuberculoseDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: TBC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE PATHOLOGIE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: TBC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🫁 La Tuberculose</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Diagnostic, Traitement et Prévention · À l&apos;usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>ORDRES DES MÉDECINS — HÔPITAL DE SAINT DENIS — DISPENSAIRE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>ORDRES DES MÉDECINS — HÔPITAL DE SAINT DENIS — DISPENSAIRE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${TBC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -7068,8 +7068,8 @@ function TuberculoseDocument() {
             <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>La tuberculose, autrefois appelée <strong>phtisie pulmonaire</strong>, demeure l&apos;une des maladies les plus meurtrières de notre époque.</RegPara>
             <RegPara>Les travaux du docteur <strong>Robert Koch</strong>, publiés en 1882, ont démontré que cette affection est provoquée par un bacille microscopique transmissible d&apos;un individu à l&apos;autre.</RegPara>
-            <RegPara>Le médecin de 1892 ne peut encore guérir cette maladie, mais il possède désormais les connaissances nécessaires pour ralentir son évolution, soulager les malades et limiter sa propagation.</RegPara>
-            <RegCitation text="L'isolement, l'hygiène et une alimentation fortifiante demeurent les principales armes contre ce fléau." author="Doctrine du Dispensaire, 1892" />
+            <RegPara>Le médecin de 1890 ne peut encore guérir cette maladie, mais il possède désormais les connaissances nécessaires pour ralentir son évolution, soulager les malades et limiter sa propagation.</RegPara>
+            <RegCitation text="L'isolement, l'hygiène et une alimentation fortifiante demeurent les principales armes contre ce fléau." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Nature */}
@@ -7178,7 +7178,7 @@ function TuberculoseDocument() {
             {tbcSection('SOINS DE CONFORT', <>
               <RegPara>Lorsque la guérison n&apos;est plus envisageable, le devoir du médecin est d&apos;apporter au malade le plus grand soulagement possible.</RegPara>
               <RegList items={['Diminuer les douleurs.', 'Calmer les quintes de toux.', 'Maintenir une respiration aussi confortable que possible.', 'Assurer une hydratation régulière.', 'Préserver une chambre propre, calme, sèche et bien ventilée.', 'Soutenir moralement le malade et sa famille.']} />
-              <RegCitation text="Même lorsqu'il ne peut plus guérir, le médecin ne cesse jamais de soigner." author="Doctrine du Dispensaire, 1892" />
+              <RegCitation text="Même lorsqu'il ne peut plus guérir, le médecin ne cesse jamais de soigner." author="Doctrine du Dispensaire, 1890" />
             </>)}
             <div style={{ height: 10 }} />
             {tbcSection("PROTECTION DE L'ENTOURAGE", <RegList items={["Les crachats doivent toujours être recueillis dans un récipient contenant un désinfectant avant d'être détruits.", 'Le linge doit être bouilli avant son lavage.', "Les ustensiles du malade ne doivent jamais être partagés.", "Les enfants, les personnes âgées et les personnes affaiblies doivent éviter les contacts prolongés avec le malade.", 'La chambre doit être largement aérée plusieurs fois par jour.']} />)}
@@ -7189,7 +7189,7 @@ function TuberculoseDocument() {
             {tbcTitle('CHAPITRE IX', 'Devoir du Médecin')}
             <RegPara>Le praticien doit :</RegPara>
             <RegList items={['reconnaître rapidement les premiers signes ;', 'isoler les malades contagieux ;', 'protéger les familles ;', 'maintenir une hygiène irréprochable ;', 'soutenir le malade tout au long de son traitement.']} />
-            <RegCitation text="Le médecin ne soigne pas seulement la maladie : il protège également la communauté contre sa propagation." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Le médecin ne soigne pas seulement la maladie : il protège également la communauté contre sa propagation." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
@@ -7197,7 +7197,7 @@ function TuberculoseDocument() {
             <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>La tuberculose demeure l&apos;un des plus grands défis médicaux de notre temps. Si la science ne permet pas encore d&apos;en obtenir la guérison complète, les découvertes de Robert Koch ont profondément transformé la compréhension de cette maladie.</RegPara>
             <RegPara>Par l&apos;observation clinique, l&apos;isolement des malades, l&apos;antisepsie, une alimentation fortifiante et les soins du dispensaire, le médecin peut ralentir son évolution, limiter les contaminations et améliorer les conditions de vie des patients.</RegPara>
-            <RegCitation text="Lorsqu'il ne peut plus vaincre la maladie, son devoir reste inchangé : soulager la souffrance, préserver la dignité du malade et protéger ceux qui l'entourent." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Lorsqu'il ne peut plus vaincre la maladie, son devoir reste inchangé : soulager la souffrance, préserver la dignité du malade et protéger ceux qui l'entourent." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -7277,7 +7277,7 @@ function TuberculoseDocument() {
           {/* À retenir */}
           <RegBlock col={`${TBC}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
-            <RegList items={['La tuberculose est une maladie contagieuse transmise principalement par la toux et les crachats.', "Le diagnostic repose sur l'observation clinique et l'auscultation.", "Aucun traitement curatif n'existe en 1892.", "L'isolement, l'hygiène et une alimentation fortifiante constituent les principales armes contre la maladie.", 'Les préparations du dispensaire soulagent les symptômes mais ne remplacent pas le repos et les mesures sanitaires.', 'En phase terminale, le devoir du médecin est de soulager le malade tout en protégeant son entourage contre la contagion.']} />
+            <RegList items={['La tuberculose est une maladie contagieuse transmise principalement par la toux et les crachats.', "Le diagnostic repose sur l'observation clinique et l'auscultation.", "Aucun traitement curatif n'existe en 1890.", "L'isolement, l'hygiène et une alimentation fortifiante constituent les principales armes contre la maladie.", 'Les préparations du dispensaire soulagent les symptômes mais ne remplacent pas le repos et les mesures sanitaires.', 'En phase terminale, le devoir du médecin est de soulager le malade tout en protégeant son entourage contre la contagion.']} />
           </RegBlock>
         </div>
       )}
@@ -7325,7 +7325,7 @@ function ProtocoleEpidemieDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: PEC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ PROTOCOLE SANITAIRE — URGENCE MAXIMALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: PEC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>⚠️ Gestion d&apos;une Épidémie</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>À l&apos;usage du personnel médical du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>ORDRES DES MÉDECINS — HÔPITAL DE SAINT DENIS — DISPENSAIRE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>ORDRES DES MÉDECINS — HÔPITAL DE SAINT DENIS — DISPENSAIRE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${PEC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -7447,14 +7447,14 @@ function ProtocoleEpidemieDocument() {
             {pecTitle('ARTICLE X', 'Devoirs du Personnel Médical')}
             <RegPara>Pendant toute la durée de l&apos;Épidémie, chaque membre de l&apos;ORDRES DES MÉDECINS doit :</RegPara>
             <RegList items={['respecter strictement les protocoles sanitaires ;', 'protéger les autres patients ;', 'transmettre quotidiennement les informations médicales ;', 'rassurer la population tout en restant honnête sur la situation ;', 'poursuivre les soins avec calme, discipline et impartialité.']} />
-            <RegCitation text="Le médecin demeure un exemple de sang-froid au milieu de la crise." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Le médecin demeure un exemple de sang-froid au milieu de la crise." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
           <RegBlock col={`${PEC}60`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Une épidémie constitue l&apos;une des plus grandes épreuves que puisse connaître une communauté. La discipline, l&apos;organisation, l&apos;antisepsie, l&apos;isolement des malades et la coopération entre les dispensaires permettent souvent de sauver davantage de vies que les traitements eux-mêmes.</RegPara>
-            <RegCitation text="La vigilance, la science et l'humanité demeurent les premières armes contre la contagion." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La vigilance, la science et l'humanité demeurent les premières armes contre la contagion." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -7565,7 +7565,7 @@ function ProtocoleSanitaireDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: PSC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ PROTOCOLE SANITAIRE OFFICIEL ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: PSC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🛡️ Gestion d&apos;un Risque Sanitaire</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>À l&apos;usage du personnel médical du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>ORDRES DES MÉDECINS — HÔPITAL DE SAINT DENIS — DISPENSAIRE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>ORDRES DES MÉDECINS — HÔPITAL DE SAINT DENIS — DISPENSAIRE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${PSC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -7634,7 +7634,7 @@ function ProtocoleSanitaireDocument() {
             {pscTitle('ARTICLE V', 'Information de la Population')}
             <RegPara>Lorsque le Risque Sanitaire est déclaré, la population est invitée à :</RegPara>
             <RegList items={["faire bouillir l'eau destinée à la consommation ;", 'éviter les contacts rapprochés avec les personnes malades ;', 'maintenir les habitations propres et aérées ;', 'signaler rapidement tout nouveau malade au dispensaire ;', 'ne pas partager les ustensiles de repas avec une personne atteinte ;', 'éviter les rassemblements inutiles lorsque la maladie paraît contagieuse.']} />
-            <RegCitation text="La prévention demeure le meilleur traitement." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La prévention demeure le meilleur traitement." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* VI. Organisation */}
@@ -7671,7 +7671,7 @@ function ProtocoleSanitaireDocument() {
             {pscTitle('ARTICLE IX', 'Devoirs du Personnel Médical')}
             <RegPara>Chaque membre de l&apos;ORDRES DES MÉDECINS est tenu de :</RegPara>
             <RegList items={['signaler tout cas suspect ;', "appliquer rigoureusement les règles d'hygiène ;", 'rassurer la population sans minimiser le danger ;', 'respecter les décisions de la Direction Médicale ;', 'transmettre quotidiennement les informations nécessaires au suivi de la situation.']} />
-            <RegCitation text="La discipline, la vigilance et la coopération de tous permettent souvent d'éviter qu'un simple Risque Sanitaire ne devienne une véritable épidémie." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La discipline, la vigilance et la coopération de tous permettent souvent d'éviter qu'un simple Risque Sanitaire ne devienne une véritable épidémie." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
@@ -7794,7 +7794,7 @@ function TheorieGermesDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: TGC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D&apos;INSTRUCTION SCIENTIFIQUE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: TGC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🔬 La Théorie des Germes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>et ses Applications · À l&apos;usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>ORDRES DES MÉDECINS — HÔPITAL DE SAINT DENIS — DISPENSAIRE · 1892</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>ORDRES DES MÉDECINS — HÔPITAL DE SAINT DENIS — DISPENSAIRE · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${TGC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -7813,7 +7813,7 @@ function TheorieGermesDocument() {
             <RegPara>Pendant des siècles, les médecins attribuèrent les épidémies, les fièvres et les infections aux miasmes, aux déséquilibres des humeurs ou aux influences du climat. Si ces théories expliquaient imparfaitement certains phénomènes, elles ne permettaient ni de comprendre véritablement la contagion, ni de la prévenir efficacement.</RegPara>
             <RegPara>Les découvertes de <strong>Louis Pasteur</strong>, de <strong>Robert Koch</strong>, de <strong>Joseph Lister</strong> et de nombreux savants de cette fin de siècle ont profondément transformé la médecine. Il est désormais établi que de nombreuses maladies sont provoquées par des organismes microscopiques, appelés <strong>germes</strong>, capables de se multiplier et de se transmettre d&apos;un individu à un autre.</RegPara>
             <RegPara>Cette théorie fonde désormais l&apos;hygiène moderne, l&apos;antisepsie chirurgicale et les mesures de santé publique appliquées dans les dispensaires.</RegPara>
-            <RegCitation text="La propreté constitue désormais l'un des premiers traitements du médecin." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La propreté constitue désormais l'un des premiers traitements du médecin." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
 
           {/* I. Nature des germes */}
@@ -7933,7 +7933,7 @@ function TheorieGermesDocument() {
             <RegPara>Le praticien moderne ne combat plus seulement les symptômes. Il lutte également contre leur cause.</RegPara>
             <RegPara>Son devoir est de :</RegPara>
             <RegList items={["appliquer rigoureusement les règles d'hygiène ;", 'enseigner les principes de la théorie des germes ;', 'protéger les malades et leurs familles ;', 'maintenir un dispensaire propre et sain ;', "prévenir les épidémies avant qu'elles ne se propagent."]} />
-            <RegCitation text="La propreté constitue désormais l'un des premiers traitements du médecin." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="La propreté constitue désormais l'un des premiers traitements du médecin." author="Doctrine du Dispensaire, 1890" />
           </>)}
 
           {/* Conclusion */}
@@ -7941,7 +7941,7 @@ function TheorieGermesDocument() {
             <div style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>La théorie des germes représente l&apos;une des plus grandes avancées scientifiques du siècle. Grâce aux découvertes de Pasteur, Koch et Lister, la médecine comprend désormais que les maladies infectieuses ne sont ni des fatalités ni des châtiments, mais les conséquences de micro-organismes pouvant être combattus par la science, l&apos;hygiène et la discipline.</RegPara>
             <RegPara>Les antiseptiques modernes, les préparations du dispensaire et les plantes médicinales agissent de manière complémentaire. Ensemble, ils permettent de limiter les infections, de protéger les malades et d&apos;améliorer les chances de guérison.</RegPara>
-            <RegCitation text="Un lieu propre, une eau saine, un air renouvelé et des mains soigneusement lavées demeurent les plus puissants remèdes contre les maladies contagieuses." author="Doctrine du Dispensaire, 1892" />
+            <RegCitation text="Un lieu propre, une eau saine, un air renouvelé et des mains soigneusement lavées demeurent les plus puissants remèdes contre les maladies contagieuses." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
         </div>
       )}
@@ -8005,7 +8005,7 @@ function TheorieGermesDocument() {
           {/* À retenir */}
           <RegBlock col={`${TGC}50`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
-            <RegList items={['Les germes sont responsables de nombreuses maladies infectieuses.', "La transmission s'effectue principalement par l'air, l'eau, les aliments et le contact.", "L'antisepsie repose sur la stérilisation, la désinfection et une hygiène rigoureuse.", 'Les préparations du dispensaire et les plantes médicinales complètent efficacement les mesures sanitaires.', 'Un lieu propre, une eau saine, un air renouvelé et des mains lavées demeurent les meilleurs moyens de prévenir les infections.', 'Le médecin de 1892 doit unir les découvertes scientifiques de Pasteur et Koch aux ressources de la médecine végétale afin de protéger le malade et la communauté.']} />
+            <RegList items={['Les germes sont responsables de nombreuses maladies infectieuses.', "La transmission s'effectue principalement par l'air, l'eau, les aliments et le contact.", "L'antisepsie repose sur la stérilisation, la désinfection et une hygiène rigoureuse.", 'Les préparations du dispensaire et les plantes médicinales complètent efficacement les mesures sanitaires.', 'Un lieu propre, une eau saine, un air renouvelé et des mains lavées demeurent les meilleurs moyens de prévenir les infections.', 'Le médecin de 1890 doit unir les découvertes scientifiques de Pasteur et Koch aux ressources de la médecine végétale afin de protéger le malade et la communauté.']} />
           </RegBlock>
         </div>
       )}
@@ -8158,7 +8158,7 @@ function BiblioEtageres({
           <div style={{ color: '#C8A850', fontSize: 22, marginBottom: 6 }}>⚕</div>
           <div style={{ fontFamily: DISPLAY, fontSize: 32, color: '#C8A850', letterSpacing: '0.35em', fontWeight: 'bold', textShadow: '0 2px 8px rgba(0,0,0,0.8),0 0 20px rgba(200,168,80,0.08)' }}>BIBLIOTHÈQUE</div>
           <div style={{ height: 1, background: 'linear-gradient(to right, transparent, rgba(200,168,80,0.5), transparent)', margin: '8px auto', maxWidth: 220 }} />
-          <div style={{ fontFamily: MONO, fontSize: 11, color: '#2e4a60', letterSpacing: '0.25em' }}>Dispensaire · 1892</div>
+          <div style={{ fontFamily: MONO, fontSize: 11, color: '#2e4a60', letterSpacing: '0.25em' }}>Dispensaire · 1890</div>
         </div>
       </div>
       <div style={{ padding: '4px 14px 10px', background: 'linear-gradient(to bottom, #03070e, #02050a)' }}>

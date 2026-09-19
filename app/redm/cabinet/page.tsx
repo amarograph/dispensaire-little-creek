@@ -32,7 +32,7 @@ export default function CabinetPage() {
         </div>
         <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#C8A850', margin: 0 }}>🛋 Cabinet Thérapeutique</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: '#5A4A35', letterSpacing: '0.12em', marginTop: 8 }}>
-          SOINS DE L&apos;ÂME · 1892 — SÉLECTIONNEZ UNE SECTION
+          SOINS DE L&apos;ÂME · 1890 — SÉLECTIONNEZ UNE SECTION
         </p>
       </div>
 

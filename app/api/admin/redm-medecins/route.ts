@@ -103,7 +103,7 @@ export async function GET(req: NextRequest) {
       age_rp:                 pr.age_rp       ?? '',
       origine:                pr.origine      ?? '',
       grade:                  pr.grade        || ROLE_DEFAULT_GRADE[topRole] || 'Apprenti',
-      dispensaire:            pr.dispensaire  ?? 'Saint Denis',
+      dispensaire:            pr.dispensaire  ?? 'Little Creek',
       specialite:             pr.specialite   ?? '',
       statut:                 pr.statut       ?? 'En service',
     };

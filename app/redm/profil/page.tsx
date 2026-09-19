@@ -14,12 +14,12 @@ const MOIS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin',
 
 function rpDateNamed(offsetDays = 0): string {
   const d = new Date(Date.now() + offsetDays * 86400000);
-  return `${d.getDate()} ${MOIS_FR[d.getMonth()]} ${d.getFullYear() - 134}`;
+  return `${d.getDate()} ${MOIS_FR[d.getMonth()]} ${d.getFullYear() - 136}`;
 }
 function rpDateFromIso(iso: string | null): string {
   if (!iso) return '—';
   const d = new Date(iso);
-  return `${d.getDate()} ${MOIS_FR[d.getMonth()]} ${d.getFullYear() - 134}`;
+  return `${d.getDate()} ${MOIS_FR[d.getMonth()]} ${d.getFullYear() - 136}`;
 }
 function parseRpDate(s: string) {
   const parts = s.trim().split(/\s+/);
@@ -34,13 +34,13 @@ function rpDatesInRange(startStr: string, endStr: string): string[] {
   const s = parseRpDate(startStr);
   const e = parseRpDate(endStr);
   if (!s || !e) return [];
-  const cur = new Date(s.year + 134, s.month - 1, s.day);
-  const end = new Date(e.year + 134, e.month - 1, e.day);
+  const cur = new Date(s.year + 136, s.month - 1, s.day);
+  const end = new Date(e.year + 136, e.month - 1, e.day);
   const dates: string[] = [];
   while (cur <= end && dates.length < 90) {
     const d = String(cur.getDate()).padStart(2, '0');
     const m = String(cur.getMonth() + 1).padStart(2, '0');
-    const y = cur.getFullYear() - 134;
+    const y = cur.getFullYear() - 136;
     dates.push(`${d}/${m}/${y}`);
     cur.setDate(cur.getDate() + 1);
   }
@@ -48,7 +48,7 @@ function rpDatesInRange(startStr: string, endStr: string): string[] {
 }
 
 const GRADES       = ['Apprenti', 'Infirmier', 'Médecin', 'Médecin Chef', 'Directeur'];
-const DISPENSAIRES = ['Saint Denis', 'Valentine', 'Rhodes', 'Tous'];
+const DISPENSAIRES = ['Little Creek', 'Valentine', 'Rhodes', 'Tous'];
 const SPECIALITES  = [
   'Médecine générale', 'Chirurgie', 'Aliénisme', 'Plantes médicinales',
   'Obstétrique', 'Traumatologie', 'Dentisterie',
@@ -78,7 +78,7 @@ interface Absence {
 
 const EMPTY: Profile = {
   nom_rp: '', prenom_rp: '', age_rp: '', origine: '', portrait_url: '',
-  grade: 'Apprenti', dispensaire: 'Saint Denis', specialites: [], statut: 'En service',
+  grade: 'Apprenti', dispensaire: 'Little Creek', specialites: [], statut: 'En service',
 };
 
 
@@ -277,7 +277,7 @@ export default function ProfilMedecinPage() {
           origine:      p.origine      ?? '',
           portrait_url: p.portrait_url ?? '',
           grade:        p.grade        ?? 'Apprenti',
-          dispensaire:  p.dispensaire  ?? 'Saint Denis',
+          dispensaire:  p.dispensaire  ?? 'Little Creek',
           specialites:  (p.specialite ?? '').split(',').map((s: string) => s.trim()).filter(Boolean),
           statut:       p.statut       ?? 'En service',
         });
@@ -852,7 +852,7 @@ export default function ProfilMedecinPage() {
                 style={{ ...inp, minHeight: 80, resize: 'vertical' } as React.CSSProperties}
                 value={absForm.note}
                 onChange={e => setAbsForm(p => ({ ...p, note: e.target.value }))}
-                placeholder='Je serai retenu hors de Saint Denis quelques jours…'
+                placeholder='Je serai retenu hors de Little Creek quelques jours…'
               />
             </div>
             <button onClick={submitAbsence} disabled={absBusy} style={{

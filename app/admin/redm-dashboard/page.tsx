@@ -49,7 +49,7 @@ interface DashboardConfig {
 
 const DEFAULTS: DashboardConfig = {
   titres: {
-    surtitle:      'Dispensaire Medical · Territoire de New Hanover',
+    surtitle:      "Dispensaire Medical · Territoire de East Wellster's",
     title:         'Carnet du dispensaire',
     subtitle:      'Registre des soins, actes medicaux et comptabilite',
     modules:       'Modules du Dispensaire',
@@ -79,7 +79,7 @@ const DEFAULTS: DashboardConfig = {
     { nom: 'Rev. John Marsh',  etat: 'En attente', col: '#C8A040' },
   ],
   citation: {
-    text:   'Primum non nocere. La médecine de 1892 exige autant de courage que de science.',
+    text:   'Primum non nocere. La médecine de 1890 exige autant de courage que de science.',
     author: 'Dr. James Herrington, 1889',
   },
   stats: [

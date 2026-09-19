@@ -57,16 +57,16 @@ function parseDateTs(dateStr: string): number {
   const p = dateStr.split('/');
   if (p.length !== 3) return 0;
   const [d, m, y] = p.map(Number);
-  const realY = y < 1900 ? y + 134 : y;
+  const realY = y < 1900 ? y + 136 : y;
   return new Date(realY, m - 1, d).getTime();
 }
-/** Convertit une date DD/MM/YYYY → DD/MM/YYYY en année RP (−134), peu importe si elle est déjà en 1892 */
+/** Convertit une date DD/MM/YYYY → DD/MM/YYYY en année RP (−136), peu importe si elle est déjà en 1890 */
 function rpDisplay(date: string): string {
   const p = date.split('/');
   if (p.length !== 3) return date;
   const y = Number(p[2]);
   if (isNaN(y)) return date;
-  p[2] = String(y >= 1900 ? y - 134 : y);
+  p[2] = String(y >= 1900 ? y - 136 : y);
   return p.join('/');
 }
 
@@ -92,8 +92,8 @@ const DOC_COL: Record<DocType, string> = {
 /* ── Templates ── */
 const TEMPLATES: Partial<Record<DocType, string>> = {
   'Synthèse de consultation': `SYNTHÈSE DE CONSULTATION
-L'ORDRES DES MÉDECINS - Hôpital de Saint Denis - Dispensaire de Valentine
-Année 1892
+L'ORDRES DES MÉDECINS - Hôpital de Little Creek - Dispensaire de Valentine
+Année 1890
 
 MOTIF DE LA CONSULTATION
 Le patient se présente à la suite de :
@@ -154,7 +154,7 @@ Le patient note une évolution depuis :
 • [Changement émotionnel]
 
 INTERPRÉTATION ALIÉNISTE
-"[Nom du trouble — style 1892]"
+"[Nom du trouble — style 1890]"
 Le patient présente :
 [Description de l'état]
 [Mécanisme interne]
@@ -183,7 +183,7 @@ ou immédiatement en cas de :
 [Aggravation]
 
 CONCLUSION DU MÉDECIN
-[Phrase de conclusion — style 1892]
+[Phrase de conclusion — style 1890]
 Le patient demeure [état], malgré [épreuve].
 Son esprit [description].`,
 
@@ -393,7 +393,7 @@ export default function PatientDetailPage() {
     setDocType(defaultType);
     setDocTitre('');
     setDocContenu(TEMPLATES[defaultType] ?? '');
-    setDocDate((() => { const n = new Date(); const s = n.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2])-134); return s.join('/'); })());
+    setDocDate((() => { const n = new Date(); const s = n.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2])-136); return s.join('/'); })());
     setDocPanelOpen(true);
   }
 
@@ -540,7 +540,7 @@ export default function PatientDetailPage() {
         {/* En-tête */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: 20, letterSpacing: '0.12em', marginBottom: 4, fontWeight: 'bold' }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
-          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Saint Denis — Blackwater</div>
+          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
           <div style={{ fontSize: 13, color: '#6A5030', lineHeight: 1.7 }}>
             Sous la direction du Docteur François De Millet<br />
             Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales
@@ -557,7 +557,7 @@ export default function PatientDetailPage() {
 
         {/* Corps */}
         <div style={{ fontSize: 15, lineHeight: 2 }}>
-          <p style={{ margin: '0 0 16px' }}>Je soussigné, <strong>Docteur François De Millet</strong>, médecin – thérapeute exerçant au sein du L'ORDRES DES MÉDECINS - Hôpital de Saint Denis - Dispensaire de Valentine, certifie avoir procédé, en date du <strong>{rpDisplay(certDoc.date)}</strong>, à la rédaction du présent document concernant :</p>
+          <p style={{ margin: '0 0 16px' }}>Je soussigné, <strong>Docteur François De Millet</strong>, médecin – thérapeute exerçant au sein du L'ORDRES DES MÉDECINS - Hôpital de Little Creek - Dispensaire de Valentine, certifie avoir procédé, en date du <strong>{rpDisplay(certDoc.date)}</strong>, à la rédaction du présent document concernant :</p>
           <p style={{ paddingLeft: 28, margin: '0 0 16px' }}>
             <strong>Nom et Prénom :</strong> {dossier.patientPrenom} {dossier.patientNom}<br />
             {dossier.patientAge ? <><strong>Âge :</strong> {dossier.patientAge} ans<br /></> : null}
@@ -574,7 +574,7 @@ export default function PatientDetailPage() {
           {/* Signature */}
           <div style={{ marginTop: 52, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
             <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>
-              Fait à <strong>Saint Denis</strong>, le <strong>{rpDisplay(certDoc.date)}</strong>
+              Fait à <strong>Little Creek</strong>, le <strong>{rpDisplay(certDoc.date)}</strong>
             </div>
             <div style={{ textAlign: 'right' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}

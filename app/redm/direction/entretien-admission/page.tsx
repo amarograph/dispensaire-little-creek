@@ -447,7 +447,7 @@ export default function EntretienAdmissionPage() {
             Entretien d'Admission
           </h2>
           <div style={{ fontFamily: MONO, fontSize: 13, color: T.muted, letterSpacing: '0.15em' }}>
-            FORMULAIRE OFFICIEL — USAGE INTERNE — DISPENSAIRE DE LEMOYNE, 1892
+            FORMULAIRE OFFICIEL — USAGE INTERNE — DISPENSAIRE DE LEMOYNE, 1890
           </div>
         </div>
 
@@ -455,7 +455,7 @@ export default function EntretienAdmissionPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr', gap: 28, marginBottom: 4 }}>
           <div>
             <label style={lbl}>LIEU</label>
-            <input style={inp} {...F('lieu')} placeholder="Dispensaire de Valentine…" />
+            <input style={inp} {...F('lieu')} placeholder="Dispensaire de Little Creek…" />
           </div>
           <div>
             <label style={lbl}>DATE DE L'ENTRETIEN</label>
@@ -636,7 +636,7 @@ export default function EntretienAdmissionPage() {
           <div style={{ fontFamily: MONO, fontSize: 10, color: T.dim + '80', letterSpacing: '0.1em', textAlign: 'center', maxWidth: 300, lineHeight: 1.8 }}>
             DISPENSAIRE DE LEMOYNE<br />
             LEMOYNE, TERRITOIRE DE NEW HANOVER<br />
-            FONDÉ EN L'AN DE GRÂCE 1892
+            FONDÉ EN L'AN DE GRÂCE 1890
           </div>
         </div>
 

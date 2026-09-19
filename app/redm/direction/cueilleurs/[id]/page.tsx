@@ -46,11 +46,11 @@ export default function CueilleurDetailPage() {
   const [cueilleur,    setCueilleur]    = useState<Cueilleur | null>(null);
   const [tab,          setTab]          = useState<'saisie' | 'archives'>('saisie');
 
-  // Saisie — date en 1892
+  // Saisie — date en 1890
   const _now = new Date();
   const [dateJour,  setDateJour]  = useState(_now.getDate());
   const [dateMois,  setDateMois]  = useState(_now.getMonth() + 1);
-  const [dateAnnee, setDateAnnee] = useState(1892);
+  const [dateAnnee, setDateAnnee] = useState(1890);
   const date = dateToStr(dateJour, dateMois, dateAnnee);
   const [plantMap,     setPlantMap]     = useState<Record<string, number>>({});
   const [montant,      setMontant]      = useState('');
@@ -251,7 +251,7 @@ export default function CueilleurDetailPage() {
       {tab === 'saisie' && (
         <div style={{ background: '#0D070F', border: `1px solid ${T.border}`, borderRadius: 8, padding: '28px' }}>
 
-          {/* Sélecteur de date (1892) */}
+          {/* Sélecteur de date (1890) */}
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12, marginBottom: 28, flexWrap: 'wrap' }}>
             {/* Jour */}
             <div>
@@ -292,9 +292,9 @@ export default function CueilleurDetailPage() {
               />
             </div>
 
-            {/* Bouton aujourd'hui (jour+mois courants, 1892) */}
+            {/* Bouton aujourd'hui (jour+mois courants, 1890) */}
             <button
-              onClick={() => { const t = new Date(); setDateJour(t.getDate()); setDateMois(t.getMonth() + 1); setDateAnnee(1892); }}
+              onClick={() => { const t = new Date(); setDateJour(t.getDate()); setDateMois(t.getMonth() + 1); setDateAnnee(1890); }}
               style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${T.border}`, color: T.dim, padding: '10px 14px', cursor: 'pointer' }}
             >
               AUJOURD'HUI

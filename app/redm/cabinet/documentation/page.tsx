@@ -17,14 +17,14 @@ const LS_EXAMS = 'redm_doc_examen_psychique_v1';
 /* ── Helpers ── */
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function rpDate(d = new Date()) {
-  const s = d.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2]) - 134); return s.join('/');
+  const s = d.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2]) - 136); return s.join('/');
 }
 function rpDisplay(date: string): string {
   const p = date.split('/');
   if (p.length !== 3) return date;
   const y = Number(p[2]);
   if (isNaN(y)) return date;
-  p[2] = String(y >= 1900 ? y - 134 : y);
+  p[2] = String(y >= 1900 ? y - 136 : y);
   return p.join('/');
 }
 
@@ -91,8 +91,8 @@ const MAX_SCORE = 110;
 
 /* ── Templates ── */
 const TEMPLATE_SYNTHESE = `SYNTHÈSE DE CONSULTATION
-L'ORDRES DES MÉDECINS - Hôpital de Saint Denis - Dispensaire de Valentine
-Année 1892
+L'ORDRES DES MÉDECINS - Hôpital de Little Creek - Dispensaire de Valentine
+Année 1890
 
 MOTIF DE LA CONSULTATION
 Le patient se présente à la suite de :
@@ -153,7 +153,7 @@ Le patient note une évolution depuis :
 • [Changement émotionnel]
 
 INTERPRÉTATION ALIÉNISTE
-"[Nom du trouble — style 1892]"
+"[Nom du trouble — style 1890]"
 Le patient présente :
 [Description de l'état]
 [Mécanisme interne]
@@ -182,7 +182,7 @@ ou immédiatement en cas de :
 [Aggravation]
 
 CONCLUSION DU MÉDECIN
-[Phrase de conclusion — style 1892]
+[Phrase de conclusion — style 1890]
 Le patient demeure [état], malgré [épreuve].
 Son esprit [description].`;
 
@@ -408,7 +408,7 @@ export default function DocumentationPage() {
   }
   function startEditExam(ex: Examen) {
     setEditExam(ex);
-    setEditForm({ nom: ex.nom, prenom: ex.prenom, age: ex.age, fonction: ex.fonction, county: ex.county, lieu: ex.lieu ?? 'Saint Denis', date: ex.date, etatEmotionnel: ex.etatEmotionnel, stabiliteNerveuse: ex.stabiliteNerveuse, elementsRetenus: ex.elementsRetenus, conclusion: ex.conclusion, recommandations: ex.recommandations });
+    setEditForm({ nom: ex.nom, prenom: ex.prenom, age: ex.age, fonction: ex.fonction, county: ex.county, lieu: ex.lieu ?? 'Little Creek', date: ex.date, etatEmotionnel: ex.etatEmotionnel, stabiliteNerveuse: ex.stabiliteNerveuse, elementsRetenus: ex.elementsRetenus, conclusion: ex.conclusion, recommandations: ex.recommandations });
   }
   function saveEditExam() {
     if (!editExam) return;
@@ -434,7 +434,7 @@ export default function DocumentationPage() {
       <div ref={printRef} className="print-area" style={{ background: '#FDFAF4', border: '2px solid #8B7355', padding: '52px 60px', maxWidth: 800, margin: '0 auto', color: '#2A1A08', fontFamily: "'Special Elite', 'Courier New', monospace" }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: 20, letterSpacing: '0.12em', marginBottom: 4, fontWeight: 'bold' }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
-          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Saint Denis — Blackwater</div>
+          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
           <div style={{ fontSize: 13, color: '#6A5030', lineHeight: 1.7 }}>
             Sous la direction du Docteur François De Millet<br />
             Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales
@@ -447,7 +447,7 @@ export default function DocumentationPage() {
           <div style={{ fontSize: 13, color: '#6A5030', marginTop: 6, letterSpacing: '0.1em' }}>{certDoc.type}</div>
         </div>
         <div style={{ fontSize: 15, lineHeight: 2 }}>
-          <p style={{ margin: '0 0 16px' }}>Je soussigné, <strong>Docteur François De Millet</strong>, médecin – thérapeute exerçant au sein du L'ORDRES DES MÉDECINS - Hôpital de Saint Denis - Dispensaire de Valentine, certifie avoir procédé, en date du <strong>{rpDisplay(certDoc.date)}</strong>, à la rédaction du présent document concernant :</p>
+          <p style={{ margin: '0 0 16px' }}>Je soussigné, <strong>Docteur François De Millet</strong>, médecin – thérapeute exerçant au sein du L'ORDRES DES MÉDECINS - Hôpital de Little Creek - Dispensaire de Valentine, certifie avoir procédé, en date du <strong>{rpDisplay(certDoc.date)}</strong>, à la rédaction du présent document concernant :</p>
           <p style={{ paddingLeft: 28, margin: '0 0 16px' }}>
             <strong>Nom et Prénom :</strong> {certPat ? `${certPat.patientPrenom} ${certPat.patientNom}` : '—'}<br />
             {certPat?.patientAge ? <><strong>Âge :</strong> {certPat.patientAge} ans<br /></> : null}
@@ -457,7 +457,7 @@ export default function DocumentationPage() {
           <div style={{ margin: '0 0 32px', whiteSpace: 'pre-wrap', lineHeight: 2.1 }}>{certDoc.contenu}</div>
           <div style={{ marginTop: 52, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
             <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>
-              Fait à <strong>Saint Denis</strong>, le <strong>{rpDisplay(certDoc.date)}</strong>
+              Fait à <strong>Little Creek</strong>, le <strong>{rpDisplay(certDoc.date)}</strong>
             </div>
             <div style={{ textAlign: 'right' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -484,7 +484,7 @@ export default function DocumentationPage() {
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>CABINET · DOCUMENTATION</span>
         </div>
         <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 }}>📁 Documentation</h1>
-        <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginTop: 8 }}>FORMULAIRES & DOCUMENTS OFFICIELS · 1892</p>
+        <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginTop: 8 }}>FORMULAIRES & DOCUMENTS OFFICIELS · 1890</p>
       </div>
 
       {/* ── FORMULAIRES ── */}
@@ -753,7 +753,7 @@ export default function DocumentationPage() {
                 <div><label style={lbl}>COMTÉ</label>
                   <select style={{ ...inp, cursor: 'pointer' }} value={editForm.county ?? ''} onChange={e => setEditForm(f => ({ ...f, county: e.target.value }))}>
                     <option value="">— Sélectionner —</option>
-                    <option>New Hanover</option><option>West Elisabeth</option>
+                    <option>East Wellster's</option><option>West Elizabeth</option>
                   </select>
                 </div>
               </div>

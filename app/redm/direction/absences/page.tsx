@@ -26,7 +26,7 @@ const STATUT_COL: Record<string, string> = {
   'Annulée':   '#C83030',
 };
 
-/* ── Helpers agenda (dates RP "20 Juin 1892" ↔ "DD/MM/YYYY_RP") ─────── */
+/* ── Helpers agenda (dates RP "20 Juin 1890" ↔ "DD/MM/YYYY_RP") ─────── */
 const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin',
               'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
@@ -44,13 +44,13 @@ function rpDatesInRange(startStr: string, endStr: string): string[] {
   const s = parseRpDate(startStr);
   const e = parseRpDate(endStr);
   if (!s || !e) return [];
-  const cur = new Date(s.year + 134, s.month - 1, s.day);
-  const end = new Date(e.year + 134, e.month - 1, e.day);
+  const cur = new Date(s.year + 136, s.month - 1, s.day);
+  const end = new Date(e.year + 136, e.month - 1, e.day);
   const dates: string[] = [];
   while (cur <= end && dates.length < 90) {
     const d = String(cur.getDate()).padStart(2, '0');
     const m = String(cur.getMonth() + 1).padStart(2, '0');
-    const y = cur.getFullYear() - 134;
+    const y = cur.getFullYear() - 136;
     dates.push(`${d}/${m}/${y}`);
     cur.setDate(cur.getDate() + 1);
   }

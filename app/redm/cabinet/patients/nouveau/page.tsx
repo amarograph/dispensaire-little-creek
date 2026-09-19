@@ -30,7 +30,7 @@ interface Dossier {
 
 const TYPES: TypeSeance[] = ['Première consultation', 'Suivi', 'Urgence', 'Hypnose', 'Thérapie du deuil', 'Conseil spirituel'];
 const METIERS = [
-  '', 'Sherif New Hanover', 'Sherif West Elisabeth', 'Maire', 'Marshall',
+  '', "Sherif East Wellster's", 'Sherif West Elizabeth', 'Maire', 'Marshall',
   'Fermier/ière', 'Médecin', 'Sans emploi', 'Salonnier/ière', 'Employé',
   'Patron/ne', 'Directeur/rice de Dispensaire', 'Tanneur',
   'Préparateur/rice de commande', 'Palefrenier/ière', 'Tisseur/euse',
@@ -88,7 +88,7 @@ export default function NouveauDossierPage() {
   const [patientPrenom,         setPatientPrenom]         = useState('');
   const [patientAge,            setPatientAge]            = useState('');
   const [patientMetier,         setPatientMetier]         = useState('');
-  const [dateConsult,           setDateConsult]           = useState(() => { const n = new Date(); const s = n.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2])-134); return s.join('/'); });
+  const [dateConsult,           setDateConsult]           = useState(() => { const n = new Date(); const s = n.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2])-136); return s.join('/'); });
   const [type,                  setType]                  = useState<TypeSeance>('Première consultation');
   const [plainte,               setPlainte]               = useState('');
   const [antecedentsPersonnels, setAntecedentsPersonnels] = useState('');
@@ -138,7 +138,7 @@ export default function NouveauDossierPage() {
             style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '13px 28px', cursor: 'pointer', background: 'rgba(74,96,72,0.25)', color: '#8BAB88', border: '1px solid rgba(74,96,72,0.5)' }}>
             ← RETOUR AUX DOSSIERS
           </button>
-          <button onClick={() => { setSaved(false); setPatientNom(''); setPatientPrenom(''); setPatientAge(''); setDateConsult((() => { const n = new Date(); const s = n.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2])-134); return s.join('/'); })()); setType('Première consultation'); setPlainte(''); setAntecedentsPersonnels(''); setAntecedentsFamiliaux(''); setEvenementsRecents(''); setObservations(''); setObservationMedecin(''); setEquilibreNerveux(''); setNoteThérapeute(''); setTraitement(''); setProchaine(''); setStatut('EN COURS'); setConfidentiel(false); }}
+          <button onClick={() => { setSaved(false); setPatientNom(''); setPatientPrenom(''); setPatientAge(''); setDateConsult((() => { const n = new Date(); const s = n.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2])-136); return s.join('/'); })()); setType('Première consultation'); setPlainte(''); setAntecedentsPersonnels(''); setAntecedentsFamiliaux(''); setEvenementsRecents(''); setObservations(''); setObservationMedecin(''); setEquilibreNerveux(''); setNoteThérapeute(''); setTraitement(''); setProchaine(''); setStatut('EN COURS'); setConfidentiel(false); }}
             style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '13px 28px', cursor: 'pointer', background: 'rgba(200,168,80,0.15)', color: T.gold, border: `1px solid rgba(200,168,80,0.4)` }}>
             ✚ NOUVEAU DOSSIER
           </button>
@@ -161,7 +161,7 @@ export default function NouveauDossierPage() {
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.16em' }}>CABINET · DOSSIERS · NOUVEAU</span>
         </div>
         <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0 }}>📋 Nouveau Dossier Patient</h1>
-        <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 10 }}>DISPENSAIRE THÉRAPEUTIQUE · 1892</p>
+        <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 10 }}>DISPENSAIRE THÉRAPEUTIQUE · 1890</p>
       </div>
 
       {/* ── 1. IDENTITÉ ── */}

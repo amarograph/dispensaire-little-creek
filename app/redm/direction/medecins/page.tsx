@@ -11,7 +11,7 @@ const MONO     = "'Special Elite', 'Courier New', monospace";
 const T = { bg: '#120A0A', card: '#1A1008', paper: '#1F1610', border: 'rgba(139,90,43,0.30)', gold: '#C8A850', text: '#E8D9C0', muted: '#8B7355', dim: '#5A4A35', sepia: '#D4B896' };
 
 const GRADES      = ['Apprenti', 'Infirmier', 'Thérapeute', 'Médecin', 'Médecin Chef', 'Co-Directeur', 'Directeur'];
-const DISPENSAIRES = ['Saint Denis', 'Valentine', 'Rhodes', 'Tous'];
+const DISPENSAIRES = ['Little Creek', 'Valentine', 'Rhodes', 'Tous'];
 const SPECIALITES = ['Médecine générale', 'Chirurgie', 'Aliénisme', 'Plantes médicinales', 'Obstétrique', 'Traumatologie', 'Dentisterie', 'Ophtalmologie', 'Hygiène', 'Autre'];
 const STATUTS     = ['En service', 'En congé', 'En mission', 'Suspendu'];
 

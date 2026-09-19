@@ -11,12 +11,12 @@ const COL = '#A0784A';
 
 function uid()  { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function rpDate(d = new Date()) {
-  const s = d.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2]) - 134); return s.join('/');
+  const s = d.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2]) - 136); return s.join('/');
 }
 function rpDisplay(date: string): string {
   const p = date.split('/'); if (p.length !== 3) return date;
   const y = Number(p[2]); if (isNaN(y)) return date;
-  p[2] = String(y >= 1900 ? y - 134 : y); return p.join('/');
+  p[2] = String(y >= 1900 ? y - 136 : y); return p.join('/');
 }
 
 interface Patient {
@@ -240,7 +240,7 @@ export default function PrescriptionMedicalePage() {
       <div ref={printRef} className="print-area" style={{ background: '#FDFAF4', border: '2px solid #8B7355', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#2A1A08', fontFamily: "'Special Elite', 'Courier New', monospace" }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: 20, letterSpacing: '0.12em', fontWeight: 'bold', marginBottom: 4 }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
-          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Saint Denis — Blackwater</div>
+          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
           <div style={{ fontSize: 13, color: '#6A5030', lineHeight: 1.7 }}>Sous la direction du Docteur François De Millet<br />Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales</div>
         </div>
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
@@ -248,14 +248,14 @@ export default function PrescriptionMedicalePage() {
           <div style={{ fontSize: 13, color: '#6A5030', marginTop: 6 }}>Prescription médicale</div>
         </div>
         <div style={{ fontSize: 15, lineHeight: 2 }}>
-          <p style={{ margin: '0 0 16px' }}>Je soussigné, <strong>Docteur François De Millet</strong>, médecin – thérapeute exerçant au sein du L'ORDRES DES MÉDECINS - Hôpital de Saint Denis - Dispensaire de Valentine, prescris en date du <strong>{rpDisplay(savedDoc.date)}</strong>, à l'attention de :</p>
+          <p style={{ margin: '0 0 16px' }}>Je soussigné, <strong>Docteur François De Millet</strong>, médecin – thérapeute exerçant au sein du L'ORDRES DES MÉDECINS - Hôpital de Little Creek - Dispensaire de Valentine, prescris en date du <strong>{rpDisplay(savedDoc.date)}</strong>, à l'attention de :</p>
           <p style={{ paddingLeft: 28, margin: '0 0 24px', lineHeight: 2.2 }}>
             <strong>Nom et Prénom :</strong> {savedPat.patientPrenom} {savedPat.patientNom}<br />
             {savedPat.patientAge ? <><strong>Âge :</strong> {savedPat.patientAge} ans<br /></> : null}
           </p>
           <div style={{ margin: '0 0 40px', whiteSpace: 'pre-wrap', lineHeight: 2.1 }}>{savedDoc.contenu}</div>
           <div style={{ marginTop: 52, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-            <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>Fait à <strong>Saint Denis</strong>, le <strong>{rpDisplay(savedDoc.date)}</strong></div>
+            <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>Fait à <strong>Little Creek</strong>, le <strong>{rpDisplay(savedDoc.date)}</strong></div>
             <div style={{ textAlign: 'right' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/signature.png" alt="Signature" style={{ width: 520, display: 'block', marginLeft: 'auto' }} />

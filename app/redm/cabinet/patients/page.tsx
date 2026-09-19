@@ -25,7 +25,7 @@ interface Dossier {
 const STATUT_COL: Record<Statut, string> = { 'EN COURS': '#C8A850', 'TERMINÉE': '#4A6048', 'ABANDONNÉE': '#8B4040', 'CLÔTURÉE': '#5A4A6A' };
 const TYPES: TypeSeance[] = ['Première consultation', 'Suivi', 'Urgence', 'Hypnose', 'Thérapie du deuil', 'Conseil spirituel'];
 const METIERS = [
-  '', 'Sherif New Hanover', 'Sherif West Elisabeth', 'Maire', 'Marshall',
+  '', "Sherif East Wellster's", 'Sherif West Elizabeth', 'Maire', 'Marshall',
   'Fermier/ière', 'Médecin', 'Sans emploi', 'Salonnier/ière', 'Employé',
   'Patron/ne', 'Directeur/rice de Dispensaire', 'Tanneur',
   'Préparateur/rice de commande', 'Palefrenier/ière', 'Tisseur/euse',

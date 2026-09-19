@@ -10,7 +10,7 @@ const T = { bg: '#1A1208', card: '#1F1610', border: 'rgba(139,90,43,0.30)', gold
 
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
 type TypeCategorie  = 'vente' | 'achat';
-type Payeur         = 'Civil' | 'Shérif' | 'Écurie Saint Denis' | 'Écurie Valentine' | 'Mairie Lemoyne';
+type Payeur         = 'Civil' | 'Shérif' | 'Écurie Little Creek' | 'Écurie Valentine' | 'Mairie West Elizabeth';
 
 interface TarifCategory { id: string; nom: string; type: TypeCategorie; prix: number; pctDispensaire: number; pctMedecin: number; ordre: number; }
 const DEFAULT_CATEGORIES: TarifCategory[] = [
@@ -22,7 +22,7 @@ function categoriesToMap(categories: TarifCategory[]): Record<string, TarifCateg
   categories.forEach(c => { m[c.id] = c; });
   return m;
 }
-const PAYEURS: Payeur[] = ['Civil', 'Shérif', 'Écurie Saint Denis', 'Écurie Valentine', 'Mairie Lemoyne'];
+const PAYEURS: Payeur[] = ['Civil', 'Shérif', 'Écurie Little Creek', 'Écurie Valentine', 'Mairie West Elizabeth'];
 
 interface Facture {
   id: string; medecin: string; patientNom: string; dateSeance: string;
@@ -51,19 +51,19 @@ function getMondayOf(date: Date): Date {
 }
 function rpDate(d = new Date()) {
   const s = d.toLocaleDateString('fr-FR'); const p = s.split('/');
-  p[2] = String(Number(p[2]) - 134); return p.join('/');
+  p[2] = String(Number(p[2]) - 136); return p.join('/');
 }
 function parseDate(s: string): Date | null {
   const p = s.split('/'); if (p.length !== 3) return null;
   const [d,m,y] = p.map(Number); if (!d||!m||!y) return null;
-  const realY = y < 1900 ? y + 134 : y;
+  const realY = y < 1900 ? y + 136 : y;
   return new Date(realY, m-1, d);
 }
 function weekLabel(mon: Date): string {
   const sun = new Date(mon); sun.setDate(mon.getDate()+6);
   const f = (dt: Date, full=false) => {
     const s = dt.toLocaleDateString('fr-FR', full ? {day:'2-digit',month:'2-digit',year:'numeric'} : {day:'2-digit',month:'2-digit'});
-    return full ? s.replace(String(dt.getFullYear()), String(dt.getFullYear() - 134)) : s;
+    return full ? s.replace(String(dt.getFullYear()), String(dt.getFullYear() - 136)) : s;
   };
   return `Semaine du ${f(mon)} au ${f(sun,true)}`;
 }

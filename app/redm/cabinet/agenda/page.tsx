@@ -35,11 +35,11 @@ function parseDate(s: string): { day: number; month: number; year: number } | nu
   return { day: d, month: m, year: y };
 }
 
-/** Format a JS Date to DD/MM/YYYY (RP year − 134) */
+/** Format a JS Date to DD/MM/YYYY (RP year − 136) */
 function formatDate(dt: Date): string {
   const d = String(dt.getDate()).padStart(2, '0');
   const m = String(dt.getMonth() + 1).padStart(2, '0');
-  return `${d}/${m}/${dt.getFullYear() - 134}`;
+  return `${d}/${m}/${dt.getFullYear() - 136}`;
 }
 
 /** Build calendar grid: array of 6 rows × 7 cols, each cell = { date: Date, inMonth: boolean } */
@@ -237,7 +237,7 @@ export default function AgendaPage() {
               {MONTH_FR[calMonth - 1]}
             </div>
             <div style={{ fontFamily: MONO, fontSize: 15, color: T.muted, letterSpacing: '0.15em', marginTop: 3 }}>
-              {calYear - 134}
+              {calYear - 136}
             </div>
           </div>
 

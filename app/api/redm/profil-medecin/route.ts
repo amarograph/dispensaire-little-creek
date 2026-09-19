@@ -7,7 +7,7 @@
     origine      TEXT NOT NULL DEFAULT '',
     portrait_url TEXT NOT NULL DEFAULT '',
     grade        TEXT NOT NULL DEFAULT 'Apprenti',
-    dispensaire  TEXT NOT NULL DEFAULT 'Saint Denis',
+    dispensaire  TEXT NOT NULL DEFAULT 'Little Creek',
     specialite   TEXT NOT NULL DEFAULT '',
     statut       TEXT NOT NULL DEFAULT 'En service',
     updated_at   TIMESTAMPTZ DEFAULT NOW()
@@ -56,7 +56,7 @@ export async function GET() {
     origine:      profil?.origine      ?? '',
     portrait_url: profil?.portrait_url ?? '',
     grade:        profil?.grade        ?? 'Apprenti',
-    dispensaire:  profil?.dispensaire  ?? 'Saint Denis',
+    dispensaire:  profil?.dispensaire  ?? 'Little Creek',
     specialite:   profil?.specialite   ?? '',
     statut:       profil?.statut       ?? 'En service',
     presence: {
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
       origine:      body.origine       ?? '',
       portrait_url: body.portrait_url  ?? '',
       grade:        body.grade         ?? 'Apprenti',
-      dispensaire:  body.dispensaire   ?? 'Saint Denis',
+      dispensaire:  body.dispensaire   ?? 'Little Creek',
       specialite:   body.specialite    ?? '',
       statut:       body.statut        ?? 'En service',
       updated_at:   new Date().toISOString(),
