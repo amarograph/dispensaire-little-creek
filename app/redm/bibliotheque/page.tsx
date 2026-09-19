@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import './bibliotheque.css';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
@@ -8141,87 +8142,32 @@ function BiblioEtageres({
   setNewCatIcon: (v: string) => void;
   createCategory: () => void;
 }) {
+  const [query, setQuery] = useState('');
+  const [section, setSection] = useState('Tout le catalogue');
   const userCats = categories.filter(c => !BUILTIN_IDS.has(c.id));
-  return (
-    <div style={{ background: 'linear-gradient(to bottom,#03070e,#02050a 35%,#04060c 70%,#020408)', border: '10px solid #060c16', borderRadius: 4, overflow: 'hidden', marginBottom: 20, boxShadow: '0 0 0 1px #020408,0 24px 60px rgba(74,62,32,0.14),inset 0 2px 0 rgba(209,183,124,0.04),inset 0 -3px 0 rgba(74,62,32,0.14)' }}>
-      <div style={{ height: 18, background: 'linear-gradient(to bottom,#060e1c,#040a12 60%,#030810)', borderBottom: '2px solid rgba(20,50,110,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 12px' }}>
-        <span style={{ color: 'rgba(180,140,40,0.3)', fontSize: 9, letterSpacing: 5 }}>✚ · · · ✚</span>
-        <span style={{ color: 'rgba(180,140,40,0.3)', fontSize: 9, letterSpacing: 5 }}>✚ · · · ✚</span>
-      </div>
-      <div style={{ padding: '12px 24px 10px', background: 'linear-gradient(to bottom, #03070e, #02050a)' }}>
-        <div style={{ border: '2px solid #122040', background: 'linear-gradient(165deg,#060e1a,#03090e 45%,#050c14 70%,#030710)', padding: '20px 80px 18px', textAlign: 'center', position: 'relative', margin: '0 auto', boxShadow: 'inset 0 1px 0 rgba(209,183,124,0.07),0 4px 16px rgba(74,62,32,0.14)' }}>
-          <div style={{ position: 'absolute', inset: 5, border: '1px solid rgba(30,60,130,0.2)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', top: 5, left:  5, width: 20, height: 20, borderTop: '2px solid #8a6030', borderLeft:  '2px solid #8a6030' }} />
-          <div style={{ position: 'absolute', top: 5, right: 5, width: 20, height: 20, borderTop: '2px solid #8a6030', borderRight: '2px solid #8a6030' }} />
-          <div style={{ position: 'absolute', bottom: 5, left:  5, width: 20, height: 20, borderBottom: '2px solid #8a6030', borderLeft:  '2px solid #8a6030' }} />
-          <div style={{ position: 'absolute', bottom: 5, right: 5, width: 20, height: 20, borderBottom: '2px solid #8a6030', borderRight: '2px solid #8a6030' }} />
-          <div style={{ color: '#D1B77C', fontSize: 22, marginBottom: 6 }}>⚕</div>
-          <div style={{ fontFamily: DISPLAY, fontSize: 32, color: '#D1B77C', letterSpacing: '0.35em', fontWeight: 'bold', textShadow: '0 2px 8px rgba(0,0,0,0.8),0 0 20px rgba(209,183,124,0.08)' }}>BIBLIOTHÈQUE</div>
-          <div style={{ height: 1, background: 'linear-gradient(to right, transparent, rgba(209,183,124,0.5), transparent)', margin: '8px auto', maxWidth: 220 }} />
-          <div style={{ fontFamily: MONO, fontSize: 11, color: '#2e4a60', letterSpacing: '0.25em' }}>Dispensaire · 1890</div>
-        </div>
-      </div>
-      <div style={{ padding: '4px 14px 10px', background: 'linear-gradient(to bottom, #03070e, #02050a)' }}>
-        {BUILTIN_SHELVES.map((shelf, si) => (
-          <ShelfRow key={si} label={shelf.label}>
-            {shelf.items.map(b => (
-              <Book
-                key={b.id}
-                icon={b.icon}
-                t1={b.t1}
-                t2={b.t2}
-                col={b.col}
-                selected={openCatId === b.id}
-                onClick={() => setOpenCatId(b.id)}
-              />
-            ))}
-          </ShelfRow>
-        ))}
-        <ShelfRow label="Vos Documents">
-          {userCats.map(cat => {
-            const words = cat.nom.split(' ');
-            return (
-              <Book
-                key={cat.id}
-                icon={cat.icon}
-                t1={words.slice(0, 2).join(' ')}
-                t2={words.length > 2 ? words.slice(2, 4).join(' ') : undefined}
-                selected={openCatId === cat.id}
-                onClick={() => setOpenCatId(cat.id)}
-              />
-            );
-          })}
-          {creatingCat ? (
-            <div style={{ width: 200, background: '#102B3B', border: `1px solid ${T.gold}`, borderRadius: 2, padding: '14px 12px', display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>
-              <div>
-                <label style={lbl}>ICÔNE</label>
-                <select style={inp} value={newCatIcon} onChange={e => setNewCatIcon(e.target.value)}>
-                  {ICONS.map(ic => <option key={ic} value={ic}>{ic}</option>)}
-                </select>
-              </div>
-              <div>
-                <label style={lbl}>NOM</label>
-                <input style={inp} value={newCatNom} onChange={e => setNewCatNom(e.target.value)} placeholder="Ex : Pharmacopée" autoFocus onKeyDown={e => { if (e.key === 'Enter') createCategory(); }} />
-              </div>
-              <div style={{ display: 'flex', gap: 6 }}>
-                <button onClick={createCategory} style={btnGold}>✔ CRÉER</button>
-                <button onClick={() => { setCreatingCat(false); setNewCatNom(''); }} style={btn}>✕</button>
-              </div>
-            </div>
-          ) : (
-            <button
-              onClick={() => setCreatingCat(true)}
-              style={{ width: 152, minHeight: 118, background: 'transparent', border: '1px dashed #3a2410', borderLeft: '4px solid #261508', borderRadius: 2, color: '#5a4020', fontFamily: MONO, fontSize: 11, letterSpacing: '0.12em', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 5, flexShrink: 0 }}
-            >
-              <span style={{ fontSize: 20, color: '#4a2e10' }}>+</span>
-              <span>NOUVELLE</span>
-              <span>CATÉGORIE</span>
-            </button>
-          )}
-        </ShelfRow>
+  const groups = [...BUILTIN_SHELVES.map(s => ({ label: s.label, items: s.items.map(b => ({ id: b.id, title: categories.find(c => c.id === b.id)?.nom ?? [b.t1, b.t2].filter(Boolean).join(' ') })) })), { label: 'Vos documents', items: userCats.map(c => ({ id: c.id, title: c.nom })) }];
+  const normalize = (v: string) => v.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const visible = groups.filter(g => section === 'Tout le catalogue' || g.label === section).map(g => ({ ...g, items: g.items.filter(b => normalize(b.title).includes(normalize(query))) })).filter(g => g.items.length);
+  const total = groups.reduce((n, g) => n + g.items.length, 0);
+  return <div className="library-catalogue">
+    <header className="library-heading">
+      <div><p className="library-eyebrow">LITTLE CREEK · COLLECTION MÉDICALE · 1890</p><h1>La Bibliothèque</h1><p className="library-intro">Le savoir au service des soins.</p></div>
+      <div className="library-seal"><strong>{total}</strong><span>ouvrages à consulter</span></div>
+    </header>
+    <div className="library-layout">
+      <aside className="library-index"><p className="library-eyebrow">TABLE DES MATIÈRES</p>
+        <nav aria-label="Collections de la bibliothèque">{['Tout le catalogue', ...groups.map(g => g.label)].map(label => <button key={label} aria-pressed={section === label} onClick={() => setSection(label)}>{label}<span>{label === 'Tout le catalogue' ? total : groups.find(g => g.label === label)?.items.length}</span></button>)}</nav>
+        <p className="library-index-note">Traités, protocoles et enseignements du dispensaire.</p>
+      </aside>
+      <div className="library-main">
+        <div className="library-tools"><label><span>Rechercher un ouvrage</span><input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Titre, discipline, mot-clé…" /></label><button className="library-add" onClick={() => setCreatingCat(!creatingCat)}>Nouvelle catégorie</button></div>
+        {creatingCat && <form className="library-create" onSubmit={e => { e.preventDefault(); createCategory(); }}><label>Nom de la catégorie<input value={newCatNom} onChange={e => setNewCatNom(e.target.value)} placeholder="Ex. Pharmacopée" autoFocus required /></label><button type="submit">Créer</button><button type="button" onClick={() => { setCreatingCat(false); setNewCatNom(''); }}>Annuler</button></form>}
+        <div aria-live="polite" className="library-count">{visible.reduce((n, g) => n + g.items.length, 0)} ouvrages · {section}</div>
+        {!visible.length && <p className="library-empty">Aucun ouvrage dans cette sélection. Essayez un autre titre ou une autre collection.</p>}
+        {visible.map(g => <section className="library-section" key={g.label}><div className="library-section-heading"><h2>{g.label}</h2><span>{String(g.items.length).padStart(2, '0')}</span></div><div className="library-grid">{g.items.map(b => <button className="library-volume" title={b.title} aria-label={b.title} key={b.id} onClick={() => setOpenCatId(b.id)}><span className="library-volume-label">DISPENSAIRE DE LITTLE CREEK</span><h3>{(() => { const book = BUILTIN_SHELVES.flatMap(s => s.items).find(i => i.id === b.id); return book ? [book.t1, book.t2].filter(Boolean).join(' ') : b.title; })()}</h3><span className="library-volume-bottom"><span>LC</span><span aria-hidden="true">→</span></span></button>)}</div></section>)}
       </div>
     </div>
-  );
+  </div>;
 }
 
 export default function BibliothequePage() {
