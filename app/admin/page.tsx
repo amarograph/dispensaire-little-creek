@@ -28,6 +28,12 @@ export default async function AdminPage() {
       title: 'Demandes d\'accès',
       desc: 'Valider les connexions Discord',
     },
+    {
+      href: '/admin/redm-dashboard',
+      icon: '🏛',
+      title: 'Accueil RedM',
+      desc: 'Titres, citation, messages d\'alerte',
+    },
   ];
 
   return (
