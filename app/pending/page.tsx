@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { getMemberStatus } from '@/lib/auth';
 import SignOutButton from './SignOutButton';
 
 export default async function PendingPage() {
@@ -10,13 +11,7 @@ export default async function PendingPage() {
     redirect('/login');
   }
 
-  const { data: member, error: memberError } = await supabase
-    .from('members')
-    .select('status, roles')
-    .eq('user_id', user.id)
-    .single();
-
-  const status = member?.status ?? null;
+  const status = await getMemberStatus(user.id);
 
   if (status === 'approved') {
     redirect('/redm');
@@ -37,13 +32,6 @@ export default async function PendingPage() {
             : 'Ta demande a bien été enregistrée. Un membre de la direction doit valider ton accès avant que tu puisses entrer.'}
         </p>
         <SignOutButton />
-
-        <div style={{ marginTop: 40, textAlign: 'left', fontSize: 11, color: '#666', background: '#111', padding: 12, borderRadius: 8, fontFamily: 'monospace', wordBreak: 'break-all' }}>
-          DEBUG (temporaire) —<br />
-          user.id: {user.id}<br />
-          member: {JSON.stringify(member)}<br />
-          error: {JSON.stringify(memberError)}
-        </div>
       </div>
     </div>
   );

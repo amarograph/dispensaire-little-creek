@@ -34,28 +34,31 @@ CREATE POLICY "self_read_members" ON members
 CREATE POLICY "self_insert_members" ON members
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+-- Fonction SECURITY DEFINER : contourne le RLS pour éviter la récursion
+-- infinie (une policy sur "members" qui relit "members" se redéclenche
+-- elle-même sinon).
+CREATE OR REPLACE FUNCTION is_direction(uid uuid)
+RETURNS boolean
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM members
+    WHERE user_id = uid
+      AND status = 'approved'
+      AND roles && ARRAY['dev','directeur','co_directeur','medecin_chef','medecin']::text[]
+  );
+$$;
+
 -- La direction (rôle avec permission "direction" : dev, directeur,
 -- co_directeur, medecin_chef, medecin) peut tout lire
 CREATE POLICY "direction_read_members" ON members
-  FOR SELECT USING (
-    EXISTS (
-      SELECT 1 FROM members d
-      WHERE d.user_id = auth.uid()
-        AND d.status = 'approved'
-        AND d.roles && ARRAY['dev','directeur','co_directeur','medecin_chef','medecin']::text[]
-    )
-  );
+  FOR SELECT USING (is_direction(auth.uid()));
 
 -- La direction peut valider / refuser / attribuer des rôles
 CREATE POLICY "direction_update_members" ON members
-  FOR UPDATE USING (
-    EXISTS (
-      SELECT 1 FROM members d
-      WHERE d.user_id = auth.uid()
-        AND d.status = 'approved'
-        AND d.roles && ARRAY['dev','directeur','co_directeur','medecin_chef','medecin']::text[]
-    )
-  );
+  FOR UPDATE USING (is_direction(auth.uid()));
 
 CREATE INDEX idx_members_status ON members(status);
 CREATE INDEX idx_members_roles ON members USING GIN (roles);
