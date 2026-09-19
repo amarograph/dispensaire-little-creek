@@ -142,13 +142,16 @@ export default function DirectionComptabilitePage() {
   interface CaisseStaff { discord_id: string; nom: string; rate: number; dates: string[]; count: number; salaire: number; }
   const [caissesStaff,   setCaissesStaff]   = useState<CaisseStaff[]>([]);
   const [caissesLoading, setCaissesLoading] = useState(true);
+  const [caisseMonday,   setCaisseMonday]   = useState<Date>(() => getMondayOf(new Date()));
 
   const todayMonday = getMondayOf(new Date());
   const currentKey  = mondayISO(todayMonday);
-  const caisseDays  = Array.from({ length: 7 }, (_, i) => addDaysReal(todayMonday, i));
+  const caisseDays  = Array.from({ length: 7 }, (_, i) => addDaysReal(caisseMonday, i));
   const caisseFrom  = fmtISODate(caisseDays[0]);
   const caisseTo    = fmtISODate(caisseDays[6]);
   const todayISODate = fmtISODate(new Date());
+  const caisseIsThisWeek = fmtISODate(caisseMonday) === fmtISODate(getMondayOf(new Date()));
+  const caissesTotalSemaine = caissesStaff.reduce((s, x) => s + x.count, 0);
 
   /* ── Registre des caisses (self-service du personnel) ── */
   useEffect(() => {
@@ -304,7 +307,7 @@ export default function DirectionComptabilitePage() {
               <div style={{ fontFamily:MONO, fontSize:13, color:T.dim, marginTop:4, letterSpacing:'0.14em' }}>SOLDE DU COMPTE DU DISPENSAIRE</div>
             </div>
 
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:10 }}>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
               <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
                 <div style={{ fontFamily:DISPLAY, fontSize:24, color:T.gold }}>{fmt$(tresorerieSemaine.ventes)}</div>
                 <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>VENTES (SEMAINE)</div>
@@ -313,16 +316,27 @@ export default function DirectionComptabilitePage() {
                 <div style={{ fontFamily:DISPLAY, fontSize:24, color:'#C8845A' }}>{fmt$(tresorerieSemaine.achats)}</div>
                 <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>ACHATS (SEMAINE)</div>
               </div>
+              <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
+                <div style={{ fontFamily:DISPLAY, fontSize:24, color:'#49654D' }}>{caissesTotalSemaine}</div>
+                <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>CAISSES (SEMAINE)</div>
+              </div>
             </div>
           </div>
 
           {/* Registre des caisses (self-service du personnel) */}
           <div>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(128,104,45,0.40)` }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(128,104,45,0.40)`, flexWrap:'wrap', gap:10 }}>
               <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>💵 REGISTRE DES CAISSES — {fmtDayShort(caisseDays[0])} AU {fmtDayShort(caisseDays[6])}</span>
-              <button onClick={() => router.push('/redm/registre-caisses')} style={{ fontFamily:MONO, fontSize:12, letterSpacing:'0.1em', padding:'7px 16px', cursor:'pointer', background:'rgba(128,104,45,0.10)', color:T.gold, border:`1px solid rgba(128,104,45,0.35)` }}>
-                MA CAISSE →
-              </button>
+              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                <button onClick={() => setCaisseMonday(m => addDaysReal(m, -7))} style={{ fontFamily:MONO, fontSize:12, padding:'7px 12px', cursor:'pointer', background:T.card, border:`1px solid ${T.border}`, color:T.gold }}>◀</button>
+                {!caisseIsThisWeek && (
+                  <button onClick={() => setCaisseMonday(getMondayOf(new Date()))} style={{ fontFamily:MONO, fontSize:11, letterSpacing:'0.08em', padding:'7px 12px', cursor:'pointer', background:'rgba(128,104,45,0.08)', border:`1px solid rgba(128,104,45,0.35)`, color:T.gold }}>AUJOURD'HUI</button>
+                )}
+                <button onClick={() => setCaisseMonday(m => addDaysReal(m, 7))} disabled={caisseIsThisWeek} style={{ fontFamily:MONO, fontSize:12, padding:'7px 12px', cursor: caisseIsThisWeek ? 'default' : 'pointer', background:T.card, border:`1px solid ${T.border}`, color: caisseIsThisWeek ? T.dim : T.gold, opacity: caisseIsThisWeek ? 0.4 : 1 }}>▶</button>
+                <button onClick={() => router.push('/redm/registre-caisses')} style={{ fontFamily:MONO, fontSize:12, letterSpacing:'0.1em', padding:'7px 16px', cursor:'pointer', background:'rgba(128,104,45,0.10)', color:T.gold, border:`1px solid rgba(128,104,45,0.35)` }}>
+                  MA CAISSE →
+                </button>
+              </div>
             </div>
 
             {caissesLoading ? (

@@ -49,6 +49,17 @@ function loadArc(): SemaineArchivee[] { try { return JSON.parse(localStorage.get
 function saveArc(d: SemaineArchivee[]) { try { localStorage.setItem(LS_ARC, JSON.stringify(d)); } catch {} }
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 
+function addDaysReal(d: Date, n: number): Date { const c = new Date(d); c.setDate(c.getDate()+n); return c; }
+function fmtISODate(d: Date): string {
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), dd = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+function fmtDayShort(d: Date): string {
+  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+}
+const JOURS_CAISSE = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+interface CaisseStaff { discord_id: string; nom: string; rate: number; dates: string[]; count: number; salaire: number; }
+
 interface Salaire { medecin: string; actes: number; ca: number; salaire: number; }
 function salairesByMedecin(factures: Facture[], tarifs: Record<string, TarifCategory>): Salaire[] {
   const map: Record<string, Salaire> = {};
@@ -117,6 +128,8 @@ export default function DirectionComptabiliteArchivesPage() {
   const [openId,   setOpenId]   = useState<string | null>(null);
   const [tarifs,   setTarifs]   = useState<Record<string, TarifCategory>>({});
   const [delConfirm, setDelConfirm] = useState<string | null>(null);
+  const [caissesStaff,   setCaissesStaff]   = useState<CaisseStaff[]>([]);
+  const [caissesLoading, setCaissesLoading] = useState(false);
 
   useEffect(() => { setArchives(loadArc()); setHydrated(true); }, []);
 
@@ -137,6 +150,22 @@ export default function DirectionComptabiliteArchivesPage() {
       .then(d => { if (d?.categories) setTarifs(categoriesToMap(d.categories)); })
       .catch(() => {});
   }, []);
+
+  /* ── Registre des caisses de la semaine ouverte ── */
+  useEffect(() => {
+    if (!openId) return;
+    const arc = archives.find(a => a.id === openId);
+    if (!arc) return;
+    const monday = new Date(arc.weekStart);
+    const from = fmtISODate(monday);
+    const to   = fmtISODate(addDaysReal(monday, 6));
+    setCaissesLoading(true);
+    fetch(`/api/admin/redm-caisses?from=${from}&to=${to}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d?.staff) setCaissesStaff(d.staff); })
+      .catch(() => {})
+      .finally(() => setCaissesLoading(false));
+  }, [openId, archives]);
 
   /* Filtrage */
   const filtered = archives.filter(a => {
@@ -227,6 +256,57 @@ export default function DirectionComptabiliteArchivesPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+        </div>
+
+        {/* Registre des caisses de la semaine */}
+        <div style={{ marginBottom:24 }}>
+          <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}>💵 Registre des caisses</div>
+          {caissesLoading ? (
+            <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Chargement…</div>
+          ) : caissesStaff.length === 0 ? (
+            <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucune caisse enregistrée cette semaine-là.</div>
+          ) : (
+            <div style={{ overflowX:'auto' }}>
+              <table style={{ width:'100%', borderCollapse:'collapse', border:`1px solid ${T.border}` }}>
+                <thead>
+                  <tr>
+                    <th style={{ background:'rgba(128,104,45,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 16px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.14em', textAlign:'left' }}>MEMBRE</th>
+                    {JOURS_CAISSE.map((j, i) => (
+                      <th key={i} style={{ background:'rgba(128,104,45,0.06)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 8px', fontFamily:MONO, fontSize:11, color:T.gold, textAlign:'center', minWidth:34 }}>{j}</th>
+                    ))}
+                    <th style={{ background:'rgba(128,104,45,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'center' }}>NB</th>
+                    <th style={{ background:'rgba(128,104,45,0.10)', borderBottom:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'right' }}>SALAIRE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {caissesStaff.map((s, idx) => {
+                    const monday = new Date(openArc.weekStart);
+                    const days = Array.from({ length: 7 }, (_, i) => addDaysReal(monday, i));
+                    return (
+                      <tr key={s.discord_id} style={{ borderBottom: idx < caissesStaff.length-1 ? `1px solid rgba(139,90,43,0.12)` : 'none' }}>
+                        <td style={{ padding:'10px 16px', borderRight:`1px solid ${T.border}`, background:T.card }}>
+                          <div style={{ fontFamily:DISPLAY, fontSize:15, color:T.text }}>{s.nom}</div>
+                          <div style={{ fontFamily:MONO, fontSize:10, color:T.dim, marginTop:2 }}>{fmt$(s.rate)} / caisse</div>
+                        </td>
+                        {days.map((d, i) => {
+                          const iso  = fmtISODate(d);
+                          const done = s.dates.includes(iso);
+                          return (
+                            <td key={i} style={{ padding:'10px 8px', textAlign:'center', borderRight: i<6 ? `1px solid rgba(139,90,43,0.10)` : 'none' }}
+                              title={done ? `Caisse faite le ${fmtDayShort(d)}` : `Non faite le ${fmtDayShort(d)}`}>
+                              {done ? <span style={{ color:'#49654D', fontSize:16 }}>✔</span> : <span style={{ color:T.gold, fontSize:16 }}>✕</span>}
+                            </td>
+                          );
+                        })}
+                        <td style={{ padding:'10px 14px', textAlign:'center', borderRight:`1px solid ${T.border}`, fontFamily:DISPLAY, fontSize:16, color:T.text }}>{s.count}</td>
+                        <td style={{ padding:'10px 14px', textAlign:'right', fontFamily:DISPLAY, fontSize:18, color:'#49654D' }}>{fmt$(s.salaire)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
