@@ -21,9 +21,17 @@ function categoriesToMap(categories: TarifCategory[]): Record<string, TarifCateg
 const STATUT_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#4A6048', 'EN ATTENTE': '#C8A850', 'ANNULÉ': '#8B4040' };
 const STATUT_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
 
+interface PrestationItem { id: string; qty: number; }
+function normPrestations(raw: unknown): PrestationItem[] {
+  if (!Array.isArray(raw) || raw.length === 0) return [{ id: 'Consultation', qty: 1 }];
+  return raw.map(p => typeof p === 'string'
+    ? { id: p, qty: 1 }
+    : { id: (p as PrestationItem).id, qty: Math.max(1, Math.min(99, Number((p as PrestationItem).qty) || 1)) });
+}
+
 interface Facture {
   id: string; medecin: string; patientNom: string; dateSeance: string;
-  prestations: string[]; montant: number;
+  prestations: (string | PrestationItem)[]; montant: number;
   payeur: Payeur; statut: StatutPaiement; notes: string; createdAt: string;
 }
 interface SemaineArchivee {
@@ -186,7 +194,7 @@ export default function ArchivesCaisseComptabilitePage() {
             <div style={{ fontFamily:MONO, fontSize:14, color:T.dim, padding:'30px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucune facture pour ce filtre</div>
           ) : factures.map(f => {
             const col  = STATUT_COL[f.statut];
-            const pres = f.prestations ?? ['Consultation'];
+            const pres = normPrestations(f.prestations);
             const pcol = PAYEUR_COL[f.payeur] ?? T.muted;
             return (
               <div key={f.id} style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`4px solid ${col}` }}>
@@ -202,11 +210,11 @@ export default function ArchivesCaisseComptabilitePage() {
                     <div style={{ fontFamily:DISPLAY, fontSize:20, color:T.text, marginBottom:6 }}>{f.patientNom}</div>
                     <div style={{ display:'flex', gap:6, flexWrap:'wrap', alignItems:'center' }}>
                       {pres.map((p,i) => {
-                        const cat = tarifs[p];
+                        const cat = tarifs[p.id];
                         const isAchat = cat?.type === 'achat';
                         return (
                           <span key={i} style={{ fontFamily:MONO, fontSize:13, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(200,168,80,0.10)', padding:'2px 8px', border: `1px solid ${isAchat ? 'rgba(200,132,90,0.25)' : 'rgba(200,168,80,0.20)'}` }}>
-                            {isAchat ? '🛒 ' : ''}{cat?.nom ?? p} <span style={{color:T.muted}}>{fmt$(cat?.prix ?? 0)}</span>
+                            {isAchat ? '🛒 ' : ''}{cat?.nom ?? p.id}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$((cat?.prix ?? 0) * p.qty)}</span>
                           </span>
                         );
                       })}

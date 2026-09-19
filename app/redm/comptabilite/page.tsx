@@ -24,9 +24,17 @@ function categoriesToMap(categories: TarifCategory[]): Record<string, TarifCateg
 }
 const PAYEURS: Payeur[] = ['Civil', 'Shérif', 'Écurie Little Creek', 'Écurie Valentine', 'Mairie West Elizabeth'];
 
+interface PrestationItem { id: string; qty: number; }
+function normPrestations(raw: unknown): PrestationItem[] {
+  if (!Array.isArray(raw) || raw.length === 0) return [{ id: 'Consultation', qty: 1 }];
+  return raw.map(p => typeof p === 'string'
+    ? { id: p, qty: 1 }
+    : { id: (p as PrestationItem).id, qty: Math.max(1, Math.min(99, Number((p as PrestationItem).qty) || 1)) });
+}
+
 interface Facture {
   id: string; medecin: string; patientNom: string; dateSeance: string;
-  prestations: string[]; montant: number;
+  prestations: (string | PrestationItem)[]; montant: number;
   payeur: Payeur; statut: StatutPaiement; notes: string; createdAt: string;
 }
 interface SemaineArchivee {
@@ -43,7 +51,7 @@ function save(d: Facture[])            { try { localStorage.setItem(LS,     JSON
 function saveArc(d: SemaineArchivee[]) { try { localStorage.setItem(LS_ARC, JSON.stringify(d)); } catch {} }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
-function calcMontant(p: string[], tarifs: Record<string, TarifCategory>) { return Math.round(p.reduce((s, x) => s + (tarifs[x]?.prix ?? 0), 0) * 100) / 100; }
+function calcMontant(p: PrestationItem[], tarifs: Record<string, TarifCategory>) { return Math.round(p.reduce((s, x) => s + (tarifs[x.id]?.prix ?? 0) * x.qty, 0) * 100) / 100; }
 
 function getMondayOf(date: Date): Date {
   const d = new Date(date); const day = d.getDay();
@@ -85,7 +93,7 @@ const STATUT_COL: Record<StatutPaiement, string>  = { 'PAYÉ': '#4A6048', 'EN AT
 const STATUT_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
-const EMPTY_FORM = { medecin: '', patientNom: '', dateSeance: '', prestations: ['Consultation'] as string[], payeur: 'Civil' as Payeur, statut: 'EN ATTENTE' as StatutPaiement, notes: '' };
+const EMPTY_FORM = { medecin: '', patientNom: '', dateSeance: '', prestations: [{ id: 'Consultation', qty: 1 }] as PrestationItem[], payeur: 'Civil' as Payeur, statut: 'EN ATTENTE' as StatutPaiement, notes: '' };
 
 export default function CaisseComptabilitePage() {
   const router = useRouter();
@@ -175,12 +183,16 @@ export default function CaisseComptabilitePage() {
   useEffect(() => { if (hydrated) saveArc(archives); }, [archives, hydrated]);
 
   function setPrestation(idx: number, val: string) {
-    setForm(f => { const p=[...f.prestations]; p[idx]=val; return {...f,prestations:p}; });
+    setForm(f => { const p=[...f.prestations]; p[idx]={...p[idx], id:val}; return {...f,prestations:p}; });
+  }
+  function setPrestationQty(idx: number, qty: number) {
+    const clamped = Math.max(1, Math.min(99, Math.round(qty) || 1));
+    setForm(f => { const p=[...f.prestations]; p[idx]={...p[idx], qty:clamped}; return {...f,prestations:p}; });
   }
   function addPrestation() {
     if (form.prestations.length >= 10) return;
     const first = categoriesSorted[0]?.id ?? 'Consultation';
-    setForm(f => ({ ...f, prestations: [...f.prestations, first] }));
+    setForm(f => ({ ...f, prestations: [...f.prestations, { id: first, qty: 1 }] }));
   }
   function removePrestation(idx: number) {
     setForm(f => ({ ...f, prestations: f.prestations.filter((_,i) => i!==idx) }));
@@ -188,7 +200,7 @@ export default function CaisseComptabilitePage() {
 
   function startEdit(f: Facture) {
     setEditing(f);
-    setForm({ medecin:f.medecin??defaultMedecin, patientNom:f.patientNom, dateSeance:f.dateSeance, prestations:f.prestations??['Consultation'], payeur:f.payeur??'Civil', statut:f.statut, notes:f.notes });
+    setForm({ medecin:f.medecin??defaultMedecin, patientNom:f.patientNom, dateSeance:f.dateSeance, prestations:normPrestations(f.prestations), payeur:f.payeur??'Civil', statut:f.statut, notes:f.notes });
   }
   function resetForm() { setForm({ ...EMPTY_FORM, medecin:defaultMedecin, dateSeance:rpDate() }); }
   function cancelEdit() { setEditing(null); resetForm(); }
@@ -211,7 +223,7 @@ export default function CaisseComptabilitePage() {
   /* ── Ligne de facture ── */
   function FactureLine({ f, isCurrent }: { f: Facture; isCurrent: boolean }) {
     const col  = STATUT_COL[f.statut];
-    const pres = f.prestations ?? ['Consultation'];
+    const pres = normPrestations(f.prestations);
     return (
       <div style={{ background: isCurrent ? '#221810' : T.card, border: `1px solid ${isCurrent ? 'rgba(200,168,80,0.22)' : T.border}`, borderLeft: `3px solid ${col}` }}>
         <div style={{ display:'flex', alignItems:'center', gap:12, padding:'11px 16px' }}>
@@ -223,11 +235,11 @@ export default function CaisseComptabilitePage() {
             <div style={{ fontFamily:DISPLAY, fontSize: 18, color:T.text, marginBottom:4 }}>{f.patientNom}</div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
               {pres.map((p,i) => {
-                const cat = tarifs[p];
+                const cat = tarifs[p.id];
                 const isAchat = cat?.type === 'achat';
                 return (
                   <span key={i} style={{ fontFamily:MONO, fontSize: 13, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(200,168,80,0.10)', padding:'1px 7px' }}>
-                    {isAchat ? '🛒 ' : ''}{cat?.nom ?? p} <span style={{color:T.muted}}>{fmt$(cat?.prix ?? 0)}</span>
+                    {isAchat ? '🛒 ' : ''}{cat?.nom ?? p.id}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$((cat?.prix ?? 0) * p.qty)}</span>
                   </span>
                 );
               })}
@@ -291,7 +303,7 @@ export default function CaisseComptabilitePage() {
                 <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
                   {form.prestations.map((p,idx) => (
                     <div key={idx} style={{ display:'flex', gap:5 }}>
-                      <select style={{...inp,flex:1,cursor:'pointer'}} value={p} onChange={e=>setPrestation(idx,e.target.value)}>
+                      <select style={{...inp,flex:1,cursor:'pointer'}} value={p.id} onChange={e=>setPrestation(idx,e.target.value)}>
                         <optgroup label="Prestations">
                           {categoriesVente.map(c=><option key={c.id} value={c.id}>{c.nom} — {fmt$(c.prix)}</option>)}
                         </optgroup>
@@ -301,6 +313,8 @@ export default function CaisseComptabilitePage() {
                           </optgroup>
                         )}
                       </select>
+                      <input type="number" min={1} max={99} value={p.qty} onChange={e=>setPrestationQty(idx,Number(e.target.value))}
+                        style={{...inp, width:56, flexShrink:0, textAlign:'center', padding:'9px 6px'}} title="Quantité" />
                       {form.prestations.length > 1 && <button onClick={()=>removePrestation(idx)} style={{ fontFamily:MONO, fontSize: 15, padding:'6px 9px', cursor:'pointer', background:'transparent', color:'#8B6060', border:`1px solid rgba(139,64,64,0.3)` }}>✕</button>}
                     </div>
                   ))}

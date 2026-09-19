@@ -22,9 +22,17 @@ function categoriesToMap(categories: TarifCategory[]): Record<string, TarifCateg
   return m;
 }
 
+interface PrestationItem { id: string; qty: number; }
+function normPrestations(raw: unknown): PrestationItem[] {
+  if (!Array.isArray(raw) || raw.length === 0) return [{ id: 'Consultation', qty: 1 }];
+  return raw.map(p => typeof p === 'string'
+    ? { id: p, qty: 1 }
+    : { id: (p as PrestationItem).id, qty: Math.max(1, Math.min(99, Number((p as PrestationItem).qty) || 1)) });
+}
+
 interface Facture {
   id: string; medecin: string; patientNom: string; dateSeance: string;
-  prestations: string[]; montant: number;
+  prestations: (string | PrestationItem)[]; montant: number;
   payeur: Payeur; statut: StatutPaiement; notes: string; createdAt: string;
 }
 interface SemaineArchivee {
@@ -83,11 +91,11 @@ function salairesByMedecin(factures: Facture[], tarifs: Record<string, TarifCate
     if (!map[key]) map[key] = { medecin: key, actes: 0, ca: 0, salaire: 0 };
     const s = map[key];
     s.actes++;
-    (f.prestations ?? ['Consultation']).forEach(p => {
-      const t = tarifs[p];
+    normPrestations(f.prestations).forEach(p => {
+      const t = tarifs[p.id];
       if (!t || t.type !== 'vente') return;
-      s.ca      += t.prix;
-      s.salaire += t.prix * t.pctMedecin / 100;
+      s.ca      += t.prix * p.qty;
+      s.salaire += t.prix * p.qty * t.pctMedecin / 100;
     });
   });
   return Object.values(map).sort((a,b) => b.ca - a.ca);
@@ -98,10 +106,10 @@ function tresorerie(factures: Facture[], tarifs: Record<string, TarifCategory>):
   let ventes = 0, achats = 0, solde = 0;
   factures.forEach(f => {
     if (f.statut === 'ANNULÉ') return;
-    (f.prestations ?? []).forEach(p => {
-      const t = tarifs[p]; if (!t) return;
-      if (t.type === 'achat') { achats += t.prix; solde -= t.prix; }
-      else { ventes += t.prix; solde += t.prix * t.pctDispensaire / 100; }
+    normPrestations(f.prestations).forEach(p => {
+      const t = tarifs[p.id]; if (!t) return;
+      if (t.type === 'achat') { achats += t.prix * p.qty; solde -= t.prix * p.qty; }
+      else { ventes += t.prix * p.qty; solde += t.prix * p.qty * t.pctDispensaire / 100; }
     });
   });
   return { ventes, achats, solde };
@@ -191,7 +199,7 @@ export default function DirectionComptabilitePage() {
   /* ── Ligne de registre (lecture seule) ── */
   function RegistreLine({ f }: { f: Facture }) {
     const col  = STATUT_COL[f.statut];
-    const pres = f.prestations ?? ['Consultation'];
+    const pres = normPrestations(f.prestations);
     return (
       <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`3px solid ${col}` }}>
         <div style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 16px' }}>
@@ -206,11 +214,11 @@ export default function DirectionComptabilitePage() {
             </div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
               {pres.map((p,i) => {
-                const cat = tarifs[p];
+                const cat = tarifs[p.id];
                 const isAchat = cat?.type === 'achat';
                 return (
                   <span key={i} style={{ fontFamily:MONO, fontSize: 12, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(200,168,80,0.10)', padding:'1px 7px' }}>
-                    {isAchat ? '🛒 ' : ''}{cat?.nom ?? p}
+                    {isAchat ? '🛒 ' : ''}{cat?.nom ?? p.id}{p.qty > 1 ? ` ×${p.qty}` : ''}
                   </span>
                 );
               })}
