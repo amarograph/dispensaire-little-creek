@@ -6,10 +6,10 @@ import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
-const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
+const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
 const SEUIL_ALERTE = 5;
 
@@ -65,7 +65,7 @@ function uid() {
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 14, background: 'rgba(0,0,0,0.25)', border: `1px solid ${T.border}`, color: T.text, padding: '8px 12px', outline: 'none', boxSizing: 'border-box' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
 const btn: React.CSSProperties = { fontFamily: MONO, fontSize: 12, letterSpacing: '0.10em', padding: '8px 14px', cursor: 'pointer', border: `1px solid ${T.border}`, background: 'rgba(0,0,0,0.25)', color: T.muted };
-const btnGold: React.CSSProperties = { ...btn, border: `1px solid ${T.gold}`, color: T.gold, background: 'rgba(128,104,45,0.08)' };
+const btnGold: React.CSSProperties = { ...btn, border: `1px solid ${T.gold}`, color: T.gold, background: 'rgba(209,183,124,0.08)' };
 const btnRed: React.CSSProperties = { ...btn, border: '1px solid rgba(180,70,70,0.5)', color: '#C87060', background: 'rgba(180,70,70,0.08)' };
 const stepBtn: React.CSSProperties = { fontFamily: MONO, fontSize: 14, width: 28, height: 28, cursor: 'pointer', border: `1px solid ${T.border}`, background: 'rgba(0,0,0,0.25)', color: T.muted, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, padding: 0 };
 
@@ -161,7 +161,7 @@ export default function StockagePage() {
       {/* Notifications stock faible */}
       <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 340 }}>
         {toasts.map(t => (
-          <div key={t.id} style={{ background: T.card, border: '1px solid rgba(168,32,32,0.5)', borderLeft: '4px solid #254B50', padding: '14px 18px', boxShadow: '0 6px 24px rgba(74,62,32,0.14)' }}>
+          <div key={t.id} style={{ background: T.card, border: '1px solid rgba(168,32,32,0.5)', borderLeft: '4px solid #EADCB9', padding: '14px 18px', boxShadow: '0 6px 24px rgba(74,62,32,0.14)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
               <span style={{ fontFamily: MONO, fontSize: 11, color: '#C87060', letterSpacing: '0.16em' }}>⚠ STOCK FAIBLE</span>
               <button onClick={() => setToasts(prev => prev.filter(x => x.id !== t.id))} style={{ background: 'none', border: 'none', color: T.muted, cursor: 'pointer', fontFamily: MONO, fontSize: 14, padding: 0 }}>✕</button>
@@ -195,7 +195,7 @@ export default function StockagePage() {
         {categories.map(cat => (
           <div key={cat.id} style={{ background: T.card, border: `1px solid ${T.border}`, padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 40, height: 40, background: 'rgba(128,104,45,0.08)', border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 19, flexShrink: 0 }}>{cat.icon}</div>
+              <div style={{ width: 40, height: 40, background: 'rgba(209,183,124,0.08)', border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 19, flexShrink: 0 }}>{cat.icon}</div>
               {renamingCat === cat.id ? (
                 <input
                   style={{ ...inp, flex: 1, fontSize: 17, fontFamily: DISPLAY }}

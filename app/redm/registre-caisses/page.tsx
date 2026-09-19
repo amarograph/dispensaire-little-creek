@@ -4,14 +4,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 
 const T = {
-  bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D',
-  text: '#183746', muted: '#6A6D50', dim: '#646850',
-  green: '#5A9858', greenLight: '#7ABE78', red: '#963F36',
+  bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C',
+  text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5',
+  green: '#5A9858', greenLight: '#7ABE78', red: '#DF9A88',
 };
 
 const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
@@ -155,7 +155,7 @@ export default function RegistreCaissesPage() {
               style={{
                 fontFamily: DISPLAY, fontSize: 24, letterSpacing: '0.04em',
                 padding: '18px 48px', cursor: dejaFaitAujourdhui ? 'default' : 'pointer',
-                background: dejaFaitAujourdhui ? 'rgba(90,152,88,0.15)' : 'rgba(128,104,45,0.18)',
+                background: dejaFaitAujourdhui ? 'rgba(90,152,88,0.15)' : 'rgba(209,183,124,0.18)',
                 border: `2px solid ${dejaFaitAujourdhui ? T.green : T.gold}`,
                 color: dejaFaitAujourdhui ? T.green : T.gold,
                 opacity: marking ? 0.6 : 1,
@@ -180,7 +180,7 @@ export default function RegistreCaissesPage() {
             <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.gold, minWidth: 200, textAlign: 'center' }}>{fmtWeekRange(monday)}</div>
             <button onClick={nextWeek} style={{ fontFamily: MONO, fontSize: 13, background: T.card, border: `1px solid ${T.border}`, color: T.gold, padding: '8px 14px', cursor: 'pointer' }}>Semaine suivante ▶</button>
             {!isThisWeek && (
-              <button onClick={thisWeek} style={{ fontFamily: MONO, fontSize: 11, background: 'rgba(128,104,45,0.08)', border: `1px solid rgba(128,104,45,0.35)`, color: T.gold, padding: '8px 14px', cursor: 'pointer', letterSpacing: '0.08em' }}>
+              <button onClick={thisWeek} style={{ fontFamily: MONO, fontSize: 11, background: 'rgba(209,183,124,0.08)', border: `1px solid rgba(209,183,124,0.35)`, color: T.gold, padding: '8px 14px', cursor: 'pointer', letterSpacing: '0.08em' }}>
                 AUJOURD'HUI
               </button>
             )}
@@ -219,7 +219,7 @@ export default function RegistreCaissesPage() {
               <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 4, letterSpacing: '0.1em' }}>CAISSES CETTE SEMAINE</div>
             </div>
             <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '18px 20px', textAlign: 'center' }}>
-              <div style={{ fontFamily: DISPLAY, fontSize: 30, color: '#49654D' }}>{fmt$(salaire)}</div>
+              <div style={{ fontFamily: DISPLAY, fontSize: 30, color: '#A8B991' }}>{fmt$(salaire)}</div>
               <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 4, letterSpacing: '0.1em' }}>SALAIRE DE LA SEMAINE</div>
             </div>
           </div>

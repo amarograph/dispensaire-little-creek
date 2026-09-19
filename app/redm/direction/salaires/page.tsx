@@ -3,18 +3,18 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Burnic','Georgia',serif";
+const DISPLAY = "'Central Station','Georgia',serif";
 const BODY    = "'Cormorant Garamond','Georgia',serif";
 const MONO    = "'Libre Baskerville','Courier New',monospace";
 
 const T = {
-  bg: '#EDE0C2', card: '#F6ECD6', gold: '#80682D', text: '#183746',
-  muted: '#6A6D50', border: 'rgba(142,122,74,0.35)', dim: '#646850',
+  bg: '#102B3B', card: '#183746', gold: '#D1B77C', text: '#EADCB9',
+  muted: '#C8BEA5', border: 'rgba(180,160,113,0.35)', dim: '#C8BEA5',
 };
 
 const GRADES = [
-  { id: 'Directeur',    icon: '👑', color: '#80682D' },
-  { id: 'Co-Directeur', icon: '⭐', color: '#80682D' },
+  { id: 'Directeur',    icon: '👑', color: '#D1B77C' },
+  { id: 'Co-Directeur', icon: '⭐', color: '#D1B77C' },
   { id: 'Médecin Chef', icon: '🩺', color: '#A890C0' },
   { id: 'Médecin',      icon: '🩺', color: '#9080B8' },
   { id: 'Apprenti',     icon: '📚', color: '#887060' },
@@ -81,7 +81,7 @@ export default function SalairesPage() {
   }
 
   const inp: React.CSSProperties = {
-    background: 'rgba(128,104,45,0.06)', border: `1px solid ${T.border}`,
+    background: 'rgba(209,183,124,0.06)', border: `1px solid ${T.border}`,
     color: T.text, fontFamily: MONO, fontSize: 16,
     padding: '10px 14px', borderRadius: 6, width: '100%', boxSizing: 'border-box',
     outline: 'none', letterSpacing: '0.05em',
@@ -91,7 +91,7 @@ export default function SalairesPage() {
     <div style={{ fontFamily: BODY, maxWidth: 680, margin: '0 auto', padding: '32px 0 60px' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
-        .sal-inp:focus { border-color: rgba(128,104,45,0.6) !important; background: rgba(128,104,45,0.10) !important; }
+        .sal-inp:focus { border-color: rgba(209,183,124,0.6) !important; background: rgba(209,183,124,0.10) !important; }
       `}</style>
 
       {/* Header */}
@@ -189,7 +189,7 @@ export default function SalairesPage() {
                 disabled={saving}
                 style={{
                   fontFamily: MONO, fontSize: 13, letterSpacing: '0.14em',
-                  background: saving ? 'rgba(128,104,45,0.12)' : 'rgba(128,104,45,0.18)',
+                  background: saving ? 'rgba(209,183,124,0.12)' : 'rgba(209,183,124,0.18)',
                   border: `1px solid ${T.gold}`,
                   color: T.gold, padding: '12px 32px', cursor: saving ? 'not-allowed' : 'pointer',
                   borderRadius: 6, transition: 'all 0.2s',

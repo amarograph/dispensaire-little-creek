@@ -48,7 +48,7 @@ function getStyle(t: Toast) {
   }
   if (t.rdv?.urgence)
     return { bg: 'linear-gradient(135deg,#1A0606,#1F0A08)', bdr: 'rgba(200,60,60,.65)',  acc: '#C84040', icon: '🔴', label: 'RAPPEL URGENT — DANS 2H' };
-  return   { bg: 'linear-gradient(135deg,#EBDDC0,#1F1208)', bdr: 'rgba(128,104,45,.55)', acc: '#80682D', icon: '🔔', label: 'RAPPEL — RENDEZ-VOUS DANS 4H' };
+  return   { bg: 'linear-gradient(135deg,#102B3B,#1F1208)', bdr: 'rgba(209,183,124,.55)', acc: '#D1B77C', icon: '🔔', label: 'RAPPEL — RENDEZ-VOUS DANS 4H' };
 }
 
 export default function Notifier() {
@@ -198,7 +198,7 @@ export default function Notifier() {
                 >✕</button>
               </div>
 
-              <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#183746', lineHeight: 1.55 }}>
+              <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#EADCB9', lineHeight: 1.55 }}>
 
                 {t.kind === 'nouveau-rdv' && t.rdvData && (
                   <>

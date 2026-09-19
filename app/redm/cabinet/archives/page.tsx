@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 
 const MODULES = [
@@ -31,13 +31,13 @@ export default function CabinetArchivesHubPage() {
       <div style={{ marginBottom: 36 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18 }}>
           <button onClick={() => router.push('/redm/cabinet')}
-            style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: '1px solid rgba(139,90,43,0.35)', color: '#6A6D50', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+            style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: '1px solid rgba(139,90,43,0.35)', color: '#C8BEA5', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
             ← CABINET
           </button>
-          <span style={{ fontFamily: MONO, fontSize: 14, color: '#80682D', letterSpacing: '0.18em' }}>CABINET THÉRAPEUTIQUE · ARCHIVES</span>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: '#D1B77C', letterSpacing: '0.18em' }}>CABINET THÉRAPEUTIQUE · ARCHIVES</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#80682D', margin: 0 }}>🗄 Archives</h1>
-        <p style={{ fontFamily: MONO, fontSize: 14, color: '#646850', letterSpacing: '0.12em', marginTop: 8 }}>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#D1B77C', margin: 0 }}>🗄 Archives</h1>
+        <p style={{ fontFamily: MONO, fontSize: 14, color: '#C8BEA5', letterSpacing: '0.12em', marginTop: 8 }}>
           MÉMOIRE DU CABINET · 1890 — SÉLECTIONNEZ UNE SECTION
         </p>
       </div>
@@ -52,7 +52,7 @@ export default function CabinetArchivesHubPage() {
               onMouseEnter={() => setHover(m.id)}
               onMouseLeave={() => setHover(null)}
               style={{
-                background:  h ? '#241B0E' : '#F7EEDB',
+                background:  h ? '#241B0E' : '#183746',
                 border:      `2px solid ${h ? m.color + '90' : 'rgba(139,90,43,0.25)'}`,
                 borderLeft:  `4px solid ${h ? m.color : m.color + '60'}`,
                 padding:     '30px 26px',
@@ -63,11 +63,11 @@ export default function CabinetArchivesHubPage() {
               }}>
               <div style={{ fontSize: 45, marginBottom: 16 }}>{m.icon}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-                <span style={{ fontFamily: DISPLAY, fontSize: 26, color: '#183746' }}>{m.label}</span>
+                <span style={{ fontFamily: DISPLAY, fontSize: 26, color: '#EADCB9' }}>{m.label}</span>
                 <span style={{ fontFamily: MONO, fontSize: 13, padding: '3px 8px', background: m.color + '22', color: m.color, border: `1px solid ${m.color + '55'}`, letterSpacing: '0.1em', flexShrink: 0 }}>{m.badge}</span>
               </div>
               <div style={{ fontFamily: MONO, fontSize: 13, color: m.color, letterSpacing: '0.12em', marginBottom: 10 }}>{m.sub}</div>
-              <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 17, color: '#646850', lineHeight: 1.55 }}>{m.desc}</div>
+              <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 17, color: '#C8BEA5', lineHeight: 1.55 }}>{m.desc}</div>
               <div style={{ fontFamily: MONO, fontSize: 15, color: h ? m.color : '#3A2A1A', marginTop: 16, letterSpacing: '0.1em', transition: 'color 0.15s' }}>→ ACCÉDER</div>
             </div>
           );

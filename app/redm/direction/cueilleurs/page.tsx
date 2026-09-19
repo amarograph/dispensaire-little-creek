@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Burnic','Georgia',serif";
+const DISPLAY = "'Central Station','Georgia',serif";
 const BODY    = "'Cormorant Garamond','Georgia',serif";
 const MONO    = "'Libre Baskerville','Courier New',monospace";
 
 const T = {
-  bg: '#EDE0C2', card: '#F4EAD8', gold: '#80682D', text: '#183746',
-  muted: '#6A6D50', border: 'rgba(142,122,74,0.35)', dim: '#646850',
+  bg: '#102B3B', card: '#183746', gold: '#D1B77C', text: '#EADCB9',
+  muted: '#C8BEA5', border: 'rgba(180,160,113,0.35)', dim: '#C8BEA5',
   green: '#6A9860', red: '#C84040',
 };
 
@@ -219,7 +219,7 @@ export default function CueilleursPage() {
 
         <button onClick={() => setShowForm(p => !p)} style={{
           fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em',
-          background: showForm ? 'rgba(128,104,45,0.15)' : 'transparent',
+          background: showForm ? 'rgba(209,183,124,0.15)' : 'transparent',
           border: `1px solid ${T.gold}`, color: T.gold,
           padding: '9px 22px', cursor: 'pointer',
         }}>
@@ -277,7 +277,7 @@ export default function CueilleursPage() {
                     <div key={a.id} style={{
                       display: 'grid', gridTemplateColumns: '110px 1fr 100px 110px 100px',
                       padding: '9px 20px', alignItems: 'center',
-                      borderBottom: `1px solid rgba(142,122,74,0.10)`,
+                      borderBottom: `1px solid rgba(180,160,113,0.10)`,
                       background: ri % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)',
                     }}>
                       <span style={{ fontFamily: MONO, fontSize: 11, color: ri === 0 ? T.muted : 'transparent' }}>
@@ -317,7 +317,7 @@ export default function CueilleursPage() {
 
                   {/* Séparateur entre jours */}
                   {groupe.rows.length === 1 && gi < byDate.length - 1 && (
-                    <div style={{ borderBottom: `1px solid rgba(142,122,74,0.18)` }} />
+                    <div style={{ borderBottom: `1px solid rgba(180,160,113,0.18)` }} />
                   )}
                 </div>
               ))}
@@ -372,7 +372,7 @@ export default function CueilleursPage() {
                 style={{
                   width: '100%', boxSizing: 'border-box',
                   fontFamily: BODY, fontSize: 15, color: T.text,
-                  background: '#F5EBD5', border: `1px solid rgba(128,104,45,0.3)`,
+                  background: '#183746', border: `1px solid rgba(209,183,124,0.3)`,
                   padding: '10px 14px', outline: 'none',
                 }}
               />
@@ -388,7 +388,7 @@ export default function CueilleursPage() {
                 style={{
                   width: '100%', boxSizing: 'border-box',
                   fontFamily: BODY, fontSize: 15, color: T.text,
-                  background: '#F5EBD5', border: `1px solid rgba(128,104,45,0.3)`,
+                  background: '#183746', border: `1px solid rgba(209,183,124,0.3)`,
                   padding: '10px 14px', outline: 'none',
                 }}
               />
@@ -409,7 +409,7 @@ export default function CueilleursPage() {
             disabled={saving || !form.nom_rp.trim()}
             style={{
               fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em',
-              background: 'rgba(128,104,45,0.18)', border: `1px solid ${T.gold}`,
+              background: 'rgba(209,183,124,0.18)', border: `1px solid ${T.gold}`,
               color: T.gold, padding: '10px 28px', cursor: saving ? 'default' : 'pointer',
               opacity: !form.nom_rp.trim() ? 0.4 : 1,
             }}
@@ -462,7 +462,7 @@ export default function CueilleursPage() {
                   onClick={() => router.push(`/redm/direction/cueilleurs/${c.id}`)}
                   style={{
                     fontFamily: MONO, fontSize: 11, letterSpacing: '0.08em',
-                    background: 'rgba(128,104,45,0.12)', border: `1px solid ${T.gold}50`,
+                    background: 'rgba(209,183,124,0.12)', border: `1px solid ${T.gold}50`,
                     color: T.gold, padding: '7px 16px', cursor: 'pointer', flex: 1,
                   }}
                 >

@@ -1,12 +1,12 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
-const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
+const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 const COL = '#6B7ABB';
 
 /* ── LocalStorage ── */
@@ -57,7 +57,7 @@ function getVerdict(score: number): Verdict {
   if (score >= 41) return 'À SURVEILLER';
   return 'INAPTE';
 }
-const VERDICT_COL: Record<Verdict, string> = { 'APTE': '#4A8048', 'À SURVEILLER': '#80682D', 'INAPTE': '#963F36' };
+const VERDICT_COL: Record<Verdict, string> = { 'APTE': '#4A8048', 'À SURVEILLER': '#D1B77C', 'INAPTE': '#DF9A88' };
 const VERDICT_DESC: Record<Verdict, string> = {
   'APTE':         'Présente toutes les dispositions requises pour l\'exercice de ses fonctions, sans réserve notable.',
   'À SURVEILLER': 'Présente certaines fragilités d\'ordre nerveux, émotionnel ou moral nécessitant une observation régulière et un suivi thérapeutique recommandé.',
@@ -98,7 +98,7 @@ const SCALES: { section: string; color: string; items: Scale[] }[] = [
     { question: 'Préférez-vous travailler :', left: 'Seul par méfiance', right: 'En équipe' },
     { question: 'Craignez-vous parfois de devenir dur, insensible ou cruel avec le temps ?', left: 'Souvent', right: 'Non' },
   ]},
-  { section: 'JUGEMENT FINAL DE L\'EXAMINATEUR', color: '#80682D', items: [
+  { section: 'JUGEMENT FINAL DE L\'EXAMINATEUR', color: '#D1B77C', items: [
     { question: 'État de la raison', left: 'Préoccupant', right: 'Sain' },
     { question: 'Solidité morale', left: 'Déclinante', right: 'Forte' },
     { question: 'Aptitude à exercer l\'autorité', left: 'Insuffisante', right: 'Pleine' },
@@ -114,7 +114,7 @@ function ScaleInput({ id, scale, value, onChange }: { id: string; scale: Scale; 
     <div style={{ marginBottom: 22, paddingBottom: 22, borderBottom: `1px solid ${T.border}` }}>
       <div style={{ fontFamily: BODY, fontSize: 17, color: T.text, marginBottom: 14, lineHeight: 1.5 }}>{scale.question}</div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-        <span style={{ fontFamily: MONO, fontSize: 13, color: '#963F36', minWidth: 150, textAlign: 'right', lineHeight: 1.4 }}>{scale.left}</span>
+        <span style={{ fontFamily: MONO, fontSize: 13, color: '#DF9A88', minWidth: 150, textAlign: 'right', lineHeight: 1.4 }}>{scale.left}</span>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {[1, 2, 3, 4, 5].map(v => (
             <button key={v} type="button" onClick={() => onChange(v)}
@@ -276,10 +276,10 @@ export default function ExamenPsychiquePage() {
           <button onClick={() => setView('letter')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: `${COL}22`, color: COL, border: `1px solid ${COL}55`, flex: 1 }}>
             📄 VOIR LE CERTIFICAT
           </button>
-          <button onClick={() => setView('archives')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'rgba(128,104,45,0.12)', color: T.gold, border: `1px solid rgba(128,104,45,0.4)`, flex: 1 }}>
+          <button onClick={() => setView('archives')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'rgba(209,183,124,0.12)', color: T.gold, border: `1px solid rgba(209,183,124,0.4)`, flex: 1 }}>
             📁 ARCHIVES
           </button>
-          <button onClick={reset} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'rgba(74,96,72,0.2)', color: '#4C6A4D', border: '1px solid rgba(74,96,72,0.4)', flex: 1 }}>
+          <button onClick={reset} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'rgba(74,96,72,0.2)', color: '#A8B991', border: '1px solid rgba(74,96,72,0.4)', flex: 1 }}>
             ✚ NOUVEL EXAMEN
           </button>
           <button onClick={() => router.push('/redm/cabinet/patients')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, flex: 1 }}>
@@ -296,7 +296,7 @@ export default function ExamenPsychiquePage() {
     if (!el) return;
     try {
       const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(el, { backgroundColor: '#FDFAF4', scale: 2, useCORS: true, allowTaint: true, logging: false });
+      const canvas = await html2canvas(el, { backgroundColor: '#183746', scale: 2, useCORS: true, allowTaint: true, logging: false });
       const link = document.createElement('a');
       link.download = `examen-${current?.prenom ?? ''}-${current?.nom ?? ''}.png`;
       link.href = canvas.toDataURL('image/png');
@@ -330,7 +330,7 @@ export default function ExamenPsychiquePage() {
         </div>
 
         {/* Certificat */}
-        <div ref={printRef} className="print-area" style={{ background: '#FDFAF4', border: '2px solid #6A6D50', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#EADCB9', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
+        <div ref={printRef} className="print-area" style={{ background: '#183746', border: '2px solid #C8BEA5', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#102B3B', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
 
           {/* En-tête */}
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
@@ -377,7 +377,7 @@ export default function ExamenPsychiquePage() {
 
             {(['APTE', 'À SURVEILLER', 'INAPTE'] as Verdict[]).map(v => (
               <div key={v} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 12 }}>
-                <div style={{ width: 18, height: 18, border: '2px solid #EADCB9', background: current.verdict === v ? '#EADCB9' : 'transparent', flexShrink: 0, marginTop: 4 }} />
+                <div style={{ width: 18, height: 18, border: '2px solid #102B3B', background: current.verdict === v ? '#102B3B' : 'transparent', flexShrink: 0, marginTop: 4 }} />
                 <div style={{ lineHeight: 1.7 }}>
                   <strong>{v === 'INAPTE' ? 'POTENTIELLEMENT DANGEREUX / INAPTE' : v} :</strong>{' '}
                   <span style={{ fontStyle: 'italic', fontSize: 13 }}>{VERDICT_DESC[v]}</span>
@@ -468,7 +468,7 @@ export default function ExamenPsychiquePage() {
             ← RETOUR
           </button>
           <span style={{ fontFamily: MONO, fontSize: 13, color: COL, letterSpacing: '0.16em' }}>CABINET · DOCUMENTATION · EXAMEN PSYCHIQUE</span>
-          <button onClick={() => setView('archives')} style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 13, background: 'rgba(128,104,45,0.10)', border: `1px solid rgba(128,104,45,0.3)`, color: T.gold, padding: '8px 16px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+          <button onClick={() => setView('archives')} style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 13, background: 'rgba(209,183,124,0.10)', border: `1px solid rgba(209,183,124,0.3)`, color: T.gold, padding: '8px 16px', cursor: 'pointer', letterSpacing: '0.1em' }}>
             📁 ARCHIVES ({archives.length})
           </button>
         </div>
@@ -557,7 +557,7 @@ export default function ExamenPsychiquePage() {
 
       {/* Bouton soumettre */}
       {!canSubmit && answered < TOTAL_QUESTIONS && answered > 0 && (
-        <div style={{ fontFamily: MONO, fontSize: 13, color: '#80682D', marginBottom: 12, textAlign: 'center' }}>
+        <div style={{ fontFamily: MONO, fontSize: 13, color: '#D1B77C', marginBottom: 12, textAlign: 'center' }}>
           {TOTAL_QUESTIONS - answered} question{TOTAL_QUESTIONS - answered > 1 ? 's' : ''} restante{TOTAL_QUESTIONS - answered > 1 ? 's' : ''}
         </div>
       )}

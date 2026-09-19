@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 @font-face {
-  font-family: 'Burnic';
-  src: url('/fonts/Burnic-Regular.woff2') format('woff2');
+  font-family: 'Central Station';
+  src: url('/fonts/CentralStationStd-Bold.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -85,10 +85,10 @@ body { background-color:var(--lc-paper); color:var(--lc-ink); }
 * { scrollbar-color:#a89365 #ede0c2; }
 *::-webkit-scrollbar-track { background:#ede0c2; }
 *::-webkit-scrollbar-thumb { background:#a89365; }
-.redm-root { color-scheme:light; }
-.redm-root ::selection { background:#c6c49a; color:#183746; }
-.redm-root input,.redm-root select,.redm-root textarea { color-scheme:light; }
-.redm-root input::placeholder,.redm-root textarea::placeholder { color:#6b6e54; }
+.redm-root { color-scheme:dark; }
+.redm-root ::selection { background:#eadcb9; color:#102b3b; }
+.redm-root input,.redm-root select,.redm-root textarea { color-scheme:dark; }
+.redm-root input::placeholder,.redm-root textarea::placeholder { color:#c8bea5; }
 .redm-root :focus-visible { outline-color:#79638c; }
 .bg-gray-950 { background-color:#ede0c2; }
 .bg-gray-900,.bg-gray-900\/80 { background-color:#f7eedb; }
@@ -97,3 +97,11 @@ body { background-color:var(--lc-paper); color:var(--lc-ink); }
 .text-gray-400,.text-gray-500,.text-gray-600 { color:#62694f; }
 .text-gray-300,.text-gray-200 { color:#344c4c; }
 .bg-gray-900 .text-white,.bg-gray-950 .text-white { color:#183746; }
+
+/* Navy ink and parchment lettering throughout the dispensary. */
+.redm-root .bg-gray-950 { background-color:#102b3b; }
+.redm-root .bg-gray-900,.redm-root .bg-gray-900\/80 { background-color:#183746; }
+.redm-root .bg-gray-800,.redm-root .bg-gray-800\/50 { background-color:#214452; }
+.redm-root .text-gray-400,.redm-root .text-gray-500,.redm-root .text-gray-600 { color:#c8bea5; }
+.redm-root .text-gray-300,.redm-root .text-gray-200,.redm-root .text-white { color:#eadcb9; }
+.redm-topbar { color-scheme:light; }

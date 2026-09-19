@@ -3,14 +3,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', Georgia, serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 
 const T = {
-  bg: '#EDE0C2', card: '#F7EEDB', paper: '#F7EEDB',
-  border: 'rgba(139,90,43,0.30)', gold: '#80682D',
-  text: '#183746', muted: '#6A6D50', dim: '#646850', sepia: '#D4B896',
+  bg: '#102B3B', card: '#183746', paper: '#183746',
+  border: 'rgba(139,90,43,0.30)', gold: '#D1B77C',
+  text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5', sepia: '#D4B896',
   green: '#5A9858', greenLight: '#7ABE78',
 };
 
@@ -134,13 +134,13 @@ export default function PresencesPage() {
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
         .pres-check { transition: background 0.12s, border-color 0.12s; }
         .pres-check:hover { border-color: rgba(90,152,88,0.80) !important; background: rgba(90,152,88,0.10) !important; cursor: pointer; }
-        .pres-row:hover td { background: rgba(128,104,45,0.03); }
+        .pres-row:hover td { background: rgba(209,183,124,0.03); }
       `}</style>
 
       {/* Navigation */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
         <button onClick={() => router.push('/redm/direction')}
-          style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid rgba(128,104,45,0.35)`, color: '#A08850', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+          style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid rgba(209,183,124,0.35)`, color: '#A08850', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
           ← RETOUR
         </button>
         <span style={{ fontFamily: MONO, fontSize: 13, color: T.gold, letterSpacing: '0.18em' }}>DIRECTION · PRÉSENCES</span>
@@ -169,7 +169,7 @@ export default function PresencesPage() {
         </button>
         {!isThisWeek && (
           <button onClick={thisWeek}
-            style={{ fontFamily: MONO, fontSize: 12, background: 'rgba(128,104,45,0.08)', border: `1px solid rgba(128,104,45,0.35)`, color: T.gold, padding: '9px 16px', cursor: 'pointer', letterSpacing: '0.08em' }}>
+            style={{ fontFamily: MONO, fontSize: 12, background: 'rgba(209,183,124,0.08)', border: `1px solid rgba(209,183,124,0.35)`, color: T.gold, padding: '9px 16px', cursor: 'pointer', letterSpacing: '0.08em' }}>
             AUJOURD'HUI
           </button>
         )}
@@ -191,7 +191,7 @@ export default function PresencesPage() {
             <thead>
               <tr>
                 <th style={{
-                  background: 'rgba(128,104,45,0.10)', borderBottom: `1px solid ${T.border}`,
+                  background: 'rgba(209,183,124,0.10)', borderBottom: `1px solid ${T.border}`,
                   borderRight: `1px solid ${T.border}`, padding: '14px 20px',
                   fontFamily: MONO, fontSize: 11, color: T.gold, letterSpacing: '0.18em',
                   textAlign: 'left', minWidth: 200, position: 'sticky', left: 0, zIndex: 2,
@@ -203,7 +203,7 @@ export default function PresencesPage() {
                   const isToday = iso === todayISO;
                   return (
                     <th key={iso} style={{
-                      background: isToday ? 'rgba(90,152,88,0.10)' : 'rgba(128,104,45,0.06)',
+                      background: isToday ? 'rgba(90,152,88,0.10)' : 'rgba(209,183,124,0.06)',
                       borderBottom: `1px solid ${T.border}`,
                       borderRight: i < 6 ? `1px solid ${T.border}` : 'none',
                       padding: '10px 14px', fontFamily: MONO, fontSize: 11,

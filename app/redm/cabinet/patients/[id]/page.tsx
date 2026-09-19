@@ -1,12 +1,12 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
-const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
+const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
 /* ── Types ── */
 type Statut    = 'EN COURS' | 'TERMINÉE' | 'ABANDONNÉE';
@@ -71,9 +71,9 @@ function rpDisplay(date: string): string {
 }
 
 /* ── Constantes ── */
-const STATUT_COL: Record<Statut, string> = { 'EN COURS': '#80682D', 'TERMINÉE': '#49654D', 'ABANDONNÉE': '#8B4040' };
+const STATUT_COL: Record<Statut, string> = { 'EN COURS': '#D1B77C', 'TERMINÉE': '#A8B991', 'ABANDONNÉE': '#8B4040' };
 const EQ_INFO: Record<string, { label: string; desc: string; col: string }> = {
-  I:   { label: 'Degré I — Léger',   desc: "Troubles passagers, n'altérant point durablement les facultés du sujet", col: '#49654D' },
+  I:   { label: 'Degré I — Léger',   desc: "Troubles passagers, n'altérant point durablement les facultés du sujet", col: '#A8B991' },
   II:  { label: 'Degré II — Modéré', desc: 'Atteinte notable nécessitant observation régulière et encadrement',      col: '#786030' },
   III: { label: 'Degré III — Grave', desc: 'Altération profonde des fonctions morales, nécessitant surveillance étroite', col: '#8B4040' },
 };
@@ -84,8 +84,8 @@ const DOC_ICONS: Record<DocType, string> = {
   "Note d'évolution": '📝', 'Attestation': '📜',
 };
 const DOC_COL: Record<DocType, string> = {
-  'Synthèse de consultation': '#80682D', 'Prescription médicale': '#49654D',
-  'Rapport médical': '#536784', 'Lettre de correspondance': '#786030',
+  'Synthèse de consultation': '#D1B77C', 'Prescription médicale': '#A8B991',
+  'Rapport médical': '#AAB9C6', 'Lettre de correspondance': '#786030',
   "Note d'évolution": '#6B4A78', 'Attestation': '#8B4040',
 };
 
@@ -257,7 +257,7 @@ ou immédiatement en cas de :
 };
 
 /* ── Constantes compta ── */
-const PAI_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#49654D', 'EN ATTENTE': '#80682D', 'ANNULÉ': '#8B4040' };
+const PAI_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#A8B991', 'EN ATTENTE': '#D1B77C', 'ANNULÉ': '#8B4040' };
 const PAI_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
 const TARIFS: Record<TypePrestation, number>   = { 'Consultation': 1, 'Traitement': 0.4 };
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
@@ -503,7 +503,7 @@ export default function PatientDetailPage() {
     if (!el || !certDoc) return;
     try {
       const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(el, { backgroundColor: '#FDFAF4', scale: 2, useCORS: true, allowTaint: true, logging: false });
+      const canvas = await html2canvas(el, { backgroundColor: '#183746', scale: 2, useCORS: true, allowTaint: true, logging: false });
       const link = document.createElement('a');
       link.download = `${certDoc.titre}.png`;
       link.href = canvas.toDataURL('image/png');
@@ -535,7 +535,7 @@ export default function PatientDetailPage() {
       </div>
 
       {/* Certificat */}
-      <div ref={printRef} className="print-area" style={{ background: '#FDFAF4', border: '2px solid #6A6D50', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#EADCB9', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
+      <div ref={printRef} className="print-area" style={{ background: '#183746', border: '2px solid #C8BEA5', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#102B3B', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
 
         {/* En-tête */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
@@ -620,11 +620,11 @@ export default function PatientDetailPage() {
               <span style={{ fontFamily: DISPLAY, fontSize: 33, color: T.text }}>{dossier.patientPrenom} {dossier.patientNom}</span>
               {dossier.patientAge && <span style={{ fontFamily: MONO, fontSize: 15, color: T.muted }}>{dossier.patientAge} ans</span>}
               {dossier.patientMetier && <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>· {dossier.patientMetier}</span>}
-              {dossier.confidentiel && <span style={{ fontFamily: MONO, fontSize: 13, color: '#963F36', background: '#8B404018', padding: '2px 8px' }}>CONFIDENTIEL</span>}
+              {dossier.confidentiel && <span style={{ fontFamily: MONO, fontSize: 13, color: '#DF9A88', background: '#8B404018', padding: '2px 8px' }}>CONFIDENTIEL</span>}
             </div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <span style={{ fontFamily: MONO, fontSize: 14, color: col, background: col + '18', padding: '3px 10px' }}>{dossier.statut}</span>
-              <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, background: 'rgba(128,104,45,0.10)', padding: '3px 10px' }}>{dossier.type}</span>
+              <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, background: 'rgba(209,183,124,0.10)', padding: '3px 10px' }}>{dossier.type}</span>
               <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>Ouvert le {dossier.dateConsult}</span>
               {eq && <span style={{ fontFamily: MONO, fontSize: 14, color: eq.col, background: eq.col + '18', padding: '3px 10px' }}>Degré {dossier.equilibreNerveux}</span>}
             </div>
@@ -642,7 +642,7 @@ export default function PatientDetailPage() {
         {([
           ['dossier',     '📋 DOSSIER',     T.gold,    null],
           ['documents',   '📄 DOCUMENTS',   T.gold,    docs.length],
-          ['facturation', '💰 FACTURATION', '#80682D', factures.length],
+          ['facturation', '💰 FACTURATION', '#D1B77C', factures.length],
         ] as const).map(([key, label, col, cnt]) => {
           const on = tab === key;
           return (
@@ -678,7 +678,7 @@ export default function PatientDetailPage() {
           {dossier.noteThérapeute && <Block icon="✍" title="NOTE DU THÉRAPEUTE" color="#6B4A78"><InfoLine label="" value={dossier.noteThérapeute} /></Block>}
 
           {(dossier.traitement || dossier.prochaine) && (
-            <Block icon="💊" title="TRAITEMENT & RECOMMANDATIONS" color="#49654D">
+            <Block icon="💊" title="TRAITEMENT & RECOMMANDATIONS" color="#A8B991">
               <InfoLine label="PRESCRIPTIONS / CONSEILS" value={dossier.traitement} />
               <InfoLine label="PROCHAINE SÉANCE"          value={dossier.prochaine} />
             </Block>
@@ -691,13 +691,13 @@ export default function PatientDetailPage() {
         <div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
             <button onClick={openNewDoc}
-              style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '10px 24px', cursor: 'pointer', background: 'rgba(128,104,45,0.15)', color: T.gold, border: `1px solid rgba(128,104,45,0.45)` }}>
+              style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '10px 24px', cursor: 'pointer', background: 'rgba(209,183,124,0.15)', color: T.gold, border: `1px solid rgba(209,183,124,0.45)` }}>
               ✚ CRÉER UN DOCUMENT
             </button>
           </div>
 
           {docsError && (
-            <div style={{ marginBottom: 16, padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#963F36', fontFamily: MONO, fontSize: 13, display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ marginBottom: 16, padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 13, display: 'flex', alignItems: 'center', gap: 10 }}>
               <span>⚠ Erreur chargement documents : {docsError}</span>
               <button onClick={() => {
                 setDocsError('');
@@ -709,7 +709,7 @@ export default function PatientDetailPage() {
                   })
                   .then(dd => { setDocs((dd.documents ?? []).map((x: any) => ({ id: String(x.id), patientId: String(x.patient_id), type: x.type, titre: x.titre, contenu: x.contenu, date: x.date, createdAt: x.created_at }))); setDocsLoading(false); })
                   .catch(err => { setDocsError(err.message); setDocsLoading(false); });
-              }} style={{ fontFamily: MONO, fontSize: 12, padding: '3px 10px', cursor: 'pointer', background: 'rgba(200,80,80,0.15)', color: '#963F36', border: '1px solid rgba(200,80,80,0.4)' }}>
+              }} style={{ fontFamily: MONO, fontSize: 12, padding: '3px 10px', cursor: 'pointer', background: 'rgba(200,80,80,0.15)', color: '#DF9A88', border: '1px solid rgba(200,80,80,0.4)' }}>
                 ↺ Réessayer
               </button>
             </div>
@@ -734,7 +734,7 @@ export default function PatientDetailPage() {
                       style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}
                       onMouseEnter={e => (e.currentTarget.style.background = '#26190E')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                      <div style={{ width: 36, height: 36, background: isOpen ? 'rgba(128,104,45,0.18)' : 'rgba(128,104,45,0.08)', border: `1px solid rgba(200,168,80,${isOpen ? '0.5' : '0.2'})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontSize: 16, color: T.gold, flexShrink: 0, transition: 'all 0.15s' }}>
+                      <div style={{ width: 36, height: 36, background: isOpen ? 'rgba(209,183,124,0.18)' : 'rgba(209,183,124,0.08)', border: `1px solid rgba(200,168,80,${isOpen ? '0.5' : '0.2'})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontSize: 16, color: T.gold, flexShrink: 0, transition: 'all 0.15s' }}>
                         {String(idx + 1).padStart(2, '0')}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
@@ -745,9 +745,9 @@ export default function PatientDetailPage() {
                         <button onClick={() => setCertDoc(doc)}
                           style={{ fontFamily: MONO, fontSize: 13, padding: '5px 10px', cursor: 'pointer', background: 'rgba(107,122,187,0.12)', color: '#8899CC', border: `1px solid rgba(107,122,187,0.35)` }}>📄</button>
                         <button onClick={() => openEditDoc(doc)}
-                          style={{ fontFamily: MONO, fontSize: 14, padding: '5px 10px', cursor: 'pointer', background: 'rgba(128,104,45,0.10)', color: T.gold, border: `1px solid rgba(128,104,45,0.3)` }}>✎</button>
+                          style={{ fontFamily: MONO, fontSize: 14, padding: '5px 10px', cursor: 'pointer', background: 'rgba(209,183,124,0.10)', color: T.gold, border: `1px solid rgba(209,183,124,0.3)` }}>✎</button>
                         {delDocConfirm === doc.id
-                          ? <><button onClick={() => deleteDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 13, padding: '5px 8px', cursor: 'pointer', background: '#8B404025', color: '#963F36', border: '1px solid #8B404060' }}>OK?</button>
+                          ? <><button onClick={() => deleteDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 13, padding: '5px 8px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button>
                               <button onClick={() => setDelDocConfirm(null)} style={{ fontFamily: MONO, fontSize: 13, padding: '5px 6px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
                           : <button onClick={() => setDelDocConfirm(doc.id)} style={{ fontFamily: MONO, fontSize: 14, padding: '5px 8px', cursor: 'pointer', background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)' }}>✕</button>}
                       </div>
@@ -780,8 +780,8 @@ export default function PatientDetailPage() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, marginBottom: 20 }}>
                 {[
                   { l: 'TOTAL SOINS',   v: fmt$(totalBrut),    c: T.gold    },
-                  { l: 'TOTAL PERÇU',   v: fmt$(totalPercu),   c: '#49654D' },
-                  { l: 'EN ATTENTE',    v: fmt$(totalAttente), c: '#80682D' },
+                  { l: 'TOTAL PERÇU',   v: fmt$(totalPercu),   c: '#A8B991' },
+                  { l: 'EN ATTENTE',    v: fmt$(totalAttente), c: '#D1B77C' },
                 ].map(s => (
                   <div key={s.l} style={{ background: T.card, border: `1px solid ${T.border}`, padding: '12px 16px', textAlign: 'center' }}>
                     <div style={{ fontFamily: DISPLAY, fontSize: 22, color: s.c }}>{s.v}</div>
@@ -816,7 +816,7 @@ export default function PatientDetailPage() {
                         {/* Prestations + payeur */}
                         <div style={{ flex: 1, display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
                           {pres.map((p, i) => (
-                            <span key={i} style={{ fontFamily: MONO, fontSize: 13, color: T.gold, background: 'rgba(128,104,45,0.10)', padding: '2px 8px', border: '1px solid rgba(128,104,45,0.20)' }}>
+                            <span key={i} style={{ fontFamily: MONO, fontSize: 13, color: T.gold, background: 'rgba(209,183,124,0.10)', padding: '2px 8px', border: '1px solid rgba(209,183,124,0.20)' }}>
                               {p} <span style={{ color: T.muted }}>{fmt$(TARIFS[p] ?? 0)}</span>
                             </span>
                           ))}
@@ -901,7 +901,7 @@ export default function PatientDetailPage() {
                   ].map(({ label, marker, title, style }) => (
                     <button key={label} type="button" title={title}
                       onMouseDown={e => { e.preventDefault(); applyFormat(marker); }}
-                      style={{ fontFamily: BODY, fontSize: 18, ...style, padding: '4px 12px', cursor: 'pointer', background: 'rgba(128,104,45,0.08)', color: T.gold, border: `1px solid rgba(128,104,45,0.3)`, letterSpacing: 0 }}>
+                      style={{ fontFamily: BODY, fontSize: 18, ...style, padding: '4px 12px', cursor: 'pointer', background: 'rgba(209,183,124,0.08)', color: T.gold, border: `1px solid rgba(209,183,124,0.3)`, letterSpacing: 0 }}>
                       {label}
                     </button>
                   ))}
@@ -919,12 +919,12 @@ export default function PatientDetailPage() {
             {/* Pied fixe — bouton enregistrer */}
             <div style={{ padding: '16px 28px 24px', borderTop: `1px solid ${T.border}`, flexShrink: 0 }}>
               {docError && (
-                <div style={{ marginBottom: 10, padding: '8px 14px', background: 'rgba(200,80,80,0.12)', border: '1px solid rgba(200,80,80,0.35)', color: '#963F36', fontFamily: MONO, fontSize: 13 }}>
+                <div style={{ marginBottom: 10, padding: '8px 14px', background: 'rgba(200,80,80,0.12)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 13 }}>
                   ⚠ {docError}
                 </div>
               )}
               <button onClick={submitDoc} disabled={!docTitre.trim() || docSaving}
-                style={{ width: '100%', fontFamily: MONO, fontSize: 16, letterSpacing: '0.14em', padding: '14px', cursor: docTitre.trim() && !docSaving ? 'pointer' : 'not-allowed', background: docTitre.trim() ? 'rgba(128,104,45,0.20)' : 'rgba(255,255,255,0.04)', color: docTitre.trim() ? T.gold : T.dim, border: `2px solid ${docTitre.trim() ? 'rgba(128,104,45,0.55)' : 'rgba(255,255,255,0.06)'}` }}>
+                style={{ width: '100%', fontFamily: MONO, fontSize: 16, letterSpacing: '0.14em', padding: '14px', cursor: docTitre.trim() && !docSaving ? 'pointer' : 'not-allowed', background: docTitre.trim() ? 'rgba(209,183,124,0.20)' : 'rgba(255,255,255,0.04)', color: docTitre.trim() ? T.gold : T.dim, border: `2px solid ${docTitre.trim() ? 'rgba(209,183,124,0.55)' : 'rgba(255,255,255,0.06)'}` }}>
                 {docSaving ? '⟳ ENREGISTREMENT...' : editingDoc ? '✔ ENREGISTRER LES MODIFICATIONS' : '✔ ENREGISTRER LE DOCUMENT'}
               </button>
             </div>

@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
-const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
+const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
 type TypeCategorie  = 'vente' | 'achat';
@@ -89,7 +89,7 @@ function groupByWeek(factures: Facture[]) {
   return byWeek;
 }
 
-const STATUT_COL: Record<StatutPaiement, string>  = { 'PAYÉ': '#49654D', 'EN ATTENTE': '#80682D', 'ANNULÉ': '#8B4040' };
+const STATUT_COL: Record<StatutPaiement, string>  = { 'PAYÉ': '#A8B991', 'EN ATTENTE': '#D1B77C', 'ANNULÉ': '#8B4040' };
 const STATUT_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
@@ -225,7 +225,7 @@ export default function CaisseComptabilitePage() {
     const col  = STATUT_COL[f.statut];
     const pres = normPrestations(f.prestations);
     return (
-      <div style={{ background: isCurrent ? '#221810' : T.card, border: `1px solid ${isCurrent ? 'rgba(128,104,45,0.22)' : T.border}`, borderLeft: `3px solid ${col}` }}>
+      <div style={{ background: isCurrent ? '#221810' : T.card, border: `1px solid ${isCurrent ? 'rgba(209,183,124,0.22)' : T.border}`, borderLeft: `3px solid ${col}` }}>
         <div style={{ display:'flex', alignItems:'center', gap:12, padding:'11px 16px' }}>
           <div style={{ textAlign:'center', minWidth:46, flexShrink:0 }}>
             <div style={{ fontFamily:DISPLAY, fontSize: 17, color:T.gold }}>{f.dateSeance.slice(0,5)}</div>
@@ -238,12 +238,12 @@ export default function CaisseComptabilitePage() {
                 const cat = tarifs[p.id];
                 const isAchat = cat?.type === 'achat';
                 return (
-                  <span key={i} style={{ fontFamily:MONO, fontSize: 13, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(128,104,45,0.10)', padding:'1px 7px' }}>
+                  <span key={i} style={{ fontFamily:MONO, fontSize: 13, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
                     {isAchat ? '🛒 ' : ''}{cat?.nom ?? p.id}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$((cat?.prix ?? 0) * p.qty)}</span>
                   </span>
                 );
               })}
-              {f.medecin && <span style={{ fontFamily:MONO, fontSize: 13, color:'#79638C', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin}</span>}
+              {f.medecin && <span style={{ fontFamily:MONO, fontSize: 13, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin}</span>}
               {f.notes && <span style={{ fontFamily:BODY, fontSize: 14, color:T.muted, fontStyle:'italic' }}>{f.notes}</span>}
             </div>
           </div>
@@ -252,9 +252,9 @@ export default function CaisseComptabilitePage() {
             <button onClick={()=>cycleStatut(f.id)} style={{ fontFamily:MONO, fontSize: 12, padding:'4px 8px', cursor:'pointer', background:col+'18', color:col, border:`1px solid ${col}50`, display:'flex', alignItems:'center', gap:3 }}>
               {STATUT_ICON[f.statut]} {f.statut}
             </button>
-            <button onClick={()=>startEdit(f)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'rgba(128,104,45,0.10)', color:T.gold, border:`1px solid rgba(128,104,45,0.3)` }}>✎</button>
+            <button onClick={()=>startEdit(f)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'rgba(209,183,124,0.10)', color:T.gold, border:`1px solid rgba(209,183,124,0.3)` }}>✎</button>
             {delConfirm===f.id
-              ? <><button onClick={()=>{setItems(p=>p.filter(x=>x.id!==f.id));setDelConfirm(null);}} style={{ fontFamily:MONO, fontSize: 13, padding:'4px 7px', cursor:'pointer', background:'#8B404025', color:'#963F36', border:'1px solid #8B404060' }}>OK?</button>
+              ? <><button onClick={()=>{setItems(p=>p.filter(x=>x.id!==f.id));setDelConfirm(null);}} style={{ fontFamily:MONO, fontSize: 13, padding:'4px 7px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>OK?</button>
                   <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize: 13, padding:'4px 5px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button></>
               : <button onClick={()=>setDelConfirm(f.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕</button>}
           </div>
@@ -355,12 +355,12 @@ export default function CaisseComptabilitePage() {
               <div style={{ display:'flex', flexDirection:'column', gap:22 }}>
                 {/* Semaine courante */}
                 <div>
-                  <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10, paddingBottom:8, borderBottom:`2px solid rgba(128,104,45,0.40)` }}>
+                  <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)` }}>
                     <div>
                       <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>📅 {weekLabel(todayMonday)}</span>
                       <span style={{ fontFamily:MONO, fontSize: 13, color:T.dim, marginLeft:10 }}>SEMAINE EN COURS</span>
                     </div>
-                    {allByWeek[currentKey] && <span style={{ fontFamily:MONO, fontSize: 13, color:'#49654D' }}>{allByWeek[currentKey].factures.length} acte(s) · {fmt$(allByWeek[currentKey].factures.filter(f=>f.statut==='PAYÉ').reduce((s,f)=>s+f.montant,0))} perçu</span>}
+                    {allByWeek[currentKey] && <span style={{ fontFamily:MONO, fontSize: 13, color:'#A8B991' }}>{allByWeek[currentKey].factures.length} acte(s) · {fmt$(allByWeek[currentKey].factures.filter(f=>f.statut==='PAYÉ').reduce((s,f)=>s+f.montant,0))} perçu</span>}
                   </div>
                   {allByWeek[currentKey]
                     ? <div style={{display:'flex',flexDirection:'column',gap:7}}>{allByWeek[currentKey].factures.map(f=><FactureLine key={f.id} f={f} isCurrent={true}/>)}</div>

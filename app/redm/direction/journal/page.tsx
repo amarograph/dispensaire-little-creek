@@ -3,29 +3,29 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Burnic','Georgia',serif";
+const DISPLAY = "'Central Station','Georgia',serif";
 const BODY    = "'Cormorant Garamond','Georgia',serif";
 const MONO    = "'Libre Baskerville','Courier New',monospace";
 
 const T = {
-  bg: '#EDE0C2', card: '#F6ECD6', gold: '#80682D', text: '#183746',
-  muted: '#6A6D50', border: 'rgba(142,122,74,0.35)', dim: '#646850',
+  bg: '#102B3B', card: '#183746', gold: '#D1B77C', text: '#EADCB9',
+  muted: '#C8BEA5', border: 'rgba(180,160,113,0.35)', dim: '#C8BEA5',
 };
 
 const CATEGORIES: { id: string; label: string; icon: string; color: string }[] = [
-  { id: '',              label: 'Tout',         icon: '📋', color: '#80682D' },
+  { id: '',              label: 'Tout',         icon: '📋', color: '#D1B77C' },
   { id: 'certificats',   label: 'Certificats',  icon: '📄', color: '#7A9060' },
-  { id: 'tarifs',        label: 'Tarifs',       icon: '🏷',  color: '#80682D' },
+  { id: 'tarifs',        label: 'Tarifs',       icon: '🏷',  color: '#D1B77C' },
   { id: 'salaires',      label: 'Salaires',     icon: '💰', color: '#D4A840' },
-  { id: 'stockage',      label: 'Stockage',     icon: '📦', color: '#806D40' },
-  { id: 'medecins',      label: 'Médecins',     icon: '🩺', color: '#79638C' },
+  { id: 'stockage',      label: 'Stockage',     icon: '📦', color: '#D1B77C' },
+  { id: 'medecins',      label: 'Médecins',     icon: '🩺', color: '#BAAAC6' },
   { id: 'entretiens',    label: 'Entretiens',   icon: '📋', color: '#5A7896' },
   { id: 'presences',     label: 'Présences',    icon: '📅', color: '#5A9858' },
   { id: 'cueilleurs',    label: 'Cueilleurs',   icon: '🌿', color: '#6A9860' },
 ];
 
 function catMeta(category: string) {
-  return CATEGORIES.find(c => c.id === category) ?? { label: category, icon: '•', color: '#6A6D50' };
+  return CATEGORIES.find(c => c.id === category) ?? { label: category, icon: '•', color: '#C8BEA5' };
 }
 
 function fmtDate(iso: string) {
@@ -75,7 +75,7 @@ export default function JournalPage() {
     <div style={{ fontFamily: BODY, maxWidth: 960, margin: '0 auto', padding: '32px 0 60px' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
-        .jl-row:hover { background: rgba(128,104,45,0.04) !important; }
+        .jl-row:hover { background: rgba(209,183,124,0.04) !important; }
       `}</style>
 
       {/* Header */}
@@ -105,7 +105,7 @@ export default function JournalPage() {
             <button key={c.id} onClick={() => setCategory(c.id)} style={{
               fontFamily: MONO, fontSize: 11, letterSpacing: '0.08em',
               background: active ? `${c.color}28` : 'transparent',
-              border: `1px solid ${active ? c.color : 'rgba(128,104,45,0.25)'}`,
+              border: `1px solid ${active ? c.color : 'rgba(209,183,124,0.25)'}`,
               color: active ? c.color : T.muted,
               padding: '6px 14px', cursor: 'pointer', borderRadius: 4,
               transition: 'all 0.15s',
@@ -161,7 +161,7 @@ CREATE POLICY "service role full access" ON public.redm_logs USING (true) WITH C
           {/* En-tête tableau */}
           <div style={{
             display: 'grid', gridTemplateColumns: '160px 180px 120px 1fr',
-            background: 'rgba(128,104,45,0.08)', borderBottom: `1px solid ${T.border}`,
+            background: 'rgba(209,183,124,0.08)', borderBottom: `1px solid ${T.border}`,
             padding: '10px 16px',
           }}>
             {['DATE', 'AUTEUR', 'SECTION', 'ACTION'].map(h => (
@@ -176,7 +176,7 @@ CREATE POLICY "service role full access" ON public.redm_logs USING (true) WITH C
               <div key={log.id} className="jl-row" style={{
                 display: 'grid', gridTemplateColumns: '160px 180px 120px 1fr',
                 padding: '12px 16px', alignItems: 'center', gap: 0,
-                borderBottom: i < logs.length - 1 ? `1px solid rgba(142,122,74,0.18)` : 'none',
+                borderBottom: i < logs.length - 1 ? `1px solid rgba(180,160,113,0.18)` : 'none',
                 background: 'transparent', transition: 'background 0.12s',
               }}>
                 {/* Date */}
@@ -194,7 +194,7 @@ CREATE POLICY "service role full access" ON public.redm_logs USING (true) WITH C
                       onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
                     />
                   ) : (
-                    <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(128,104,45,0.15)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: T.gold }}>
+                    <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(209,183,124,0.15)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: T.gold }}>
                       {log.actor_name?.[0]?.toUpperCase() ?? '?'}
                     </div>
                   )}

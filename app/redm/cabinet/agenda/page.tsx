@@ -3,10 +3,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
-const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
+const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
 type StatutRDV = 'CONFIRMÉ' | 'EN ATTENTE' | 'ANNULÉ' | 'PASSÉ';
 interface RendezVous {
@@ -16,7 +16,7 @@ interface RendezVous {
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 
-const STATUT_COL:  Record<StatutRDV, string> = { 'CONFIRMÉ': '#49654D', 'EN ATTENTE': '#80682D', 'ANNULÉ': '#8B4040', 'PASSÉ': '#646850' };
+const STATUT_COL:  Record<StatutRDV, string> = { 'CONFIRMÉ': '#A8B991', 'EN ATTENTE': '#D1B77C', 'ANNULÉ': '#8B4040', 'PASSÉ': '#C8BEA5' };
 const STATUT_ICON: Record<StatutRDV, string> = { 'CONFIRMÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕', 'PASSÉ': '◉' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
@@ -181,11 +181,11 @@ export default function AgendaPage() {
         @keyframes pulse    { 0%,100% { opacity: 1 } 50% { opacity: 0.5 } }
         @keyframes fade-in  { from { opacity: 0; transform: translateY(4px) } to { opacity: 1; transform: translateY(0) } }
         .cal-day { transition: background 0.15s, border-color 0.15s; }
-        .cal-day:hover { background: rgba(128,104,45,0.07) !important; border-color: rgba(128,104,45,0.35) !important; }
+        .cal-day:hover { background: rgba(209,183,124,0.07) !important; border-color: rgba(209,183,124,0.35) !important; }
         .rdv-badge { transition: opacity 0.12s; cursor: pointer; }
         .rdv-badge:hover { opacity: 0.75; }
         .nav-btn { transition: background 0.15s, color 0.15s; }
-        .nav-btn:hover { background: rgba(128,104,45,0.15) !important; color: #80682D !important; }
+        .nav-btn:hover { background: rgba(209,183,124,0.15) !important; color: #D1B77C !important; }
         * { box-sizing: border-box; }
       `}</style>
 
@@ -200,7 +200,7 @@ export default function AgendaPage() {
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.16em' }}>CABINET · AGENDA</span>
           <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
             {saving && <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim }}>⟳ sync...</span>}
-            <span style={{ fontFamily: MONO, fontSize: 13, color: notifStatus === 'ok' ? '#49654D' : '#646850', display: 'flex', alignItems: 'center', gap: 5, animation: notifStatus === 'ok' ? 'pulse 1s ease 2' : 'none' }}>
+            <span style={{ fontFamily: MONO, fontSize: 13, color: notifStatus === 'ok' ? '#A8B991' : '#C8BEA5', display: 'flex', alignItems: 'center', gap: 5, animation: notifStatus === 'ok' ? 'pulse 1s ease 2' : 'none' }}>
               <span style={{ width: 7, height: 7, borderRadius: '50%', background: notifStatus === 'ok' ? '#4A8048' : '#3A3028', display: 'inline-block' }} />
               {notifStatus === 'ok' ? 'NOTIF ENVOYÉE' : 'DISCORD ACTIF'}
             </span>
@@ -283,9 +283,9 @@ export default function AgendaPage() {
                         borderRight: !isLastCol ? `1px solid ${T.border}` : 'none',
                         borderBottom: !isLastRow ? `1px solid ${T.border}` : 'none',
                         background: todayDay
-                          ? 'rgba(128,104,45,0.08)'
+                          ? 'rgba(209,183,124,0.08)'
                           : isWeekend && cell.inMonth
-                            ? 'rgba(128,104,45,0.02)'
+                            ? 'rgba(209,183,124,0.02)'
                             : 'transparent',
                         cursor: 'pointer',
                         position: 'relative',
@@ -299,7 +299,7 @@ export default function AgendaPage() {
                         color: todayDay
                           ? T.gold
                           : cell.inMonth
-                            ? isWeekend ? 'rgba(128,104,45,0.7)' : T.muted
+                            ? isWeekend ? 'rgba(209,183,124,0.7)' : T.muted
                             : T.dim,
                         opacity: cell.inMonth ? 1 : 0.35,
                         marginBottom: dayRdvs.length > 0 ? 5 : 0,
@@ -442,7 +442,7 @@ export default function AgendaPage() {
                     {STATUT_ICON[editing.statut]} Changer statut → {STATUTS[(STATUTS.indexOf(editing.statut) + 1) % STATUTS.length]}
                   </button>
                   {delConfirm === editing.id
-                    ? <button onClick={e => deleteRdv(editing.id, e)} style={{ fontFamily: MONO, fontSize: 13, padding: '8px 12px', cursor: 'pointer', background: '#8B404025', color: '#963F36', border: '1px solid #8B404060', whiteSpace: 'nowrap' }}>Confirmer ✕</button>
+                    ? <button onClick={e => deleteRdv(editing.id, e)} style={{ fontFamily: MONO, fontSize: 13, padding: '8px 12px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060', whiteSpace: 'nowrap' }}>Confirmer ✕</button>
                     : <button onClick={() => setDelConfirm(editing.id)} style={{ fontFamily: MONO, fontSize: 13, padding: '8px 12px', cursor: 'pointer', background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)', whiteSpace: 'nowrap' }}>Supprimer ✕</button>}
                 </div>
               )}

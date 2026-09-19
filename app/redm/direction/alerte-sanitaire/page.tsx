@@ -11,10 +11,10 @@ import {
 } from '@/app/redm/_lib/sanitaireListes';
 
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
-const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
+const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.25)', border: `1px solid ${T.border}`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%', cursor: 'pointer' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
@@ -95,9 +95,9 @@ export default function AlerteSanitairePage() {
                 fontFamily: MONO, fontSize: 13, letterSpacing: '0.12em', padding: '10px 20px',
                 cursor: (saving || !entry.nom) ? 'default' : 'pointer',
                 opacity: !entry.nom ? 0.4 : 1,
-                background: entry.critique ? 'rgba(200,48,48,0.18)' : 'rgba(128,104,45,0.10)',
+                background: entry.critique ? 'rgba(200,48,48,0.18)' : 'rgba(209,183,124,0.10)',
                 color: entry.critique ? '#E86060' : T.gold,
-                border: `1px solid ${entry.critique ? 'rgba(200,48,48,0.5)' : 'rgba(128,104,45,0.35)'}`,
+                border: `1px solid ${entry.critique ? 'rgba(200,48,48,0.5)' : 'rgba(209,183,124,0.35)'}`,
               }}>
               {entry.critique ? '⚠ CRITIQUE' : 'MARQUER CRITIQUE'}
             </button>

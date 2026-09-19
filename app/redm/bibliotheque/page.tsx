@@ -1,12 +1,12 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
-const T = { bg: '#EDE0C2', card: '#F7EEDB', paper: '#F1E4C8', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850', sepia: '#D4B896' };
+const T = { bg: '#102B3B', card: '#183746', paper: '#214452', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5', sepia: '#D4B896' };
 
 const LS = 'redm_bibliotheque_v1';
 
@@ -102,22 +102,22 @@ function save(d: BiblioCategorie[]) {
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 14, background: 'rgba(0,0,0,0.25)', border: `1px solid ${T.border}`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
 const btn: React.CSSProperties = { fontFamily: MONO, fontSize: 12, letterSpacing: '0.10em', padding: '9px 16px', cursor: 'pointer', border: `1px solid ${T.border}`, background: 'rgba(0,0,0,0.25)', color: T.muted };
-const btnGold: React.CSSProperties = { ...btn, border: `1px solid ${T.gold}`, color: T.gold, background: 'rgba(128,104,45,0.08)' };
+const btnGold: React.CSSProperties = { ...btn, border: `1px solid ${T.gold}`, color: T.gold, background: 'rgba(209,183,124,0.08)' };
 const btnRed: React.CSSProperties = { ...btn, border: '1px solid rgba(180,70,70,0.5)', color: '#C87060', background: 'rgba(180,70,70,0.08)' };
 
 /* ── Règlement Général du Dispensaire (document mis en avant) ── */
 
 const REGLEMENT_CHAPITRES = [
   { num: 'I',    title: 'DE LA CONDUITE DU PERSONNEL',         icon: '🎖', col: '#8B4040' },
-  { num: 'II',   title: "DE L'ORGANISATION DU DISPENSAIRE",    icon: '⚙',  col: '#536784' },
-  { num: 'III',  title: "DE L'HYGIÈNE ET DE LA SALUBRITÉ",     icon: '🧼', col: '#4B6546' },
+  { num: 'II',   title: "DE L'ORGANISATION DU DISPENSAIRE",    icon: '⚙',  col: '#AAB9C6' },
+  { num: 'III',  title: "DE L'HYGIÈNE ET DE LA SALUBRITÉ",     icon: '🧼', col: '#A8B991' },
   { num: 'IV',   title: 'DES SOINS MÉDICAUX',                   icon: '⚕',  col: '#6B4A78' },
   { num: 'V',    title: 'DES REMÈDES, PLANTES ET PRÉPARATIONS', icon: '🌿', col: '#786030' },
   { num: 'VI',   title: 'DES VISITES EXTÉRIEURES',              icon: '🐎', col: '#4A6878' },
-  { num: 'VII',  title: "DE L'ENSEIGNEMENT MÉDICAL",            icon: '📖', col: '#49654D' },
-  { num: 'VIII', title: 'DU SECRET MÉDICAL',                    icon: '🔒', col: '#80682D' },
-  { num: 'IX',   title: 'DE LA MORALITÉ DU PRATICIEN',          icon: '⚖',  col: '#80682D' },
-  { num: 'X',    title: 'DES SANCTIONS DISCIPLINAIRES',         icon: '⚠',  col: '#254B50' },
+  { num: 'VII',  title: "DE L'ENSEIGNEMENT MÉDICAL",            icon: '📖', col: '#A8B991' },
+  { num: 'VIII', title: 'DU SECRET MÉDICAL',                    icon: '🔒', col: '#D1B77C' },
+  { num: 'IX',   title: 'DE LA MORALITÉ DU PRATICIEN',          icon: '⚖',  col: '#D1B77C' },
+  { num: 'X',    title: 'DES SANCTIONS DISCIPLINAIRES',         icon: '⚠',  col: '#EADCB9' },
 ] as const;
 
 function RegSectionHeader({ num, title, icon, col }: { num: string; title: string; icon: string; col: string }) {
@@ -162,7 +162,7 @@ function RegBlock({ children, col = T.border }: { children: React.ReactNode; col
 
 function RegCitation({ text, author }: { text: string; author: string }) {
   return (
-    <div style={{ margin: '18px 0 0', padding: '16px 24px', borderLeft: `3px solid ${T.gold}`, background: 'rgba(128,104,45,0.06)', position: 'relative' }}>
+    <div style={{ margin: '18px 0 0', padding: '16px 24px', borderLeft: `3px solid ${T.gold}`, background: 'rgba(209,183,124,0.06)', position: 'relative' }}>
       <span style={{ position: 'absolute', top: -12, left: 16, fontFamily: DISPLAY, fontSize: 40, color: T.gold, opacity: 0.35, lineHeight: 1 }}>"</span>
       <p style={{ fontFamily: BODY, fontSize: 16, color: T.sepia, fontStyle: 'italic', lineHeight: 1.85, margin: '0 0 8px', paddingTop: 8 }}>{text}</p>
       <div style={{ fontFamily: MONO, fontSize: 12, color: T.muted, letterSpacing: '0.12em' }}>— {author}</div>
@@ -176,7 +176,7 @@ function ReglementDocument() {
       {/* Bandeau */}
       <div style={{ textAlign: 'center', marginBottom: 36, padding: '36px 20px', background: T.card, border: `1px solid ${T.border}`, position: 'relative', overflow: 'hidden' }}>
         {['top-left', 'top-right', 'bottom-left', 'bottom-right'].map(pos => (
-          <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? '2px solid rgba(128,104,45,0.45)' : 'none', borderBottom: pos.includes('bottom') ? '2px solid rgba(128,104,45,0.45)' : 'none', borderLeft: pos.includes('left') ? '2px solid rgba(128,104,45,0.45)' : 'none', borderRight: pos.includes('right') ? '2px solid rgba(128,104,45,0.45)' : 'none' }} />
+          <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderBottom: pos.includes('bottom') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderLeft: pos.includes('left') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderRight: pos.includes('right') ? '2px solid rgba(209,183,124,0.45)' : 'none' }} />
         ))}
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ DOCUMENT OFFICIEL ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 8px', letterSpacing: '0.05em' }}>📜 Règlement Général du Dispensaire</h2>
@@ -187,7 +187,7 @@ function ReglementDocument() {
       </div>
 
       {/* Sommaire */}
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: 'rgba(128,104,45,0.04)', border: `1px solid rgba(128,104,45,0.18)` }}>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: 'rgba(209,183,124,0.04)', border: `1px solid rgba(209,183,124,0.18)` }}>
         <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SOMMAIRE</span>
         {REGLEMENT_CHAPITRES.map(c => (
           <a key={c.num} href={`#chap-${c.num}`} style={{ fontFamily: MONO, fontSize: 12, color: c.col, background: `${c.col}15`, border: `1px solid ${c.col}40`, padding: '4px 12px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.08em' }}>
@@ -199,10 +199,10 @@ function ReglementDocument() {
       {/* Préambule */}
       <div style={{ marginBottom: 36 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-          <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, letterSpacing: '0.22em', background: 'rgba(128,104,45,0.10)', padding: '6px 16px', border: `1px solid rgba(128,104,45,0.30)` }}>PRÉAMBULE</div>
-          <div style={{ flex: 1, height: 1, background: 'rgba(128,104,45,0.25)' }} />
+          <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, letterSpacing: '0.22em', background: 'rgba(209,183,124,0.10)', padding: '6px 16px', border: `1px solid rgba(209,183,124,0.30)` }}>PRÉAMBULE</div>
+          <div style={{ flex: 1, height: 1, background: 'rgba(209,183,124,0.25)' }} />
         </div>
-        <RegBlock col="rgba(128,104,45,0.35)">
+        <RegBlock col="rgba(209,183,124,0.35)">
           <RegPara>Le Dispensaire a pour vocation de porter secours aux malades, blessés et nécessiteux du territoire, sans distinction de fortune, d'origine, de profession ou de confession.</RegPara>
           <RegPara>Fondé sur les principes de la médecine moderne tout en conservant les savoirs éprouvés de l'herboristerie et des remèdes traditionnels, le dispensaire s'efforce d'offrir des soins dignes, rigoureux et respectueux de la personne humaine.</RegPara>
           <RegPara>Tout membre du personnel médical, qu'il soit médecin, infirmier, étudiant, apprenti ou intendant, s'engage à respecter le présent règlement, garant de la discipline, de l'hygiène, de l'efficacité des soins et de l'honneur de la profession médicale.</RegPara>
@@ -218,8 +218,8 @@ function ReglementDocument() {
         <RegList items={['Respect', 'Patience', 'Discrétion', 'Courtoisie', 'Sang-froid']} />
         <RegPara>Les querelles, insultes, comportements agressifs ou attitudes portant atteinte à la réputation du dispensaire sont strictement interdits.</RegPara>
         <div style={{ background: 'rgba(139,64,64,0.10)', border: '1px solid rgba(139,64,64,0.30)', padding: '14px 20px' }}>
-          <div style={{ fontFamily: MONO, fontSize: 12, color: '#963F36', letterSpacing: '0.14em', marginBottom: 6 }}>⚠ AVERTISSEMENT</div>
-          <RegPara>L'état d'ivresse, l'usage abusif de substances altérant le jugement ou toute négligence mettant en danger un patient pourront entraîner des <strong style={{ color: '#963F36' }}>sanctions immédiates</strong>.</RegPara>
+          <div style={{ fontFamily: MONO, fontSize: 12, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 6 }}>⚠ AVERTISSEMENT</div>
+          <RegPara>L'état d'ivresse, l'usage abusif de substances altérant le jugement ou toute négligence mettant en danger un patient pourront entraîner des <strong style={{ color: '#DF9A88' }}>sanctions immédiates</strong>.</RegPara>
         </div>
       </div>
 
@@ -280,7 +280,7 @@ function ReglementDocument() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '24px 0 14px' }}>
           <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, letterSpacing: '0.18em' }}>—</span>
           <span style={{ fontFamily: MONO, fontSize: 13, color: T.gold, letterSpacing: '0.15em' }}>DES MÉDICAMENTS ET PRÉPARATIONS PHARMACEUTIQUES</span>
-          <div style={{ flex: 1, height: '1px', background: 'rgba(128,104,45,0.18)' }} />
+          <div style={{ flex: 1, height: '1px', background: 'rgba(209,183,124,0.18)' }} />
         </div>
         <RegPara>Le dispensaire reconnaît également l'usage des médicaments issus des avancées récentes de la médecine et de la pharmacie moderne.</RegPara>
         <RegPara>Lorsque l'état du malade le justifie, les praticiens sont autorisés à employer notamment :</RegPara>
@@ -397,9 +397,9 @@ function SermentHippocrateDocument() {
 const HERBORISTE_CHAPITRES = [
   { num: 'I',   title: 'PLANTES CALMANTES ET SOPORIFIQUES',          icon: '🌙', col: '#6B4A78' },
   { num: 'II',  title: 'PLANTES TONIQUES ET FORTIFIANTES',            icon: '⚡', col: '#786030' },
-  { num: 'III', title: 'PLANTES CICATRISANTES ET ANTI-INFECTIEUSES',  icon: '🩹', col: '#4B6546' },
-  { num: 'IV',  title: 'PLANTES DIGESTIVES ET DÉPURATIVES',           icon: '🌾', col: '#536784' },
-  { num: 'V',   title: 'SUBSTANCES DANGEREUSES ET USAGES PROHIBÉS',   icon: '☠',  col: '#254B50' },
+  { num: 'III', title: 'PLANTES CICATRISANTES ET ANTI-INFECTIEUSES',  icon: '🩹', col: '#A8B991' },
+  { num: 'IV',  title: 'PLANTES DIGESTIVES ET DÉPURATIVES',           icon: '🌾', col: '#AAB9C6' },
+  { num: 'V',   title: 'SUBSTANCES DANGEREUSES ET USAGES PROHIBÉS',   icon: '☠',  col: '#EADCB9' },
 ] as const;
 
 function PlantFiche({ nom, latin, icon, apparence, vertus, preparation, danger }: { nom: string; latin?: string; icon: string; apparence: string; vertus: string; preparation: string; danger?: string }) {
@@ -415,7 +415,7 @@ function PlantFiche({ nom, latin, icon, apparence, vertus, preparation, danger }
       <RegPara><strong style={{ color: T.sepia }}>Préparation — </strong>{preparation}</RegPara>
       {danger && (
         <div style={{ background: 'rgba(139,64,64,0.10)', border: '1px solid rgba(139,64,64,0.30)', padding: '12px 16px', marginTop: 10 }}>
-          <div style={{ fontFamily: MONO, fontSize: 11, color: '#963F36', letterSpacing: '0.14em', marginBottom: 6 }}>⚠ PRÉCAUTION</div>
+          <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 6 }}>⚠ PRÉCAUTION</div>
           <RegPara>{danger}</RegPara>
         </div>
       )}
@@ -429,7 +429,7 @@ function GuideHerboristeDocument() {
       {/* Bandeau */}
       <div style={{ textAlign: 'center', marginBottom: 36, padding: '36px 20px', background: T.card, border: `1px solid ${T.border}`, position: 'relative', overflow: 'hidden' }}>
         {['top-left', 'top-right', 'bottom-left', 'bottom-right'].map(pos => (
-          <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? '2px solid rgba(128,104,45,0.45)' : 'none', borderBottom: pos.includes('bottom') ? '2px solid rgba(128,104,45,0.45)' : 'none', borderLeft: pos.includes('left') ? '2px solid rgba(128,104,45,0.45)' : 'none', borderRight: pos.includes('right') ? '2px solid rgba(128,104,45,0.45)' : 'none' }} />
+          <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderBottom: pos.includes('bottom') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderLeft: pos.includes('left') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderRight: pos.includes('right') ? '2px solid rgba(209,183,124,0.45)' : 'none' }} />
         ))}
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ MANUEL DE BOTANIQUE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 8px', letterSpacing: '0.05em' }}>🌿 Guide de l'Herboriste</h2>
@@ -440,7 +440,7 @@ function GuideHerboristeDocument() {
       </div>
 
       {/* Sommaire */}
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: 'rgba(128,104,45,0.04)', border: `1px solid rgba(128,104,45,0.18)` }}>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: 'rgba(209,183,124,0.04)', border: `1px solid rgba(209,183,124,0.18)` }}>
         <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SOMMAIRE</span>
         {HERBORISTE_CHAPITRES.map(c => (
           <a key={c.num} href={`#herb-chap-${c.num}`} style={{ fontFamily: MONO, fontSize: 12, color: c.col, background: `${c.col}15`, border: `1px solid ${c.col}40`, padding: '4px 12px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.08em' }}>
@@ -452,10 +452,10 @@ function GuideHerboristeDocument() {
       {/* Avant-propos */}
       <div style={{ marginBottom: 36 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-          <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, letterSpacing: '0.22em', background: 'rgba(128,104,45,0.10)', padding: '6px 16px', border: `1px solid rgba(128,104,45,0.30)` }}>AVANT-PROPOS</div>
-          <div style={{ flex: 1, height: 1, background: 'rgba(128,104,45,0.25)' }} />
+          <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, letterSpacing: '0.22em', background: 'rgba(209,183,124,0.10)', padding: '6px 16px', border: `1px solid rgba(209,183,124,0.30)` }}>AVANT-PROPOS</div>
+          <div style={{ flex: 1, height: 1, background: 'rgba(209,183,124,0.25)' }} />
         </div>
-        <RegBlock col="rgba(128,104,45,0.35)">
+        <RegBlock col="rgba(209,183,124,0.35)">
           <RegPara>Conformément au Chapitre V du Règlement Général, tout médecin, infirmier ou apprenti du dispensaire doit posséder des connaissances suffisantes en botanique médicale.</RegPara>
           <RegPara>Le présent guide recense les plantes, racines et champignons les plus couramment employés ou rencontrés sur le territoire de West Elizabeth : leur apparence, leurs vertus reconnues, leur mode de préparation, ainsi que les précautions à observer.</RegPara>
           <RegPara>Il ne remplace en aucun cas le jugement du médecin. En cas de doute sur l'identification d'une plante ou sur le dosage d'une préparation, mieux vaut s'abstenir que risquer la santé d'un patient.</RegPara>
@@ -648,12 +648,12 @@ function GuideHerboristeDocument() {
 /* ── Spécialités Proposées ── */
 
 const SPECIALITES_LIST = [
-  { titre: 'Médecine Générale',      col: '#42663C', desc: 'Le médecin généraliste est le premier praticien consulté par la population. Il diagnostique les maladies courantes, soigne les blessures légères et oriente les patients vers une spécialité lorsque cela est nécessaire.' },
-  { titre: 'Chirurgie',              col: '#963F36', desc: 'Le chirurgien intervient lors des blessures graves et des opérations nécessitant une intervention manuelle. Il traite notamment les fractures complexes, les plaies profondes, les amputations et certaines urgences vitales.' },
+  { titre: 'Médecine Générale',      col: '#A8B991', desc: 'Le médecin généraliste est le premier praticien consulté par la population. Il diagnostique les maladies courantes, soigne les blessures légères et oriente les patients vers une spécialité lorsque cela est nécessaire.' },
+  { titre: 'Chirurgie',              col: '#DF9A88', desc: 'Le chirurgien intervient lors des blessures graves et des opérations nécessitant une intervention manuelle. Il traite notamment les fractures complexes, les plaies profondes, les amputations et certaines urgences vitales.' },
   { titre: 'Aliénisme',              col: '#6B4A78', desc: "L'aliénisme est la médecine des troubles de l'esprit. L'aliéniste accompagne les personnes souffrant de mélancolie, d'hystérie, de traumatismes, de dépendances ou d'autres affections mentales connues de l'époque." },
-  { titre: 'Plantes Médicinales',    col: '#4B6546', desc: 'Le spécialiste des plantes médicinales étudie et prépare les remèdes naturels du dispensaire. Il utilise les propriétés thérapeutiques des plantes pour soulager les douleurs, combattre certaines maladies et favoriser la guérison.' },
+  { titre: 'Plantes Médicinales',    col: '#A8B991', desc: 'Le spécialiste des plantes médicinales étudie et prépare les remèdes naturels du dispensaire. Il utilise les propriétés thérapeutiques des plantes pour soulager les douleurs, combattre certaines maladies et favoriser la guérison.' },
   { titre: 'Traumatologie',          col: '#786030', desc: 'Le traumatologue prend en charge les blessures causées par les accidents, les chutes, les combats ou les activités dangereuses. Il traite les fractures, luxations, entorses et autres traumatismes physiques.' },
-  { titre: 'Hygiène et Santé Publique', col: '#536784', desc: 'Cette spécialité veille à la prévention des maladies et à la protection de la population. Elle surveille les risques sanitaires, les épidémies, la salubrité des lieux publics et les mesures d\'hygiène au sein des dispensaires.' },
+  { titre: 'Hygiène et Santé Publique', col: '#AAB9C6', desc: 'Cette spécialité veille à la prévention des maladies et à la protection de la population. Elle surveille les risques sanitaires, les épidémies, la salubrité des lieux publics et les mesures d\'hygiène au sein des dispensaires.' },
   { titre: 'Obstétrique',            col: '#7A5878', desc: "L'obstétricien accompagne les femmes durant la grossesse, l'accouchement et les suites de couches. Il veille à la santé de la mère et de l'enfant avant, pendant et après la naissance." },
   { titre: 'Ophtalmologie',          col: '#4A6878', desc: "L'ophtalmologiste est spécialisé dans les maladies et blessures des yeux. Il traite les troubles de la vue, les infections oculaires ainsi que les traumatismes affectant la vision." },
   { titre: 'Dentisterie',            col: '#8B7040', desc: 'Le dentiste soigne les affections de la bouche et des dents. Il traite les douleurs dentaires, les infections, les extractions et veille à la bonne santé bucco-dentaire des habitants.' },
@@ -665,7 +665,7 @@ function SpecialitesDocument() {
       {/* Bandeau */}
       <div style={{ textAlign: 'center', marginBottom: 36, padding: '36px 20px', background: T.card, border: `1px solid ${T.border}`, position: 'relative', overflow: 'hidden' }}>
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
-          <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? '2px solid rgba(128,104,45,0.45)' : 'none', borderBottom: pos.includes('bottom') ? '2px solid rgba(128,104,45,0.45)' : 'none', borderLeft: pos.includes('left') ? '2px solid rgba(128,104,45,0.45)' : 'none', borderRight: pos.includes('right') ? '2px solid rgba(128,104,45,0.45)' : 'none' }} />
+          <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderBottom: pos.includes('bottom') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderLeft: pos.includes('left') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderRight: pos.includes('right') ? '2px solid rgba(209,183,124,0.45)' : 'none' }} />
         ))}
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ CATALOGUE MÉDICAL ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 8px', letterSpacing: '0.05em' }}>Spécialités Proposées</h2>
@@ -695,8 +695,8 @@ function SpecialitesDocument() {
       </div>
 
       {/* Note du Dispensaire */}
-      <div style={{ background: T.card, border: `1px solid rgba(128,104,45,0.35)`, borderLeft: `4px solid ${T.gold}`, padding: '24px 28px' }}>
-        <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, letterSpacing: '0.22em', background: 'rgba(128,104,45,0.10)', padding: '5px 14px', border: `1px solid rgba(128,104,45,0.30)`, display: 'inline-block', marginBottom: 16 }}>NOTE DU DISPENSAIRE</div>
+      <div style={{ background: T.card, border: `1px solid rgba(209,183,124,0.35)`, borderLeft: `4px solid ${T.gold}`, padding: '24px 28px' }}>
+        <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, letterSpacing: '0.22em', background: 'rgba(209,183,124,0.10)', padding: '5px 14px', border: `1px solid rgba(209,183,124,0.30)`, display: 'inline-block', marginBottom: 16 }}>NOTE DU DISPENSAIRE</div>
         <p style={{ fontFamily: BODY, fontSize: 16, color: T.text, lineHeight: 1.9, margin: 0, textAlign: 'justify' }}>
           Un médecin peut posséder plusieurs spécialités. Toutefois, chaque praticien demeure avant tout un serviteur de la médecine et se doit d'apporter assistance à toute personne nécessitant des soins, quelle que soit la nature de son mal.
         </p>
@@ -717,7 +717,7 @@ const DOCTRINE_ARTICLES = [
   { num: 'VII',  title: "DE L'HYGIÈNE DU MALADE",                        icon: '🏥', col: '#6A7A68' },
   { num: 'VIII', title: "APPLICATION SELON LES GRADES",                   icon: '📜', col: '#5A6888' },
   { num: 'IX',   title: "DISCIPLINE ET MORALITÉ DU SOIGNANT",             icon: '⚖',  col: '#786050' },
-  { num: 'X',    title: "REMÈDES HYGIÉNIQUES DU DISPENSAIRE",             icon: '⚗',  col: '#4B6546' },
+  { num: 'X',    title: "REMÈDES HYGIÉNIQUES DU DISPENSAIRE",             icon: '⚗',  col: '#A8B991' },
   { num: 'XI',   title: "SERMENT DU SERVITEUR DE SANTÉ",                  icon: '✦',  col: '#8A7848' },
 ] as const;
 
@@ -864,7 +864,7 @@ function DoctrinePureteDocument() {
             <ArticleHeader {...DOCTRINE_ARTICLES[7]} />
             {[
               { grade: 'Apprentis',         col: '#786848', items: ['Exécutent les tâches de propreté et de purification.', 'Apprennent les gestes qui chassent les germes : lavage, aération, désinfection.', 'Observent et consignent les signes d\'insalubrité.'] },
-              { grade: 'Infirmiers',         col: '#4B6546', items: ['Assurent l\'entretien des chambres, la stérilisation du matériel et la préparation des solutions antiseptiques.', 'Enseignent la discipline hygiénique et veillent à la sécurité des soins.'] },
+              { grade: 'Infirmiers',         col: '#A8B991', items: ['Assurent l\'entretien des chambres, la stérilisation du matériel et la préparation des solutions antiseptiques.', 'Enseignent la discipline hygiénique et veillent à la sécurité des soins.'] },
               { grade: 'Apprentis-Médecins', col: '#4878A8', items: ['Étudient la science pasteurienne, la cause microbienne des maladies, et l\'influence des éléments — air, eau, saleté — sur la santé publique.', 'Établissent des protocoles et supervisent leur application au dispensaire.'] },
             ].map(g => (
               <div key={g.grade} style={{ marginBottom: 18, background: T.card, border: `1px solid ${g.col}35`, borderLeft: `3px solid ${g.col}`, padding: '16px 20px' }}>
@@ -937,7 +937,7 @@ const PLANTES = [
     devise: '"Je purifie par le parfum et j\'apaise par la douceur."',
   },
   {
-    num: '3', nom: 'Romarin', lat: 'Rosmarinus officinalis', icon: '🌿', col: '#4B6546',
+    num: '3', nom: 'Romarin', lat: 'Rosmarinus officinalis', icon: '🌿', col: '#A8B991',
     desc: "Plante tonique et solaire. Elle ranime le sang et désinfecte les instruments comme les pièces.",
     usages: ["Décoction pour le nettoyage des tables et ustensiles.", "Infusion dans le vinaigre pour la désinfection du matériel.", "Fumigation dans les salles d'opérations."],
     devise: '"Je rends force au lieu et chaleur au sang."',
@@ -1188,7 +1188,7 @@ function ManuelInfirmiersDocument() {
           <div style={{ marginBottom: 24, background: T.paper, border: `1px solid ${MC}30`, borderLeft: `3px solid ${MC}`, padding: '18px 22px' }}>
             <div style={{ fontFamily: DISPLAY, fontSize: 18, color: MC_LIGHT, marginBottom: 14 }}>Traitements autorisés</div>
             {[
-              { label: 'Remèdes végétaux', items: ["Teinture Mère d'Échinacée", "Décoction Fébrifuge", "Sirop Pectoral", "Décoction Expectorante", "Macération de Panax", "Vin Quinquiné"], col: '#4B6546' },
+              { label: 'Remèdes végétaux', items: ["Teinture Mère d'Échinacée", "Décoction Fébrifuge", "Sirop Pectoral", "Décoction Expectorante", "Macération de Panax", "Vin Quinquiné"], col: '#A8B991' },
               { label: 'Préparations externes', items: ["Eau Vulnéraire", "Onguent Vulnéraire", "Pommade Camphrée", "Baume Résineux"], col: '#4878A8' },
               { label: 'Sous autorisation médicale', items: ["Laudanum", "Élixir Parégorique"], col: '#A06028' },
             ].map(cat => (
@@ -1283,7 +1283,7 @@ function ManuelInfirmiersDocument() {
             <div style={{ fontFamily: DISPLAY, fontSize: 18, color: '#8AAA70', marginBottom: 12, marginTop: 4 }}>Remèdes végétaux</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 22 }}>
               {REMEDIES_VEGETAUX.map(r => (
-                <div key={r.nom} style={{ background: T.card, border: '1px solid rgba(90,120,72,0.35)', borderLeft: '3px solid #4B6546', padding: '12px 18px', display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+                <div key={r.nom} style={{ background: T.card, border: '1px solid rgba(90,120,72,0.35)', borderLeft: '3px solid #A8B991', padding: '12px 18px', display: 'flex', gap: 20, alignItems: 'flex-start' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#8AAA70', minWidth: 200, flexShrink: 0 }}>{r.nom}</div>
                   <div style={{ flex: 1 }}><RegList items={r.usages} /></div>
                 </div>
@@ -1396,7 +1396,7 @@ const CC_LIGHT = '#A07850';
 
 const CATAPLASMES = [
   {
-    id: 'A', nom: 'Cataplasme Purifiant', col: '#4B6546',
+    id: 'A', nom: 'Cataplasme Purifiant', col: '#A8B991',
     usage:       ["Plaies infectées.", "Blessures souillées.", "Inflammations locales."],
     composition: ["Argile verte.", "Thym.", "Romarin.", "Miel.", "Vinaigre tiède."],
     effets:      ["Absorbe les impuretés.", "Assainit la plaie.", "Réduit l'inflammation."],
@@ -1700,7 +1700,7 @@ const TRAITEMENTS = [
 
 function MedTable({ rows }: { rows: readonly (readonly string[])[] }) {
   const hStyle: React.CSSProperties = { padding: '9px 14px', fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em', color: MMC_LIGHT, background: `${MMC}20`, borderBottom: `1px solid ${MMC}40`, textAlign: 'left' };
-  const tdStyle: React.CSSProperties = { padding: '9px 14px', fontFamily: BODY, fontSize: 14, color: '#273E50', borderBottom: `1px solid ${MMC}20`, verticalAlign: 'top' };
+  const tdStyle: React.CSSProperties = { padding: '9px 14px', fontFamily: BODY, fontSize: 14, color: '#EADCB9', borderBottom: `1px solid ${MMC}20`, verticalAlign: 'top' };
   const td0Style: React.CSSProperties = { ...tdStyle, fontFamily: DISPLAY, fontSize: 15, color: MMC_LIGHT };
   return (
     <table style={{ width: '100%', borderCollapse: 'collapse', border: `1px solid ${MMC}35`, marginTop: 10 }}>
@@ -1787,12 +1787,12 @@ function ManuelMedecinDocument() {
             <div style={{ fontFamily: DISPLAY, fontSize: 21, color: MMC_LIGHT, marginBottom: 16 }}>Pharmacologie du Dispensaire</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
               {[
-                { titre: 'Remèdes végétaux',        col: '#4B6546', items: ["Tilleul.", "Saule.", "Camomille.", "Menthe.", "Thym.", "Consoude.", "Millepertuis.", "Valériane.", "Échinacée.", "Panax."] },
+                { titre: 'Remèdes végétaux',        col: '#A8B991', items: ["Tilleul.", "Saule.", "Camomille.", "Menthe.", "Thym.", "Consoude.", "Millepertuis.", "Valériane.", "Échinacée.", "Panax."] },
                 { titre: 'Préparations médicales',  col: '#7A5830', items: ["Laudanum.", "Élixir Parégorique.", "Vin Quinquiné.", "Eau Vulnéraire.", "Onguent Vulnéraire.", "Pommade Camphrée.", "Baume Résineux."] },
                 { titre: 'Produits modernes',       col: '#604878', items: ["Quinine.", "Chloroforme.", "Éther.", "Acide phénique.", "Teinture d'iode."] },
               ].map(cat => (
                 <div key={cat.titre} style={{ background: T.card, border: `1px solid ${cat.col}40`, borderLeft: `3px solid ${cat.col}`, padding: '12px 16px' }}>
-                  <div style={{ fontFamily: DISPLAY, fontSize: 14, color: cat.col === '#4B6546' ? '#8AAA70' : cat.col === '#7A5830' ? '#A07850' : '#9878B8', marginBottom: 8 }}>{cat.titre}</div>
+                  <div style={{ fontFamily: DISPLAY, fontSize: 14, color: cat.col === '#A8B991' ? '#8AAA70' : cat.col === '#7A5830' ? '#A07850' : '#9878B8', marginBottom: 8 }}>{cat.titre}</div>
                   <RegList items={cat.items} />
                 </div>
               ))}
@@ -1929,7 +1929,7 @@ function ManuelMedecinDocument() {
               <RegPara>Le médecin doit connaître :</RegPara>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
                 {[
-                  { titre: 'Remèdes végétaux',        col: '#4B6546', colL: '#8AAA70', items: ["Tilleul.", "Saule.", "Camomille.", "Menthe.", "Thym.", "Consoude.", "Millepertuis.", "Valériane.", "Échinacée.", "Panax."] },
+                  { titre: 'Remèdes végétaux',        col: '#A8B991', colL: '#8AAA70', items: ["Tilleul.", "Saule.", "Camomille.", "Menthe.", "Thym.", "Consoude.", "Millepertuis.", "Valériane.", "Échinacée.", "Panax."] },
                   { titre: 'Préparations médicales',  col: '#7A5830', colL: '#A07850', items: ["Laudanum.", "Élixir Parégorique.", "Vin Quinquiné.", "Eau Vulnéraire.", "Onguent Vulnéraire.", "Pommade Camphrée.", "Baume Résineux."] },
                   { titre: 'Agents médicaux modernes',col: '#604878', colL: '#9878B8', items: ["Quinine.", "Chloroforme.", "Éther.", "Acide phénique.", "Teinture d'iode."] },
                 ].map(cat => (
@@ -2072,7 +2072,7 @@ const AFFECTIONS = [
     chirurgie: null,
   },
   {
-    num: 'V', nom: 'Maux de Gorge', col: '#4B6546',
+    num: 'V', nom: 'Maux de Gorge', col: '#A8B991',
     symptomes: ["Douleur.", "Difficulté à avaler.", "Toux.", "Fièvre légère."],
     traitement: ["Gargarismes de sauge et miel.", "Infusion de thym.", "Cataplasme tiède sur le cou."],
     complement: "Sirop Pectoral pour toux persistante. Élixir Parégorique sur prescription médicale.",
@@ -2118,7 +2118,7 @@ const REMEDES_GEN = [
   { nom: 'Laudanum',          col: '#A04848', usages: ["Douleurs sévères.", "Agitation importante.", "Insomnies graves."] },
   { nom: 'Élixir Parégorique', col: '#786040', usages: ["Toux persistante.", "Irritations respiratoires.", "Douleurs modérées."] },
   { nom: 'Vin Quinquiné',     col: '#606880', usages: ["Fatigue.", "Fièvres prolongées.", "Convalescence."] },
-  { nom: 'Eau Vulnéraire',    col: '#4B6546', usages: ["Nettoyer les plaies.", "Prévenir les infections."] },
+  { nom: 'Eau Vulnéraire',    col: '#A8B991', usages: ["Nettoyer les plaies.", "Prévenir les infections."] },
   { nom: 'Onguent Vulnéraire', col: '#4878A8', usages: ["Favoriser la cicatrisation.", "Protéger les tissus lésés."] },
   { nom: 'Pommade Camphrée',  col: '#7A5830', usages: ["Douleurs musculaires.", "Entorses.", "Contusions."] },
   { nom: 'Baume Résineux',    col: '#488070', usages: ["Inflammations locales.", "Irritations de la peau.", "Douleurs articulaires."] },
@@ -2333,7 +2333,7 @@ const PLANTES_AD = [
     note: null,
   },
   {
-    nom: 'Reine-des-Prés', col: '#4B6546',
+    nom: 'Reine-des-Prés', col: '#A8B991',
     usage: ["Douleurs articulaires.", "États fébriles.", "Maux de tête."],
     application: null, note: null,
   },
@@ -2361,13 +2361,13 @@ const PLANTES_AD = [
 
 const CATAPLASMES_AD = [
   { nom: 'Cataplasme du Médecin',       col: '#A04848', ingredients: ["Consoude.", "Sauge.", "Miel.", "Argile."],                 usages: ["Plaies.", "Fractures.", "Sutures."] },
-  { nom: 'Cataplasme du Soldat',         col: '#4B6546', ingredients: ["Romarin.", "Lavande.", "Prêle."],                          usages: ["Courbatures.", "Douleurs du dos.", "Fatigue musculaire."] },
+  { nom: 'Cataplasme du Soldat',         col: '#A8B991', ingredients: ["Romarin.", "Lavande.", "Prêle."],                          usages: ["Courbatures.", "Douleurs du dos.", "Fatigue musculaire."] },
   { nom: 'Cataplasme de la Paix Blanche', col: '#706888', ingredients: ["Camomille.", "Millepertuis.", "Miel."],                   usages: ["Brûlures.", "Coupures.", "Inflammations de la peau."] },
 ] as const;
 
 const PREPARATIONS_INT = [
   { nom: 'Infusion du Calme Profond',    col: '#486880', ingredients: ["Saule blanc.", "Camomille.", "Tilleul."],            usages: ["Douleurs légères.", "Repos nocturne."] },
-  { nom: "Infusion du Guerrier Guéri",   col: '#4B6546', ingredients: ["Reine-des-Prés.", "Ortie.", "Romarin."],             usages: ["Convalescence.", "Douleurs résiduelles."] },
+  { nom: "Infusion du Guerrier Guéri",   col: '#A8B991', ingredients: ["Reine-des-Prés.", "Ortie.", "Romarin."],             usages: ["Convalescence.", "Douleurs résiduelles."] },
   { nom: 'Vin Médicinal de Romarin',     col: '#7A5830', ingredients: null,                                                   usages: ["Fatigue.", "Douleurs liées au froid.", "Faiblesse générale."] },
 ] as const;
 
@@ -2820,7 +2820,7 @@ function PharmacieSedartifsDocument() {
                 <div key={s.nom} style={{ marginBottom: 4, display: 'flex', gap: 10, alignItems: 'baseline', flexWrap: 'wrap' }}>
                   <span style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, minWidth: 160 }}>{s.nom}</span>
                   <span style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.05em' }}>{s.surnom}</span>
-                  {s.prescription && <span style={{ fontFamily: MONO, fontSize: 10, color: '#963F36', letterSpacing: '0.1em' }}>PRESCRIPTION</span>}
+                  {s.prescription && <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', letterSpacing: '0.1em' }}>PRESCRIPTION</span>}
                 </div>
               ))}
             </div>
@@ -2832,7 +2832,7 @@ function PharmacieSedartifsDocument() {
               <div key={a.nom} style={{ marginBottom: 4, display: 'flex', gap: 10, alignItems: 'baseline', flexWrap: 'wrap' }}>
                 <span style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, minWidth: 160 }}>{a.nom}</span>
                 <span style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.05em' }}>{a.surnom}</span>
-                <span style={{ fontFamily: MONO, fontSize: 10, color: '#963F36', letterSpacing: '0.1em' }}>PRESCRIPTION</span>
+                <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', letterSpacing: '0.1em' }}>PRESCRIPTION</span>
               </div>
             ))}
           </div>
@@ -2861,8 +2861,8 @@ function PharmacieSedartifsDocument() {
                 {(ECHELLE_SED as unknown as string[][]).map(row => (
                   <tr key={row[0]}>
                     <td style={{ padding: '8px 12px', fontFamily: DISPLAY, fontSize: 14, color: SC_LIGHT, borderBottom: `1px solid ${SC}20` }}>{row[0]}</td>
-                    <td style={{ padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: '#273E50', borderBottom: `1px solid ${SC}20` }}>{row[2]}</td>
-                    <td style={{ padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: '#273E50', borderBottom: `1px solid ${SC}20` }}>{row[3]}</td>
+                    <td style={{ padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: '#EADCB9', borderBottom: `1px solid ${SC}20` }}>{row[2]}</td>
+                    <td style={{ padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: '#EADCB9', borderBottom: `1px solid ${SC}20` }}>{row[3]}</td>
                     <td style={{ padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: T.sepia, borderBottom: `1px solid ${SC}20` }}>{row[4]}</td>
                   </tr>
                 ))}
@@ -2938,7 +2938,7 @@ function PharmacieSedartifsDocument() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px 10px', flexWrap: 'wrap' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}>{s.nom}</div>
                 <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.1em' }}>{s.surnom}</div>
-                {s.prescription && <span style={{ fontFamily: MONO, fontSize: 10, color: '#963F36', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION REQUISE</span>}
+                {s.prescription && <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION REQUISE</span>}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, padding: '0 18px 14px' }}>
                 <div>
@@ -2968,7 +2968,7 @@ function PharmacieSedartifsDocument() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px 10px', flexWrap: 'wrap' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}>{s.nom}</div>
                 <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.1em' }}>{s.surnom}</div>
-                {s.prescription && <span style={{ fontFamily: MONO, fontSize: 10, color: '#963F36', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION OBLIGATOIRE</span>}
+                {s.prescription && <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION OBLIGATOIRE</span>}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, padding: '0 18px 14px' }}>
                 <div>
@@ -2985,8 +2985,8 @@ function PharmacieSedartifsDocument() {
                     </div>
                   )}
                   {s.danger && (
-                    <div style={{ marginTop: 8, padding: '8px 12px', background: 'rgba(192,48,48,0.08)', border: '1px solid rgba(192,48,48,0.30)', borderLeft: '3px solid #244958' }}>
-                      <div style={{ fontFamily: MONO, fontSize: 10, color: '#244958', letterSpacing: '0.2em', marginBottom: 4 }}>⚠ DANGER</div>
+                    <div style={{ marginTop: 8, padding: '8px 12px', background: 'rgba(192,48,48,0.08)', border: '1px solid rgba(192,48,48,0.30)', borderLeft: '3px solid #EADCB9' }}>
+                      <div style={{ fontFamily: MONO, fontSize: 10, color: '#EADCB9', letterSpacing: '0.2em', marginBottom: 4 }}>⚠ DANGER</div>
                       <div style={{ fontFamily: BODY, fontSize: 13, color: '#C07070' }}>{s.danger}</div>
                     </div>
                   )}
@@ -3004,7 +3004,7 @@ function PharmacieSedartifsDocument() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px 10px', flexWrap: 'wrap' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}>{a.nom}</div>
                 <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.1em' }}>{a.surnom}</div>
-                <span style={{ fontFamily: MONO, fontSize: 10, color: '#963F36', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION OBLIGATOIRE</span>
+                <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION OBLIGATOIRE</span>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, padding: '0 18px 14px' }}>
                 <div>
@@ -3012,8 +3012,8 @@ function PharmacieSedartifsDocument() {
                   {a.usage.map((u, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.sepia, marginBottom: 3 }}>• {u}</div>)}
                 </div>
                 <div>
-                  <div style={{ padding: '8px 12px', background: 'rgba(192,48,48,0.08)', border: '1px solid rgba(192,48,48,0.30)', borderLeft: '3px solid #244958' }}>
-                    <div style={{ fontFamily: MONO, fontSize: 10, color: '#244958', letterSpacing: '0.2em', marginBottom: 4 }}>⚠ DANGER</div>
+                  <div style={{ padding: '8px 12px', background: 'rgba(192,48,48,0.08)', border: '1px solid rgba(192,48,48,0.30)', borderLeft: '3px solid #EADCB9' }}>
+                    <div style={{ fontFamily: MONO, fontSize: 10, color: '#EADCB9', letterSpacing: '0.2em', marginBottom: 4 }}>⚠ DANGER</div>
                     <div style={{ fontFamily: BODY, fontSize: 13, color: '#C07070' }}>{a.danger}</div>
                   </div>
                 </div>
@@ -3035,9 +3035,9 @@ function PharmacieSedartifsDocument() {
                 {(ECHELLE_SED as unknown as string[][]).map((row, i) => (
                   <tr key={row[0]} style={{ background: i % 2 === 0 ? 'transparent' : `${SC}08` }}>
                     <td style={{ padding: '9px 14px', fontFamily: DISPLAY, fontSize: 15, color: SC_LIGHT, borderBottom: `1px solid ${SC}20` }}>{row[0]}</td>
-                    <td style={{ padding: '9px 14px', fontFamily: BODY, fontSize: 14, color: '#273E50', borderBottom: `1px solid ${SC}20` }}>{row[1]}</td>
-                    <td style={{ padding: '9px 14px', fontFamily: BODY, fontSize: 14, color: '#273E50', borderBottom: `1px solid ${SC}20` }}>{row[2]}</td>
-                    <td style={{ padding: '9px 14px', fontFamily: BODY, fontSize: 14, color: '#273E50', borderBottom: `1px solid ${SC}20` }}>{row[3]}</td>
+                    <td style={{ padding: '9px 14px', fontFamily: BODY, fontSize: 14, color: '#EADCB9', borderBottom: `1px solid ${SC}20` }}>{row[1]}</td>
+                    <td style={{ padding: '9px 14px', fontFamily: BODY, fontSize: 14, color: '#EADCB9', borderBottom: `1px solid ${SC}20` }}>{row[2]}</td>
+                    <td style={{ padding: '9px 14px', fontFamily: BODY, fontSize: 14, color: '#EADCB9', borderBottom: `1px solid ${SC}20` }}>{row[3]}</td>
                     <td style={{ padding: '9px 14px', fontFamily: BODY, fontSize: 14, color: T.sepia, borderBottom: `1px solid ${SC}20` }}>{row[4]}</td>
                   </tr>
                 ))}
@@ -3071,7 +3071,7 @@ function PharmacieSedartifsDocument() {
           </div>
 
           <RegSectionHeader num="IV" title="Dangers et Devoir du Médecin" icon="⚠" col={SC} />
-          <div style={{ marginBottom: 20, padding: '18px 22px', background: 'rgba(192,48,48,0.06)', border: '1px solid rgba(192,48,48,0.25)', borderLeft: '4px solid #244958' }}>
+          <div style={{ marginBottom: 20, padding: '18px 22px', background: 'rgba(192,48,48,0.06)', border: '1px solid rgba(192,48,48,0.25)', borderLeft: '4px solid #EADCB9' }}>
             <RegPara>Les sédatifs opiacés — laudanum, lait de pavot, élixir parégorique — créent une accoutumance. Un patient qui en consomme régulièrement peut développer une dépendance dont les symptômes de sevrage sont douloureux et potentiellement mortels. Le médecin doit noter toute administration dans le registre du malade et réduire progressivement la dose dès que l'état du patient le permet.</RegPara>
             <RegPara>Il est du devoir du praticien de refuser la délivrance de laudanum ou de chloroforme à tout individu qui ne présente pas de raison médicale valable. Ces substances tombent trop souvent entre de mauvaises mains. La responsabilité du médecin est entière.</RegPara>
             <RegPara>Face à un surdosage : maintenir le patient sur le côté pour éviter l'asphyxie, stimuler par friction vigoureuse, appliquer de l'eau froide sur le visage, ne jamais laisser seul. En cas d'arrêt respiratoire après chloroforme : réanimation par insufflation et compressions thoraciques immédiates.</RegPara>
@@ -3087,7 +3087,7 @@ function PharmacieSedartifsDocument() {
 /* ── Cours de Chirurgie Médicale ── */
 
 const CHC = '#702020';
-const CHC_LIGHT = '#963F36';
+const CHC_LIGHT = '#DF9A88';
 
 function ChirurgieDocument() {
   const [version, setVersion] = useState<'complete' | 'resume'>('complete');
@@ -3532,7 +3532,7 @@ function ObstetriqueiDocument() {
                 <div key={m} style={{ background: `${OBC}08`, border: `1px solid ${OBC}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text }}>{m}</div>
               ))}
             </div>
-            <RegBlock col="rgba(128,104,45,0.40)">
+            <RegBlock col="rgba(209,183,124,0.40)">
               <RegPara><strong>En cas de douleurs importantes :</strong> Laudanum uniquement si le bénéfice est supérieur au risque. Les médicaments puissants demeurent exceptionnels durant la grossesse.</RegPara>
             </RegBlock>
           </>)}
@@ -3630,7 +3630,7 @@ function ObstetriqueiDocument() {
           {obBlock(<>
             {obTitle('MÉDICAMENTS AUTORISÉS')}
             <RegList items={['Camomille.', 'Mélisse.', 'Tilleul.', 'Menthe.', 'Valériane.']} />
-            <RegBlock col="rgba(128,104,45,0.40)">
+            <RegBlock col="rgba(209,183,124,0.40)">
               <RegPara>En cas de douleur importante : Laudanum uniquement sous contrôle médical.</RegPara>
             </RegBlock>
           </>)}
@@ -3814,10 +3814,10 @@ function ObstetriqueIIDocument() {
                   items: ['Évaluer la nécessité d\'une intervention.', 'Surveiller l\'état de la mère et du fœtus.', 'Ne pas précipiter sans indication claire.'],
                 },
               ].map(c => (
-                <div key={c.label} style={{ background: c.urgent ? 'rgba(142,122,74,0.06)' : `${OBC2}06`, border: `1px solid ${c.urgent ? 'rgba(180,60,60,0.40)' : OBC2 + '30'}`, borderLeft: `4px solid ${c.urgent ? '#B83030' : OBC2}`, padding: '16px 20px' }}>
+                <div key={c.label} style={{ background: c.urgent ? 'rgba(180,160,113,0.06)' : `${OBC2}06`, border: `1px solid ${c.urgent ? 'rgba(180,60,60,0.40)' : OBC2 + '30'}`, borderLeft: `4px solid ${c.urgent ? '#B83030' : OBC2}`, padding: '16px 20px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                    {c.urgent && <span style={{ fontFamily: MONO, fontSize: 10, color: '#963F36', background: 'rgba(180,60,60,0.12)', padding: '2px 7px', letterSpacing: '0.12em' }}>URGENCE</span>}
-                    <div style={{ fontFamily: DISPLAY, fontSize: 17, color: c.urgent ? '#963F36' : OBC2_LIGHT }}>{c.label}</div>
+                    {c.urgent && <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', background: 'rgba(180,60,60,0.12)', padding: '2px 7px', letterSpacing: '0.12em' }}>URGENCE</span>}
+                    <div style={{ fontFamily: DISPLAY, fontSize: 17, color: c.urgent ? '#DF9A88' : OBC2_LIGHT }}>{c.label}</div>
                   </div>
                   <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, margin: '0 0 8px', lineHeight: 1.65 }}>{c.desc}</p>
                   <RegList items={c.items} />
@@ -3835,7 +3835,7 @@ function ObstetriqueIIDocument() {
                 <RegList items={['Laudanum (douleurs importantes).', 'Éther.', 'Chloroforme.', 'Ergot de seigle.', 'Acide phénique.', 'Teinture d\'iode.']} />
               </div>
               <div style={{ background: T.card, border: `1px solid rgba(80,140,80,0.35)`, padding: '16px 20px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 16, color: '#42663C', marginBottom: 10 }}>Préparations végétales</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 16, color: '#A8B991', marginBottom: 10 }}>Préparations végétales</div>
                 <RegList items={['Camomille.', 'Mélisse.', 'Tilleul.', 'Lavande.', 'Consoude.', 'Plantain.']} />
               </div>
             </div>
@@ -3854,7 +3854,7 @@ function ObstetriqueIIDocument() {
                 <RegList items={['La surveillance du travail.', 'Les premiers soins à la mère.', 'Les premiers soins au nouveau-né.']} />
               </div>
               <div style={{ background: 'rgba(160,60,60,0.06)', border: '1px solid rgba(180,60,60,0.35)', borderLeft: '3px solid rgba(180,60,60,0.70)', padding: '16px 20px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#963F36', marginBottom: 8 }}>Appel immédiat d'un médecin si</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#DF9A88', marginBottom: 8 }}>Appel immédiat d'un médecin si</div>
                 <RegList items={['Présentation anormale.', 'Hémorragie.', 'Absence de progression du travail.', 'Perte de connaissance de la mère.', 'Toute complication menaçante.']} />
               </div>
             </div>
@@ -3943,7 +3943,7 @@ function ObstetriqueIIDocument() {
                 <RegList items={['Laudanum.', 'Éther.', 'Chloroforme.', 'Ergot de seigle.', 'Acide phénique.', 'Teinture d\'iode.']} />
               </div>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#42663C', marginBottom: 8 }}>Végétaux</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#A8B991', marginBottom: 8 }}>Végétaux</div>
                 <RegList items={['Camomille.', 'Mélisse.', 'Lavande.', 'Tilleul.', 'Consoude.', 'Plantain.']} />
               </div>
             </div>
@@ -3957,7 +3957,7 @@ function ObstetriqueIIDocument() {
                 <RegList items={['Surveillance du travail.', 'Assistance à la naissance.', 'Premiers soins mère/enfant.']} />
               </div>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#963F36', marginBottom: 8 }}>Appel médecin si</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#DF9A88', marginBottom: 8 }}>Appel médecin si</div>
                 <RegList items={['Présentation anormale.', 'Hémorragie.', 'Travail bloqué.', 'Perte de connaissance.', 'Complication grave.']} />
               </div>
             </div>
@@ -4116,12 +4116,12 @@ function ObstetriqueIIIDocument() {
             {ob3Title('CHAPITRE VI', 'Les Complications du Post-partum')}
             <RegPara>Le praticien doit reconnaître rapidement :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 14 }}>
-              <div style={{ background: 'rgba(142,122,74,0.06)', border: '1px solid rgba(180,60,60,0.40)', borderLeft: '4px solid rgba(180,60,60,0.70)', padding: '16px 20px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 16, color: '#963F36', marginBottom: 10 }}>Chez la mère</div>
+              <div style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.40)', borderLeft: '4px solid rgba(180,60,60,0.70)', padding: '16px 20px' }}>
+                <div style={{ fontFamily: DISPLAY, fontSize: 16, color: '#DF9A88', marginBottom: 10 }}>Chez la mère</div>
                 <RegList items={['Hémorragie secondaire.', 'Fièvre puerpérale.', 'Infection utérine.', 'Abcès mammaire.', 'Rétention de débris placentaires.', 'Épuisement important.']} />
               </div>
-              <div style={{ background: 'rgba(142,122,74,0.06)', border: '1px solid rgba(180,60,60,0.40)', borderLeft: '4px solid rgba(180,60,60,0.70)', padding: '16px 20px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 16, color: '#963F36', marginBottom: 10 }}>Chez le nouveau-né</div>
+              <div style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.40)', borderLeft: '4px solid rgba(180,60,60,0.70)', padding: '16px 20px' }}>
+                <div style={{ fontFamily: DISPLAY, fontSize: 16, color: '#DF9A88', marginBottom: 10 }}>Chez le nouveau-né</div>
                 <RegList items={['Difficultés respiratoires.', 'Refus de téter.', 'Fièvre.', 'Faiblesse générale.', 'Infection du cordon.', 'Convulsions.']} />
               </div>
             </div>
@@ -4149,14 +4149,14 @@ function ObstetriqueIIIDocument() {
             {ob3Title('CHAPITRE VIII', 'Médicaments et Préparations Autorisés')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
               <div style={{ background: T.card, border: `1px solid rgba(80,140,80,0.35)`, padding: '16px 20px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#42663C', marginBottom: 10 }}>Préparations végétales</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#A8B991', marginBottom: 10 }}>Préparations végétales</div>
                 <RegList items={['Camomille.', 'Mélisse.', 'Tilleul.', 'Lavande.', 'Plantain.', 'Consoude.']} />
               </div>
               <div style={{ background: `${OBC3}08`, border: `1px solid ${OBC3}30`, padding: '16px 20px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 15, color: OBC3_LIGHT, marginBottom: 10 }}>Préparations du dispensaire</div>
                 <RegList items={['Eau Vulnéraire.', 'Onguent Vulnéraire.', 'Pommade Camphrée.', 'Baume Résineux.']} />
               </div>
-              <div style={{ background: T.card, border: `1px solid rgba(128,104,45,0.35)`, padding: '16px 20px' }}>
+              <div style={{ background: T.card, border: `1px solid rgba(209,183,124,0.35)`, padding: '16px 20px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 15, color: T.gold, marginBottom: 10 }}>Médicaments modernes</div>
                 <RegList items={['Laudanum (douleurs importantes uniquement).', 'Acide phénique (désinfection).', 'Teinture d\'iode.']} />
               </div>
@@ -4228,12 +4228,12 @@ function ObstetriqueIIIDocument() {
           {ob3Block(<>
             {ob3Title('COMPLICATIONS À RECONNAÎTRE')}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <div style={{ background: 'rgba(142,122,74,0.06)', border: '1px solid rgba(180,60,60,0.35)', borderLeft: '3px solid rgba(180,60,60,0.70)', padding: '14px 16px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#963F36', marginBottom: 8 }}>Chez la mère</div>
+              <div style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.35)', borderLeft: '3px solid rgba(180,60,60,0.70)', padding: '14px 16px' }}>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#DF9A88', marginBottom: 8 }}>Chez la mère</div>
                 <RegList items={['Hémorragie.', 'Fièvre puerpérale.', 'Infection.', 'Abcès mammaire.', 'Rétention placentaire.', 'Épuisement.']} />
               </div>
-              <div style={{ background: 'rgba(142,122,74,0.06)', border: '1px solid rgba(180,60,60,0.35)', borderLeft: '3px solid rgba(180,60,60,0.70)', padding: '14px 16px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#963F36', marginBottom: 8 }}>Chez le nouveau-né</div>
+              <div style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.35)', borderLeft: '3px solid rgba(180,60,60,0.70)', padding: '14px 16px' }}>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#DF9A88', marginBottom: 8 }}>Chez le nouveau-né</div>
                 <RegList items={['Difficultés respiratoires.', 'Refus de téter.', 'Fièvre.', 'Infection du cordon.', 'Convulsions.', 'Faiblesse.']} />
               </div>
             </div>
@@ -4251,7 +4251,7 @@ function ObstetriqueIIIDocument() {
             {ob3Title('MÉDICAMENTS AUTORISÉS')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
               {[
-                { label: 'Végétaux', col: '#42663C', items: ['Camomille.', 'Mélisse.', 'Tilleul.', 'Lavande.', 'Plantain.', 'Consoude.'] },
+                { label: 'Végétaux', col: '#A8B991', items: ['Camomille.', 'Mélisse.', 'Tilleul.', 'Lavande.', 'Plantain.', 'Consoude.'] },
                 { label: 'Dispensaire', col: OBC3_LIGHT, items: ['Eau Vulnéraire.', 'Onguent Vulnéraire.', 'Pommade Camphrée.', 'Baume Résineux.'] },
                 { label: 'Médicaments', col: T.gold, items: ['Laudanum (douleurs).', 'Acide phénique.', 'Teinture d\'iode.'] },
               ].map(g => (
@@ -4459,8 +4459,8 @@ function TraitementPhysioDocument() {
             <RegPara>Le praticien doit reconnaître rapidement :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8, marginTop: 12 }}>
               {['Infection.', 'Suppuration.', 'Gangrène.', 'Hémorragie.', 'Retard de consolidation.', 'Mauvaise position de l\'os.'].map(c => (
-                <div key={c} style={{ background: 'rgba(142,122,74,0.06)', border: '1px solid rgba(180,60,60,0.35)', padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: '#963F36', fontSize: 10 }}>◆</span>{c}
+                <div key={c} style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.35)', padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: '#DF9A88', fontSize: 10 }}>◆</span>{c}
                 </div>
               ))}
             </div>
@@ -4475,14 +4475,14 @@ function TraitementPhysioDocument() {
             <RegPara>Les plantes accompagnent la consolidation sans remplacer les traitements chirurgicaux.</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginTop: 14 }}>
               <div style={{ background: T.card, border: 'rgba(80,140,80,0.35) solid 1px', padding: '16px 20px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#42663C', marginBottom: 10 }}>Préparations végétales</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#A8B991', marginBottom: 10 }}>Préparations végétales</div>
                 <RegList items={['Consoude.', 'Prêle.', 'Ortie.', 'Plantain.', 'Romarin.', 'Lavande.', 'Sauge.', 'Calendula.', 'Échinacée.']} />
               </div>
               <div style={{ background: `${TPC}08`, border: `1px solid ${TPC}30`, padding: '16px 20px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 15, color: TPC_LIGHT, marginBottom: 10 }}>Préparations du dispensaire</div>
                 <RegList items={['Eau Vulnéraire.', 'Onguent Vulnéraire.', 'Pommade Camphrée.', 'Baume Résineux.']} />
               </div>
-              <div style={{ background: T.card, border: 'rgba(128,104,45,0.35) solid 1px', padding: '16px 20px' }}>
+              <div style={{ background: T.card, border: 'rgba(209,183,124,0.35) solid 1px', padding: '16px 20px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 15, color: T.gold, marginBottom: 10 }}>Médicaments</div>
                 <RegList items={['Laudanum.', 'Élixir Parégorique.', 'Éther.', 'Chloroforme.', 'Acide phénique.', 'Teinture d\'iode.']} />
               </div>
@@ -4604,7 +4604,7 @@ function TraitementPhysioDocument() {
             {tpTitle('TRAITEMENTS AUTORISÉS')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
               {[
-                { label: 'Végétaux', col: '#42663C', items: ['Consoude.', 'Prêle.', 'Ortie.', 'Plantain.', 'Romarin.', 'Lavande.', 'Sauge.', 'Calendula.', 'Échinacée.'] },
+                { label: 'Végétaux', col: '#A8B991', items: ['Consoude.', 'Prêle.', 'Ortie.', 'Plantain.', 'Romarin.', 'Lavande.', 'Sauge.', 'Calendula.', 'Échinacée.'] },
                 { label: 'Dispensaire', col: TPC_LIGHT, items: ['Eau Vulnéraire.', 'Onguent Vulnéraire.', 'Pommade Camphrée.', 'Baume Résineux.'] },
                 { label: 'Médicaments', col: T.gold, items: ['Laudanum.', 'Élixir Parégorique.', 'Éther.', 'Chloroforme.', 'Acide phénique.', 'Teinture d\'iode.'] },
               ].map(g => (
@@ -4797,7 +4797,7 @@ function TraumatologieDocument() {
                   {t.note && <RegBlock col={`${TRU}40`}><RegPara>{t.note}</RegPara></RegBlock>}
                   {t.plantes && (
                     <div style={{ marginTop: 10 }}>
-                      <div style={{ fontFamily: MONO, fontSize: 11, color: '#42663C', letterSpacing: '0.12em', marginBottom: 6 }}>PRÉPARATIONS VÉGÉTALES</div>
+                      <div style={{ fontFamily: MONO, fontSize: 11, color: '#A8B991', letterSpacing: '0.12em', marginBottom: 6 }}>PRÉPARATIONS VÉGÉTALES</div>
                       <RegList items={t.plantes} />
                     </div>
                   )}
@@ -4827,8 +4827,8 @@ function TraumatologieDocument() {
             {truTitle('CHAPITRE VI', 'Complications')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
               {['Compression nerveuse.', 'Mauvaise circulation.', 'Infection.', 'Suppuration.', 'Gangrène.', 'Ankylose.', 'Instabilité articulaire persistante.'].map(c => (
-                <div key={c} style={{ background: 'rgba(142,122,74,0.06)', border: '1px solid rgba(180,60,60,0.35)', padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: '#963F36', fontSize: 10 }}>◆</span>{c}
+                <div key={c} style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.35)', padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: '#DF9A88', fontSize: 10 }}>◆</span>{c}
                 </div>
               ))}
             </div>
@@ -4842,14 +4842,14 @@ function TraumatologieDocument() {
             {truTitle('CHAPITRE VII', 'Traitements du Dispensaire')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
               <div style={{ background: T.card, border: 'rgba(80,140,80,0.35) solid 1px', padding: '16px 20px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#42663C', marginBottom: 10 }}>Préparations végétales</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#A8B991', marginBottom: 10 }}>Préparations végétales</div>
                 <RegList items={['Consoude.', 'Prêle.', 'Plantain.', 'Lavande.', 'Romarin.', 'Sauge.', 'Calendula.', 'Échinacée.']} />
               </div>
               <div style={{ background: `${TRU}08`, border: `1px solid ${TRU}30`, padding: '16px 20px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 15, color: TRU_LIGHT, marginBottom: 10 }}>Préparations pharmaceutiques</div>
                 <RegList items={['Eau Vulnéraire.', 'Onguent Vulnéraire.', 'Pommade Camphrée.', 'Baume Résineux.']} />
               </div>
-              <div style={{ background: T.card, border: 'rgba(128,104,45,0.35) solid 1px', padding: '16px 20px' }}>
+              <div style={{ background: T.card, border: 'rgba(209,183,124,0.35) solid 1px', padding: '16px 20px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 15, color: T.gold, marginBottom: 10 }}>Médicaments</div>
                 <RegList items={['Laudanum.', 'Élixir Parégorique.', 'Éther.', 'Chloroforme.', 'Acide phénique.', 'Teinture d\'iode.']} />
               </div>
@@ -4978,7 +4978,7 @@ function TraumatologieDocument() {
             {truTitle('TRAITEMENTS AUTORISÉS')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
               {[
-                { label: 'Végétaux', col: '#42663C', items: ['Consoude.', 'Prêle.', 'Plantain.', 'Lavande.', 'Romarin.', 'Sauge.', 'Calendula.', 'Échinacée.'] },
+                { label: 'Végétaux', col: '#A8B991', items: ['Consoude.', 'Prêle.', 'Plantain.', 'Lavande.', 'Romarin.', 'Sauge.', 'Calendula.', 'Échinacée.'] },
                 { label: 'Dispensaire', col: TRU_LIGHT, items: ['Eau Vulnéraire.', 'Onguent Vulnéraire.', 'Pommade Camphrée.', 'Baume Résineux.'] },
                 { label: 'Médicaments', col: T.gold, items: ['Laudanum.', 'Élixir Parégorique.', 'Éther.', 'Chloroforme.', 'Acide phénique.', 'Teinture d\'iode.'] },
               ].map(g => (
@@ -5075,13 +5075,13 @@ function ZoonosesDocument() {
                 <div style={{ fontFamily: MONO, fontSize: 11, color: '#C07050', letterSpacing: '0.14em', marginBottom: 8 }}>CHEZ L'ANIMAL</div>
                 <RegList items={['Agressivité inhabituelle.', 'Salivation abondante.', 'Difficultés à avaler.', 'Agitation ou errance.', 'Attaques sans provocation.']} />
               </div>
-              <div style={{ background: 'rgba(142,122,74,0.06)', border: '1px solid rgba(180,60,60,0.30)', padding: '14px 16px' }}>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: '#963F36', letterSpacing: '0.14em', marginBottom: 8 }}>CHEZ L'HOMME</div>
+              <div style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.30)', padding: '14px 16px' }}>
+                <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>CHEZ L'HOMME</div>
                 <RegList items={['Douleur autour de la morsure.', 'Fièvre.', 'Anxiété.', 'Difficultés à avaler.', 'Spasmes de la gorge.', 'Agitation croissante.']} />
               </div>
             </div>
             <RegBlock col="rgba(180,60,60,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#963F36', letterSpacing: '0.14em', marginBottom: 8 }}>URGENCE — CONDUITE À TENIR</div>
+              <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>URGENCE — CONDUITE À TENIR</div>
               <RegList items={['Laver immédiatement la plaie à l\'eau bouillie et au savon.', 'Désinfecter avec Eau Vulnéraire ou Acide phénique.', 'Appliquer une Teinture d\'iode si nécessaire.', 'Surveiller l\'animal lorsqu\'il peut être capturé.', 'Déclarer le cas aux autorités locales.', 'Orienter vers la méthode préventive de Pasteur lorsque possible.']} />
             </RegBlock>
             <RegBlock col={`${ZON}40`}>
@@ -5122,7 +5122,7 @@ function ZoonosesDocument() {
                 <RegList items={['Démangeaisons importantes.', 'Sillons cutanés.', 'Rougeurs.', 'Lésions de grattage.']} />
                 <div style={{ fontFamily: MONO, fontSize: 10, color: ZON_LIGHT, letterSpacing: '0.12em', margin: '10px 0 6px' }}>TRAITEMENT</div>
                 <RegList items={['Bain chaud.', 'Pommade au soufre.', 'Lavage vêtements à l\'eau bouillante.', 'Désinfection literie et habitation.']} />
-                <div style={{ fontFamily: MONO, fontSize: 10, color: '#42663C', letterSpacing: '0.12em', margin: '10px 0 6px' }}>PLANTES</div>
+                <div style={{ fontFamily: MONO, fontSize: 10, color: '#A8B991', letterSpacing: '0.12em', margin: '10px 0 6px' }}>PLANTES</div>
                 <RegList items={['Lavande.', 'Noyer.', 'Thym.']} />
               </div>
               <div style={{ background: `${ZON}08`, border: `1px solid ${ZON}35`, borderTop: `2px solid ${ZON}`, padding: '16px 20px' }}>
@@ -5133,7 +5133,7 @@ function ZoonosesDocument() {
                 <RegList items={['Plaques dépilées.', 'Cheveux cassés.', 'Démangeaisons.', 'Pellicules épaisses.']} />
                 <div style={{ fontFamily: MONO, fontSize: 10, color: ZON_LIGHT, letterSpacing: '0.12em', margin: '10px 0 6px' }}>TRAITEMENT</div>
                 <RegList items={['Raser la zone atteinte.', 'Nettoyer avec Eau Vulnéraire.', 'Désinfecter les objets de toilette.', 'Ne jamais partager peignes ou brosses.']} />
-                <div style={{ fontFamily: MONO, fontSize: 10, color: '#42663C', letterSpacing: '0.12em', margin: '10px 0 6px' }}>PLANTES</div>
+                <div style={{ fontFamily: MONO, fontSize: 10, color: '#A8B991', letterSpacing: '0.12em', margin: '10px 0 6px' }}>PLANTES</div>
                 <RegList items={['Thym.', 'Ortie.', 'Huile de ricin.']} />
               </div>
             </div>
@@ -5144,7 +5144,7 @@ function ZoonosesDocument() {
             {zonTitle('CHAPITRE V', 'Autres Zoonoses Importantes')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
               {[
-                { label: 'Rouget du porc', col: '#963F36', transmission: 'Manipulation de viande infectée.', signes: ['Rougeur de la peau.', 'Fièvre.', 'Douleur.'], traitement: 'Nettoyage, antisepsie, surveillance.' },
+                { label: 'Rouget du porc', col: '#DF9A88', transmission: 'Manipulation de viande infectée.', signes: ['Rougeur de la peau.', 'Fièvre.', 'Douleur.'], traitement: 'Nettoyage, antisepsie, surveillance.' },
                 { label: 'Tuberculose bovine', col: '#8A6010', transmission: 'Lait cru. Contact avec bovins malades.', signes: ['Symptômes respiratoires.', 'Fatigue progressive.'], traitement: 'Faire bouillir le lait. Surveiller les troupeaux.' },
                 { label: 'Morve', col: '#5A3080', transmission: 'Chevaux malades.', signes: ['Écoulement nasal.', 'Ulcérations.', 'Fièvre.'], traitement: 'Isolement de l\'animal malade.' },
                 { label: 'Trichinose', col: '#6A3A10', transmission: 'Viande de porc insuffisamment cuite.', signes: ['Douleurs musculaires.', 'Fièvre.', 'Troubles digestifs.'], traitement: 'Cuire complètement la viande.' },
@@ -5187,12 +5187,12 @@ function ZoonosesDocument() {
                 <div style={{ fontFamily: DISPLAY, fontSize: 15, color: ZON_LIGHT, marginBottom: 10 }}>Préparations du dispensaire</div>
                 <RegList items={['Eau Vulnéraire.', 'Onguent Vulnéraire.']} />
               </div>
-              <div style={{ background: T.card, border: 'rgba(128,104,45,0.35) solid 1px', padding: '16px 20px' }}>
+              <div style={{ background: T.card, border: 'rgba(209,183,124,0.35) solid 1px', padding: '16px 20px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 15, color: T.gold, marginBottom: 10 }}>Désinfectants</div>
                 <RegList items={['Acide phénique.', 'Teinture d\'iode.']} />
               </div>
               <div style={{ background: T.card, border: 'rgba(80,140,80,0.35) solid 1px', padding: '16px 20px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#42663C', marginBottom: 10 }}>Plantes médicinales</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#A8B991', marginBottom: 10 }}>Plantes médicinales</div>
                 <RegList items={['Thym.', 'Romarin.', 'Plantain.', 'Calendula.', 'Lavande.', 'Échinacée.', 'Ortie.', 'Consoude (phase de réparation).']} />
               </div>
             </div>
@@ -5220,11 +5220,11 @@ function ZoonosesDocument() {
             {zonTitle('PRINCIPALES ZOONOSES')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8 }}>
               {[
-                { label: 'Rage', col: '#963F36', note: 'Morsure animale — urgence.' },
+                { label: 'Rage', col: '#DF9A88', note: 'Morsure animale — urgence.' },
                 { label: 'Charbon', col: '#8A3010', note: 'Bovins, peaux, sols.' },
                 { label: 'Gale', col: '#6A4A10', note: 'Parasite cutané.' },
                 { label: 'Teigne', col: '#5A3080', note: 'Chats, chiens, chevaux.' },
-                { label: 'Rouget du porc', col: '#963F36', note: 'Viande infectée.' },
+                { label: 'Rouget du porc', col: '#DF9A88', note: 'Viande infectée.' },
                 { label: 'Tuberculose bovine', col: '#8A6010', note: 'Lait cru.' },
                 { label: 'Morve', col: '#5A3080', note: 'Chevaux malades.' },
                 { label: 'Trichinose', col: '#6A3A10', note: 'Viande insuffisamment cuite.' },
@@ -5249,7 +5249,7 @@ function ZoonosesDocument() {
                 <RegList items={['Agressivité.', 'Salivation abondante.', 'Difficulté à avaler.']} />
               </div>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#963F36', marginBottom: 8 }}>Signes chez l'homme</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#DF9A88', marginBottom: 8 }}>Signes chez l'homme</div>
                 <RegList items={['Douleur morsure.', 'Fièvre.', 'Anxiété.', 'Spasmes.']} />
               </div>
             </div>
@@ -5290,7 +5290,7 @@ function ZoonosesDocument() {
             {zonTitle('AUTRES ZOONOSES')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 10 }}>
               {[
-                { label: 'Rouget du porc', col: '#963F36', note: 'Rougeurs, fièvre, douleurs. Antisepsie.' },
+                { label: 'Rouget du porc', col: '#DF9A88', note: 'Rougeurs, fièvre, douleurs. Antisepsie.' },
                 { label: 'Tuberculose bovine', col: '#8A6010', note: 'Lait cru. Toujours faire bouillir.' },
                 { label: 'Morve', col: '#5A3080', note: 'Chevaux. Isolement animal.' },
                 { label: 'Trichinose', col: '#6A3A10', note: 'Porc. Cuire complètement.' },
@@ -5315,7 +5315,7 @@ function ZoonosesDocument() {
               {[
                 { label: 'Dispensaire', col: ZON_LIGHT, items: ['Eau Vulnéraire.', 'Onguent Vulnéraire.'] },
                 { label: 'Désinfectants', col: T.gold, items: ['Acide phénique.', 'Teinture d\'iode.'] },
-                { label: 'Plantes', col: '#42663C', items: ['Thym.', 'Romarin.', 'Plantain.', 'Lavande.', 'Calendula.', 'Échinacée.', 'Ortie.', 'Consoude (réparation).'] },
+                { label: 'Plantes', col: '#A8B991', items: ['Thym.', 'Romarin.', 'Plantain.', 'Lavande.', 'Calendula.', 'Échinacée.', 'Ortie.', 'Consoude (réparation).'] },
               ].map(g => (
                 <div key={g.label} style={{ background: `${ZON}08`, border: `1px solid ${ZON}25`, padding: '12px 14px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: g.col, marginBottom: 6 }}>{g.label}</div>
@@ -5355,7 +5355,7 @@ function ChirurgieTraumaDocument() {
     </div>
   );
   const urgBox = (children: React.ReactNode) => (
-    <div style={{ background: 'rgba(142,122,74,0.08)', border: '1px solid rgba(142,122,74,0.35)', borderLeft: '4px solid #963F36', padding: '12px 16px', marginTop: 10 }}>
+    <div style={{ background: 'rgba(180,160,113,0.08)', border: '1px solid rgba(180,160,113,0.35)', borderLeft: '4px solid #DF9A88', padding: '12px 16px', marginTop: 10 }}>
       {children}
     </div>
   );
@@ -5397,7 +5397,7 @@ function ChirurgieTraumaDocument() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 10 }}>
               {[
                 { num: 'I', label: 'Observer avant d\'agir', col: '#3C657E', items: ['Origine du traumatisme.', 'Profondeur de la plaie.', 'Importance du saignement.', 'Présence d\'un projectile.', 'Atteinte d\'un os, tendon ou organe.'] },
-                { num: 'II', label: 'Sauver la vie avant le membre', col: '#963F36', items: ['Comprimer la plaie.', 'Élever le membre si possible.', 'Appliquer un bandage compressif.'] },
+                { num: 'II', label: 'Sauver la vie avant le membre', col: '#DF9A88', items: ['Comprimer la plaie.', 'Élever le membre si possible.', 'Appliquer un bandage compressif.'] },
                 { num: 'III', label: 'Soulager la douleur', col: '#8060A0', items: ['Légère : Camomille, Valériane.', 'Modérée : Élixir Parégorique.', 'Importante : Laudanum.', 'Chirurgie majeure : Éther, Chloroforme.'] },
                 { num: 'IV', label: 'Prévenir l\'infection', col: '#40806A', items: ['Lavage soigneux des mains.', 'Instruments stérilisés.', 'Peau nettoyée.', 'Acide phénique ou Teinture d\'iode.'] },
                 { num: 'V', label: 'Respecter les tissus', col: '#907030', items: ['Retirer les corps étrangers.', 'Retirer les tissus manifestement morts.', 'Conserver tout tissu vivant.'] },
@@ -5417,7 +5417,7 @@ function ChirurgieTraumaDocument() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
               {[
                 { label: 'Profondeur', col: CTR_LIGHT, items: ['Superficielle.', 'Profonde.', 'Pénétrante.'] },
-                { label: 'Saignement', col: '#963F36', items: ['Faible.', 'Modéré.', 'Abondant.'] },
+                { label: 'Saignement', col: '#DF9A88', items: ['Faible.', 'Modéré.', 'Abondant.'] },
                 { label: 'Contamination', col: '#907030', items: ['Terre.', 'Vêtements.', 'Bois.', 'Plomb.', 'Poudre.', 'Fragments osseux.'] },
                 { label: 'Lésions associées', col: '#3C657E', items: ['Fracture.', 'Luxation.', 'Atteinte tendineuse.', 'Lésion nerveuse.', 'Atteinte vasculaire.'] },
               ].map(s => (
@@ -5457,7 +5457,7 @@ function ChirurgieTraumaDocument() {
                 { label: 'Profondes', col: '#3C657E', note: 'Atteignent les muscles ou les tendons.' },
                 { label: 'Pénétrantes', col: '#8060A0', note: 'Risque de lésion d\'un organe.' },
                 { label: 'Par balle', col: '#C07030', note: 'Projectile ou trajectoire traversante.' },
-                { label: 'Infectées', col: '#963F36', note: 'Rougeur, douleur, suppuration, fièvre.' },
+                { label: 'Infectées', col: '#DF9A88', note: 'Rougeur, douleur, suppuration, fièvre.' },
                 { label: 'Gangreneuses', col: '#8A1010', note: 'Tissus noirs, odeur fétide. Urgence absolue.' },
               ].map(c => (
                 <div key={c.label} style={{ background: `${c.col}10`, border: `1px solid ${c.col}35`, borderTop: `3px solid ${c.col}`, padding: '10px 12px' }}>
@@ -5477,7 +5477,7 @@ function ChirurgieTraumaDocument() {
                 <RegList items={['Nettoyage abondant.', 'Désinfection.', 'Contrôle du saignement.', 'Rapprochement des berges.']} />
               </div>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#42663C', marginBottom: 8 }}>Plantes médicinales</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8 }}>Plantes médicinales</div>
                 <RegList items={['Calendula.', 'Plantain.', 'Lavande.', 'Consoude (après disparition de l\'infection).']} />
                 <div style={{ fontFamily: DISPLAY, fontSize: 14, color: CTR_LIGHT, marginBottom: 8, marginTop: 10 }}>Dispensaire</div>
                 <RegList items={['Eau Vulnéraire.', 'Onguent Vulnéraire.']} />
@@ -5530,8 +5530,8 @@ function ChirurgieTraumaDocument() {
           {ctrBlock(<>
             {ctrTitle('CHAPITRE VII', 'Plaies Gravement Infectées')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
-              <div style={{ background: 'rgba(142,122,74,0.08)', border: '1px solid rgba(142,122,74,0.35)', borderLeft: '4px solid #963F36', padding: '14px 16px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#963F36', marginBottom: 8 }}>Signes d'alerte</div>
+              <div style={{ background: 'rgba(180,160,113,0.08)', border: '1px solid rgba(180,160,113,0.35)', borderLeft: '4px solid #DF9A88', padding: '14px 16px' }}>
+                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#DF9A88', marginBottom: 8 }}>Signes d'alerte</div>
                 <RegList items={['Rougeur importante.', 'Chaleur locale.', 'Gonflement.', 'Douleur croissante.', 'Écoulement purulent.', 'Mauvaise odeur.', 'Fièvre.', 'Frissons.']} />
               </div>
               <div>
@@ -5542,7 +5542,7 @@ function ChirurgieTraumaDocument() {
                 <div style={{ background: `${CTR}08`, border: `1px solid ${CTR_LIGHT}30`, padding: '12px 14px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 15, color: CTR_LIGHT, marginBottom: 8 }}>Drainage</div>
                   <RegPara>Toute collection de pus doit être évacuée. Une plaie infectée ne doit jamais être refermée avant disparition complète de la suppuration.</RegPara>
-                  <div style={{ fontFamily: DISPLAY, fontSize: 13, color: T.gold, fontStyle: 'italic', marginTop: 8, padding: '6px 10px', background: 'rgba(128,104,45,0.08)', border: '1px solid rgba(128,104,45,0.25)' }}>« Là où le pus s'accumule, il faut lui ouvrir un chemin. »</div>
+                  <div style={{ fontFamily: DISPLAY, fontSize: 13, color: T.gold, fontStyle: 'italic', marginTop: 8, padding: '6px 10px', background: 'rgba(209,183,124,0.08)', border: '1px solid rgba(209,183,124,0.25)' }}>« Là où le pus s'accumule, il faut lui ouvrir un chemin. »</div>
                 </div>
               </div>
             </div>
@@ -5554,7 +5554,7 @@ function ChirurgieTraumaDocument() {
             <RegPara>Les plantes ne remplacent jamais l'antisepsie moderne. Elles complètent les soins et favorisent la cicatrisation.</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8, marginTop: 12 }}>
               {[
-                { plant: 'Thym', col: '#42663C', usage: 'Lavage antiseptique, compresses.' },
+                { plant: 'Thym', col: '#A8B991', usage: 'Lavage antiseptique, compresses.' },
                 { plant: 'Romarin', col: '#60A880', usage: 'Assainissement des plaies, stimulation de la circulation.' },
                 { plant: 'Lavande', col: '#8080C0', usage: 'Calme l\'inflammation, nettoie les tissus.' },
                 { plant: 'Plantain', col: '#70A060', usage: 'Apaise les douleurs et irritations.' },
@@ -5604,7 +5604,7 @@ function ChirurgieTraumaDocument() {
             {ctrTitle('CHAPITRE XI', 'Gangrène')}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div style={{ background: 'rgba(140,10,10,0.08)', border: '1px solid rgba(140,10,10,0.35)', borderLeft: '4px solid #8A1010', padding: '14px 16px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#963F36', marginBottom: 8 }}>Signes</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 15, color: '#DF9A88', marginBottom: 8 }}>Signes</div>
                 <RegList items={['Peau noire.', 'Odeur fétide.', 'Perte de sensibilité.', 'Absence de circulation.']} />
               </div>
               <div>
@@ -5661,7 +5661,7 @@ function ChirurgieTraumaDocument() {
             {ctrTitle('CHAPITRE XIV', 'Complications Chirurgicales')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-sit, minmax(200px, 1fr))', gap: 12 }}>
               {[
-                { label: 'Hémorragie secondaire', col: '#963F36', items: ['Comprimer immédiatement.', 'Rechercher le vaisseau responsable.', 'Nouvelle ligature si nécessaire.'] },
+                { label: 'Hémorragie secondaire', col: '#DF9A88', items: ['Comprimer immédiatement.', 'Rechercher le vaisseau responsable.', 'Nouvelle ligature si nécessaire.'] },
                 { label: 'Infection', col: '#B05030', items: ['Fièvre persistante.', 'Douleur croissante.', 'Pus abondant, mauvaise odeur.', 'Nouveau lavage, drainage, désinfection.'] },
                 { label: 'Septicémie', col: '#8A1020', items: ['Forte fièvre.', 'Frissons.', 'Grande faiblesse.', 'Confusion.', 'Accélération du pouls.', 'Pronostic réservé.'] },
               ].map(c => (
@@ -5684,7 +5684,7 @@ function ChirurgieTraumaDocument() {
               <div style={{ background: `${CTR}08`, border: `1px solid ${CTR_LIGHT}30`, padding: '14px 16px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 14, color: CTR_LIGHT, marginBottom: 8 }}>Médicaments</div>
                 <RegList items={['Eau Vulnéraire / Onguent Vulnéraire.', 'Élixir Parégorique.', 'Laudanum (usage limité).', 'Quinine (si fièvre palustre associée).']} />
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#42663C', marginBottom: 8, marginTop: 8 }}>Plantes</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8, marginTop: 8 }}>Plantes</div>
                 <RegList items={['Calendula.', 'Plantain.', 'Consoude.', 'Lavande.', 'Romarin.', 'Échinacée.', 'Camomille.']} />
               </div>
               <div style={{ background: `${CTR}08`, border: `1px solid ${CTR_LIGHT}30`, padding: '14px 16px' }}>
@@ -5720,7 +5720,7 @@ function ChirurgieTraumaDocument() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
               {[
                 { label: 'I — Observer avant d\'agir', col: '#3C657E' },
-                { label: 'II — Sauver la vie avant le membre', col: '#963F36' },
+                { label: 'II — Sauver la vie avant le membre', col: '#DF9A88' },
                 { label: 'III — Soulager la douleur', col: '#8060A0' },
                 { label: 'IV — Prévenir l\'infection', col: '#40806A' },
                 { label: 'V — Respecter les tissus', col: '#907030' },
@@ -5762,7 +5762,7 @@ function ChirurgieTraumaDocument() {
                     { label: 'Profondes', col: '#3C657E' },
                     { label: 'Pénétrantes', col: '#8060A0' },
                     { label: 'Par balle', col: '#C07030' },
-                    { label: 'Infectées', col: '#963F36' },
+                    { label: 'Infectées', col: '#DF9A88' },
                     { label: 'Gangreneuses', col: '#8A1010' },
                   ].map(c => (
                     <div key={c.label} style={{ background: `${c.col}10`, border: `1px solid ${c.col}30`, padding: '5px 10px', fontFamily: BODY, fontSize: 13, color: c.col }}>
@@ -5799,7 +5799,7 @@ function ChirurgieTraumaDocument() {
                 {ctrTitle('PLAIES INFECTÉES')}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
                   {['Rougeur', 'Gonflement', 'Chaleur', 'Douleur', 'Pus', 'Odeur', 'Fièvre'].map(s => (
-                    <div key={s} style={{ background: 'rgba(142,122,74,0.08)', border: '1px solid rgba(142,122,74,0.30)', padding: '4px 10px', fontFamily: MONO, fontSize: 11, color: '#963F36' }}>⚠ {s}</div>
+                    <div key={s} style={{ background: 'rgba(180,160,113,0.08)', border: '1px solid rgba(180,160,113,0.30)', padding: '4px 10px', fontFamily: MONO, fontSize: 11, color: '#DF9A88' }}>⚠ {s}</div>
                   ))}
                 </div>
                 <RegList items={['Débridement.', 'Drainage.', 'Lavages répétés.', 'Désinfection.', 'Surveillance rapprochée.']} />
@@ -5856,7 +5856,7 @@ function ChirurgieTraumaDocument() {
               <div>
                 {ctrTitle('COMPLICATIONS')}
                 {[
-                  { label: 'Hémorragie secondaire', col: '#963F36' },
+                  { label: 'Hémorragie secondaire', col: '#DF9A88' },
                   { label: 'Infection', col: '#B05030' },
                   { label: 'Septicémie', col: '#8A1020' },
                 ].map(c => (
@@ -5875,7 +5875,7 @@ function ChirurgieTraumaDocument() {
               {[
                 { label: 'Alimentation', col: CTR_LIGHT, items: ['Bouillons nourrissants.', 'Viandes cuites.', 'Légumes frais.', 'Fruits.'] },
                 { label: 'Dispensaire', col: CTR_LIGHT, items: ['Eau Vulnéraire.', 'Onguent Vulnéraire.', 'Élixir Parégorique.', 'Laudanum.'] },
-                { label: 'Végétaux', col: '#42663C', items: ['Calendula.', 'Plantain.', 'Consoude.', 'Lavande.', 'Romarin.', 'Échinacée.'] },
+                { label: 'Végétaux', col: '#A8B991', items: ['Calendula.', 'Plantain.', 'Consoude.', 'Lavande.', 'Romarin.', 'Échinacée.'] },
                 { label: 'Rééducation', col: '#8080B0', items: ['Mobilisation progressive.', 'Mouvements doux.', 'Massages légers.', 'Reprise de la marche.'] },
               ].map(g => (
                 <div key={g.label} style={{ background: `${CTR}08`, border: `1px solid ${CTR_LIGHT}25`, padding: '12px 14px' }}>
@@ -6012,7 +6012,7 @@ function DesinfectionDocument() {
               ))}
             </div>
             <div style={{ marginTop: 12, padding: '10px 14px', background: `rgba(180,60,40,0.08)`, border: `1px solid rgba(180,60,40,0.30)` }}>
-              <span style={{ fontFamily: BODY, fontSize: 13, color: '#963F36' }}>Les mains ne doivent plus toucher de surface souillée avant l'intervention.</span>
+              <span style={{ fontFamily: BODY, fontSize: 13, color: '#DF9A88' }}>Les mains ne doivent plus toucher de surface souillée avant l'intervention.</span>
             </div>
           </>)}
 
@@ -6038,7 +6038,7 @@ function DesinfectionDocument() {
                 <div style={{ fontFamily: DISPLAY, fontSize: 14, color: DSI_LIGHT, marginBottom: 8 }}>Préparations du dispensaire</div>
                 <RegList items={['Eau Vulnéraire.', 'Onguent Vulnéraire.']} />
               </div>
-              <div style={{ background: T.card, border: 'rgba(128,104,45,0.35) solid 1px', padding: '14px 16px' }}>
+              <div style={{ background: T.card, border: 'rgba(209,183,124,0.35) solid 1px', padding: '14px 16px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, marginBottom: 8 }}>Désinfectants</div>
                 <RegList items={['Acide phénique.', 'Teinture d\'iode.']} />
               </div>
@@ -6088,7 +6088,7 @@ function DesinfectionDocument() {
               {[
                 { label: 'Plaies par balle', col: '#A04020', items: ['Lavage abondant.', 'Retrait des corps étrangers accessibles.', 'Désinfection.', 'Drainage si nécessaire.', 'Pansement antiseptique.'] },
                 { label: 'Plaies profondes', col: '#8060A0', items: ['Nettoyage soigneux.', 'Drainage lorsque nécessaire.', 'Ne jamais refermer une plaie infectée.'] },
-                { label: 'Gangrène', col: '#963F36', items: ['Retrait des tissus morts.', 'Amputation si extension importante menaçant la vie du malade.'] },
+                { label: 'Gangrène', col: '#DF9A88', items: ['Retrait des tissus morts.', 'Amputation si extension importante menaçant la vie du malade.'] },
               ].map(p => (
                 <div key={p.label} style={{ background: T.card, border: `1px solid ${p.col}35`, borderLeft: `4px solid ${p.col}`, padding: '14px 16px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 16, color: p.col, marginBottom: 10 }}>{p.label}</div>
@@ -6104,12 +6104,12 @@ function DesinfectionDocument() {
             <RegPara>Le médecin recherche quotidiennement :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8, marginTop: 10 }}>
               {[
-                { signe: 'Rougeur.', col: '#963F36' },
+                { signe: 'Rougeur.', col: '#DF9A88' },
                 { signe: 'Chaleur excessive.', col: '#C07030' },
                 { signe: 'Douleur importante.', col: '#B04040' },
                 { signe: 'Écoulement purulent.', col: '#908030' },
                 { signe: 'Mauvaise odeur.', col: '#708030' },
-                { signe: 'Fièvre.', col: '#244958' },
+                { signe: 'Fièvre.', col: '#EADCB9' },
                 { signe: 'Retard de cicatrisation.', col: '#506080' },
               ].map(s => (
                 <div key={s.signe} style={{ background: `${s.col}10`, border: `1px solid ${s.col}35`, padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: s.col }}>
@@ -6118,7 +6118,7 @@ function DesinfectionDocument() {
               ))}
             </div>
             <div style={{ marginTop: 12, padding: '10px 14px', background: `rgba(180,60,40,0.08)`, border: `1px solid rgba(180,60,40,0.30)` }}>
-              <span style={{ fontFamily: BODY, fontSize: 13, color: '#963F36' }}>Toute aggravation impose une nouvelle désinfection et un examen complet.</span>
+              <span style={{ fontFamily: BODY, fontSize: 13, color: '#DF9A88' }}>Toute aggravation impose une nouvelle désinfection et un examen complet.</span>
             </div>
           </>)}
 
@@ -6239,7 +6239,7 @@ function DesinfectionDocument() {
               {[
                 { label: 'Plaies par balle', col: '#A04020', items: ['Lavage abondant.', 'Désinfection.', 'Retrait corps étrangers.', 'Drainage si nécessaire.'] },
                 { label: 'Plaies profondes', col: '#8060A0', items: ['Nettoyage soigneux.', 'Drainage.', 'Ne jamais refermer si infectée.'] },
-                { label: 'Gangrène', col: '#963F36', items: ['Retrait des tissus morts.', 'Amputation si menace vitale.'] },
+                { label: 'Gangrène', col: '#DF9A88', items: ['Retrait des tissus morts.', 'Amputation si menace vitale.'] },
               ].map(p => (
                 <div key={p.label} style={{ background: T.card, border: `1px solid ${p.col}35`, borderLeft: `4px solid ${p.col}`, padding: '12px 14px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: p.col, marginBottom: 8 }}>{p.label}</div>
@@ -6254,12 +6254,12 @@ function DesinfectionDocument() {
             {dsiTitle('COMPLICATIONS À SURVEILLER')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8 }}>
               {[
-                { signe: 'Rougeur', col: '#963F36' },
+                { signe: 'Rougeur', col: '#DF9A88' },
                 { signe: 'Chaleur importante', col: '#C07030' },
                 { signe: 'Douleur croissante', col: '#B04040' },
                 { signe: 'Écoulement purulent', col: '#908030' },
                 { signe: 'Mauvaise odeur', col: '#708030' },
-                { signe: 'Fièvre', col: '#244958' },
+                { signe: 'Fièvre', col: '#EADCB9' },
                 { signe: 'Retard cicatrisation', col: '#506080' },
               ].map(s => (
                 <div key={s.signe} style={{ background: `${s.col}10`, border: `1px solid ${s.col}35`, padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: s.col }}>
@@ -6475,7 +6475,7 @@ function FievresDocument() {
                 <div style={{ fontFamily: DISPLAY, fontSize: 14, color: FIE_LIGHT, marginBottom: 8 }}>Préparations du dispensaire</div>
                 <RegList items={['Eau Vulnéraire.', 'Onguent Vulnéraire.']} />
               </div>
-              <div style={{ background: T.card, border: 'rgba(128,104,45,0.35) solid 1px', padding: '14px 16px' }}>
+              <div style={{ background: T.card, border: 'rgba(209,183,124,0.35) solid 1px', padding: '14px 16px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, marginBottom: 8 }}>Désinfectants</div>
                 <RegList items={['Acide phénique.', 'Teinture d\'iode.']} />
               </div>
@@ -6485,11 +6485,11 @@ function FievresDocument() {
               </div>
             </div>
             <div style={{ background: T.card, border: 'rgba(80,140,80,0.35) solid 1px', padding: '14px 16px' }}>
-              <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#42663C', marginBottom: 8 }}>Préparations végétales</div>
+              <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8 }}>Préparations végétales</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 4 }}>
                 {['Camomille.', 'Menthe.', 'Sauge.', 'Guimauve.', 'Thym.', 'Achillée.', 'Romarin.', 'Lavande.', 'Gentiane.', 'Saule blanc.'].map(p => (
                   <div key={p} style={{ fontFamily: BODY, fontSize: 13, color: T.text, padding: '3px 0', display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ color: '#42663C', fontSize: 9 }}>◆</span>{p}
+                    <span style={{ color: '#A8B991', fontSize: 9 }}>◆</span>{p}
                   </div>
                 ))}
               </div>
@@ -6549,7 +6549,7 @@ function FievresDocument() {
                 <RegList items={['Repos strict.', 'Eau bouillie.', 'Alimentation légère.', 'Isolement.', 'Désinfection.']} />
               </div>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#42663C', marginBottom: 8 }}>Plantes</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8 }}>Plantes</div>
                 <RegList items={['Achillée.', 'Menthe.', 'Sauge.', 'Camomille.', 'Guimauve.']} />
               </div>
             </div>
@@ -6570,7 +6570,7 @@ function FievresDocument() {
                 <RegList items={['Hydratation.', 'Repos.', 'Alimentation légère.', 'Surveillance déshydratation.']} />
               </div>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#42663C', marginBottom: 8 }}>Plantes</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8 }}>Plantes</div>
                 <RegList items={['Thym.', 'Menthe.', 'Guimauve.', 'Camomille.', 'Mauve.']} />
               </div>
             </div>
@@ -6592,7 +6592,7 @@ function FievresDocument() {
                 </div>
               </div>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#42663C', marginBottom: 8 }}>Plantes</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8 }}>Plantes</div>
                 <RegList items={['Quinquina.', 'Gentiane.', 'Saule blanc.', 'Romarin.', 'Lavande.']} />
               </div>
             </div>
@@ -6629,7 +6629,7 @@ function FievresDocument() {
                 { label: 'Dispensaire', col: FIE_LIGHT, items: ['Eau Vulnéraire.', 'Onguent Vulnéraire.'] },
                 { label: 'Désinfectants', col: T.gold, items: ['Acide phénique.', 'Teinture d\'iode.'] },
                 { label: 'Médicaments', col: '#D06840', items: ['Quinine.', 'Laudanum.', 'Élixir Parégorique.'] },
-                { label: 'Végétaux', col: '#42663C', items: ['Achillée.', 'Camomille.', 'Menthe.', 'Sauge.', 'Guimauve.', 'Thym.', 'Romarin.', 'Lavande.', 'Gentiane.', 'Saule blanc.'] },
+                { label: 'Végétaux', col: '#A8B991', items: ['Achillée.', 'Camomille.', 'Menthe.', 'Sauge.', 'Guimauve.', 'Thym.', 'Romarin.', 'Lavande.', 'Gentiane.', 'Saule blanc.'] },
               ].map(g => (
                 <div key={g.label} style={{ background: `${FIE}08`, border: `1px solid ${FIE}25`, padding: '12px 14px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: g.col, marginBottom: 6 }}>{g.label}</div>
@@ -6716,7 +6716,7 @@ function MaladiesInfantilesDocument() {
           {/* I. Rougeole */}
           {micBlock(<>
             {micTitle('CHAPITRE I', 'De la Rougeole')}
-            {micDisease('Rougeole', '#963F36', [
+            {micDisease('Rougeole', '#DF9A88', [
               {
                 title: 'ORIGINE',
                 content: <p style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65, margin: 0 }}>Maladie virale très contagieuse, transmise par l'air et les sécrétions respiratoires. Touche particulièrement écoles et logements mal ventilés.</p>,
@@ -6735,7 +6735,7 @@ function MaladiesInfantilesDocument() {
               },
             ])}
             <RegBlock col="rgba(180,60,60,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#963F36', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS À SURVEILLER</div>
+              <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS À SURVEILLER</div>
               <RegList items={['Bronchite.', 'Pneumonie.', 'Otite.', 'Déshydratation.']} />
             </RegBlock>
           </>)}
@@ -6765,7 +6765,7 @@ function MaladiesInfantilesDocument() {
               <RegPara>Depuis les récentes découvertes médicales, le sérum antidiphtérique commence à être employé dans certains grands établissements médicaux, bien qu'il demeure encore peu disponible dans les dispensaires ruraux.</RegPara>
             </RegBlock>
             <RegBlock col="rgba(180,60,60,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#963F36', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
+              <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
               <RegList items={['Asphyxie.', 'Pneumonie.', 'Paralysie.', 'Épuisement général.']} />
               <RegPara>Toute aggravation impose une surveillance médicale constante.</RegPara>
             </RegBlock>
@@ -6793,7 +6793,7 @@ function MaladiesInfantilesDocument() {
               },
             ])}
             <RegBlock col="rgba(180,60,60,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#963F36', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
+              <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
               <RegList items={['Bronchite.', 'Pneumonie.', 'Convulsions.', 'Amaigrissement.']} />
             </RegBlock>
           </>)}
@@ -6851,17 +6851,17 @@ function MaladiesInfantilesDocument() {
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: MIC_LIGHT, marginBottom: 8 }}>Préparations du dispensaire</div>
                   <RegList items={['Eau Vulnéraire.', 'Onguent Vulnéraire.']} />
                 </div>
-                <div style={{ background: T.card, border: 'rgba(128,104,45,0.35) solid 1px', padding: '14px 16px' }}>
+                <div style={{ background: T.card, border: 'rgba(209,183,124,0.35) solid 1px', padding: '14px 16px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, marginBottom: 8 }}>Désinfectants</div>
                   <RegList items={['Acide phénique.', 'Teinture d\'iode.']} />
                 </div>
               </div>
               <div style={{ background: T.card, border: 'rgba(80,140,80,0.35) solid 1px', padding: '14px 16px' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#42663C', marginBottom: 8 }}>Préparations végétales</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8 }}>Préparations végétales</div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 4 }}>
                   {['Camomille.', 'Tilleul.', 'Mauve.', 'Guimauve.', 'Sauge.', 'Thym.', 'Menthe.', 'Lavande.', 'Romarin.', 'Violette.', 'Primevère.'].map(p => (
                     <div key={p} style={{ fontFamily: BODY, fontSize: 13, color: T.text, padding: '3px 0', display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ color: '#42663C', fontSize: 9 }}>◆</span>{p}
+                      <span style={{ color: '#A8B991', fontSize: 9 }}>◆</span>{p}
                     </div>
                   ))}
                 </div>
@@ -6891,7 +6891,7 @@ function MaladiesInfantilesDocument() {
             {micTitle('PRINCIPALES MALADIES INFANTILES')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8 }}>
               {[
-                { label: 'Rougeole', col: '#963F36', note: 'Virale, éruption rouge, très contagieuse.' },
+                { label: 'Rougeole', col: '#DF9A88', note: 'Virale, éruption rouge, très contagieuse.' },
                 { label: 'Diphtérie', col: '#8A2020', note: 'Bactérienne, membrane gorge, urgence.' },
                 { label: 'Coqueluche', col: '#5A3080', note: 'Toux en quintes, crises nocturnes.' },
                 { label: 'Scarlatine', col: '#C07030', note: 'Fièvre, gorge rouge, éruption.' },
@@ -6910,7 +6910,7 @@ function MaladiesInfantilesDocument() {
             {micTitle('ROUGEOLE')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#963F36', marginBottom: 8 }}>Signes</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#DF9A88', marginBottom: 8 }}>Signes</div>
                 <RegList items={['Fièvre élevée.', 'Fatigue.', 'Conjonctivite.', 'Toux sèche.', 'Éruption rouge au visage.']} />
               </div>
               <div>
@@ -6918,7 +6918,7 @@ function MaladiesInfantilesDocument() {
                 <RegList items={['Repos complet.', 'Chambre aérée.', 'Hydratation.', 'Alimentation légère.']} />
               </div>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#42663C', marginBottom: 8 }}>Plantes</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8 }}>Plantes</div>
                 <RegList items={['Tilleul.', 'Mauve.', 'Guimauve.', 'Camomille.', 'Violette.']} />
               </div>
             </div>
@@ -6939,7 +6939,7 @@ function MaladiesInfantilesDocument() {
                 <RegList items={['Isolement immédiat.', 'Désinfection gorge.', 'Eau Vulnéraire.', 'Surveillance respiratoire.', 'Alimentation liquide.']} />
               </div>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#42663C', marginBottom: 8 }}>Plantes</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8 }}>Plantes</div>
                 <RegList items={['Sauge.', 'Thym.', 'Menthe.', 'Primevère.', 'Guimauve.']} />
               </div>
             </div>
@@ -6960,7 +6960,7 @@ function MaladiesInfantilesDocument() {
                 <RegList items={['Repos.', 'Air bien ventilé et humidifié.', 'Surveillance nocturne.']} />
               </div>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#42663C', marginBottom: 8 }}>Plantes</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8 }}>Plantes</div>
                 <RegList items={['Guimauve.', 'Mauve.', 'Réglisse.', 'Coquelicot.', 'Lavande.']} />
               </div>
             </div>
@@ -6996,7 +6996,7 @@ function MaladiesInfantilesDocument() {
               {[
                 { label: 'Dispensaire', col: MIC_LIGHT, items: ['Eau Vulnéraire.', 'Onguent Vulnéraire.'] },
                 { label: 'Désinfectants', col: T.gold, items: ['Acide phénique.', 'Teinture d\'iode.'] },
-                { label: 'Végétaux', col: '#42663C', items: ['Camomille.', 'Tilleul.', 'Mauve.', 'Guimauve.', 'Sauge.', 'Thym.', 'Menthe.', 'Lavande.', 'Romarin.', 'Violette.', 'Primevère.'] },
+                { label: 'Végétaux', col: '#A8B991', items: ['Camomille.', 'Tilleul.', 'Mauve.', 'Guimauve.', 'Sauge.', 'Thym.', 'Menthe.', 'Lavande.', 'Romarin.', 'Violette.', 'Primevère.'] },
               ].map(g => (
                 <div key={g.label} style={{ background: `${MIC}08`, border: `1px solid ${MIC}25`, padding: '12px 14px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: g.col, marginBottom: 6 }}>{g.label}</div>
@@ -7017,7 +7017,7 @@ function MaladiesInfantilesDocument() {
 }
 
 const TBC = '#6A1818';
-const TBC_LIGHT = '#963F36';
+const TBC_LIGHT = '#DF9A88';
 
 function TuberculoseDocument() {
   const [version, setVersion] = useState<'complete' | 'resume'>('complete');
@@ -7114,7 +7114,7 @@ function TuberculoseDocument() {
           {/* V. Traitement */}
           {tbcBlock(<>
             {tbcTitle('CHAPITRE V', 'Traitement')}
-            <RegBlock col={`rgba(142,122,74,0.40)`}>
+            <RegBlock col={`rgba(180,160,113,0.40)`}>
               <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>AVERTISSEMENT</div>
               <RegPara>Aucun remède connu ne permet encore d&apos;éliminer définitivement le bacille tuberculeux. Le traitement consiste à soutenir les forces naturelles de l&apos;organisme.</RegPara>
             </RegBlock>
@@ -7261,7 +7261,7 @@ function TuberculoseDocument() {
           </RegBlock>
 
           {/* Aggravation */}
-          <RegBlock col={`rgba(142,122,74,0.40)`}>
+          <RegBlock col={`rgba(180,160,113,0.40)`}>
             <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>AGGRAVATION DE LA MALADIE</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
               {tbcSection("SIGNES D'ALERTE", <RegList items={['Toux incessante.', 'Crachats sanglants abondants.', 'Fièvre élevée persistante.', 'Essoufflement au repos.', 'Amaigrissement rapide.', "Perte d'appétit.", 'Faiblesse extrême.', 'Altération de la conscience.']} />)}
@@ -7285,7 +7285,7 @@ function TuberculoseDocument() {
   );
 }
 
-const PEC = '#A8935C';
+const PEC = '#D1B77C';
 const PEC_LIGHT = '#C02020';
 
 function ProtocoleEpidemieDocument() {
@@ -8066,7 +8066,7 @@ const BOOK_COLS: Record<string, { bg: string; spine: string; border: string }> =
   violet: { bg: 'linear-gradient(160deg,#16082a,#0c041c 55%,#120622)', spine: '#9A3CD0', border: '#380e52' },
   marron: { bg: 'linear-gradient(160deg,#38160a,#240e04 55%,#2e1208)', spine: '#C87030', border: '#5e2c10' },
 };
-const BOOK_DEFAULT = { bg: 'linear-gradient(160deg,#160c08,#0e0804 55%,#120a06)', spine: '#3a2010', border: '#F1E4C8' };
+const BOOK_DEFAULT = { bg: 'linear-gradient(160deg,#160c08,#0e0804 55%,#120a06)', spine: '#3a2010', border: '#214452' };
 
 function Book({ icon, t1, t2, col, selected, onClick }: { icon: string; t1: string; t2?: string; col?: string; selected: boolean; onClick: () => void }) {
   const c = col ? (BOOK_COLS[col] ?? BOOK_DEFAULT) : BOOK_DEFAULT;
@@ -8085,7 +8085,7 @@ function Book({ icon, t1, t2, col, selected, onClick }: { icon: string; t1: stri
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: '10px 9px 10px 13px',
         cursor: 'pointer',
-        boxShadow: selected ? `0 0 0 1px ${T.gold}, 0 4px 16px rgba(128,104,45,0.18)` : '1px 2px 6px rgba(0,0,0,0.7)',
+        boxShadow: selected ? `0 0 0 1px ${T.gold}, 0 4px 16px rgba(209,183,124,0.18)` : '1px 2px 6px rgba(0,0,0,0.7)',
         userSelect: 'none',
       }}
     >
@@ -8103,8 +8103,8 @@ function Book({ icon, t1, t2, col, selected, onClick }: { icon: string; t1: stri
         <div style={{ position: 'absolute', bottom: 3, left:  3, width: 5, height: 5, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%,#c09020,#6a4208)', boxShadow: '0 1px 2px rgba(74,62,32,0.14)' }} />
         <div style={{ position: 'absolute', bottom: 3, right: 3, width: 5, height: 5, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%,#c09020,#6a4208)', boxShadow: '0 1px 2px rgba(74,62,32,0.14)' }} />
         <span style={{ display: 'block', fontSize: 12, color: '#9a7828', marginBottom: 3, position: 'relative', zIndex: 1 }}>{icon}</span>
-        <span style={{ display: 'block', fontFamily: DISPLAY, fontSize: 11, color: '#80682D', lineHeight: 1.55, textShadow: '0 1px 2px rgba(0,0,0,0.8)', position: 'relative', zIndex: 1 }}>{t1}</span>
-        {t2 && <span style={{ display: 'block', fontFamily: DISPLAY, fontSize: 11, color: '#80682D', lineHeight: 1.55, textShadow: '0 1px 2px rgba(0,0,0,0.8)', position: 'relative', zIndex: 1 }}>{t2}</span>}
+        <span style={{ display: 'block', fontFamily: DISPLAY, fontSize: 11, color: '#D1B77C', lineHeight: 1.55, textShadow: '0 1px 2px rgba(0,0,0,0.8)', position: 'relative', zIndex: 1 }}>{t1}</span>
+        {t2 && <span style={{ display: 'block', fontFamily: DISPLAY, fontSize: 11, color: '#D1B77C', lineHeight: 1.55, textShadow: '0 1px 2px rgba(0,0,0,0.8)', position: 'relative', zIndex: 1 }}>{t2}</span>}
       </div>
     </div>
   );
@@ -8115,7 +8115,7 @@ function ShelfRow({ label, children }: { label: string; children: React.ReactNod
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 0 4px' }}>
         <div style={{ flex: 1, height: 2, background: 'linear-gradient(to right, transparent, rgba(20,50,110,0.6))' }} />
-        <span style={{ fontFamily: MONO, fontSize: 10, color: '#80682D', fontStyle: 'italic', letterSpacing: '0.2em', border: '1px solid rgba(20,50,110,0.6)', background: 'linear-gradient(135deg, #04080e, #02050a)', padding: '3px 16px 4px', whiteSpace: 'nowrap', flexShrink: 0, boxShadow: 'inset 0 1px 0 rgba(128,104,45,0.06)' }}>✦ {label} ✦</span>
+        <span style={{ fontFamily: MONO, fontSize: 10, color: '#D1B77C', fontStyle: 'italic', letterSpacing: '0.2em', border: '1px solid rgba(20,50,110,0.6)', background: 'linear-gradient(135deg, #04080e, #02050a)', padding: '3px 16px 4px', whiteSpace: 'nowrap', flexShrink: 0, boxShadow: 'inset 0 1px 0 rgba(209,183,124,0.06)' }}>✦ {label} ✦</span>
         <div style={{ flex: 1, height: 2, background: 'linear-gradient(to left, transparent, rgba(20,50,110,0.6))' }} />
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, padding: '2px 0 6px' }}>
@@ -8143,21 +8143,21 @@ function BiblioEtageres({
 }) {
   const userCats = categories.filter(c => !BUILTIN_IDS.has(c.id));
   return (
-    <div style={{ background: 'linear-gradient(to bottom,#03070e,#02050a 35%,#04060c 70%,#020408)', border: '10px solid #060c16', borderRadius: 4, overflow: 'hidden', marginBottom: 20, boxShadow: '0 0 0 1px #020408,0 24px 60px rgba(74,62,32,0.14),inset 0 2px 0 rgba(128,104,45,0.04),inset 0 -3px 0 rgba(74,62,32,0.14)' }}>
+    <div style={{ background: 'linear-gradient(to bottom,#03070e,#02050a 35%,#04060c 70%,#020408)', border: '10px solid #060c16', borderRadius: 4, overflow: 'hidden', marginBottom: 20, boxShadow: '0 0 0 1px #020408,0 24px 60px rgba(74,62,32,0.14),inset 0 2px 0 rgba(209,183,124,0.04),inset 0 -3px 0 rgba(74,62,32,0.14)' }}>
       <div style={{ height: 18, background: 'linear-gradient(to bottom,#060e1c,#040a12 60%,#030810)', borderBottom: '2px solid rgba(20,50,110,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 12px' }}>
         <span style={{ color: 'rgba(180,140,40,0.3)', fontSize: 9, letterSpacing: 5 }}>✚ · · · ✚</span>
         <span style={{ color: 'rgba(180,140,40,0.3)', fontSize: 9, letterSpacing: 5 }}>✚ · · · ✚</span>
       </div>
       <div style={{ padding: '12px 24px 10px', background: 'linear-gradient(to bottom, #03070e, #02050a)' }}>
-        <div style={{ border: '2px solid #122040', background: 'linear-gradient(165deg,#060e1a,#03090e 45%,#050c14 70%,#030710)', padding: '20px 80px 18px', textAlign: 'center', position: 'relative', margin: '0 auto', boxShadow: 'inset 0 1px 0 rgba(128,104,45,0.07),0 4px 16px rgba(74,62,32,0.14)' }}>
+        <div style={{ border: '2px solid #122040', background: 'linear-gradient(165deg,#060e1a,#03090e 45%,#050c14 70%,#030710)', padding: '20px 80px 18px', textAlign: 'center', position: 'relative', margin: '0 auto', boxShadow: 'inset 0 1px 0 rgba(209,183,124,0.07),0 4px 16px rgba(74,62,32,0.14)' }}>
           <div style={{ position: 'absolute', inset: 5, border: '1px solid rgba(30,60,130,0.2)', pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', top: 5, left:  5, width: 20, height: 20, borderTop: '2px solid #8a6030', borderLeft:  '2px solid #8a6030' }} />
           <div style={{ position: 'absolute', top: 5, right: 5, width: 20, height: 20, borderTop: '2px solid #8a6030', borderRight: '2px solid #8a6030' }} />
           <div style={{ position: 'absolute', bottom: 5, left:  5, width: 20, height: 20, borderBottom: '2px solid #8a6030', borderLeft:  '2px solid #8a6030' }} />
           <div style={{ position: 'absolute', bottom: 5, right: 5, width: 20, height: 20, borderBottom: '2px solid #8a6030', borderRight: '2px solid #8a6030' }} />
-          <div style={{ color: '#80682D', fontSize: 22, marginBottom: 6 }}>⚕</div>
-          <div style={{ fontFamily: DISPLAY, fontSize: 32, color: '#80682D', letterSpacing: '0.35em', fontWeight: 'bold', textShadow: '0 2px 8px rgba(0,0,0,0.8),0 0 20px rgba(128,104,45,0.08)' }}>BIBLIOTHÈQUE</div>
-          <div style={{ height: 1, background: 'linear-gradient(to right, transparent, rgba(128,104,45,0.5), transparent)', margin: '8px auto', maxWidth: 220 }} />
+          <div style={{ color: '#D1B77C', fontSize: 22, marginBottom: 6 }}>⚕</div>
+          <div style={{ fontFamily: DISPLAY, fontSize: 32, color: '#D1B77C', letterSpacing: '0.35em', fontWeight: 'bold', textShadow: '0 2px 8px rgba(0,0,0,0.8),0 0 20px rgba(209,183,124,0.08)' }}>BIBLIOTHÈQUE</div>
+          <div style={{ height: 1, background: 'linear-gradient(to right, transparent, rgba(209,183,124,0.5), transparent)', margin: '8px auto', maxWidth: 220 }} />
           <div style={{ fontFamily: MONO, fontSize: 11, color: '#2e4a60', letterSpacing: '0.25em' }}>Dispensaire · 1890</div>
         </div>
       </div>
@@ -8192,7 +8192,7 @@ function BiblioEtageres({
             );
           })}
           {creatingCat ? (
-            <div style={{ width: 200, background: '#EBDDC0', border: `1px solid ${T.gold}`, borderRadius: 2, padding: '14px 12px', display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>
+            <div style={{ width: 200, background: '#102B3B', border: `1px solid ${T.gold}`, borderRadius: 2, padding: '14px 12px', display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>
               <div>
                 <label style={lbl}>ICÔNE</label>
                 <select style={inp} value={newCatIcon} onChange={e => setNewCatIcon(e.target.value)}>
@@ -8486,7 +8486,7 @@ export default function BibliothequePage() {
       {openCat && openCat.id !== 'reglement-interne' && openCat.id !== 'serment-hippocrate' && openCat.id !== 'guide-herboriste' && openCat.id !== 'specialites-proposees' && openCat.id !== 'protocole-sanitaire' && openCat.id !== 'protocole-epidemie' && openCat.id !== 'doctrine-purete' && openCat.id !== 'botanique-medicale' && openCat.id !== 'manuel-infirmiers' && openCat.id !== 'doctrine-cataplasmes' && openCat.id !== 'manuel-medecin' && openCat.id !== 'medecine-generale' && openCat.id !== 'theorie-germes' && openCat.id !== 'pharmacie-antidouleurs' && openCat.id !== 'pharmacie-sedatifs' && openCat.id !== 'chirurgie-suture' && openCat.id !== 'obstetrique-i' && openCat.id !== 'obstetrique-ii' && openCat.id !== 'obstetrique-iii' && openCat.id !== 'traitement-physio' && openCat.id !== 'traumatologie' && openCat.id !== 'guide-zoonoses' && openCat.id !== 'maladies-infantiles' && openCat.id !== 'fievres-communes' && openCat.id !== 'tuberculose' && openCat.id !== 'desinfection-steri' && openCat.id !== 'chirurgie-trauma' && (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24, flexWrap: 'wrap' }}>
-            <div style={{ width: 50, height: 50, background: 'rgba(128,104,45,0.08)', border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>{openCat.icon}</div>
+            <div style={{ width: 50, height: 50, background: 'rgba(209,183,124,0.08)', border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>{openCat.icon}</div>
             {renamingCat === openCat.id ? (
               <input
                 style={{ ...inp, width: 'auto', flex: '1 1 240px', fontSize: 20, fontFamily: DISPLAY }}

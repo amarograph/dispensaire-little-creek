@@ -101,7 +101,7 @@ export default function AlerteSanitaire() {
     .filter(key => status[key].nom && !dismissed[key])
     .map(key => {
       const entry = status[key];
-      const sevColor = entry.critique ? '#963F36' : '#80682D';
+      const sevColor = entry.critique ? '#DF9A88' : '#D1B77C';
       const message  = entry.critique ? messages[`${key}Critique`] : messages[key];
       return { key, critique: entry.critique, sevColor, message };
     });
@@ -120,7 +120,7 @@ export default function AlerteSanitaire() {
         <div key={key} style={{
           pointerEvents: 'all',
           maxWidth: 440,
-          background: 'linear-gradient(135deg, #1F1006 0%, #EBDDC0 60%, #150A04 100%)',
+          background: 'linear-gradient(135deg, #1F1006 0%, #102B3B 60%, #150A04 100%)',
           border: `1px solid ${sevColor}8C`,
           borderLeft: `4px solid ${sevColor}`,
           borderRadius: 8,
@@ -135,7 +135,7 @@ export default function AlerteSanitaire() {
                 <div style={{ fontFamily: MONO, fontSize: 12, color: sevColor, letterSpacing: '0.14em', marginBottom: 6, textTransform: 'uppercase' }}>
                   {TITLES[key]}{critique ? ' — CRITIQUE' : ''}
                 </div>
-                <div style={{ fontFamily: BODY, fontSize: 15, color: '#183746', lineHeight: 1.55 }}>
+                <div style={{ fontFamily: BODY, fontSize: 15, color: '#EADCB9', lineHeight: 1.55 }}>
                   {message}
                 </div>
               </div>

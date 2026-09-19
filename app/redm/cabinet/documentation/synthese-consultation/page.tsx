@@ -1,12 +1,12 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
-const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
+const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 const COL = '#526C45';
 
 function uid()  { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
@@ -245,7 +245,7 @@ export default function SyntheseConsultationPage() {
     if (!el || !savedDoc) return;
     try {
       const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(el, { backgroundColor: '#FDFAF4', scale: 2, useCORS: true, allowTaint: true, logging: false });
+      const canvas = await html2canvas(el, { backgroundColor: '#183746', scale: 2, useCORS: true, allowTaint: true, logging: false });
       const link = document.createElement('a');
       link.download = `${savedDoc.titre}.png`;
       link.href = canvas.toDataURL('image/png');
@@ -267,7 +267,7 @@ export default function SyntheseConsultationPage() {
         <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>🖨 IMPRIMER</button>
         <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#526C45', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>💾 ENREGISTRER PNG</button>
       </div>
-      <div ref={printRef} className="print-area" style={{ background: '#FDFAF4', border: '2px solid #6A6D50', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#EADCB9', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
+      <div ref={printRef} className="print-area" style={{ background: '#183746', border: '2px solid #C8BEA5', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#102B3B', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: 20, letterSpacing: '0.12em', fontWeight: 'bold', marginBottom: 4 }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
           <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
@@ -418,7 +418,7 @@ export default function SyntheseConsultationPage() {
 
         {/* ── Erreur ── */}
         {saveError && (
-          <div style={{ padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#963F36', fontFamily: MONO, fontSize: 13 }}>
+          <div style={{ padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 13 }}>
             ⚠ {saveError}
           </div>
         )}

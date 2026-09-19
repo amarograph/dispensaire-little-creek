@@ -6,10 +6,10 @@ import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
-const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
+const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
 type TypeCategorie = 'vente' | 'achat';
 interface TarifCategory { id: string; nom: string; type: TypeCategorie; prix: number; pctDispensaire: number; pctMedecin: number; ordre: number; }
@@ -203,14 +203,14 @@ export default function DirectionTarifsPage() {
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>
                   <div style={{ fontFamily:MONO, fontSize:13, color:T.dim, letterSpacing:'0.05em' }}>
                     {isVente
-                      ? <>Pour {fmt$(t.prix)} → <span style={{color:T.gold}}>Dispensaire {fmt$(partDispensaire)}</span> · <span style={{color:'#79638C'}}>Médecin {fmt$(partMedecin)}</span></>
+                      ? <>Pour {fmt$(t.prix)} → <span style={{color:T.gold}}>Dispensaire {fmt$(partDispensaire)}</span> · <span style={{color:'#BAAAC6'}}>Médecin {fmt$(partMedecin)}</span></>
                       : <>Dépense du dispensaire — <span style={{color:'#C8845A'}}>{fmt$(t.prix)}</span> par achat</>}
                   </div>
                   {canEdit && (
                     <div style={{ display:'flex', gap:8 }}>
                       {delConfirm===t.id
                         ? <>
-                            <button onClick={()=>remove(t.id)} style={{ fontFamily:MONO, fontSize:13, padding:'9px 16px', cursor:'pointer', background:'#8B404025', color:'#963F36', border:'1px solid #8B404060' }}>SUPPRIMER ?</button>
+                            <button onClick={()=>remove(t.id)} style={{ fontFamily:MONO, fontSize:13, padding:'9px 16px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>SUPPRIMER ?</button>
                             <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize:13, padding:'9px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
                           </>
                         : <button onClick={()=>setDelConfirm(t.id)} style={{ fontFamily:MONO, fontSize:13, padding:'9px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕ SUPPRIMER</button>}
@@ -227,7 +227,7 @@ export default function DirectionTarifsPage() {
 
           {canEdit && (
             <button onClick={createCategory} disabled={creating}
-              style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'14px', cursor:creating?'default':'pointer', background:'transparent', color:T.gold, border:`1px dashed rgba(128,104,45,0.4)` }}>
+              style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'14px', cursor:creating?'default':'pointer', background:'transparent', color:T.gold, border:`1px dashed rgba(209,183,124,0.4)` }}>
               {creating ? '⟳ CRÉATION...' : '+ NOUVELLE CATÉGORIE'}
             </button>
           )}

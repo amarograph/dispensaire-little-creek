@@ -1,22 +1,22 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
-const DISPLAY  = "'Burnic', 'Georgia', serif";
+const DISPLAY  = "'Central Station', 'Georgia', serif";
 const BODY     = "'Cormorant Garamond', 'Georgia', serif";
 const MONO     = "'Libre Baskerville', 'Courier New', monospace";
 const T = {
-  bg:     '#EDE0C2',
-  card:   '#F7EEDB',
+  bg:     '#102B3B',
+  card:   '#183746',
   paper:  '#1C1208',
   border: 'rgba(139,90,43,0.30)',
-  gold:   '#80682D',
-  text:   '#183746',
-  muted:  '#6A6D50',
-  dim:    '#646850',
+  gold:   '#D1B77C',
+  text:   '#EADCB9',
+  muted:  '#C8BEA5',
+  dim:    '#C8BEA5',
   sepia:  '#D4B896',
 };
 
@@ -223,7 +223,7 @@ export default function EntretienAdmissionPage() {
       <div style={{ marginBottom: 36 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
           <button onClick={() => router.push('/redm/direction')}
-            style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid rgba(128,104,45,0.35)`, color: '#A08850', padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+            style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid rgba(209,183,124,0.35)`, color: '#A08850', padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>
             ← RETOUR
           </button>
           <span style={{ fontFamily: MONO, fontSize: 13, color: T.gold, letterSpacing: '0.2em' }}>DIRECTION · RECRUTEMENT</span>
@@ -270,7 +270,7 @@ export default function EntretienAdmissionPage() {
         <div style={{ flex: 1 }} />
         {canWrite && tab === 'actifs' && (
           <button onClick={openNew}
-            style={{ fontFamily: MONO, fontSize: 13, background: T.gold, color: '#EBDDC0', border: 'none', padding: '12px 28px', cursor: 'pointer', letterSpacing: '0.12em', fontWeight: 700, marginBottom: 1 }}>
+            style={{ fontFamily: MONO, fontSize: 13, background: T.gold, color: '#102B3B', border: 'none', padding: '12px 28px', cursor: 'pointer', letterSpacing: '0.12em', fontWeight: 700, marginBottom: 1 }}>
             + NOUVEL ENTRETIEN
           </button>
         )}
@@ -390,8 +390,8 @@ export default function EntretienAdmissionPage() {
       {/* Modal confirmation suppression */}
       {delConfirm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 999 }}>
-          <div style={{ background: '#EBDDC0', border: `1px solid rgba(180,60,60,0.5)`, padding: '40px 48px', maxWidth: 440, width: '90%' }}>
-            <div style={{ fontFamily: DISPLAY, fontSize: 22, color: '#963F36', marginBottom: 12 }}>Supprimer définitivement ?</div>
+          <div style={{ background: '#102B3B', border: `1px solid rgba(180,60,60,0.5)`, padding: '40px 48px', maxWidth: 440, width: '90%' }}>
+            <div style={{ fontFamily: DISPLAY, fontSize: 22, color: '#DF9A88', marginBottom: 12 }}>Supprimer définitivement ?</div>
             <p style={{ fontFamily: BODY, fontSize: 16, color: T.muted, marginBottom: 28, lineHeight: 1.6 }}>
               Cet entretien sera supprimé de façon permanente. Cette action est irréversible.
             </p>
@@ -422,7 +422,7 @@ export default function EntretienAdmissionPage() {
       {/* Nav */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 32 }}>
         <button onClick={() => setView('list')}
-          style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid rgba(128,104,45,0.35)`, color: '#A08850', padding: '10px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+          style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid rgba(209,183,124,0.35)`, color: '#A08850', padding: '10px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>
           ← LISTE
         </button>
         <span style={{ fontFamily: MONO, fontSize: 13, color: T.gold, letterSpacing: '0.2em' }}>
@@ -436,7 +436,7 @@ export default function EntretienAdmissionPage() {
       </div>
 
       {/* Document */}
-      <div style={{ background: T.paper, border: `1px solid rgba(128,104,45,0.20)`, padding: '56px 64px', maxWidth: 1100 }}>
+      <div style={{ background: T.paper, border: `1px solid rgba(209,183,124,0.20)`, padding: '56px 64px', maxWidth: 1100 }}>
 
         {/* En-tête officiel */}
         <div style={{ textAlign: 'center', marginBottom: 48, paddingBottom: 36, borderBottom: `2px solid ${T.gold}35` }}>
@@ -562,7 +562,7 @@ export default function EntretienAdmissionPage() {
         </div>
 
         {/* ── SECTION III ── */}
-        <h3 style={secHead('#79638C')}>
+        <h3 style={secHead('#BAAAC6')}>
           <span style={{ fontFamily: MONO, fontSize: 14, color: '#9B6AC8AA', letterSpacing: '0.2em' }}>III.</span>
           Observations du Directeur
         </h3>
@@ -644,7 +644,7 @@ export default function EntretienAdmissionPage() {
         {canWrite && (
           <div style={{ marginTop: 40, paddingTop: 28, borderTop: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
             <button onClick={save} disabled={saving}
-              style={{ fontFamily: MONO, fontSize: 14, background: T.gold, color: '#EBDDC0', border: 'none', padding: '14px 40px', cursor: saving ? 'wait' : 'pointer', letterSpacing: '0.13em', fontWeight: 700, opacity: saving ? 0.7 : 1 }}>
+              style={{ fontFamily: MONO, fontSize: 14, background: T.gold, color: '#102B3B', border: 'none', padding: '14px 40px', cursor: saving ? 'wait' : 'pointer', letterSpacing: '0.13em', fontWeight: 700, opacity: saving ? 0.7 : 1 }}>
               {saving ? 'ENREGISTREMENT…' : editId ? '✔ METTRE À JOUR' : '✔ ENREGISTRER'}
             </button>
             {editId && (
@@ -660,7 +660,7 @@ export default function EntretienAdmissionPage() {
               </button>
             )}
             {saveMsg && (
-              <span style={{ fontFamily: MONO, fontSize: 13, color: saveMsg.startsWith('✓') ? '#5AAA6A' : '#963F36', letterSpacing: '0.08em' }}>
+              <span style={{ fontFamily: MONO, fontSize: 13, color: saveMsg.startsWith('✓') ? '#5AAA6A' : '#DF9A88', letterSpacing: '0.08em' }}>
                 {saveMsg}
               </span>
             )}
@@ -671,8 +671,8 @@ export default function EntretienAdmissionPage() {
       {/* Modal confirmation suppression */}
       {delConfirm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 999 }}>
-          <div style={{ background: '#EBDDC0', border: `1px solid rgba(180,60,60,0.5)`, padding: '40px 48px', maxWidth: 440, width: '90%' }}>
-            <div style={{ fontFamily: DISPLAY, fontSize: 22, color: '#963F36', marginBottom: 12 }}>Supprimer définitivement ?</div>
+          <div style={{ background: '#102B3B', border: `1px solid rgba(180,60,60,0.5)`, padding: '40px 48px', maxWidth: 440, width: '90%' }}>
+            <div style={{ fontFamily: DISPLAY, fontSize: 22, color: '#DF9A88', marginBottom: 12 }}>Supprimer définitivement ?</div>
             <p style={{ fontFamily: BODY, fontSize: 16, color: T.muted, marginBottom: 28, lineHeight: 1.6 }}>Cet entretien sera supprimé de façon permanente. Cette action est irréversible.</p>
             <div style={{ display: 'flex', gap: 14 }}>
               <button onClick={() => del(delConfirm)} style={{ fontFamily: MONO, fontSize: 13, background: '#8A2020', color: '#fff', border: 'none', padding: '12px 24px', cursor: 'pointer', flex: 1, letterSpacing: '0.1em' }}>SUPPRIMER</button>

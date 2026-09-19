@@ -1,12 +1,12 @@
-﻿'use client';
+'use client';
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
-const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
+const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 const COL  = '#6B7ABB';
 const COL_S = '#526C45'; // synthèse — vert
 const COL_P = '#A0784A'; // prescription — brun
@@ -86,7 +86,7 @@ function mapDoc(x: any): DocResult {
   };
 }
 
-const VERDICT_COL: Record<Verdict, string> = { 'APTE': '#4A8048', 'À SURVEILLER': '#80682D', 'INAPTE': '#963F36' };
+const VERDICT_COL: Record<Verdict, string> = { 'APTE': '#4A8048', 'À SURVEILLER': '#D1B77C', 'INAPTE': '#DF9A88' };
 const MAX_SCORE = 110;
 
 /* ── Templates ── */
@@ -431,7 +431,7 @@ export default function DocumentationPage() {
         <button onClick={() => { setCertDoc(null); setCertPat(null); }} style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
         <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>🖨 IMPRIMER</button>
       </div>
-      <div ref={printRef} className="print-area" style={{ background: '#FDFAF4', border: '2px solid #6A6D50', padding: '52px 60px', maxWidth: 800, margin: '0 auto', color: '#EADCB9', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
+      <div ref={printRef} className="print-area" style={{ background: '#183746', border: '2px solid #C8BEA5', padding: '52px 60px', maxWidth: 800, margin: '0 auto', color: '#102B3B', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: 20, letterSpacing: '0.12em', marginBottom: 4, fontWeight: 'bold' }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
           <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
@@ -491,7 +491,7 @@ export default function DocumentationPage() {
       <div style={{ marginBottom: 44 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
           <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.gold }}>📋 Formulaires</span>
-          <div style={{ flex: 1, height: 1, background: 'rgba(128,104,45,0.25)' }} />
+          <div style={{ flex: 1, height: 1, background: 'rgba(209,183,124,0.25)' }} />
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
 
@@ -565,17 +565,17 @@ export default function DocumentationPage() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 19, color: T.text, marginBottom: 4 }}>{ex.prenom} {ex.nom}</div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-                  <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, background: 'rgba(128,104,45,0.10)', padding: '1px 8px' }}>{ex.fonction}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, background: 'rgba(209,183,124,0.10)', padding: '1px 8px' }}>{ex.fonction}</span>
                   {ex.county && <span style={{ fontFamily: MONO, fontSize: 12, color: T.muted }}>{ex.county}</span>}
                   <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim }}>{rpDisplay(ex.date)}</span>
                 </div>
               </div>
               <div style={{ fontFamily: MONO, fontSize: 12, color: vc, background: vc + '18', border: `1px solid ${vc}40`, padding: '5px 14px', flexShrink: 0 }}>{ex.verdict}</div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                <button onClick={() => startEditExam(ex)} style={{ fontFamily: MONO, fontSize: 13, padding: '6px 10px', cursor: 'pointer', background: 'rgba(128,104,45,0.10)', color: T.gold, border: `1px solid rgba(128,104,45,0.3)` }}>✎</button>
+                <button onClick={() => startEditExam(ex)} style={{ fontFamily: MONO, fontSize: 13, padding: '6px 10px', cursor: 'pointer', background: 'rgba(209,183,124,0.10)', color: T.gold, border: `1px solid rgba(209,183,124,0.3)` }}>✎</button>
                 <button onClick={() => router.push(`/redm/cabinet/documentation/examen-psychique?id=${ex.id}&view=letter`)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 10px', cursor: 'pointer', background: `${COL}15`, color: COL, border: `1px solid ${COL}40` }}>📄 CERTIFICAT</button>
                 {delExam === ex.id
-                  ? <><button onClick={() => deleteExam(ex.id)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#963F36', border: '1px solid #8B404060' }}>OK?</button>
+                  ? <><button onClick={() => deleteExam(ex.id)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button>
                       <button onClick={() => setDelExam(null)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 8px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
                   : <button onClick={() => setDelExam(ex.id)} style={{ fontFamily: MONO, fontSize: 13, padding: '6px 10px', cursor: 'pointer', background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)' }}>✕</button>}
               </div>
@@ -599,14 +599,14 @@ export default function DocumentationPage() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 19, color: T.text, marginBottom: 4 }}>{doc.titre}</div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-                  {pat && <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, background: 'rgba(128,104,45,0.10)', padding: '1px 8px' }}>{pat.patientPrenom} {pat.patientNom}</span>}
+                  {pat && <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, background: 'rgba(209,183,124,0.10)', padding: '1px 8px' }}>{pat.patientPrenom} {pat.patientNom}</span>}
                   <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim }}>{rpDisplay(doc.date)}</span>
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                 <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 10px', cursor: 'pointer', background: `${COL_S}15`, color: COL_S, border: `1px solid ${COL_S}40` }}>📄 VOIR</button>
                 {delDoc === doc.id
-                  ? <><button onClick={() => deleteDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#963F36', border: '1px solid #8B404060' }}>OK?</button>
+                  ? <><button onClick={() => deleteDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button>
                       <button onClick={() => setDelDoc(null)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 8px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
                   : <button onClick={() => setDelDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 13, padding: '6px 10px', cursor: 'pointer', background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)' }}>✕</button>}
               </div>
@@ -630,14 +630,14 @@ export default function DocumentationPage() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 19, color: T.text, marginBottom: 4 }}>{doc.titre}</div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-                  {pat && <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, background: 'rgba(128,104,45,0.10)', padding: '1px 8px' }}>{pat.patientPrenom} {pat.patientNom}</span>}
+                  {pat && <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, background: 'rgba(209,183,124,0.10)', padding: '1px 8px' }}>{pat.patientPrenom} {pat.patientNom}</span>}
                   <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim }}>{rpDisplay(doc.date)}</span>
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                 <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 10px', cursor: 'pointer', background: `${COL_P}15`, color: COL_P, border: `1px solid ${COL_P}40` }}>📄 VOIR</button>
                 {delDoc === doc.id
-                  ? <><button onClick={() => deleteDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#963F36', border: '1px solid #8B404060' }}>OK?</button>
+                  ? <><button onClick={() => deleteDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button>
                       <button onClick={() => setDelDoc(null)} style={{ fontFamily: MONO, fontSize: 12, padding: '6px 8px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
                   : <button onClick={() => setDelDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 13, padding: '6px 10px', cursor: 'pointer', background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)' }}>✕</button>}
               </div>
@@ -671,7 +671,7 @@ export default function DocumentationPage() {
                 <div style={{ display: 'flex', gap: 0, marginBottom: 14, border: `1px solid ${T.border}` }}>
                   {(['existing', 'new'] as const).map(opt => (
                     <button key={opt} onClick={() => setUseExisting(opt === 'existing')}
-                      style={{ flex: 1, fontFamily: MONO, fontSize: 13, padding: '8px', cursor: 'pointer', letterSpacing: '0.08em', border: 'none', background: (opt === 'existing') === useExisting ? 'rgba(128,104,45,0.18)' : 'transparent', color: (opt === 'existing') === useExisting ? T.gold : T.dim, borderBottom: (opt === 'existing') === useExisting ? `2px solid ${T.gold}` : '2px solid transparent' }}>
+                      style={{ flex: 1, fontFamily: MONO, fontSize: 13, padding: '8px', cursor: 'pointer', letterSpacing: '0.08em', border: 'none', background: (opt === 'existing') === useExisting ? 'rgba(209,183,124,0.18)' : 'transparent', color: (opt === 'existing') === useExisting ? T.gold : T.dim, borderBottom: (opt === 'existing') === useExisting ? `2px solid ${T.gold}` : '2px solid transparent' }}>
                       {opt === 'existing' ? '👤 PATIENT EXISTANT' : '✚ NOUVEAU PATIENT'}
                     </button>
                   ))}
@@ -780,15 +780,15 @@ function ResultsSection({ icon, title, color, badge, count, onNew, newLabel, emp
   children: React.ReactNode;
 }) {
   const MONO = "'Libre Baskerville', 'Courier New', monospace";
-  const DISPLAY = "'Burnic', 'Georgia', serif";
-  const T = { card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', text: '#183746', dim: '#646850', gold: '#80682D' };
+  const DISPLAY = "'Central Station', 'Georgia', serif";
+  const T = { card: '#183746', border: 'rgba(139,90,43,0.30)', text: '#EADCB9', dim: '#C8BEA5', gold: '#D1B77C' };
   const hasChildren = Array.isArray(children) ? children.some(Boolean) : !!children;
   return (
     <div style={{ marginBottom: 28 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
         <span style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}>{icon} {title}</span>
         <span style={{ fontFamily: MONO, fontSize: 12, padding: '2px 7px', background: color + '22', color, border: `1px solid ${color}55` }}>{badge}</span>
-        <div style={{ flex: 1, height: 1, background: 'rgba(128,104,45,0.20)' }} />
+        <div style={{ flex: 1, height: 1, background: 'rgba(209,183,124,0.20)' }} />
       </div>
       <div style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `4px solid ${color}`, overflow: 'hidden' }}>
         <div style={{ padding: '14px 22px', borderBottom: `1px solid ${T.border}`, background: color + '10', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
