@@ -69,7 +69,7 @@ export default function RedMDashboardClient({ roles }: { roles: string[] }) {
   type RDV = { id: string; patientNom: string; date: string; heure: string; type: string; statut: string; };
   const [rdvs, setRdvs] = useState<RDV[]>([]);
   const [TITRES] = useState({
-    surtitle:      "Dispensaire Medical · Territoire de East Wellster's",
+    surtitle:      "Dispensaire Medical · Comté de West Elizabeth",
     title:         'Carnet du dispensaire',
     subtitle:      'Registre des soins, actes medicaux et comptabilite',
     modules:       'Modules du Dispensaire',

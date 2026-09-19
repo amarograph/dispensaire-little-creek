@@ -369,7 +369,7 @@ function ReglementDocument() {
       <div style={{ textAlign: 'center', padding: '8px 0 0' }}>
         <RegPara>Fait à West Elizabeth, en l'an de grâce 1890.</RegPara>
         <div style={{ fontFamily: DISPLAY, fontSize: 19, color: T.sepia, marginBottom: 2 }}>Docteur François De Millet</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.16em', marginBottom: 22 }}>DIRECTEUR DU DISPENSAIRE DE WEST ELIZABETH</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.16em', marginBottom: 22 }}>DIRECTEUR DU DISPENSAIRE DE LITTLE CREEK</div>
         <RegCitation text="La science éclaire le chemin du médecin, mais la compassion guide sa main." author="Docteur François De Millet" />
       </div>
     </div>
@@ -638,7 +638,7 @@ function GuideHerboristeDocument() {
       <div style={{ textAlign: 'center', padding: '8px 0 0' }}>
         <RegPara>Recueil tenu à jour dans la réserve botanique du dispensaire, à l'usage du personnel médical.</RegPara>
         <div style={{ fontFamily: DISPLAY, fontSize: 19, color: T.sepia, marginBottom: 2 }}>Mère Agathe Voclain</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.16em', marginBottom: 22 }}>HERBORISTE DU DISPENSAIRE DE WEST ELIZABETH</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.16em', marginBottom: 22 }}>HERBORISTE DU DISPENSAIRE DE LITTLE CREEK</div>
         <RegCitation text="La nature met à notre portée plus de remèdes que nous n'aurons jamais le temps d'en apprendre ; à nous de les connaître avec humilité et de les employer avec mesure." author="Mère Agathe Voclain" />
       </div>
     </div>
@@ -1153,7 +1153,7 @@ function ManuelInfirmiersDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: MC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ FORMATION MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: MC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩹 Manuel des Soins Infirmiers</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Les Fondamentaux et Soins Autorisés</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${MC}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${MC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${MC}28` : 'transparent', color: version === 'complete' ? MC_LIGHT : T.dim, borderRight: `1px solid ${MC}40` }}>
@@ -1534,7 +1534,7 @@ function DoctrineCataplasmeDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: CC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE MÉDECINE VÉGÉTALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: CC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🫙 Doctrine des Cataplasmes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>et de leur Usage Thérapeutique</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${CC}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${CC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${CC}28` : 'transparent', color: version === 'complete' ? CC_LIGHT : T.dim, borderRight: `1px solid ${CC}40` }}>
@@ -1743,7 +1743,7 @@ function ManuelMedecinDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: MMC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ FORMATION MÉDICALE SUPÉRIEURE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: MMC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩺 Manuel de Médecine à Base de Plantes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>et de Pharmacologie Médicale</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${MMC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${MMC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${MMC}30` : 'transparent', color: version === 'complete' ? MMC_LIGHT : T.dim, borderRight: `1px solid ${MMC}40` }}>
@@ -2187,7 +2187,7 @@ function MedecineGeneraleDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: GMC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE MÉDECINE GÉNÉRALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: GMC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>📋 Traitement des Affections Communes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>et leurs Remèdes</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${GMC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${GMC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${GMC}28` : 'transparent', color: version === 'complete' ? GMC_LIGHT : T.dim, borderRight: `1px solid ${GMC}40` }}>
@@ -2391,7 +2391,7 @@ function PharmacieAntidouleurDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: PAC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE PHARMACIE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: PAC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>⚗ Doctrine des Anti-Douleurs</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Naturels et Pharmaceutiques</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${PAC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${PAC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${PAC}28` : 'transparent', color: version === 'complete' ? PAC_LIGHT : T.dim, borderRight: `1px solid ${PAC}40` }}>
@@ -2785,7 +2785,7 @@ function PharmacieSedartifsDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: SC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE PHARMACIE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: SC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>💤 Doctrine des Sédatifs</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Naturels et Pharmaceutiques</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${SC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${SC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${SC}28` : 'transparent', color: version === 'complete' ? SC_LIGHT : T.dim, borderRight: `1px solid ${SC}40` }}>
@@ -3114,7 +3114,7 @@ function ChirurgieDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: CHC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE CHIRURGIE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: CHC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🔪 Doctrine des Points de Suture</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Antisepsie et Cicatrisation</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${CHC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -3374,7 +3374,7 @@ function ObstetriqueiDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: OBC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE I ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: OBC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>👶 Reconnaissance de la Grossesse</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Suivi de la mère · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${OBC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -3683,7 +3683,7 @@ function ObstetriqueIIDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: OBC2_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE II ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: OBC2_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🤱 De l'Accouchement</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Complications obstétricales · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${OBC2_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -4003,7 +4003,7 @@ function ObstetriqueIIIDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: OBC3_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE III ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: OBC3_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🍼 Soins de la Mère et du Nouveau-né</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Post-partum · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${OBC3_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -4303,7 +4303,7 @@ function TraitementPhysioDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: TPC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE TRAITEMENT PHYSIOLOGIQUE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: TPC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🦴 Soins des Fractures et Convalescence</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Chirurgie osseuse · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${TPC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -4661,7 +4661,7 @@ function TraumatologieDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: TRU_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE TRAUMATOLOGIE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: TRU_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩹 Traumatismes des Membres</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Foulures, entorses, luxations · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE EAST WELLSTER'S ET DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${TRU_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -5041,7 +5041,7 @@ function ZoonosesDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: ZON_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ GUIDE DES ZOONOSES ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: ZON_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🐾 Maladies de l'Animal à l'Homme</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Médecine rurale · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE EAST WELLSTER'S ET DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${ZON_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -5370,7 +5370,7 @@ function ChirurgieTraumaDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: CTR_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE CHIRURGIE TRAUMATOLOGIQUE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: CTR_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩻 Chirurgie Traumatologique</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Plaies Graves · Blessures par Balle · Infections Chirurgicales</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE EAST WELLSTER'S ET DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${CTR_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -5932,7 +5932,7 @@ function DesinfectionDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: DSI_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ MANUEL DE DÉSINFECTION ET DE STÉRILISATION ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: DSI_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🔬 Désinfection et Stérilisation</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Selon les principes de Pasteur, Lister et de l'Antisepsie Moderne</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE EAST WELLSTER'S ET DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${DSI_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -6322,7 +6322,7 @@ function FievresDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: FIE_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ TRAITÉ DES FIÈVRES COMMUNES ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: FIE_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🌡️ Fièvres Communes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Diagnostic, Traitement et Prévention · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE EAST WELLSTER'S ET DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${FIE_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
@@ -6692,7 +6692,7 @@ function MaladiesInfantilesDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: MIC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DES MALADIES INFANTILES ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: MIC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🧒 Maladies Infantiles Courantes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Diagnostic, Traitement et Prévention · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRES DE EAST WELLSTER'S ET DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${MIC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (

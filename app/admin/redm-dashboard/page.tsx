@@ -49,7 +49,7 @@ interface DashboardConfig {
 
 const DEFAULTS: DashboardConfig = {
   titres: {
-    surtitle:      "Dispensaire Medical · Territoire de East Wellster's",
+    surtitle:      "Dispensaire Medical · Comté de West Elizabeth",
     title:         'Carnet du dispensaire',
     subtitle:      'Registre des soins, actes medicaux et comptabilite',
     modules:       'Modules du Dispensaire',

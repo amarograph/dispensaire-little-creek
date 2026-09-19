@@ -150,7 +150,7 @@ export default function PresencesPage() {
       <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.text, margin: '0 0 6px' }}>📅 Feuille de Présences</h1>
         <p style={{ fontFamily: MONO, fontSize: 12, color: T.muted, letterSpacing: '0.12em', margin: 0 }}>
-          DISPENSAIRE DE WEST ELIZABETH · SUIVI DE PRÉSENCE HEBDOMADAIRE
+          DISPENSAIRE DE LITTLE CREEK · SUIVI DE PRÉSENCE HEBDOMADAIRE
         </p>
       </div>
 
