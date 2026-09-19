@@ -7,7 +7,7 @@ interface Props {
   children:   ReactNode;
   className?: string;
   style?:     CSSProperties;
-  as?:        'div' | 'main';
+  as?:        'div' | 'main' | 'nav';
 }
 
 export default function ZoomWrapper({ children, className, style, as: Tag = 'main' }: Props) {

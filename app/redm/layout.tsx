@@ -115,7 +115,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
         .redm-navrow {
           width: 100%; padding: 0 40px;
           display: flex; align-items: center; gap: 2px;
-          height: 72px; box-sizing: border-box;
+          min-height: 72px; box-sizing: border-box;
           background: rgba(184,166,116,0.12);
         }
 
@@ -282,14 +282,14 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
 
           {/* ── Ligne 2 : navigation ── */}
           <div className="redm-navrow">
-            <nav className="redm-nav">
+            <ZoomWrapper as="nav" className="redm-nav">
               {NAV.map(n => (
                 <Link key={n.href} href={n.href}>
                   <span>{n.icon}</span>{n.label}
                 </Link>
               ))}
               <DirectionNav />
-            </nav>
+            </ZoomWrapper>
             <ZoomPicker accentRgb="120,20,20" activeColor="#203C49" mutedColor="rgba(90,60,40,0.7)" font="'Libre Baskerville', monospace" />
           </div>
 
