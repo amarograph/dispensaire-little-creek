@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       discord_id: discordId,
       username,
       status: isDev ? 'approved' : 'pending',
-      roles: isDev ? ['dev'] : [],
+      roles: isDev ? ['admin'] : [],
       decided_at: isDev ? new Date().toISOString() : null,
       decided_by: isDev ? 'auto (ADMIN_DISCORD_IDS)' : null,
     });

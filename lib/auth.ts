@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import { hasPermission, type Permission } from '@/lib/permissions';
+import { canRead, canEdit, canManage, isAdmin, type Section } from '@/lib/permissions';
 
 export async function getMember(userId: string) {
   const supabase = await createClient();
@@ -28,8 +28,20 @@ export async function requireApprovedMember() {
   return { supabase, user, roles: member.roles };
 }
 
-export async function requirePermission(permission: Permission) {
+export async function requireSection(section: Section, level: 'read' | 'edit' | 'manage' = 'read') {
   const { supabase, user, roles } = await requireApprovedMember();
-  if (!hasPermission(roles, permission)) throw new Error('Unauthorized');
+  if (isAdmin(roles)) return { supabase, user, roles };
+
+  const allowed = level === 'manage' ? canManage(roles, section)
+    : level === 'edit' ? canEdit(roles, section)
+    : canRead(roles, section);
+
+  if (!allowed) throw new Error('Unauthorized');
+  return { supabase, user, roles };
+}
+
+export async function requireAdmin() {
+  const { supabase, user, roles } = await requireApprovedMember();
+  if (!isAdmin(roles)) throw new Error('Unauthorized');
   return { supabase, user, roles };
 }

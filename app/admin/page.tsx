@@ -1,10 +1,10 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { requirePermission } from '@/lib/auth';
+import { requireAdmin } from '@/lib/auth';
 
 export default async function AdminPage() {
   try {
-    await requirePermission('direction');
+    await requireAdmin();
   } catch {
     redirect('/redm');
   }

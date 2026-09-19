@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { canRead, isAdmin, ROUTE_SECTION } from '@/lib/permissions';
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -41,7 +42,7 @@ export async function updateSession(request: NextRequest) {
   if (user && !isAuthRoute) {
     const { data: member } = await supabase
       .from('members')
-      .select('status')
+      .select('status, roles')
       .eq('user_id', user.id)
       .single();
 
@@ -54,10 +55,31 @@ export async function updateSession(request: NextRequest) {
       return supabaseResponse;
     }
 
+    const roles: string[] = member.roles ?? [];
+
     if (isPendingRoute || (isAuthRoute && request.nextUrl.pathname === '/login')) {
       const url = request.nextUrl.clone();
       url.pathname = '/redm';
       return NextResponse.redirect(url);
+    }
+
+    if (request.nextUrl.pathname.startsWith('/admin') && !isAdmin(roles)) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/redm';
+      return NextResponse.redirect(url);
+    }
+
+    if (!isAdmin(roles)) {
+      for (const { prefix, section } of ROUTE_SECTION) {
+        if (request.nextUrl.pathname.startsWith(prefix)) {
+          if (!canRead(roles, section)) {
+            const url = request.nextUrl.clone();
+            url.pathname = '/redm';
+            return NextResponse.redirect(url);
+          }
+          break;
+        }
+      }
     }
   }
 

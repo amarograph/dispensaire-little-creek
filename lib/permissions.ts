@@ -1,56 +1,189 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Système de permissions — 4 niveaux
+// 0 = Aucun accès | 1 = Lecture | 2 = Éditeur | 3 = Gestionnaire
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const PERM = {
+  NONE:    0,
+  READ:    1,
+  EDITOR:  2,
+  MANAGER: 3,
+} as const;
+
+export type PermLevel = 0 | 1 | 2 | 3;
+
+export type Section =
+  | 'redm_certificats'   // Certificats médicaux
+  | 'redm_archives'      // Archives patients
+  | 'redm_bibliotheque'  // Bibliothèque
+  | 'redm_contexte'      // Contexte époque
+  | 'redm_comptabilite'  // Comptabilité dispensaire
+  | 'redm_guide'         // Guide RP
+  | 'redm_cabinet'       // Cabinet thérapeutique
+  | 'redm_direction';    // Direction (réservé direction/co-direction)
+
+type PermMap = Record<Section, PermLevel>;
+
+const ALL_MANAGER: PermMap = {
+  redm_certificats: 3, redm_archives: 3, redm_bibliotheque: 3,
+  redm_contexte: 3, redm_comptabilite: 3, redm_guide: 3, redm_cabinet: 3, redm_direction: 3,
+};
+
+const NONE_MAP: PermMap = {
+  redm_certificats: 0, redm_archives: 0, redm_bibliotheque: 0,
+  redm_contexte: 0, redm_comptabilite: 0, redm_guide: 0, redm_cabinet: 0, redm_direction: 0,
+};
+
 export const ROLES = [
-  'dev',
-  'directeur',
-  'co_directeur',
-  'medecin_chef',
-  'medecin',
-  'apprenti_medecin',
-  'infirmier',
-  'preparateur_caisse',
-  'therapeute',
+  'admin',
+  'redm_directeur',
+  'redm_co_directeur',
+  'redm_medecin_chef',
+  'redm_medecin',
+  'redm_apprenti',
+  'redm_infirmier',
+  'redm_preparateur_caisse',
+  'redm_therapeute',
 ] as const;
 
 export type Role = typeof ROLES[number];
 
 export const ROLE_LABELS: Record<Role, string> = {
-  dev: 'Dev',
-  directeur: 'Directeur',
-  co_directeur: 'Co-directeur',
-  medecin_chef: 'Médecin en Chef',
-  medecin: 'Médecin',
-  apprenti_medecin: 'Apprenti médecin',
-  infirmier: 'Infirmier',
-  preparateur_caisse: 'Préparateur de caisse',
-  therapeute: 'Thérapeute',
+  admin: 'Dev',
+  redm_directeur: 'Directeur',
+  redm_co_directeur: 'Co-directeur',
+  redm_medecin_chef: 'Médecin en Chef',
+  redm_medecin: 'Médecin',
+  redm_apprenti: 'Apprenti médecin',
+  redm_infirmier: 'Infirmier',
+  redm_preparateur_caisse: 'Préparateur de caisse',
+  redm_therapeute: 'Thérapeute',
 };
-
-export const PERMISSIONS = ['comptabilite', 'bibliotheque', 'direction', 'cabinet'] as const;
-export type Permission = typeof PERMISSIONS[number];
-
-// direction = gestion des demandes d'accès, des rôles, des templates et des paramètres
-const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
-  dev: ['comptabilite', 'bibliotheque', 'direction', 'cabinet'],
-  directeur: ['comptabilite', 'bibliotheque', 'direction'],
-  co_directeur: ['comptabilite', 'bibliotheque', 'direction'],
-  medecin_chef: ['comptabilite', 'bibliotheque', 'direction'],
-  medecin: ['comptabilite', 'bibliotheque', 'direction'],
-  apprenti_medecin: ['comptabilite', 'bibliotheque'],
-  infirmier: ['comptabilite', 'bibliotheque'],
-  preparateur_caisse: ['comptabilite'],
-  therapeute: ['cabinet'],
-};
-
-// Rôles dont au moins un membre du groupe doit valider les accès / gérer les rôles.
-export const DIRECTION_ROLES: Role[] = ['dev', 'directeur', 'co_directeur', 'medecin_chef', 'medecin'];
 
 export function isRole(value: string): value is Role {
   return (ROLES as readonly string[]).includes(value);
 }
 
-export function hasPermission(roles: string[], permission: Permission): boolean {
-  return roles.some(r => isRole(r) && ROLE_PERMISSIONS[r].includes(permission));
+export const ROLE_PERMISSIONS: Record<Role, PermMap> = {
+
+  // ── Système ──────────────────────────────────────────────────────────────
+  admin: ALL_MANAGER,
+
+  // ── Directeur dispensaire : tout ─────────────────────────────────────────
+  redm_directeur: ALL_MANAGER,
+
+  // ── Co-Directeur dispensaire : tout ──────────────────────────────────────
+  redm_co_directeur: ALL_MANAGER,
+
+  // ── Médecin dispensaire ───────────────────────────────────────────────────
+  redm_medecin: {
+    ...NONE_MAP,
+    redm_certificats:  PERM.EDITOR,
+    redm_archives:     PERM.EDITOR,
+    redm_bibliotheque: PERM.READ,
+    redm_contexte:     PERM.READ,
+    redm_guide:        PERM.READ,
+    redm_cabinet:      PERM.NONE,
+    redm_comptabilite: PERM.EDITOR,
+    redm_direction:    PERM.NONE,
+  },
+
+  // ── Médecin en Chef (Médecin + lecture Direction/Comptabilité) ──────────
+  redm_medecin_chef: {
+    ...NONE_MAP,
+    redm_certificats:  PERM.EDITOR,
+    redm_archives:     PERM.EDITOR,
+    redm_bibliotheque: PERM.READ,
+    redm_contexte:     PERM.READ,
+    redm_guide:        PERM.READ,
+    redm_cabinet:      PERM.NONE,
+    redm_comptabilite: PERM.EDITOR,
+    redm_direction:    PERM.READ,
+  },
+
+  // ── Thérapeute dispensaire ────────────────────────────────────────────────
+  redm_therapeute: {
+    ...NONE_MAP,
+    redm_certificats:  PERM.READ,
+    redm_archives:     PERM.EDITOR,
+    redm_bibliotheque: PERM.READ,
+    redm_contexte:     PERM.READ,
+    redm_guide:        PERM.READ,
+    redm_cabinet:      PERM.EDITOR,
+    redm_comptabilite: PERM.NONE,
+    redm_direction:    PERM.NONE,
+  },
+
+  // ── Infirmier dispensaire ─────────────────────────────────────────────────
+  redm_infirmier: {
+    ...NONE_MAP,
+    redm_certificats:  PERM.READ,
+    redm_archives:     PERM.READ,
+    redm_bibliotheque: PERM.READ,
+    redm_contexte:     PERM.READ,
+    redm_guide:        PERM.READ,
+    redm_cabinet:      PERM.NONE,
+    redm_comptabilite: PERM.EDITOR,
+    redm_direction:    PERM.NONE,
+  },
+
+  // ── Apprenti dispensaire ──────────────────────────────────────────────────
+  redm_apprenti: {
+    ...NONE_MAP,
+    redm_certificats:  PERM.READ,
+    redm_archives:     PERM.READ,
+    redm_bibliotheque: PERM.READ,
+    redm_contexte:     PERM.READ,
+    redm_guide:        PERM.READ,
+    redm_cabinet:      PERM.NONE,
+    redm_comptabilite: PERM.EDITOR,
+    redm_direction:    PERM.NONE,
+  },
+
+  // ── Préparateur de caisse : note ses caisses uniquement ─────────────────
+  redm_preparateur_caisse: {
+    ...NONE_MAP,
+    redm_comptabilite: PERM.EDITOR,
+  },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Fonctions utilitaires
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Retourne le niveau de permission effectif (max sur tous les rôles de l'utilisateur) */
+export function getPermission(roles: string[], section: Section): PermLevel {
+  let max: PermLevel = 0;
+  for (const role of roles) {
+    if (!isRole(role)) continue;
+    const p = (ROLE_PERMISSIONS[role]?.[section] ?? 0) as PermLevel;
+    if (p > max) max = p;
+  }
+  return max;
+}
+
+export const canRead   = (roles: string[], s: Section) => getPermission(roles, s) >= PERM.READ;
+export const canEdit   = (roles: string[], s: Section) => getPermission(roles, s) >= PERM.EDITOR;
+export const canManage = (roles: string[], s: Section) => getPermission(roles, s) >= PERM.MANAGER;
+
+export function isAdmin(roles: string[]): boolean {
+  return roles.includes('admin');
 }
 
 export function isDirection(roles: string[]): boolean {
-  return hasPermission(roles, 'direction');
+  return isAdmin(roles) || canRead(roles, 'redm_direction');
 }
+
+/** Mapping route → section pour le middleware (du plus spécifique au plus général) */
+export const ROUTE_SECTION: Array<{ prefix: string; section: Section }> = [
+  { prefix: '/redm/direction/comptabilite', section: 'redm_comptabilite' },
+  { prefix: '/redm/direction',            section: 'redm_direction'     },
+  { prefix: '/redm/cabinet',              section: 'redm_cabinet'       },
+  { prefix: '/redm/certificats',          section: 'redm_certificats'   },
+  { prefix: '/redm/archives',             section: 'redm_archives'      },
+  { prefix: '/redm/bibliotheque',         section: 'redm_bibliotheque'  },
+  { prefix: '/redm/contexte',             section: 'redm_contexte'      },
+  { prefix: '/redm/essentiel',            section: 'redm_guide'         },
+  { prefix: '/redm/comptabilite',         section: 'redm_comptabilite'  },
+  { prefix: '/bibliotheque',              section: 'redm_bibliotheque'  },
+];
