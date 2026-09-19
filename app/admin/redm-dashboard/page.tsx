@@ -321,6 +321,9 @@ export default function RedmDashboardAdmin() {
           <button onClick={save} disabled={saving} style={btnSave}>
             {saving ? '...' : 'Sauvegarder tout'}
           </button>
+          <a href="/redm" style={{ padding: '14px 24px', background: 'transparent', border: `1px solid ${T.border}`, borderRadius: 10, color: T.muted, fontFamily: MONO, fontSize: 17, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
+            🏠 Accueil
+          </a>
           <a href="/admin" style={{ padding: '14px 24px', background: 'transparent', border: `1px solid ${T.border}`, borderRadius: 10, color: T.muted, fontFamily: MONO, fontSize: 17, textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
             ← Admin
           </a>
