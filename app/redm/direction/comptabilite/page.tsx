@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
 
-const DISPLAY = "'Burnic', 'Georgia', serif";
+const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
-const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
+const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
 type TypeCategorie  = 'vente' | 'achat';
@@ -124,7 +124,7 @@ function tresorerie(factures: Facture[], tarifs: Record<string, TarifCategory>):
   return { ventes, achats, solde };
 }
 
-const STATUT_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#49654D', 'EN ATTENTE': '#80682D', 'ANNULÉ': '#8B4040' };
+const STATUT_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#A8B991', 'EN ATTENTE': '#D1B77C', 'ANNULÉ': '#8B4040' };
 const STATUT_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
 
 export default function DirectionComptabilitePage() {
@@ -132,6 +132,7 @@ export default function DirectionComptabilitePage() {
   const { roles } = useRedmSession();
   const isAdmin = checkIsAdmin(roles);
   const canEdit = isAdmin || roles.some(r => ['redm_directeur', 'redm_co_directeur', 'admin'].includes(r));
+  const canEditCaisses = isAdmin || roles.some(r => ['redm_directeur', 'redm_co_directeur', 'redm_medecin_chef'].includes(r));
   const [items,    setItems]    = useState<Facture[]>([]);
   const [archives, setArchives] = useState<SemaineArchivee[]>([]);
   const [hydrated, setHydrated] = useState(false);
@@ -153,16 +154,37 @@ export default function DirectionComptabilitePage() {
   const caisseIsThisWeek = fmtISODate(caisseMonday) === fmtISODate(getMondayOf(new Date()));
   const caissesTotalSemaine = caissesStaff.reduce((s, x) => s + x.count, 0);
 
-  /* ── Registre des caisses (self-service du personnel) ── */
-  useEffect(() => {
+  /* ── Registre des caisses (self-service du personnel + édition Direction) ── */
+  const loadCaisses = useCallback(() => {
     setCaissesLoading(true);
-    fetch(`/api/admin/redm-caisses?from=${caisseFrom}&to=${caisseTo}`)
+    return fetch(`/api/admin/redm-caisses?from=${caisseFrom}&to=${caisseTo}`)
       .then(r => r.ok ? r.json() : null)
       .then(d => { if (d?.staff) setCaissesStaff(d.staff); })
       .catch(() => {})
       .finally(() => setCaissesLoading(false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caisseFrom, caisseTo]);
+
+  useEffect(() => { loadCaisses(); }, [loadCaisses]);
+
+  async function toggleCaisse(discordId: string, date: string) {
+    if (!canEditCaisses) return;
+    setCaissesStaff(prev => prev.map(s => {
+      if (s.discord_id !== discordId) return s;
+      const has   = s.dates.includes(date);
+      const dates = has ? s.dates.filter(d => d !== date) : [...s.dates, date].sort();
+      return { ...s, dates, count: dates.length, salaire: Math.round(dates.length * s.rate * 100) / 100 };
+    }));
+    try {
+      const res = await fetch('/api/admin/redm-caisses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discord_id: discordId, date }),
+      });
+      if (!res.ok) throw new Error();
+    } catch {
+      loadCaisses();
+    }
+  }
 
   /* ── Hydratation : on lit les mêmes registres que « Caisse et Comptabilité » ── */
   useEffect(() => {
@@ -241,14 +263,14 @@ export default function DirectionComptabilitePage() {
           <div style={{ flex:1, minWidth:0 }}>
             <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4, flexWrap:'wrap' }}>
               <span style={{ fontFamily:DISPLAY, fontSize: 17, color:T.text }}>{f.patientNom}</span>
-              <span style={{ fontFamily:MONO, fontSize: 12, color:'#79638C', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
+              <span style={{ fontFamily:MONO, fontSize: 12, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
             </div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
               {pres.map((p,i) => {
                 const cat = tarifs[p.id];
                 const isAchat = cat?.type === 'achat';
                 return (
-                  <span key={i} style={{ fontFamily:MONO, fontSize: 12, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(128,104,45,0.10)', padding:'1px 7px' }}>
+                  <span key={i} style={{ fontFamily:MONO, fontSize: 12, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
                     {isAchat ? '🛒 ' : ''}{cat?.nom ?? p.id}{p.qty > 1 ? ` ×${p.qty}` : ''}
                   </span>
                 );
@@ -276,7 +298,7 @@ export default function DirectionComptabilitePage() {
           <div style={{ marginLeft:'auto', display:'flex', gap:10 }}>
             <button
               onClick={()=>router.push('/redm/direction/tarifs')}
-              style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'9px 20px', cursor:'pointer', background:'rgba(128,104,45,0.12)', color:T.gold, border:`1px solid rgba(128,104,45,0.40)`, display:'flex', alignItems:'center', gap:8 }}>
+              style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'9px 20px', cursor:'pointer', background:'rgba(209,183,124,0.12)', color:T.gold, border:`1px solid rgba(209,183,124,0.40)`, display:'flex', alignItems:'center', gap:8 }}>
               🏷 TARIFS
             </button>
             <button
@@ -298,12 +320,12 @@ export default function DirectionComptabilitePage() {
 
           {/* Trésorerie du dispensaire */}
           <div>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(128,104,45,0.40)` }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)` }}>
               <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>🏦 TRÉSORERIE DU DISPENSAIRE</span>
             </div>
 
-            <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`5px solid ${soldeDispensaire>=0 ? '#49654D' : '#8B4040'}`, padding:'22px 24px', textAlign:'center', marginBottom:10 }}>
-              <div style={{ fontFamily:DISPLAY, fontSize:42, color: soldeDispensaire>=0 ? '#6A9A68' : '#963F36' }}>{fmt$(soldeDispensaire)}</div>
+            <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`5px solid ${soldeDispensaire>=0 ? '#A8B991' : '#8B4040'}`, padding:'22px 24px', textAlign:'center', marginBottom:10 }}>
+              <div style={{ fontFamily:DISPLAY, fontSize:42, color: soldeDispensaire>=0 ? '#6A9A68' : '#DF9A88' }}>{fmt$(soldeDispensaire)}</div>
               <div style={{ fontFamily:MONO, fontSize:13, color:T.dim, marginTop:4, letterSpacing:'0.14em' }}>SOLDE DU COMPTE DU DISPENSAIRE</div>
             </div>
 
@@ -317,7 +339,7 @@ export default function DirectionComptabilitePage() {
                 <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>ACHATS (SEMAINE)</div>
               </div>
               <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
-                <div style={{ fontFamily:DISPLAY, fontSize:24, color:'#49654D' }}>{caissesTotalSemaine}</div>
+                <div style={{ fontFamily:DISPLAY, fontSize:24, color:'#A8B991' }}>{caissesTotalSemaine}</div>
                 <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>CAISSES (SEMAINE)</div>
               </div>
             </div>
@@ -325,19 +347,25 @@ export default function DirectionComptabilitePage() {
 
           {/* Registre des caisses (self-service du personnel) */}
           <div>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(128,104,45,0.40)`, flexWrap:'wrap', gap:10 }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)`, flexWrap:'wrap', gap:10 }}>
               <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>💵 REGISTRE DES CAISSES — {fmtDayShort(caisseDays[0])} AU {fmtDayShort(caisseDays[6])}</span>
               <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                 <button onClick={() => setCaisseMonday(m => addDaysReal(m, -7))} style={{ fontFamily:MONO, fontSize:12, padding:'7px 12px', cursor:'pointer', background:T.card, border:`1px solid ${T.border}`, color:T.gold }}>◀</button>
                 {!caisseIsThisWeek && (
-                  <button onClick={() => setCaisseMonday(getMondayOf(new Date()))} style={{ fontFamily:MONO, fontSize:11, letterSpacing:'0.08em', padding:'7px 12px', cursor:'pointer', background:'rgba(128,104,45,0.08)', border:`1px solid rgba(128,104,45,0.35)`, color:T.gold }}>AUJOURD'HUI</button>
+                  <button onClick={() => setCaisseMonday(getMondayOf(new Date()))} style={{ fontFamily:MONO, fontSize:11, letterSpacing:'0.08em', padding:'7px 12px', cursor:'pointer', background:'rgba(209,183,124,0.08)', border:`1px solid rgba(209,183,124,0.35)`, color:T.gold }}>AUJOURD'HUI</button>
                 )}
                 <button onClick={() => setCaisseMonday(m => addDaysReal(m, 7))} disabled={caisseIsThisWeek} style={{ fontFamily:MONO, fontSize:12, padding:'7px 12px', cursor: caisseIsThisWeek ? 'default' : 'pointer', background:T.card, border:`1px solid ${T.border}`, color: caisseIsThisWeek ? T.dim : T.gold, opacity: caisseIsThisWeek ? 0.4 : 1 }}>▶</button>
-                <button onClick={() => router.push('/redm/registre-caisses')} style={{ fontFamily:MONO, fontSize:12, letterSpacing:'0.1em', padding:'7px 16px', cursor:'pointer', background:'rgba(128,104,45,0.10)', color:T.gold, border:`1px solid rgba(128,104,45,0.35)` }}>
+                <button onClick={() => router.push('/redm/registre-caisses')} style={{ fontFamily:MONO, fontSize:12, letterSpacing:'0.1em', padding:'7px 16px', cursor:'pointer', background:'rgba(209,183,124,0.10)', color:T.gold, border:`1px solid rgba(209,183,124,0.35)` }}>
                   MA CAISSE →
                 </button>
               </div>
             </div>
+
+            {canEditCaisses && (
+              <p style={{ fontFamily:MONO, fontSize:11, color:T.dim, letterSpacing:'0.06em', marginTop:-8, marginBottom:12 }}>
+                Cliquez sur une case du tableau pour cocher/décocher une caisse.
+              </p>
+            )}
 
             {caissesLoading ? (
               <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Chargement…</div>
@@ -348,12 +376,12 @@ export default function DirectionComptabilitePage() {
                 <table style={{ width:'100%', borderCollapse:'collapse', border:`1px solid ${T.border}` }}>
                   <thead>
                     <tr>
-                      <th style={{ background:'rgba(128,104,45,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 16px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.14em', textAlign:'left' }}>MEMBRE</th>
+                      <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 16px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.14em', textAlign:'left' }}>MEMBRE</th>
                       {JOURS_CAISSE.map((j, i) => (
-                        <th key={i} style={{ background:'rgba(128,104,45,0.06)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 8px', fontFamily:MONO, fontSize:11, color:T.gold, textAlign:'center', minWidth:34 }}>{j}</th>
+                        <th key={i} style={{ background:'rgba(209,183,124,0.06)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 8px', fontFamily:MONO, fontSize:11, color:T.gold, textAlign:'center', minWidth:34 }}>{j}</th>
                       ))}
-                      <th style={{ background:'rgba(128,104,45,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'center' }}>NB</th>
-                      <th style={{ background:'rgba(128,104,45,0.10)', borderBottom:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'right' }}>SALAIRE</th>
+                      <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'center' }}>NB</th>
+                      <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'right' }}>SALAIRE</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -369,9 +397,19 @@ export default function DirectionComptabilitePage() {
                           const missed = !done && iso < todayISODate;
                           const future = iso > todayISODate;
                           return (
-                            <td key={i} style={{ padding:'10px 8px', textAlign:'center', borderRight: i<6 ? `1px solid rgba(139,90,43,0.10)` : 'none' }}
-                              title={done ? `Caisse faite le ${fmtDayShort(d)}` : missed ? `Non faite le ${fmtDayShort(d)}` : ''}>
-                              {done ? <span style={{ color:'#49654D', fontSize:16 }}>✔</span>
+                            <td key={i}
+                              onClick={() => toggleCaisse(s.discord_id, iso)}
+                              onMouseEnter={e => { if (canEditCaisses) e.currentTarget.style.background = 'rgba(128,104,45,0.10)'; }}
+                              onMouseLeave={e => { if (canEditCaisses) e.currentTarget.style.background = 'transparent'; }}
+                              style={{
+                                padding:'10px 8px', textAlign:'center',
+                                borderRight: i<6 ? `1px solid rgba(139,90,43,0.10)` : 'none',
+                                cursor: canEditCaisses ? 'pointer' : 'default',
+                                background: 'transparent',
+                                transition:'background 0.12s',
+                              }}
+                              title={canEditCaisses ? `Cliquer pour basculer — ${fmtDayShort(d)}` : done ? `Caisse faite le ${fmtDayShort(d)}` : missed ? `Non faite le ${fmtDayShort(d)}` : ''}>
+                              {done ? <span style={{ color:'#A8B991', fontSize:16 }}>✔</span>
                                 : missed ? <span style={{ color:T.gold, fontSize:16 }}>✕</span>
                                 : future ? <span style={{ color:T.dim, fontSize:12 }}>—</span>
                                 : <span style={{ color:T.dim, fontSize:12 }}>·</span>}
@@ -379,7 +417,7 @@ export default function DirectionComptabilitePage() {
                           );
                         })}
                         <td style={{ padding:'10px 14px', textAlign:'center', borderRight:`1px solid ${T.border}`, fontFamily:DISPLAY, fontSize:16, color:T.text }}>{s.count}</td>
-                        <td style={{ padding:'10px 14px', textAlign:'right', fontFamily:DISPLAY, fontSize:18, color:'#49654D' }}>{fmt$(s.salaire)}</td>
+                        <td style={{ padding:'10px 14px', textAlign:'right', fontFamily:DISPLAY, fontSize:18, color:'#A8B991' }}>{fmt$(s.salaire)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -390,7 +428,7 @@ export default function DirectionComptabilitePage() {
 
           {/* Semaine en cours */}
           <div>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(128,104,45,0.40)` }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)` }}>
               <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>📅 {weekLabel(todayMonday)} — SEMAINE EN COURS</span>
             </div>
 
@@ -398,9 +436,9 @@ export default function DirectionComptabilitePage() {
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10, marginBottom:20 }}>
               {[
                 { l:'NB ACTES',   v: String(semaineActuelle.length), c: T.gold    },
-                { l:'TOTAL PERÇU',v: fmt$(totalPercu),                c: '#49654D' },
-                { l:'EN ATTENTE', v: fmt$(totalAttente),              c: '#80682D' },
-                { l:'MÉDECINS',   v: String(salaires.length),         c: '#79638C' },
+                { l:'TOTAL PERÇU',v: fmt$(totalPercu),                c: '#A8B991' },
+                { l:'EN ATTENTE', v: fmt$(totalAttente),              c: '#D1B77C' },
+                { l:'MÉDECINS',   v: String(salaires.length),         c: '#BAAAC6' },
               ].map(s => (
                 <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
                   <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
@@ -417,7 +455,7 @@ export default function DirectionComptabilitePage() {
               ) : (
                 <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
                   {salaires.map(s => (
-                    <div key={s.medecin} style={{ background:T.card, border:`1px solid rgba(155,106,200,0.35)`, borderLeft:`4px solid #79638C`, padding:'12px 18px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>
+                    <div key={s.medecin} style={{ background:T.card, border:`1px solid rgba(155,106,200,0.35)`, borderLeft:`4px solid #BAAAC6`, padding:'12px 18px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>
                       <div>
                         <div style={{ fontFamily:DISPLAY, fontSize: 19, color:T.text }}>{s.medecin}</div>
                         <div style={{ fontFamily:MONO, fontSize: 12, color:T.dim, marginTop:3 }}>{s.actes} acte{s.actes>1?'s':''}</div>
@@ -428,7 +466,7 @@ export default function DirectionComptabilitePage() {
                           <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim, letterSpacing:'0.1em' }}>CHIFFRE D&apos;AFFAIRES</div>
                         </div>
                         <div style={{ textAlign:'right' }}>
-                          <div style={{ fontFamily:DISPLAY, fontSize: 28, color:'#79638C' }}>{fmt$(s.salaire)}</div>
+                          <div style={{ fontFamily:DISPLAY, fontSize: 28, color:'#BAAAC6' }}>{fmt$(s.salaire)}</div>
                           <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim, letterSpacing:'0.1em' }}>SALAIRE (APRÈS %)</div>
                         </div>
                       </div>
@@ -474,7 +512,7 @@ export default function DirectionComptabilitePage() {
               </div>
               {resetConfirm
                 ? <div style={{ display:'flex', gap:8, flexShrink:0 }}>
-                    <button onClick={resetTout} style={{ fontFamily:MONO, fontSize:13, padding:'9px 16px', cursor:'pointer', background:'#8B404025', color:'#963F36', border:'1px solid #8B404060' }}>CONFIRMER LA SUPPRESSION ?</button>
+                    <button onClick={resetTout} style={{ fontFamily:MONO, fontSize:13, padding:'9px 16px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>CONFIRMER LA SUPPRESSION ?</button>
                     <button onClick={()=>setResetConfirm(false)} style={{ fontFamily:MONO, fontSize:13, padding:'9px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>ANNULER</button>
                   </div>
                 : <button onClick={()=>setResetConfirm(true)} style={{ fontFamily:MONO, fontSize:13, letterSpacing:'0.1em', padding:'9px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)', flexShrink:0 }}>🗑 RÉINITIALISER TOUS LES COMPTES</button>}

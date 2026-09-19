@@ -63,10 +63,24 @@ export async function decideMember(userId: string, status: 'approved' | 'rejecte
 export async function updateMemberRoles(userId: string, roles: string[]) {
   const { supabase, user } = await requireDirection();
 
+  // Le rôle "dev" n'est jamais proposé dans le sélecteur de rôles (il ne doit
+  // figurer dans aucun registre), donc sanitizeRoles() l'exclut toujours du
+  // tableau soumis par le formulaire. Sans ce garde-fou, enregistrer les rôles
+  // d'un compte qui a déjà "dev" l'en dépouillerait silencieusement.
+  const { data: existing } = await supabase
+    .from('members')
+    .select('roles')
+    .eq('user_id', userId)
+    .single();
+  const hadDev = (existing?.roles ?? []).includes('dev');
+
+  const nextRoles = sanitizeRoles(roles);
+  if (hadDev) nextRoles.push('dev');
+
   const { error } = await supabase
     .from('members')
     .update({
-      roles: sanitizeRoles(roles),
+      roles: nextRoles,
       decided_at: new Date().toISOString(),
       decided_by: user.id,
     })

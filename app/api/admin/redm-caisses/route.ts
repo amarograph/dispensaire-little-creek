@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireDirectionRead } from '@/lib/redm-api-auth';
+import { getApiSession } from '@/lib/api-auth';
+import { isAdmin } from '@/lib/permissions';
 import { createClient } from '@supabase/supabase-js';
 import { CAISSE_RATE, CAISSE_ROLES } from '@/lib/caisse-rates';
+import { redmLog } from '@/lib/redm-log';
 
 export const dynamic = 'force-dynamic';
+
+const CAISSE_EDITOR_ROLES = ['redm_directeur', 'redm_co_directeur', 'redm_medecin_chef'];
 
 function db() {
   return createClient(
@@ -76,4 +81,38 @@ export async function GET(req: NextRequest) {
   }).sort((a, b) => b.rate - a.rate || a.nom.localeCompare(b.nom));
 
   return NextResponse.json({ staff: result });
+}
+
+/* POST { discord_id, date } — bascule manuellement une caisse (Direction / Co-direction / Médecin en Chef) */
+export async function POST(req: NextRequest) {
+  const session = await getApiSession();
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const allowed = isAdmin(session.roles) || session.roles.some(r => CAISSE_EDITOR_ROLES.includes(r));
+  if (!allowed) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
+  const { discord_id, date } = await req.json();
+  if (!discord_id || !date) return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+
+  const supabase = db();
+  const actor = { id: session.discordId, name: session.username };
+
+  const { data: existing } = await supabase
+    .from('redm_caisses')
+    .select('id')
+    .eq('discord_id', discord_id)
+    .eq('date', date)
+    .single();
+
+  if (existing) {
+    const { error } = await supabase.from('redm_caisses').delete().eq('discord_id', discord_id).eq('date', date);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    redmLog(actor, { action: 'caisse_remove', category: 'caisses', description: `A retiré la caisse de ${discord_id} pour le ${date}`, meta: { discord_id, date } });
+    return NextResponse.json({ done: false });
+  } else {
+    const { error } = await supabase.from('redm_caisses').insert({ discord_id, date });
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    redmLog(actor, { action: 'caisse_add', category: 'caisses', description: `A ajouté la caisse de ${discord_id} pour le ${date}`, meta: { discord_id, date } });
+    return NextResponse.json({ done: true });
+  }
 }
