@@ -11,7 +11,7 @@ const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 
 const MODULES = [
   { id: 'comptabilite', href: '/redm/comptabilite',  icon: '💰', label: 'Comptabilité', sub: 'HONORAIRES & RECETTES', desc: 'Enregistrer les honoraires, suivre les paiements et consulter les comptes du dispensaire.', color: '#80682D', badge: 'FIN' },
-  { id: 'registre-caisses', href: '/redm/comptabilite/archives', icon: '📖', label: 'Registre des Caisses', sub: 'HISTORIQUE DES SEMAINES', desc: "Consulter l'historique des semaines archivées et les totaux perçus par le dispensaire.", color: '#6A8A68', badge: 'RGC' },
+  { id: 'registre-caisses', href: '/redm/registre-caisses', icon: '📖', label: 'Registre des Caisses', sub: 'SUIVI HEBDOMADAIRE', desc: "Faire sa caisse du jour et suivre son nombre de caisses et son salaire de la semaine.", color: '#6A8A68', badge: 'RGC' },
   { id: 'inventaire',   href: '/redm/inventaire',    icon: '📦', label: 'Inventaire',             sub: 'STOCKS DU DISPENSAIRE', desc: "Consulter l'état des stocks de plantes et de produits médicaux du dispensaire.", color: '#806D40', badge: 'INV' },
   { id: 'bibliotheque', href: '/redm/bibliotheque',  icon: '📚', label: 'Bibliothèque',           sub: 'TRAITÉS & MANUELS', desc: "Traités médicaux, formulaires de remèdes et guides de soins de l'époque.",    color: '#536784', badge: 'REF' },
   { id: 'archives',     href: '/redm/archives',      icon: '🗄', label: 'Archives',               sub: 'REGISTRES',         desc: 'Consulter les registres de consultations et dossiers des patients.',           color: '#4B6546', badge: 'REG' },

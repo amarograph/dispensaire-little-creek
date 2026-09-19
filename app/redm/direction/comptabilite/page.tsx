@@ -54,6 +54,15 @@ function getMondayOf(date: Date): Date {
   const d = new Date(date); const day = d.getDay();
   d.setDate(d.getDate() + (day === 0 ? -6 : 1 - day)); d.setHours(0,0,0,0); return d;
 }
+function addDaysReal(d: Date, n: number): Date { const c = new Date(d); c.setDate(c.getDate()+n); return c; }
+function fmtISODate(d: Date): string {
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), dd = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+function fmtDayShort(d: Date): string {
+  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+}
+const JOURS_CAISSE = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 function parseDate(s: string): Date | null {
   const p = s.split('/'); if (p.length !== 3) return null;
   const [d,m,y] = p.map(Number); if (!d||!m||!y) return null;
@@ -130,8 +139,27 @@ export default function DirectionComptabilitePage() {
   const [resetConfirm, setResetConfirm] = useState(false);
   const autoArchiveDone = useRef(false);
 
+  interface CaisseStaff { discord_id: string; nom: string; rate: number; dates: string[]; count: number; salaire: number; }
+  const [caissesStaff,   setCaissesStaff]   = useState<CaisseStaff[]>([]);
+  const [caissesLoading, setCaissesLoading] = useState(true);
+
   const todayMonday = getMondayOf(new Date());
   const currentKey  = mondayISO(todayMonday);
+  const caisseDays  = Array.from({ length: 7 }, (_, i) => addDaysReal(todayMonday, i));
+  const caisseFrom  = fmtISODate(caisseDays[0]);
+  const caisseTo    = fmtISODate(caisseDays[6]);
+  const todayISODate = fmtISODate(new Date());
+
+  /* ── Registre des caisses (self-service du personnel) ── */
+  useEffect(() => {
+    setCaissesLoading(true);
+    fetch(`/api/admin/redm-caisses?from=${caisseFrom}&to=${caisseTo}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d?.staff) setCaissesStaff(d.staff); })
+      .catch(() => {})
+      .finally(() => setCaissesLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caisseFrom, caisseTo]);
 
   /* ── Hydratation : on lit les mêmes registres que « Caisse et Comptabilité » ── */
   useEffect(() => {
@@ -286,6 +314,64 @@ export default function DirectionComptabilitePage() {
                 <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>ACHATS (SEMAINE)</div>
               </div>
             </div>
+          </div>
+
+          {/* Registre des caisses (self-service du personnel) */}
+          <div>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(128,104,45,0.40)` }}>
+              <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>💵 REGISTRE DES CAISSES — {fmtDayShort(caisseDays[0])} AU {fmtDayShort(caisseDays[6])}</span>
+              <button onClick={() => router.push('/redm/registre-caisses')} style={{ fontFamily:MONO, fontSize:12, letterSpacing:'0.1em', padding:'7px 16px', cursor:'pointer', background:'rgba(128,104,45,0.10)', color:T.gold, border:`1px solid rgba(128,104,45,0.35)` }}>
+                MA CAISSE →
+              </button>
+            </div>
+
+            {caissesLoading ? (
+              <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Chargement…</div>
+            ) : caissesStaff.length === 0 ? (
+              <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucun membre concerné par le registre des caisses.</div>
+            ) : (
+              <div style={{ overflowX:'auto' }}>
+                <table style={{ width:'100%', borderCollapse:'collapse', border:`1px solid ${T.border}` }}>
+                  <thead>
+                    <tr>
+                      <th style={{ background:'rgba(128,104,45,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 16px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.14em', textAlign:'left' }}>MEMBRE</th>
+                      {JOURS_CAISSE.map((j, i) => (
+                        <th key={i} style={{ background:'rgba(128,104,45,0.06)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 8px', fontFamily:MONO, fontSize:11, color:T.gold, textAlign:'center', minWidth:34 }}>{j}</th>
+                      ))}
+                      <th style={{ background:'rgba(128,104,45,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'center' }}>NB</th>
+                      <th style={{ background:'rgba(128,104,45,0.10)', borderBottom:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'right' }}>SALAIRE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {caissesStaff.map((s, idx) => (
+                      <tr key={s.discord_id} style={{ borderBottom: idx < caissesStaff.length-1 ? `1px solid rgba(139,90,43,0.12)` : 'none' }}>
+                        <td style={{ padding:'10px 16px', borderRight:`1px solid ${T.border}`, background:T.card }}>
+                          <div style={{ fontFamily:DISPLAY, fontSize:15, color:T.text }}>{s.nom}</div>
+                          <div style={{ fontFamily:MONO, fontSize:10, color:T.dim, marginTop:2 }}>{fmt$(s.rate)} / caisse</div>
+                        </td>
+                        {caisseDays.map((d, i) => {
+                          const iso = fmtISODate(d);
+                          const done = s.dates.includes(iso);
+                          const missed = !done && iso < todayISODate;
+                          const future = iso > todayISODate;
+                          return (
+                            <td key={i} style={{ padding:'10px 8px', textAlign:'center', borderRight: i<6 ? `1px solid rgba(139,90,43,0.10)` : 'none' }}
+                              title={done ? `Caisse faite le ${fmtDayShort(d)}` : missed ? `Non faite le ${fmtDayShort(d)}` : ''}>
+                              {done ? <span style={{ color:'#49654D', fontSize:16 }}>✔</span>
+                                : missed ? <span style={{ color:T.gold, fontSize:16 }}>✕</span>
+                                : future ? <span style={{ color:T.dim, fontSize:12 }}>—</span>
+                                : <span style={{ color:T.dim, fontSize:12 }}>·</span>}
+                            </td>
+                          );
+                        })}
+                        <td style={{ padding:'10px 14px', textAlign:'center', borderRight:`1px solid ${T.border}`, fontFamily:DISPLAY, fontSize:16, color:T.text }}>{s.count}</td>
+                        <td style={{ padding:'10px 14px', textAlign:'right', fontFamily:DISPLAY, fontSize:18, color:'#49654D' }}>{fmt$(s.salaire)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
 
           {/* Semaine en cours */}

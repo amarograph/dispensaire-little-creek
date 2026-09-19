@@ -57,6 +57,16 @@ export async function updateSession(request: NextRequest) {
 
     const roles: string[] = member.roles ?? [];
 
+    /* Préparateur de caisse "pur" (aucun autre rôle) : accès exclusif au registre des caisses. */
+    if (roles.length === 1 && roles[0] === 'redm_preparateur_caisse') {
+      if (!request.nextUrl.pathname.startsWith('/redm/registre-caisses')) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/redm/registre-caisses';
+        return NextResponse.redirect(url);
+      }
+      return supabaseResponse;
+    }
+
     if (isPendingRoute || (isAuthRoute && request.nextUrl.pathname === '/login')) {
       const url = request.nextUrl.clone();
       url.pathname = '/redm';

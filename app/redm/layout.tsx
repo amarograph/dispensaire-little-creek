@@ -10,6 +10,7 @@ import Notifier from './_components/Notifier';
 import AlerteSanitaire from './_components/AlerteSanitaire';
 import DirectionNav from './_components/DirectionNav';
 import { RedmSessionProvider } from './_components/RedmSessionProvider';
+import { caisseRateForRoles } from '@/lib/caisse-rates';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,6 +38,17 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
     avatarUrl: (user.user_metadata?.avatar_url ?? '') as string,
     roles: member.roles,
   };
+
+  const roles: string[] = member.roles ?? [];
+  const isPreparateurOnly = roles.length === 1 && roles[0] === 'redm_preparateur_caisse';
+  const hasCaisseAccess   = caisseRateForRoles(roles) !== null;
+
+  const navItems = isPreparateurOnly
+    ? [{ href: '/redm/registre-caisses', label: 'Registre des Caisses', icon: '💰' }]
+    : [
+        ...NAV,
+        ...(hasCaisseAccess ? [{ href: '/redm/registre-caisses', label: 'Registre des Caisses', icon: '💰' }] : []),
+      ];
 
   return (
     <RedmSessionProvider value={session}>
@@ -283,7 +295,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
           {/* ── Ligne 2 : navigation ── */}
           <div className="redm-navrow">
             <ZoomWrapper as="nav" className="redm-nav">
-              {NAV.map(n => (
+              {navItems.map(n => (
                 <Link key={n.href} href={n.href}>
                   <span>{n.icon}</span>{n.label}
                 </Link>
