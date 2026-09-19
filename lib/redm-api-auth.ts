@@ -1,0 +1,22 @@
+import { getApiSession } from '@/lib/api-auth';
+import { isAdmin } from '@/lib/permissions';
+
+const DIRECTION_ROLES = ['redm_directeur', 'redm_co_directeur'];
+const DIRECTION_READ_ROLES = [...DIRECTION_ROLES, 'redm_medecin_chef'];
+
+/** Direction / co-direction (ou dev) — accès complet aux routes d'admin RedM. */
+export async function requireDirectionActor(): Promise<{ id: string; name: string } | null> {
+  const session = await getApiSession();
+  if (!session) return null;
+  const ok = isAdmin(session.roles) || session.roles.some(r => DIRECTION_ROLES.includes(r));
+  if (!ok) return null;
+  return { id: session.discordId, name: session.username };
+}
+
+/** Direction / co-direction / médecin en chef (ou dev) — lecture seule élargie. */
+export async function requireDirectionRead(): Promise<string | null> {
+  const session = await getApiSession();
+  if (!session) return null;
+  const ok = isAdmin(session.roles) || session.roles.some(r => DIRECTION_READ_ROLES.includes(r));
+  return ok ? session.discordId : null;
+}
