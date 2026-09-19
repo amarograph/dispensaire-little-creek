@@ -150,7 +150,7 @@ export default function ArchivesPage() {
             >
               <div className="flex items-start gap-4">
                 <div className="text-2xl">
-                  {archive.universe === 'fivem' ? '🏥' : '⚕️'}
+                  ⚕️
                 </div>
                 <div>
                   <div className="font-medium text-white">

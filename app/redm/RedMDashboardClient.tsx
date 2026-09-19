@@ -10,9 +10,6 @@ const BODY    = "'Josefin Slab', 'Georgia', serif";
 const MONO    = "'Special Elite', 'Courier New', monospace";
 
 const MODULES = [
-  { id: 'contexte',     href: '/redm/contexte',      icon: '🕰', label: "Contexte de l'Époque",   sub: '1892',              desc: "Histoire, maladies et pratiques médicales de l'époque.",                      color: '#705030', badge: 'HST' },
-  { id: 'essentiel',    href: '/redm/essentiel',     icon: '🏥', label: "L'Essentiel du Médecin", sub: 'GUIDE RP', desc: "Comment incarner un médecin au XIXe siècle.",        color: '#7A1515', badge: 'URG' },
-  { id: 'certificats',  href: '/redm/certificats',  icon: '📜', label: 'Certificats Médicaux',  sub: 'ACTES OFFICIELS',   desc: 'Rédiger et délivrer les certificats, ordonnances et attestations médicales.', color: '#A82020', badge: 'ACT' },
   { id: 'comptabilite', href: '/redm/comptabilite',  icon: '💰', label: 'Caisse et Comptabilité', sub: 'HONORAIRES & RECETTES', desc: 'Enregistrer les honoraires, suivre les paiements et consulter les comptes du dispensaire.', color: '#C8A850', badge: 'FIN' },
   { id: 'inventaire',   href: '/redm/inventaire',    icon: '📦', label: 'Inventaire',             sub: 'STOCKS DU DISPENSAIRE', desc: "Consulter l'état des stocks de plantes et de produits médicaux du dispensaire.", color: '#8B6F47', badge: 'INV' },
   { id: 'bibliotheque', href: '/redm/bibliotheque',  icon: '📚', label: 'Bibliothèque',           sub: 'TRAITÉS & MANUELS', desc: "Traités médicaux, formulaires de remèdes et guides de soins de l'époque.",    color: '#486878', badge: 'REF' },
@@ -209,17 +206,17 @@ export default function RedMDashboardClient({ roles }: { roles: string[] }) {
             <span style={{ fontFamily: MONO, fontSize: 13, color: '#C8A850', letterSpacing: '0.1em', flexShrink: 0 }}>CONSULTER →</span>
           </div>
 
-          {/* ── CARTE DES PLANTES ── */}
+          {/* ── CIRCUIT DE CUEILLETTE ── */}
           <div
-            onClick={() => router.push('/redm/cartes-plantes')}
+            onClick={() => router.push('/redm/circuit-cueillette')}
             style={{ ...PANEL, borderLeft: '4px solid #4A7A40', padding: '16px 24px', display: 'flex', alignItems: 'center', gap: 18, cursor: 'pointer', transition: 'background 0.15s' }}
             onMouseEnter={e => (e.currentTarget.style.background = 'rgba(8,14,8,0.97)')}
             onMouseLeave={e => (e.currentTarget.style.background = CARD_BG)}
           >
             <div style={{ width: 46, height: 46, background: 'rgba(74,122,64,0.14)', border: '1px solid rgba(74,122,64,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>🌿</div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontFamily: DISPLAY, fontSize: 19, color: '#7AAA70', lineHeight: 1.3 }}>Carte des Plantes</div>
-              <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#A09080' }}>Atlas botanique — 19 plantes médicinales du comté</div>
+              <div style={{ fontFamily: DISPLAY, fontSize: 19, color: '#7AAA70', lineHeight: 1.3 }}>Circuit de Cueillette</div>
+              <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#A09080' }}>Parcours de récolte des plantes médicinales du comté</div>
             </div>
             <span style={{ fontFamily: MONO, fontSize: 13, color: '#7AAA70', letterSpacing: '0.1em', flexShrink: 0 }}>CONSULTER →</span>
           </div>

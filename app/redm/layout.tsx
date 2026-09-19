@@ -15,10 +15,7 @@ export const dynamic = 'force-dynamic';
 
 const NAV = [
   { href: '/redm',                  label: 'Accueil',               icon: '⌂'  },
-  { href: '/redm/contexte',         label: 'Contexte',              icon: '🕰' },
-  { href: '/redm/essentiel',        label: "L'Essentiel du Médecin",icon: '🩺' },
   { href: '/redm/registre-malades', label: 'Registre Patient',      icon: '📋' },
-  { href: '/redm/certificats',      label: 'Certificats',           icon: '📜' },
   { href: '/redm/comptabilite',     label: 'Caisse et Comptabilité',icon: '💰' },
   { href: '/redm/bibliotheque',     label: 'Bibliothèque',          icon: '📚' },
   { href: '/redm/archives',         label: 'Archives',              icon: '🗄' },

@@ -1,4 +1,4 @@
-export type Universe = 'fivem' | 'redm';
+export type Universe = 'redm';
 
 export type FieldType =
   | 'short_text'
