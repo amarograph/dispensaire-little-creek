@@ -131,7 +131,7 @@ export default function AdminDashboardClient({ members }: { members: Member[] })
   const approved = members.filter(m => m.status === 'approved');
 
   return (
-    <div>
+    <div className="admin-panel-content">
       {/* En-tête */}
       <div className="flex items-center justify-between flex-wrap gap-4 mb-8">
         <div>
@@ -144,7 +144,7 @@ export default function AdminDashboardClient({ members }: { members: Member[] })
         </div>
         <div className="flex items-center gap-2">
           <Link href="/redm" className="text-xs bg-gray-900 border border-gray-800 hover:border-gray-600 text-gray-400 px-4 py-2 rounded-lg transition">
-            ← Retour
+            🏠 Accueil
           </Link>
         </div>
       </div>
