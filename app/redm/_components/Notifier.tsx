@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-const MONO    = "'Special Elite', 'Courier New', monospace";
-const DISPLAY = "'Josefin Slab', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
+const DISPLAY = "'Cormorant Garamond', 'Georgia', serif";
 
 const LS_RDV_TS   = 'rdm_notif_rdv_ts';
 const LS_ALERTE   = 'rdm_notif_alerte';
@@ -48,7 +48,7 @@ function getStyle(t: Toast) {
   }
   if (t.rdv?.urgence)
     return { bg: 'linear-gradient(135deg,#1A0606,#1F0A08)', bdr: 'rgba(200,60,60,.65)',  acc: '#C84040', icon: '🔴', label: 'RAPPEL URGENT — DANS 2H' };
-  return   { bg: 'linear-gradient(135deg,#1A0E06,#1F1208)', bdr: 'rgba(200,168,80,.55)', acc: '#C8A850', icon: '🔔', label: 'RAPPEL — RENDEZ-VOUS DANS 4H' };
+  return   { bg: 'linear-gradient(135deg,#EBDDC0,#1F1208)', bdr: 'rgba(128,104,45,.55)', acc: '#80682D', icon: '🔔', label: 'RAPPEL — RENDEZ-VOUS DANS 4H' };
 }
 
 export default function Notifier() {
@@ -182,7 +182,7 @@ export default function Notifier() {
               borderRadius: 8,
               padding: '14px 18px',
               width: 440,
-              boxShadow: `0 8px 40px rgba(0,0,0,.8), 0 0 24px ${s.bdr}`,
+              boxShadow: `0 8px 40px rgba(74,62,32,0.14), 0 0 24px ${s.bdr}`,
               animation: 'notif-in 0.3s ease',
             }}>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom: 8 }}>
@@ -198,7 +198,7 @@ export default function Notifier() {
                 >✕</button>
               </div>
 
-              <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#E8D9C0', lineHeight: 1.55 }}>
+              <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#183746', lineHeight: 1.55 }}>
 
                 {t.kind === 'nouveau-rdv' && t.rdvData && (
                   <>

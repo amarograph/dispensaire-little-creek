@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const BODY    = "'Josefin Slab', Georgia, serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const BODY    = "'Cormorant Garamond', Georgia, serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const COLOR   = '#8B4040';
 
 interface Absence {
@@ -21,9 +21,9 @@ interface Absence {
 }
 
 const STATUT_COL: Record<string, string> = {
-  'Absence':   '#C8A040',
-  'Vue et lu': '#5A9A58',
-  'Annulée':   '#C83030',
+  'Absence':   '#80682D',
+  'Vue et lu': '#42663C',
+  'Annulée':   '#963F36',
 };
 
 /* ── Helpers agenda (dates RP "20 Juin 1890" ↔ "DD/MM/YYYY_RP") ─────── */
@@ -203,27 +203,27 @@ export default function AbsencesDirectionPage() {
   };
 
   const card: React.CSSProperties = {
-    background: 'rgba(14,8,10,0.90)', border: '1px solid rgba(120,20,20,0.28)',
+    background: 'rgba(247,237,215,0.90)', border: '1px solid rgba(142,122,74,0.28)',
     borderRadius: 9, padding: '22px 26px',
   };
 
   return (
     <div style={{ fontFamily: BODY, maxWidth: 900, margin: '0 auto' }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
       {/* En-tête */}
       <div style={{ marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
           <button onClick={() => router.push('/redm/direction')}
-            style={{ fontFamily: MONO, fontSize: 13, background: 'transparent', border: '1px solid rgba(200,168,80,0.35)', color: '#A08850', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+            style={{ fontFamily: MONO, fontSize: 13, background: 'transparent', border: '1px solid rgba(128,104,45,0.35)', color: '#A08850', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
             ← RETOUR
           </button>
-          <span style={{ fontFamily: MONO, fontSize: 12, color: '#C8A850', letterSpacing: '0.18em' }}>
+          <span style={{ fontFamily: MONO, fontSize: 12, color: '#80682D', letterSpacing: '0.18em' }}>
             DIRECTION · ABSENCES DÉCLARÉES
           </span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: '#E8D8C0', margin: 0 }}>Absences Déclarées</h1>
-        <p style={{ fontFamily: MONO, fontSize: 12, color: '#5A4A35', letterSpacing: '0.12em', marginTop: 8 }}>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: '#183746', margin: 0 }}>Absences Déclarées</h1>
+        <p style={{ fontFamily: MONO, fontSize: 12, color: '#646850', letterSpacing: '0.12em', marginTop: 8 }}>
           CONGÉS & INDISPONIBILITÉS DU PERSONNEL MÉDICAL
         </p>
       </div>
@@ -233,7 +233,7 @@ export default function AbsencesDirectionPage() {
         {(['Absence', 'Vue et lu', 'Annulée'] as StatutVal[]).map(s => (
           <div key={s} style={{ ...card, textAlign: 'center', borderLeft: `4px solid ${STATUT_COL[s]}` }}>
             <div style={{ fontFamily: DISPLAY, fontSize: 36, color: STATUT_COL[s], lineHeight: 1 }}>{counts[s]}</div>
-            <div style={{ fontFamily: MONO, fontSize: 10, color: '#7A5A40', letterSpacing: '0.14em', marginTop: 6 }}>{s.toUpperCase()}</div>
+            <div style={{ fontFamily: MONO, fontSize: 10, color: '#676C51', letterSpacing: '0.14em', marginTop: 6 }}>{s.toUpperCase()}</div>
           </div>
         ))}
       </div>
@@ -242,13 +242,13 @@ export default function AbsencesDirectionPage() {
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
         {(['Toutes', 'Absence', 'Vue et lu', 'Annulée'] as FilterVal[]).map(f => {
           const active = filter === f;
-          const col = f === 'Toutes' ? '#C8A850' : STATUT_COL[f];
+          const col = f === 'Toutes' ? '#80682D' : STATUT_COL[f];
           return (
             <button key={f} onClick={() => setFilter(f)} style={{
               fontFamily: MONO, fontSize: 11, letterSpacing: '0.12em',
               padding: '7px 16px', cursor: 'pointer',
               background: active ? `${col}22` : 'rgba(0,0,0,0.25)',
-              border: `1px solid ${active ? col : 'rgba(120,20,20,0.25)'}`,
+              border: `1px solid ${active ? col : 'rgba(142,122,74,0.25)'}`,
               color: active ? col : '#7A6050',
               borderRadius: 4, transition: 'all 0.14s',
             }}>
@@ -257,7 +257,7 @@ export default function AbsencesDirectionPage() {
           );
         })}
         {msg && (
-          <span style={{ fontFamily: BODY, fontSize: 13, color: msg.startsWith('Erreur') ? '#C83030' : '#5A9A58', alignSelf: 'center', marginLeft: 8 }}>
+          <span style={{ fontFamily: BODY, fontSize: 13, color: msg.startsWith('Erreur') ? '#963F36' : '#42663C', alignSelf: 'center', marginLeft: 8 }}>
             {msg}
           </span>
         )}
@@ -265,10 +265,10 @@ export default function AbsencesDirectionPage() {
 
       {/* Liste */}
       {loading ? (
-        <div style={{ fontFamily: BODY, color: '#9A8870', padding: 60, textAlign: 'center' }}>Chargement…</div>
+        <div style={{ fontFamily: BODY, color: '#60694F', padding: 60, textAlign: 'center' }}>Chargement…</div>
       ) : filtered.length === 0 ? (
         <div style={{ ...card, textAlign: 'center', padding: '48px 24px' }}>
-          <div style={{ fontFamily: DISPLAY, fontSize: 18, color: '#5A4A38' }}>Aucune absence dans cette catégorie.</div>
+          <div style={{ fontFamily: DISPLAY, fontSize: 18, color: '#646850' }}>Aucune absence dans cette catégorie.</div>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -280,7 +280,7 @@ export default function AbsencesDirectionPage() {
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6, flexWrap: 'wrap' }}>
-                      <span style={{ fontFamily: DISPLAY, fontSize: 20, color: '#C8B8A0' }}>
+                      <span style={{ fontFamily: DISPLAY, fontSize: 20, color: '#203C49' }}>
                         {a.nom_rp || 'Médecin inconnu'}
                       </span>
                       <span style={{
@@ -292,11 +292,11 @@ export default function AbsencesDirectionPage() {
                     <div style={{ fontFamily: MONO, fontSize: 11, color: COLOR, letterSpacing: '0.10em', marginBottom: 6 }}>
                       {a.motif}
                     </div>
-                    <div style={{ fontFamily: MONO, fontSize: 11, color: '#7A5A40', marginBottom: a.note ? 8 : 0 }}>
+                    <div style={{ fontFamily: MONO, fontSize: 11, color: '#676C51', marginBottom: a.note ? 8 : 0 }}>
                       {a.date_debut} → {a.date_fin}
                     </div>
                     {a.note && (
-                      <div style={{ fontFamily: BODY, fontSize: 13, color: '#9A8870', fontStyle: 'italic' }}>
+                      <div style={{ fontFamily: BODY, fontSize: 13, color: '#60694F', fontStyle: 'italic' }}>
                         « {a.note} »
                       </div>
                     )}
@@ -312,7 +312,7 @@ export default function AbsencesDirectionPage() {
                         fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em',
                         padding: '7px 14px', cursor: isBusy ? 'default' : 'pointer',
                         background: 'rgba(90,154,88,0.12)', border: '1px solid rgba(90,154,88,0.50)',
-                        color: '#5A9A58', borderRadius: 4, opacity: isBusy ? 0.5 : 1,
+                        color: '#42663C', borderRadius: 4, opacity: isBusy ? 0.5 : 1,
                         transition: 'all 0.14s',
                       }}>✔ VUE ET LU</button>
                     )}
@@ -321,7 +321,7 @@ export default function AbsencesDirectionPage() {
                         fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em',
                         padding: '7px 14px', cursor: isBusy ? 'default' : 'pointer',
                         background: 'rgba(200,48,48,0.10)', border: '1px solid rgba(200,48,48,0.45)',
-                        color: '#C83030', borderRadius: 4, opacity: isBusy ? 0.5 : 1,
+                        color: '#963F36', borderRadius: 4, opacity: isBusy ? 0.5 : 1,
                         transition: 'all 0.14s',
                       }}>✕ ANNULER</button>
                     )}
@@ -329,13 +329,13 @@ export default function AbsencesDirectionPage() {
                       <button onClick={() => updateStatut(a.id, 'Absence')} disabled={isBusy} style={{
                         fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em',
                         padding: '7px 14px', cursor: isBusy ? 'default' : 'pointer',
-                        background: 'rgba(200,160,64,0.10)', border: '1px solid rgba(200,160,64,0.35)',
-                        color: '#C8A040', borderRadius: 4, opacity: isBusy ? 0.5 : 1,
+                        background: 'rgba(128,104,45,0.10)', border: '1px solid rgba(128,104,45,0.35)',
+                        color: '#80682D', borderRadius: 4, opacity: isBusy ? 0.5 : 1,
                         transition: 'all 0.14s',
                       }}>↺ ABSENCE</button>
                     )}
                     {/* Supprimer */}
-                    <div style={{ borderTop: '1px solid rgba(120,20,20,0.20)', paddingTop: 7, marginTop: 2 }}>
+                    <div style={{ borderTop: '1px solid rgba(142,122,74,0.20)', paddingTop: 7, marginTop: 2 }}>
                       {delConfirm === a.id ? (
                         <div style={{ display: 'flex', gap: 5 }}>
                           <button onClick={() => deleteAbsence(a.id)} disabled={isBusy} style={{
@@ -347,7 +347,7 @@ export default function AbsencesDirectionPage() {
                           <button onClick={() => setDelConfirm(null)} disabled={isBusy} style={{
                             fontFamily: MONO, fontSize: 10, letterSpacing: '0.10em',
                             padding: '6px 10px', cursor: 'pointer',
-                            background: 'rgba(0,0,0,0.20)', border: '1px solid rgba(120,20,20,0.30)',
+                            background: 'rgba(0,0,0,0.20)', border: '1px solid rgba(142,122,74,0.30)',
                             color: '#7A6050', borderRadius: 4,
                           }}>NON</button>
                         </div>
@@ -355,7 +355,7 @@ export default function AbsencesDirectionPage() {
                         <button onClick={() => setDelConfirm(a.id)} disabled={isBusy} style={{
                           fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em',
                           padding: '6px 14px', cursor: isBusy ? 'default' : 'pointer',
-                          background: 'transparent', border: '1px solid rgba(120,20,20,0.35)',
+                          background: 'transparent', border: '1px solid rgba(142,122,74,0.35)',
                           color: '#7A4040', borderRadius: 4, opacity: isBusy ? 0.5 : 1,
                           transition: 'all 0.14s', width: '100%',
                         }}>⌫ SUPPRIMER</button>

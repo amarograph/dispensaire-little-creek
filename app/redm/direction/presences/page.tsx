@@ -3,14 +3,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const BODY    = "'Josefin Slab', Georgia, serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const BODY    = "'Cormorant Garamond', Georgia, serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 
 const T = {
-  bg: '#120A0A', card: '#1A1008', paper: '#1F1610',
-  border: 'rgba(139,90,43,0.30)', gold: '#C8A850',
-  text: '#E8D9C0', muted: '#8B7355', dim: '#5A4A35', sepia: '#D4B896',
+  bg: '#EDE0C2', card: '#F7EEDB', paper: '#F7EEDB',
+  border: 'rgba(139,90,43,0.30)', gold: '#80682D',
+  text: '#183746', muted: '#6A6D50', dim: '#646850', sepia: '#D4B896',
   green: '#5A9858', greenLight: '#7ABE78',
 };
 
@@ -131,16 +131,16 @@ export default function PresencesPage() {
   return (
     <div style={{ fontFamily: BODY, background: T.bg, minHeight: '100vh', padding: '32px 28px' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
         .pres-check { transition: background 0.12s, border-color 0.12s; }
         .pres-check:hover { border-color: rgba(90,152,88,0.80) !important; background: rgba(90,152,88,0.10) !important; cursor: pointer; }
-        .pres-row:hover td { background: rgba(200,168,80,0.03); }
+        .pres-row:hover td { background: rgba(128,104,45,0.03); }
       `}</style>
 
       {/* Navigation */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
         <button onClick={() => router.push('/redm/direction')}
-          style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid rgba(200,168,80,0.35)`, color: '#A08850', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+          style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid rgba(128,104,45,0.35)`, color: '#A08850', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
           ← RETOUR
         </button>
         <span style={{ fontFamily: MONO, fontSize: 13, color: T.gold, letterSpacing: '0.18em' }}>DIRECTION · PRÉSENCES</span>
@@ -169,7 +169,7 @@ export default function PresencesPage() {
         </button>
         {!isThisWeek && (
           <button onClick={thisWeek}
-            style={{ fontFamily: MONO, fontSize: 12, background: 'rgba(200,168,80,0.08)', border: `1px solid rgba(200,168,80,0.35)`, color: T.gold, padding: '9px 16px', cursor: 'pointer', letterSpacing: '0.08em' }}>
+            style={{ fontFamily: MONO, fontSize: 12, background: 'rgba(128,104,45,0.08)', border: `1px solid rgba(128,104,45,0.35)`, color: T.gold, padding: '9px 16px', cursor: 'pointer', letterSpacing: '0.08em' }}>
             AUJOURD'HUI
           </button>
         )}
@@ -191,7 +191,7 @@ export default function PresencesPage() {
             <thead>
               <tr>
                 <th style={{
-                  background: 'rgba(200,168,80,0.10)', borderBottom: `1px solid ${T.border}`,
+                  background: 'rgba(128,104,45,0.10)', borderBottom: `1px solid ${T.border}`,
                   borderRight: `1px solid ${T.border}`, padding: '14px 20px',
                   fontFamily: MONO, fontSize: 11, color: T.gold, letterSpacing: '0.18em',
                   textAlign: 'left', minWidth: 200, position: 'sticky', left: 0, zIndex: 2,
@@ -203,7 +203,7 @@ export default function PresencesPage() {
                   const isToday = iso === todayISO;
                   return (
                     <th key={iso} style={{
-                      background: isToday ? 'rgba(90,152,88,0.10)' : 'rgba(200,168,80,0.06)',
+                      background: isToday ? 'rgba(90,152,88,0.10)' : 'rgba(128,104,45,0.06)',
                       borderBottom: `1px solid ${T.border}`,
                       borderRight: i < 6 ? `1px solid ${T.border}` : 'none',
                       padding: '10px 14px', fontFamily: MONO, fontSize: 11,

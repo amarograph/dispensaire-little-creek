@@ -5,18 +5,18 @@ import { useRouter } from 'next/navigation';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const BODY    = "'Josefin Slab', 'Georgia', serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const BODY    = "'Cormorant Garamond', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 
 const T = {
-  bg:     '#1A1208',
-  card:   '#1F1610',
+  bg:     '#EDE0C2',
+  card:   '#F7EEDB',
   border: 'rgba(139,90,43,0.30)',
-  gold:   '#C8A850',
-  text:   '#E8D9C0',
-  muted:  '#8B7355',
-  dim:    '#5A4A35',
+  gold:   '#80682D',
+  text:   '#183746',
+  muted:  '#6A6D50',
+  dim:    '#646850',
 };
 
 interface Dossier {
@@ -37,7 +37,7 @@ interface Dossier {
 const inp: React.CSSProperties = {
   fontFamily: MONO, fontSize: 15,
   background: 'rgba(0,0,0,0.30)', border: `1px solid rgba(139,90,43,0.30)`,
-  color: '#E8D9C0', padding: '9px 14px', outline: 'none',
+  color: '#183746', padding: '9px 14px', outline: 'none',
   boxSizing: 'border-box', width: '100%',
 };
 
@@ -89,10 +89,10 @@ export default function CabinetArchivesCloturees() {
 
   return (
     <div style={{ fontFamily: BODY }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap'); @keyframes fade-in{from{opacity:0}to{opacity:1}}`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap'); @keyframes fade-in{from{opacity:0}to{opacity:1}}`}</style>
 
       {toast && (
-        <div style={{ position: 'fixed', top: 22, right: 24, zIndex: 9999, padding: '12px 22px', background: 'rgba(200,168,80,0.12)', border: '1px solid rgba(200,168,80,0.45)', borderRadius: 8, color: T.gold, fontFamily: MONO, fontSize: 15, animation: 'fade-in 0.2s ease' }}>
+        <div style={{ position: 'fixed', top: 22, right: 24, zIndex: 9999, padding: '12px 22px', background: 'rgba(128,104,45,0.12)', border: '1px solid rgba(128,104,45,0.45)', borderRadius: 8, color: T.gold, fontFamily: MONO, fontSize: 15, animation: 'fade-in 0.2s ease' }}>
           {toast}
         </div>
       )}
@@ -120,7 +120,7 @@ export default function CabinetArchivesCloturees() {
           Ces dossiers ont été clôturés avec le statut <strong>CLÔTURÉE</strong>. Ils peuvent être restaurés au statut <em>EN COURS</em> si le patient reprend les séances.
         </span>
         <button onClick={() => router.push('/redm/cabinet/patients')}
-          style={{ fontFamily: MONO, fontSize: 12, padding: '6px 14px', cursor: 'pointer', background: 'transparent', color: T.gold, border: `1px solid rgba(200,168,80,0.35)`, whiteSpace: 'nowrap', flexShrink: 0, letterSpacing: '0.08em' }}>
+          style={{ fontFamily: MONO, fontSize: 12, padding: '6px 14px', cursor: 'pointer', background: 'transparent', color: T.gold, border: `1px solid rgba(128,104,45,0.35)`, whiteSpace: 'nowrap', flexShrink: 0, letterSpacing: '0.08em' }}>
           Voir les dossiers actifs →
         </button>
       </div>
@@ -162,11 +162,11 @@ export default function CabinetArchivesCloturees() {
                     <span style={{ fontFamily: DISPLAY, fontSize: 20, color: T.muted, textDecoration: 'line-through', textDecorationColor: 'rgba(139,90,43,0.3)' }}>{nomComplet || d.patient_nom}</span>
                     {d.patient_age && <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim }}>{d.patient_age} ans</span>}
                     {d.patient_metier && <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim }}>· {d.patient_metier}</span>}
-                    {d.confidentiel && <span style={{ fontFamily: MONO, fontSize: 12, color: '#C06060', background: '#8B404018', padding: '1px 6px' }}>CONFIDENTIEL</span>}
+                    {d.confidentiel && <span style={{ fontFamily: MONO, fontSize: 12, color: '#963F36', background: '#8B404018', padding: '1px 6px' }}>CONFIDENTIEL</span>}
                   </div>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     <span style={{ fontFamily: MONO, fontSize: 12, color: '#9A8AB0', background: 'rgba(90,74,106,0.15)', padding: '1px 7px', border: '1px solid rgba(90,74,106,0.30)' }}>CLÔTURÉE</span>
-                    {d.type_seance && <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, background: 'rgba(200,168,80,0.08)', padding: '1px 7px' }}>{d.type_seance}</span>}
+                    {d.type_seance && <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, background: 'rgba(128,104,45,0.08)', padding: '1px 7px' }}>{d.type_seance}</span>}
                     {d.date_consult && <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim }}>{d.date_consult}</span>}
                   </div>
                   {d.plainte && <div style={{ fontFamily: BODY, fontSize: 15, color: T.dim, marginTop: 4, fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>« {d.plainte} »</div>}
@@ -177,7 +177,7 @@ export default function CabinetArchivesCloturees() {
                   <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                     {restConfirm === d.id
                       ? <>
-                          <button onClick={() => restore(d)} style={{ fontFamily: MONO, fontSize: 11, padding: '5px 8px', cursor: 'pointer', background: 'rgba(200,168,80,0.15)', color: T.gold, border: '1px solid rgba(200,168,80,0.45)', letterSpacing: '0.05em' }}>RESTAURER</button>
+                          <button onClick={() => restore(d)} style={{ fontFamily: MONO, fontSize: 11, padding: '5px 8px', cursor: 'pointer', background: 'rgba(128,104,45,0.15)', color: T.gold, border: '1px solid rgba(128,104,45,0.45)', letterSpacing: '0.05em' }}>RESTAURER</button>
                           <button onClick={() => setRestConfirm(null)} style={{ fontFamily: MONO, fontSize: 12, padding: '5px 6px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button>
                         </>
                       : <button onClick={() => setRestConfirm(d.id)} title="Restaurer dans les dossiers actifs" style={{ fontFamily: MONO, fontSize: 12, padding: '5px 12px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, letterSpacing: '0.06em' }}>↩ Restaurer</button>

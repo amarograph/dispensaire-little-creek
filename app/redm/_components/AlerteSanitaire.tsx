@@ -5,8 +5,8 @@ import { createPortal } from 'react-dom';
 import { DEFAULT_DISPENSAIRE_STATUS, type DispensaireStatus } from '../_lib/sanitaireListes';
 import { ZOOM_KEY, ZOOMS, type ZoomKey } from '@/components/layout/ZoomPicker';
 
-const BODY = "'Josefin Slab', 'Georgia', serif";
-const MONO = "'Special Elite', 'Courier New', monospace";
+const BODY = "'Cormorant Garamond', 'Georgia', serif";
+const MONO = "'Libre Baskerville', 'Courier New', monospace";
 
 interface AlertMessages {
   epidemie: string;
@@ -101,7 +101,7 @@ export default function AlerteSanitaire() {
     .filter(key => status[key].nom && !dismissed[key])
     .map(key => {
       const entry = status[key];
-      const sevColor = entry.critique ? '#C83030' : '#C8A040';
+      const sevColor = entry.critique ? '#963F36' : '#80682D';
       const message  = entry.critique ? messages[`${key}Critique`] : messages[key];
       return { key, critique: entry.critique, sevColor, message };
     });
@@ -120,12 +120,12 @@ export default function AlerteSanitaire() {
         <div key={key} style={{
           pointerEvents: 'all',
           maxWidth: 440,
-          background: 'linear-gradient(135deg, #1F1006 0%, #1A0E06 60%, #150A04 100%)',
+          background: 'linear-gradient(135deg, #1F1006 0%, #EBDDC0 60%, #150A04 100%)',
           border: `1px solid ${sevColor}8C`,
           borderLeft: `4px solid ${sevColor}`,
           borderRadius: 8,
           padding: '16px 20px',
-          boxShadow: `0 8px 40px rgba(0,0,0,0.8), 0 0 30px ${sevColor}2E`,
+          boxShadow: `0 8px 40px rgba(74,62,32,0.14), 0 0 30px ${sevColor}2E`,
           animation: 'alerte-sanitaire-drop 0.35s ease',
         }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
@@ -135,7 +135,7 @@ export default function AlerteSanitaire() {
                 <div style={{ fontFamily: MONO, fontSize: 12, color: sevColor, letterSpacing: '0.14em', marginBottom: 6, textTransform: 'uppercase' }}>
                   {TITLES[key]}{critique ? ' — CRITIQUE' : ''}
                 </div>
-                <div style={{ fontFamily: BODY, fontSize: 15, color: '#E8D9C0', lineHeight: 1.55 }}>
+                <div style={{ fontFamily: BODY, fontSize: 15, color: '#183746', lineHeight: 1.55 }}>
                   {message}
                 </div>
               </div>

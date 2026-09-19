@@ -6,22 +6,22 @@ import { useRouter } from 'next/navigation';
 const MONO    = "'Share Tech Mono', 'Courier New', monospace";
 const DISPLAY = "'Rajdhani', 'Arial', sans-serif";
 const T = {
-  bg: '#08090D', card: '#10121A', border: 'rgba(200,168,80,0.18)',
-  gold: '#C8A850', muted: '#5A6A80', red: '#C85050', green: '#50C878',
+  bg: '#08090D', card: '#10121A', border: 'rgba(128,104,45,0.18)',
+  gold: '#80682D', muted: '#5A6A80', red: '#C85050', green: '#50C878',
   sepia: '#D4C090',
 };
 
 const COLORS_DOT = [
-  { label: 'Rouge foncé', val: '#7A1515' },
-  { label: 'Vert',        val: '#5A7848' },
-  { label: 'Rouge vif',   val: '#A82020' },
-  { label: 'Bleu',        val: '#486878' },
+  { label: 'Rouge foncé', val: '#405B4A' },
+  { label: 'Vert',        val: '#4B6546' },
+  { label: 'Rouge vif',   val: '#254B50' },
+  { label: 'Bleu',        val: '#536784' },
 ];
 const COLORS_PATIENT = [
-  { label: 'Vert (stable)',    val: '#5A9A58' },
-  { label: 'Rouge (critique)', val: '#C83030' },
+  { label: 'Vert (stable)',    val: '#42663C' },
+  { label: 'Rouge (critique)', val: '#963F36' },
   { label: 'Bleu (soigné)',    val: '#4888A8' },
-  { label: 'Orange (attente)', val: '#C8A040' },
+  { label: 'Orange (attente)', val: '#80682D' },
 ];
 
 interface RegistreItem { heure: string; msg: string; dot: string; }
@@ -67,25 +67,25 @@ const DEFAULTS: DashboardConfig = {
     alertMessageRisqueCritique: 'ALERTE CRITIQUE — Risque sanitaire majeur en cours. Isolement immédiat et respect strict des protocoles exigés pour votre sécurité.',
   },
   registre: [
-    { heure: '08h14', msg: 'Consultation — blessure par balle, M. Calloway', dot: '#7A1515' },
-    { heure: '07h42', msg: "Délivrance d'un certificat de bonne santé",      dot: '#5A7848' },
-    { heure: '06h55', msg: "Arrivée d'un convoi — 3 blessés du ranch Ford",  dot: '#A82020' },
-    { heure: '06h10', msg: 'Renouvellement du stock de laudanum',             dot: '#486878' },
+    { heure: '08h14', msg: 'Consultation — blessure par balle, M. Calloway', dot: '#405B4A' },
+    { heure: '07h42', msg: "Délivrance d'un certificat de bonne santé",      dot: '#4B6546' },
+    { heure: '06h55', msg: "Arrivée d'un convoi — 3 blessés du ranch Ford",  dot: '#254B50' },
+    { heure: '06h10', msg: 'Renouvellement du stock de laudanum',             dot: '#536784' },
   ],
   patients: [
-    { nom: 'Elijah Calloway',  etat: 'Stable',     col: '#5A9A58' },
-    { nom: 'Mary Sue Henkel',  etat: 'Critique',   col: '#C83030' },
+    { nom: 'Elijah Calloway',  etat: 'Stable',     col: '#42663C' },
+    { nom: 'Mary Sue Henkel',  etat: 'Critique',   col: '#963F36' },
     { nom: 'Tom "Buck" Walsh', etat: 'Soigné',     col: '#4888A8' },
-    { nom: 'Rev. John Marsh',  etat: 'En attente', col: '#C8A040' },
+    { nom: 'Rev. John Marsh',  etat: 'En attente', col: '#80682D' },
   ],
   citation: {
     text:   'Primum non nocere. La médecine de 1890 exige autant de courage que de science.',
     author: 'Dr. James Herrington, 1889',
   },
   stats: [
-    { label: 'PATIENTS / 24H', val: '7',   unit: '',  col: '#C03030' },
-    { label: 'ACTES RÉALISÉS', val: '14',  unit: '',  col: '#5A9A58' },
-    { label: 'TAUX SURVIE',    val: '85',  unit: '%', col: '#D04040' },
+    { label: 'PATIENTS / 24H', val: '7',   unit: '',  col: '#244958' },
+    { label: 'ACTES RÉALISÉS', val: '14',  unit: '',  col: '#42663C' },
+    { label: 'TAUX SURVIE',    val: '85',  unit: '%', col: '#254B50' },
     { label: 'JOURS EN POSTE', val: '312', unit: '',  col: '#4888A8' },
   ],
 };
@@ -94,7 +94,7 @@ function inp(extra?: React.CSSProperties): React.CSSProperties {
   return {
     padding: '9px 13px',
     background: 'rgba(255,255,255,0.06)',
-    border: '1px solid rgba(200,168,80,0.30)',
+    border: '1px solid rgba(128,104,45,0.30)',
     borderRadius: 7,
     color: '#E8D8B0',
     fontFamily: MONO,
@@ -116,7 +116,7 @@ function ColorSelect({ value, onChange, options }: {
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       <span style={{ display: 'inline-block', width: 12, height: 12, borderRadius: '50%', background: value, flexShrink: 0 }} />
       <select value={value} onChange={e => onChange(e.target.value)}
-        style={{ padding: '9px 10px', background: '#1A1C28', border: '1px solid rgba(200,168,80,0.30)', borderRadius: 7, color: '#E8D8B0', fontFamily: MONO, fontSize: 14, cursor: 'pointer', width: 160 }}>
+        style={{ padding: '9px 10px', background: '#1A1C28', border: '1px solid rgba(128,104,45,0.30)', borderRadius: 7, color: '#E8D8B0', fontFamily: MONO, fontSize: 14, cursor: 'pointer', width: 160 }}>
         {options.map(o => <option key={o.val} value={o.val}>{o.label}</option>)}
       </select>
     </div>
@@ -248,13 +248,13 @@ export default function RedmDashboardAdmin() {
     setFormKey(k => k + 1);
   }
 
-  function addRegistre()             { mutate(c => ({ ...c, registre: [...c.registre, { heure: '', msg: '', dot: '#7A1515' }] })); }
+  function addRegistre()             { mutate(c => ({ ...c, registre: [...c.registre, { heure: '', msg: '', dot: '#405B4A' }] })); }
   function removeRegistre(i: number) { mutate(c => ({ ...c, registre: c.registre.filter((_, j) => j !== i) })); }
   function setRegistreDot(i: number, dot: string) {
     setCfg(c => { const a = [...c.registre]; a[i] = { ...a[i], dot }; return { ...c, registre: a }; });
   }
 
-  function addPatient()             { mutate(c => ({ ...c, patients: [...c.patients, { nom: '', etat: '', col: '#5A9A58' }] })); }
+  function addPatient()             { mutate(c => ({ ...c, patients: [...c.patients, { nom: '', etat: '', col: '#42663C' }] })); }
   function removePatient(i: number) { mutate(c => ({ ...c, patients: c.patients.filter((_, j) => j !== i) })); }
   function setPatientCol(i: number, col: string) {
     setCfg(c => { const a = [...c.patients]; a[i] = { ...a[i], col }; return { ...c, patients: a }; });
@@ -270,7 +270,7 @@ export default function RedmDashboardAdmin() {
 
   const btnAdd: React.CSSProperties = {
     marginTop: 8, padding: '9px 18px',
-    background: 'rgba(200,168,80,0.07)', border: `1px solid ${T.border}`,
+    background: 'rgba(128,104,45,0.07)', border: `1px solid ${T.border}`,
     borderRadius: 8, color: T.gold, cursor: 'pointer', fontSize: 15,
     alignSelf: 'flex-start', fontFamily: MONO,
   };

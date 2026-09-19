@@ -3,13 +3,13 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
-const DISPLAY = "'Rye','Georgia',serif";
-const BODY    = "'Josefin Slab','Georgia',serif";
-const MONO    = "'Special Elite','Courier New',monospace";
+const DISPLAY = "'Burnic','Georgia',serif";
+const BODY    = "'Cormorant Garamond','Georgia',serif";
+const MONO    = "'Libre Baskerville','Courier New',monospace";
 
 const T = {
-  bg: '#080508', card: '#0E0810', gold: '#C8A850', text: '#E8D9C0',
-  muted: '#8B7355', border: 'rgba(120,20,20,0.35)', dim: '#5A4A38',
+  bg: '#EDE0C2', card: '#F4EAD8', gold: '#80682D', text: '#183746',
+  muted: '#6A6D50', border: 'rgba(142,122,74,0.35)', dim: '#646850',
   green: '#6A9860', red: '#C84040', greenFaint: 'rgba(100,160,90,0.12)',
 };
 
@@ -164,9 +164,9 @@ export default function CueilleurDetailPage() {
   return (
     <div style={{ fontFamily: BODY, maxWidth: 900, margin: '0 auto', padding: '32px 0 60px' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@400;600;700&family=Special+Elite&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
         input[type=number]::-webkit-inner-spin-button { opacity: 1; }
-        .plant-row:hover { background: rgba(200,168,80,0.05) !important; }
+        .plant-row:hover { background: rgba(128,104,45,0.05) !important; }
       `}</style>
 
       {/* Header */}
@@ -189,12 +189,12 @@ export default function CueilleurDetailPage() {
               <div>
                 <label style={{ fontFamily: MONO, fontSize: 10, color: T.muted, letterSpacing: '0.1em', display: 'block', marginBottom: 5 }}>NOM RP</label>
                 <input value={profilForm.nom_rp} onChange={e => setProfilForm(p => ({ ...p, nom_rp: e.target.value }))}
-                  style={{ width: '100%', boxSizing: 'border-box', fontFamily: BODY, fontSize: 15, color: T.text, background: '#0A050C', border: `1px solid rgba(200,168,80,0.3)`, padding: '9px 12px', outline: 'none' }} />
+                  style={{ width: '100%', boxSizing: 'border-box', fontFamily: BODY, fontSize: 15, color: T.text, background: '#F5EBD5', border: `1px solid rgba(128,104,45,0.3)`, padding: '9px 12px', outline: 'none' }} />
               </div>
               <div>
                 <label style={{ fontFamily: MONO, fontSize: 10, color: T.muted, letterSpacing: '0.1em', display: 'block', marginBottom: 5 }}>NOTES</label>
                 <input value={profilForm.notes} onChange={e => setProfilForm(p => ({ ...p, notes: e.target.value }))}
-                  style={{ width: '100%', boxSizing: 'border-box', fontFamily: BODY, fontSize: 15, color: T.text, background: '#0A050C', border: `1px solid rgba(200,168,80,0.3)`, padding: '9px 12px', outline: 'none' }} />
+                  style={{ width: '100%', boxSizing: 'border-box', fontFamily: BODY, fontSize: 15, color: T.text, background: '#F5EBD5', border: `1px solid rgba(128,104,45,0.3)`, padding: '9px 12px', outline: 'none' }} />
               </div>
             </div>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', marginBottom: 14 }}>
@@ -202,7 +202,7 @@ export default function CueilleurDetailPage() {
               <span style={{ fontFamily: MONO, fontSize: 11, color: T.muted, letterSpacing: '0.1em' }}>ACTIF</span>
             </label>
             <div style={{ display: 'flex', gap: 8 }}>
-              <button onClick={sauvegarderProfil} disabled={savingProfil} style={{ fontFamily: MONO, fontSize: 11, background: 'rgba(200,168,80,0.15)', border: `1px solid ${T.gold}`, color: T.gold, padding: '8px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+              <button onClick={sauvegarderProfil} disabled={savingProfil} style={{ fontFamily: MONO, fontSize: 11, background: 'rgba(128,104,45,0.15)', border: `1px solid ${T.gold}`, color: T.gold, padding: '8px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>
                 {savingProfil ? 'SAUVEGARDE…' : '✓ ENREGISTRER'}
               </button>
               <button onClick={() => setEditProfil(false)} style={{ fontFamily: MONO, fontSize: 11, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '8px 16px', cursor: 'pointer' }}>
@@ -259,7 +259,7 @@ export default function CueilleurDetailPage() {
               <select
                 value={dateJour}
                 onChange={e => setDateJour(Number(e.target.value))}
-                style={{ fontFamily: MONO, fontSize: 15, color: T.text, background: '#0A050C', border: `1px solid rgba(200,168,80,0.4)`, padding: '10px 12px', outline: 'none', cursor: 'pointer', colorScheme: 'dark' }}
+                style={{ fontFamily: MONO, fontSize: 15, color: T.text, background: '#F5EBD5', border: `1px solid rgba(128,104,45,0.4)`, padding: '10px 12px', outline: 'none', cursor: 'pointer', colorScheme: 'dark' }}
               >
                 {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
                   <option key={d} value={d}>{d}</option>
@@ -273,7 +273,7 @@ export default function CueilleurDetailPage() {
               <select
                 value={dateMois}
                 onChange={e => setDateMois(Number(e.target.value))}
-                style={{ fontFamily: MONO, fontSize: 15, color: T.text, background: '#0A050C', border: `1px solid rgba(200,168,80,0.4)`, padding: '10px 12px', outline: 'none', cursor: 'pointer', colorScheme: 'dark' }}
+                style={{ fontFamily: MONO, fontSize: 15, color: T.text, background: '#F5EBD5', border: `1px solid rgba(128,104,45,0.4)`, padding: '10px 12px', outline: 'none', cursor: 'pointer', colorScheme: 'dark' }}
               >
                 {MOIS_FR.map((m, i) => (
                   <option key={i} value={i + 1}>{m}</option>
@@ -288,7 +288,7 @@ export default function CueilleurDetailPage() {
                 type="number"
                 value={dateAnnee}
                 onChange={e => setDateAnnee(Number(e.target.value))}
-                style={{ width: 90, fontFamily: MONO, fontSize: 15, color: T.gold, background: '#0A050C', border: `1px solid rgba(200,168,80,0.4)`, padding: '10px 12px', outline: 'none', colorScheme: 'dark' }}
+                style={{ width: 90, fontFamily: MONO, fontSize: 15, color: T.gold, background: '#F5EBD5', border: `1px solid rgba(128,104,45,0.4)`, padding: '10px 12px', outline: 'none', colorScheme: 'dark' }}
               />
             </div>
 
@@ -323,7 +323,7 @@ export default function CueilleurDetailPage() {
                     <div key={plante} className="plant-row" style={{
                       display: 'flex', alignItems: 'center', gap: 12,
                       padding: '9px 8px', borderRadius: 4,
-                      borderBottom: `1px solid rgba(120,20,20,0.14)`,
+                      borderBottom: `1px solid rgba(142,122,74,0.14)`,
                       transition: 'background 0.1s',
                     }}>
                       <span style={{ fontFamily: BODY, fontSize: 14, color: qty > 0 ? T.text : T.dim, flex: 1 }}>
@@ -337,8 +337,8 @@ export default function CueilleurDetailPage() {
                         onChange={e => setPlantMap(p => ({ ...p, [plante]: Math.max(0, parseInt(e.target.value) || 0) }))}
                         style={{
                           width: 70, fontFamily: MONO, fontSize: 15, color: T.gold,
-                          background: qty > 0 ? 'rgba(200,168,80,0.10)' : 'rgba(200,168,80,0.04)',
-                          border: `1px solid ${qty > 0 ? 'rgba(200,168,80,0.35)' : 'rgba(200,168,80,0.15)'}`,
+                          background: qty > 0 ? 'rgba(128,104,45,0.10)' : 'rgba(128,104,45,0.04)',
+                          border: `1px solid ${qty > 0 ? 'rgba(128,104,45,0.35)' : 'rgba(128,104,45,0.15)'}`,
                           padding: '6px 8px', textAlign: 'right', outline: 'none',
                           transition: 'all 0.12s',
                         }}
@@ -383,7 +383,7 @@ export default function CueilleurDetailPage() {
                     placeholder={valeurJour() > 0 ? String(valeurJour()) : '0.00'}
                     style={{
                       width: 130, fontFamily: MONO, fontSize: 17, color: T.text,
-                      background: 'rgba(200,168,80,0.06)', border: `1px solid rgba(200,168,80,0.35)`,
+                      background: 'rgba(128,104,45,0.06)', border: `1px solid rgba(128,104,45,0.35)`,
                       padding: '9px 14px', outline: 'none',
                       colorScheme: 'dark',
                     }}
@@ -430,7 +430,7 @@ export default function CueilleurDetailPage() {
             </p>
           ) : (
             <div style={{ border: `1px solid ${T.border}`, borderRadius: 8, overflow: 'hidden' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr 110px 120px 110px', background: 'rgba(200,168,80,0.06)', borderBottom: `1px solid ${T.border}`, padding: '10px 16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr 110px 120px 110px', background: 'rgba(128,104,45,0.06)', borderBottom: `1px solid ${T.border}`, padding: '10px 16px' }}>
                 {['DATE', 'PLANTES', 'TOTAL QTÉ', 'VALEUR', 'PAYÉ'].map(h => (
                   <span key={h} style={{ fontFamily: MONO, fontSize: 10, color: T.gold, letterSpacing: '0.14em' }}>{h}</span>
                 ))}
@@ -443,8 +443,8 @@ export default function CueilleurDetailPage() {
                     style={{
                       display: 'grid', gridTemplateColumns: '140px 1fr 110px 120px 110px',
                       padding: '12px 16px', alignItems: 'center', cursor: 'pointer',
-                      borderBottom: i < archives.length - 1 && expandedArch !== a.id ? `1px solid rgba(120,20,20,0.18)` : 'none',
-                      background: expandedArch === a.id ? 'rgba(200,168,80,0.04)' : 'transparent',
+                      borderBottom: i < archives.length - 1 && expandedArch !== a.id ? `1px solid rgba(142,122,74,0.18)` : 'none',
+                      background: expandedArch === a.id ? 'rgba(128,104,45,0.04)' : 'transparent',
                     }}
                   >
                     <span style={{ fontFamily: MONO, fontSize: 12, color: T.muted }}>
@@ -462,7 +462,7 @@ export default function CueilleurDetailPage() {
                   </div>
 
                   {expandedArch === a.id && (
-                    <div style={{ padding: '0 16px 16px', borderBottom: `1px solid rgba(120,20,20,0.18)`, background: 'rgba(200,168,80,0.02)' }}>
+                    <div style={{ padding: '0 16px 16px', borderBottom: `1px solid rgba(142,122,74,0.18)`, background: 'rgba(128,104,45,0.02)' }}>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
                         {a.entrees.map(e => (
                           <span key={e.plante} style={{

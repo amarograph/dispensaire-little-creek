@@ -1,10 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+@font-face {
+  font-family: 'Burnic';
+  src: url('/fonts/Burnic-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   * {
@@ -69,3 +78,22 @@
 .login-logo { display: block; width: min(100%, 410px); height: auto; margin: 0 auto; object-fit: contain; }
 @media (max-height: 700px) and (min-aspect-ratio: 1/1) { .login-logo { width: min(100%, 290px); } .login-brand { margin-bottom: 16px; } }
 @media (max-width: 420px) { .login-logo { width: min(100%, 330px); } }
+
+/* Shared apothecary palette: appearance only, no layout overrides. */
+:root { --lc-paper:#ede0c2; --lc-card:#f7eedb; --lc-ink:#183746; --lc-green:#49654d; --lc-brass:#80682d; --lc-lavender:#79638c; }
+body { background-color:var(--lc-paper); color:var(--lc-ink); }
+* { scrollbar-color:#a89365 #ede0c2; }
+*::-webkit-scrollbar-track { background:#ede0c2; }
+*::-webkit-scrollbar-thumb { background:#a89365; }
+.redm-root { color-scheme:light; }
+.redm-root ::selection { background:#c6c49a; color:#183746; }
+.redm-root input,.redm-root select,.redm-root textarea { color-scheme:light; }
+.redm-root input::placeholder,.redm-root textarea::placeholder { color:#6b6e54; }
+.redm-root :focus-visible { outline-color:#79638c; }
+.bg-gray-950 { background-color:#ede0c2; }
+.bg-gray-900,.bg-gray-900\/80 { background-color:#f7eedb; }
+.bg-gray-800,.bg-gray-800\/50 { background-color:#e4d7b9; }
+.border-gray-800,.border-gray-700 { border-color:#b3a174; }
+.text-gray-400,.text-gray-500,.text-gray-600 { color:#62694f; }
+.text-gray-300,.text-gray-200 { color:#344c4c; }
+.bg-gray-900 .text-white,.bg-gray-950 .text-white { color:#183746; }

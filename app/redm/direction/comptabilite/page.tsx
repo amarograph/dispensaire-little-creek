@@ -6,10 +6,10 @@ import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const BODY    = "'Josefin Slab', 'Georgia', serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
-const T = { bg: '#1A1208', card: '#1F1610', border: 'rgba(139,90,43,0.30)', gold: '#C8A850', text: '#E8D9C0', muted: '#8B7355', dim: '#5A4A35' };
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const BODY    = "'Cormorant Garamond', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
+const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
 
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
 type TypeCategorie  = 'vente' | 'achat';
@@ -115,7 +115,7 @@ function tresorerie(factures: Facture[], tarifs: Record<string, TarifCategory>):
   return { ventes, achats, solde };
 }
 
-const STATUT_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#4A6048', 'EN ATTENTE': '#C8A850', 'ANNULÉ': '#8B4040' };
+const STATUT_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#49654D', 'EN ATTENTE': '#80682D', 'ANNULÉ': '#8B4040' };
 const STATUT_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
 
 export default function DirectionComptabilitePage() {
@@ -210,14 +210,14 @@ export default function DirectionComptabilitePage() {
           <div style={{ flex:1, minWidth:0 }}>
             <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4, flexWrap:'wrap' }}>
               <span style={{ fontFamily:DISPLAY, fontSize: 17, color:T.text }}>{f.patientNom}</span>
-              <span style={{ fontFamily:MONO, fontSize: 12, color:'#9B6AC8', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
+              <span style={{ fontFamily:MONO, fontSize: 12, color:'#79638C', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
             </div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
               {pres.map((p,i) => {
                 const cat = tarifs[p.id];
                 const isAchat = cat?.type === 'achat';
                 return (
-                  <span key={i} style={{ fontFamily:MONO, fontSize: 12, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(200,168,80,0.10)', padding:'1px 7px' }}>
+                  <span key={i} style={{ fontFamily:MONO, fontSize: 12, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(128,104,45,0.10)', padding:'1px 7px' }}>
                     {isAchat ? '🛒 ' : ''}{cat?.nom ?? p.id}{p.qty > 1 ? ` ×${p.qty}` : ''}
                   </span>
                 );
@@ -236,7 +236,7 @@ export default function DirectionComptabilitePage() {
 
   return (
     <div style={{ fontFamily: BODY }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
       <div style={{ marginBottom: 24 }}>
         <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14, flexWrap:'wrap' }}>
@@ -245,7 +245,7 @@ export default function DirectionComptabilitePage() {
           <div style={{ marginLeft:'auto', display:'flex', gap:10 }}>
             <button
               onClick={()=>router.push('/redm/direction/tarifs')}
-              style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'9px 20px', cursor:'pointer', background:'rgba(200,168,80,0.12)', color:T.gold, border:`1px solid rgba(200,168,80,0.40)`, display:'flex', alignItems:'center', gap:8 }}>
+              style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'9px 20px', cursor:'pointer', background:'rgba(128,104,45,0.12)', color:T.gold, border:`1px solid rgba(128,104,45,0.40)`, display:'flex', alignItems:'center', gap:8 }}>
               🏷 TARIFS
             </button>
             <button
@@ -267,12 +267,12 @@ export default function DirectionComptabilitePage() {
 
           {/* Trésorerie du dispensaire */}
           <div>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(200,168,80,0.40)` }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(128,104,45,0.40)` }}>
               <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>🏦 TRÉSORERIE DU DISPENSAIRE</span>
             </div>
 
-            <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`5px solid ${soldeDispensaire>=0 ? '#4A6048' : '#8B4040'}`, padding:'22px 24px', textAlign:'center', marginBottom:10 }}>
-              <div style={{ fontFamily:DISPLAY, fontSize:42, color: soldeDispensaire>=0 ? '#6A9A68' : '#C06060' }}>{fmt$(soldeDispensaire)}</div>
+            <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`5px solid ${soldeDispensaire>=0 ? '#49654D' : '#8B4040'}`, padding:'22px 24px', textAlign:'center', marginBottom:10 }}>
+              <div style={{ fontFamily:DISPLAY, fontSize:42, color: soldeDispensaire>=0 ? '#6A9A68' : '#963F36' }}>{fmt$(soldeDispensaire)}</div>
               <div style={{ fontFamily:MONO, fontSize:13, color:T.dim, marginTop:4, letterSpacing:'0.14em' }}>SOLDE DU COMPTE DU DISPENSAIRE</div>
             </div>
 
@@ -290,7 +290,7 @@ export default function DirectionComptabilitePage() {
 
           {/* Semaine en cours */}
           <div>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(200,168,80,0.40)` }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(128,104,45,0.40)` }}>
               <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>📅 {weekLabel(todayMonday)} — SEMAINE EN COURS</span>
             </div>
 
@@ -298,9 +298,9 @@ export default function DirectionComptabilitePage() {
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10, marginBottom:20 }}>
               {[
                 { l:'NB ACTES',   v: String(semaineActuelle.length), c: T.gold    },
-                { l:'TOTAL PERÇU',v: fmt$(totalPercu),                c: '#4A6048' },
-                { l:'EN ATTENTE', v: fmt$(totalAttente),              c: '#C8A850' },
-                { l:'MÉDECINS',   v: String(salaires.length),         c: '#9B6AC8' },
+                { l:'TOTAL PERÇU',v: fmt$(totalPercu),                c: '#49654D' },
+                { l:'EN ATTENTE', v: fmt$(totalAttente),              c: '#80682D' },
+                { l:'MÉDECINS',   v: String(salaires.length),         c: '#79638C' },
               ].map(s => (
                 <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
                   <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
@@ -317,7 +317,7 @@ export default function DirectionComptabilitePage() {
               ) : (
                 <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
                   {salaires.map(s => (
-                    <div key={s.medecin} style={{ background:T.card, border:`1px solid rgba(155,106,200,0.35)`, borderLeft:`4px solid #9B6AC8`, padding:'12px 18px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>
+                    <div key={s.medecin} style={{ background:T.card, border:`1px solid rgba(155,106,200,0.35)`, borderLeft:`4px solid #79638C`, padding:'12px 18px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>
                       <div>
                         <div style={{ fontFamily:DISPLAY, fontSize: 19, color:T.text }}>{s.medecin}</div>
                         <div style={{ fontFamily:MONO, fontSize: 12, color:T.dim, marginTop:3 }}>{s.actes} acte{s.actes>1?'s':''}</div>
@@ -328,7 +328,7 @@ export default function DirectionComptabilitePage() {
                           <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim, letterSpacing:'0.1em' }}>CHIFFRE D&apos;AFFAIRES</div>
                         </div>
                         <div style={{ textAlign:'right' }}>
-                          <div style={{ fontFamily:DISPLAY, fontSize: 28, color:'#9B6AC8' }}>{fmt$(s.salaire)}</div>
+                          <div style={{ fontFamily:DISPLAY, fontSize: 28, color:'#79638C' }}>{fmt$(s.salaire)}</div>
                           <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim, letterSpacing:'0.1em' }}>SALAIRE (APRÈS %)</div>
                         </div>
                       </div>
@@ -374,7 +374,7 @@ export default function DirectionComptabilitePage() {
               </div>
               {resetConfirm
                 ? <div style={{ display:'flex', gap:8, flexShrink:0 }}>
-                    <button onClick={resetTout} style={{ fontFamily:MONO, fontSize:13, padding:'9px 16px', cursor:'pointer', background:'#8B404025', color:'#C06060', border:'1px solid #8B404060' }}>CONFIRMER LA SUPPRESSION ?</button>
+                    <button onClick={resetTout} style={{ fontFamily:MONO, fontSize:13, padding:'9px 16px', cursor:'pointer', background:'#8B404025', color:'#963F36', border:'1px solid #8B404060' }}>CONFIRMER LA SUPPRESSION ?</button>
                     <button onClick={()=>setResetConfirm(false)} style={{ fontFamily:MONO, fontSize:13, padding:'9px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>ANNULER</button>
                   </div>
                 : <button onClick={()=>setResetConfirm(true)} style={{ fontFamily:MONO, fontSize:13, letterSpacing:'0.1em', padding:'9px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)', flexShrink:0 }}>🗑 RÉINITIALISER TOUS LES COMPTES</button>}

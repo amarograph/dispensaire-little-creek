@@ -3,18 +3,18 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Rye','Georgia',serif";
-const BODY    = "'Josefin Slab','Georgia',serif";
-const MONO    = "'Special Elite','Courier New',monospace";
+const DISPLAY = "'Burnic','Georgia',serif";
+const BODY    = "'Cormorant Garamond','Georgia',serif";
+const MONO    = "'Libre Baskerville','Courier New',monospace";
 
 const T = {
-  bg: '#080508', card: '#0E080A', gold: '#C8A850', text: '#E8D9C0',
-  muted: '#8B7355', border: 'rgba(120,20,20,0.35)', dim: '#5A4A38',
+  bg: '#EDE0C2', card: '#F6ECD6', gold: '#80682D', text: '#183746',
+  muted: '#6A6D50', border: 'rgba(142,122,74,0.35)', dim: '#646850',
 };
 
 const GRADES = [
-  { id: 'Directeur',    icon: '👑', color: '#C8A850' },
-  { id: 'Co-Directeur', icon: '⭐', color: '#C8A850' },
+  { id: 'Directeur',    icon: '👑', color: '#80682D' },
+  { id: 'Co-Directeur', icon: '⭐', color: '#80682D' },
   { id: 'Médecin Chef', icon: '🩺', color: '#A890C0' },
   { id: 'Médecin',      icon: '🩺', color: '#9080B8' },
   { id: 'Apprenti',     icon: '📚', color: '#887060' },
@@ -81,7 +81,7 @@ export default function SalairesPage() {
   }
 
   const inp: React.CSSProperties = {
-    background: 'rgba(200,168,80,0.06)', border: `1px solid ${T.border}`,
+    background: 'rgba(128,104,45,0.06)', border: `1px solid ${T.border}`,
     color: T.text, fontFamily: MONO, fontSize: 16,
     padding: '10px 14px', borderRadius: 6, width: '100%', boxSizing: 'border-box',
     outline: 'none', letterSpacing: '0.05em',
@@ -90,8 +90,8 @@ export default function SalairesPage() {
   return (
     <div style={{ fontFamily: BODY, maxWidth: 680, margin: '0 auto', padding: '32px 0 60px' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@400;600;700&family=Special+Elite&display=swap');
-        .sal-inp:focus { border-color: rgba(200,168,80,0.6) !important; background: rgba(200,168,80,0.10) !important; }
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+        .sal-inp:focus { border-color: rgba(128,104,45,0.6) !important; background: rgba(128,104,45,0.10) !important; }
       `}</style>
 
       {/* Header */}
@@ -189,7 +189,7 @@ export default function SalairesPage() {
                 disabled={saving}
                 style={{
                   fontFamily: MONO, fontSize: 13, letterSpacing: '0.14em',
-                  background: saving ? 'rgba(200,168,80,0.12)' : 'rgba(200,168,80,0.18)',
+                  background: saving ? 'rgba(128,104,45,0.12)' : 'rgba(128,104,45,0.18)',
                   border: `1px solid ${T.gold}`,
                   color: T.gold, padding: '12px 32px', cursor: saving ? 'not-allowed' : 'pointer',
                   borderRadius: 6, transition: 'all 0.2s',

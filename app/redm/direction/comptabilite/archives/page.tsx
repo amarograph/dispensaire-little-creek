@@ -6,16 +6,16 @@ import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const BODY    = "'Josefin Slab', 'Georgia', serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
-const T = { bg: '#1A1208', card: '#1F1610', border: 'rgba(139,90,43,0.30)', gold: '#C8A850', text: '#E8D9C0', muted: '#8B7355', dim: '#5A4A35' };
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const BODY    = "'Cormorant Garamond', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
+const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
 
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
 type TypeCategorie  = 'vente' | 'achat';
 type Payeur         = 'Civil' | 'Shérif' | 'Mairie West Elizabeth';
 
-const STATUT_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#4A6048', 'EN ATTENTE': '#C8A850', 'ANNULÉ': '#8B4040' };
+const STATUT_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#49654D', 'EN ATTENTE': '#80682D', 'ANNULÉ': '#8B4040' };
 const STATUT_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
 
 interface TarifCategory { id: string; nom: string; type: TypeCategorie; prix: number; pctDispensaire: number; pctMedecin: number; ordre: number; }
@@ -82,14 +82,14 @@ function RegistreLine({ f, tarifs }: { f: Facture; tarifs: Record<string, TarifC
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4, flexWrap:'wrap' }}>
             <span style={{ fontFamily:DISPLAY, fontSize: 17, color:T.text }}>{f.patientNom}</span>
-            <span style={{ fontFamily:MONO, fontSize: 12, color:'#9B6AC8', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
+            <span style={{ fontFamily:MONO, fontSize: 12, color:'#79638C', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
           </div>
           <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
             {pres.map((p,i) => {
               const cat = tarifs[p.id];
               const isAchat = cat?.type === 'achat';
               return (
-                <span key={i} style={{ fontFamily:MONO, fontSize: 12, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(200,168,80,0.10)', padding:'1px 7px' }}>
+                <span key={i} style={{ fontFamily:MONO, fontSize: 12, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(128,104,45,0.10)', padding:'1px 7px' }}>
                   {isAchat ? '🛒 ' : ''}{cat?.nom ?? p.id}{p.qty > 1 ? ` ×${p.qty}` : ''}
                 </span>
               );
@@ -165,7 +165,7 @@ export default function DirectionComptabiliteArchivesPage() {
 
     return (
       <div style={{ fontFamily: BODY }}>
-        <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
         {/* En-tête */}
         <div style={{ marginBottom: 24 }}>
@@ -176,7 +176,7 @@ export default function DirectionComptabiliteArchivesPage() {
               <div style={{ marginLeft:'auto', display:'flex', gap:8 }}>
                 {delConfirm === openArc.id
                   ? <>
-                      <button onClick={()=>removeArchive(openArc.id)} style={{ fontFamily:MONO, fontSize:13, padding:'8px 16px', cursor:'pointer', background:'#8B404025', color:'#C06060', border:'1px solid #8B404060' }}>SUPPRIMER CETTE SEMAINE ?</button>
+                      <button onClick={()=>removeArchive(openArc.id)} style={{ fontFamily:MONO, fontSize:13, padding:'8px 16px', cursor:'pointer', background:'#8B404025', color:'#963F36', border:'1px solid #8B404060' }}>SUPPRIMER CETTE SEMAINE ?</button>
                       <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize:13, padding:'8px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
                     </>
                   : <button onClick={()=>setDelConfirm(openArc.id)} style={{ fontFamily:MONO, fontSize:13, padding:'8px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕ SUPPRIMER</button>}
@@ -192,8 +192,8 @@ export default function DirectionComptabiliteArchivesPage() {
           {[
             { l:'TOTAL ACTES',  v: String(openArc.factures.length), c: T.gold       },
             { l:'TOTAL BRUT',   v: fmt$(wTotal),                    c: T.gold       },
-            { l:'TOTAL PERÇU',  v: fmt$(openArc.totalPercu),        c: '#4A6048'    },
-            { l:'EN ATTENTE',   v: fmt$(openArc.totalAttente),      c: '#C8A850'    },
+            { l:'TOTAL PERÇU',  v: fmt$(openArc.totalPercu),        c: '#49654D'    },
+            { l:'EN ATTENTE',   v: fmt$(openArc.totalAttente),      c: '#80682D'    },
           ].map(s => (
             <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
               <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
@@ -210,7 +210,7 @@ export default function DirectionComptabiliteArchivesPage() {
           ) : (
             <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
               {salaires.map(s => (
-                <div key={s.medecin} style={{ background:T.card, border:`1px solid rgba(155,106,200,0.35)`, borderLeft:`4px solid #9B6AC8`, padding:'12px 18px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>
+                <div key={s.medecin} style={{ background:T.card, border:`1px solid rgba(155,106,200,0.35)`, borderLeft:`4px solid #79638C`, padding:'12px 18px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>
                   <div>
                     <div style={{ fontFamily:DISPLAY, fontSize: 19, color:T.text }}>{s.medecin}</div>
                     <div style={{ fontFamily:MONO, fontSize: 12, color:T.dim, marginTop:3 }}>{s.actes} acte{s.actes>1?'s':''}</div>
@@ -221,7 +221,7 @@ export default function DirectionComptabiliteArchivesPage() {
                       <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim, letterSpacing:'0.1em' }}>CHIFFRE D&apos;AFFAIRES</div>
                     </div>
                     <div style={{ textAlign:'right' }}>
-                      <div style={{ fontFamily:DISPLAY, fontSize: 28, color:'#9B6AC8' }}>{fmt$(s.salaire)}</div>
+                      <div style={{ fontFamily:DISPLAY, fontSize: 28, color:'#79638C' }}>{fmt$(s.salaire)}</div>
                       <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim, letterSpacing:'0.1em' }}>SALAIRE (APRÈS %)</div>
                     </div>
                   </div>
@@ -245,7 +245,7 @@ export default function DirectionComptabiliteArchivesPage() {
   /* ── Vue liste des archives ── */
   return (
     <div style={{ fontFamily: BODY }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
       {/* En-tête */}
       <div style={{ marginBottom: 24 }}>
@@ -264,8 +264,8 @@ export default function DirectionComptabiliteArchivesPage() {
         {[
           { l:'SEMAINES ARCHIVÉES', v: String(archives.length),   c: T.gold    },
           { l:'TOTAL ACTES',        v: String(totalActes),         c: T.muted   },
-          { l:'TOTAL PERÇU',        v: fmt$(totalPercu),           c: '#4A6048' },
-          { l:'EN ATTENTE',         v: fmt$(totalAttente),         c: '#C8A850' },
+          { l:'TOTAL PERÇU',        v: fmt$(totalPercu),           c: '#49654D' },
+          { l:'EN ATTENTE',         v: fmt$(totalAttente),         c: '#80682D' },
         ].map(s => (
           <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
             <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
@@ -297,7 +297,7 @@ export default function DirectionComptabiliteArchivesPage() {
             const allDone   = arc.factures.every(f => f.statut === 'PAYÉ' || f.statut === 'ANNULÉ');
             const salaires  = salairesByMedecin(arc.factures, tarifs);
             return (
-              <div key={arc.id} style={{ background:T.card, border:`1px solid rgba(74,96,72,0.40)`, borderLeft:`5px solid ${allDone ? '#4A6048' : '#C8A850'}`, overflow:'hidden', cursor:'pointer', transition:'background 0.15s' }}
+              <div key={arc.id} style={{ background:T.card, border:`1px solid rgba(74,96,72,0.40)`, borderLeft:`5px solid ${allDone ? '#49654D' : '#80682D'}`, overflow:'hidden', cursor:'pointer', transition:'background 0.15s' }}
                 onClick={() => setOpenId(arc.id)}
                 onMouseEnter={e=>(e.currentTarget.style.background='#26190E')}
                 onMouseLeave={e=>(e.currentTarget.style.background=T.card)}
@@ -309,12 +309,12 @@ export default function DirectionComptabiliteArchivesPage() {
                       <span style={{ fontFamily:DISPLAY, fontSize:19, color: allDone ? '#6A9A68' : T.gold }}>
                         {allDone ? '✔' : '📅'} {arc.weekLabel}
                       </span>
-                      {allDone && <span style={{ fontFamily:MONO, fontSize:11, color:'#4A6048', background:'rgba(74,96,72,0.20)', padding:'2px 8px', border:'1px solid rgba(74,96,72,0.40)' }}>SOLDÉ</span>}
+                      {allDone && <span style={{ fontFamily:MONO, fontSize:11, color:'#49654D', background:'rgba(74,96,72,0.20)', padding:'2px 8px', border:'1px solid rgba(74,96,72,0.40)' }}>SOLDÉ</span>}
                     </div>
                     <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'center' }}>
                       <span style={{ fontFamily:MONO, fontSize:13, color:T.dim }}>{arc.factures.length} acte(s)</span>
                       {salaires.map(s => (
-                        <span key={s.medecin} style={{ fontFamily:MONO, fontSize:12, color:'#9B6AC8', background:'rgba(155,106,200,0.12)', padding:'1px 7px', border:'1px solid rgba(155,106,200,0.35)' }}>👤 {s.medecin} · {fmt$(s.salaire)}</span>
+                        <span key={s.medecin} style={{ fontFamily:MONO, fontSize:12, color:'#79638C', background:'rgba(155,106,200,0.12)', padding:'1px 7px', border:'1px solid rgba(155,106,200,0.35)' }}>👤 {s.medecin} · {fmt$(s.salaire)}</span>
                       ))}
                     </div>
                   </div>
@@ -325,7 +325,7 @@ export default function DirectionComptabiliteArchivesPage() {
                       <div onClick={e => e.stopPropagation()}>
                         {delConfirm === arc.id
                           ? <span style={{ display:'flex', gap:6 }}>
-                              <button onClick={()=>removeArchive(arc.id)} style={{ fontFamily:MONO, fontSize:11, padding:'4px 9px', cursor:'pointer', background:'#8B404025', color:'#C06060', border:'1px solid #8B404060' }}>SUPPRIMER ?</button>
+                              <button onClick={()=>removeArchive(arc.id)} style={{ fontFamily:MONO, fontSize:11, padding:'4px 9px', cursor:'pointer', background:'#8B404025', color:'#963F36', border:'1px solid #8B404060' }}>SUPPRIMER ?</button>
                               <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize:11, padding:'4px 7px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
                             </span>
                           : <button onClick={()=>setDelConfirm(arc.id)} style={{ fontFamily:MONO, fontSize:11, padding:'4px 9px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕ SUPPRIMER</button>}
@@ -335,10 +335,10 @@ export default function DirectionComptabiliteArchivesPage() {
                       {fmt$(arc.totalPercu + arc.totalAttente)}
                     </div>
                     <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, display:'flex', gap:10 }}>
-                      {arc.totalPercu > 0 && <span style={{color:'#4A6048'}}>✔ {fmt$(arc.totalPercu)}</span>}
-                      {arc.totalAttente > 0 && <span style={{color:'#C8A850'}}>⏳ {fmt$(arc.totalAttente)}</span>}
+                      {arc.totalPercu > 0 && <span style={{color:'#49654D'}}>✔ {fmt$(arc.totalPercu)}</span>}
+                      {arc.totalAttente > 0 && <span style={{color:'#80682D'}}>⏳ {fmt$(arc.totalAttente)}</span>}
                     </div>
-                    <div style={{ fontFamily:MONO, fontSize:12, color:'rgba(200,168,80,0.5)', marginTop:2 }}>
+                    <div style={{ fontFamily:MONO, fontSize:12, color:'rgba(128,104,45,0.5)', marginTop:2 }}>
                       VOIR LE DÉTAIL →
                     </div>
                   </div>

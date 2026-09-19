@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
-const BODY    = "'Josefin Slab', 'Georgia', serif";
-const T = { bg: '#1A1208', card: '#1F1610', border: 'rgba(139,90,43,0.30)', gold: '#C8A850', text: '#E8D9C0', muted: '#8B7355', dim: '#5A4A35' };
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
+const BODY    = "'Cormorant Garamond', 'Georgia', serif";
+const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
 const COL = '#A0784A';
 
 function uid()  { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
@@ -227,17 +227,17 @@ export default function PrescriptionMedicalePage() {
   if (view === 'letter' && savedDoc && savedPat) return (
     <div style={{ fontFamily: BODY }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&display=swap');
-        @font-face { font-family: 'Special Elite'; src: url('/SpecialElite-Regular.ttf') format('truetype'); font-weight: normal; font-style: normal; }
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+        @font-face { font-family: 'Libre Baskerville'; src: url('/SpecialElite-Regular.ttf') format('truetype'); font-weight: normal; font-style: normal; }
         @media print { .no-print { display: none !important; } .print-area { background: white !important; color: black !important; padding: 40px !important; } }
       `}</style>
       <div className="no-print" style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
         <button onClick={() => router.push('/redm/cabinet/documentation')} style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
         <button onClick={() => router.push(`/redm/cabinet/patients/${savedPat.id}`)} style={{ fontFamily: MONO, fontSize: 14, background: `${COL}22`, border: `1px solid ${COL}55`, color: COL, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>📋 VOIR DOSSIER</button>
         <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>🖨 IMPRIMER</button>
-        <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#7A9A6A', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>💾 ENREGISTRER PNG</button>
+        <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#526C45', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>💾 ENREGISTRER PNG</button>
       </div>
-      <div ref={printRef} className="print-area" style={{ background: '#FDFAF4', border: '2px solid #8B7355', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#2A1A08', fontFamily: "'Special Elite', 'Courier New', monospace" }}>
+      <div ref={printRef} className="print-area" style={{ background: '#FDFAF4', border: '2px solid #6A6D50', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#EADCB9', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: 20, letterSpacing: '0.12em', fontWeight: 'bold', marginBottom: 4 }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
           <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
@@ -269,7 +269,7 @@ export default function PrescriptionMedicalePage() {
   /* ══ VUE FORMULAIRE ══ */
   return (
     <div style={{ fontFamily: BODY, maxWidth: 860, margin: '0 auto' }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
       {/* ── Header ── */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 32 }}>
@@ -387,7 +387,7 @@ export default function PrescriptionMedicalePage() {
 
         {/* ── Erreur ── */}
         {saveError && (
-          <div style={{ padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#C06060', fontFamily: MONO, fontSize: 13 }}>
+          <div style={{ padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#963F36', fontFamily: MONO, fontSize: 13 }}>
             ⚠ {saveError}
           </div>
         )}

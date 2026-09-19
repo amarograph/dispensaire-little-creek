@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const BODY    = "'Josefin Slab', 'Georgia', serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
-const T = { bg: '#1A1208', card: '#1F1610', border: 'rgba(139,90,43,0.30)', gold: '#C8A850', text: '#E8D9C0', muted: '#8B7355', dim: '#5A4A35' };
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const BODY    = "'Cormorant Garamond', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
+const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
 
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
 type TypeCategorie  = 'vente' | 'achat';
@@ -18,7 +18,7 @@ function categoriesToMap(categories: TarifCategory[]): Record<string, TarifCateg
   categories.forEach(c => { m[c.id] = c; });
   return m;
 }
-const STATUT_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#4A6048', 'EN ATTENTE': '#C8A850', 'ANNULÉ': '#8B4040' };
+const STATUT_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#49654D', 'EN ATTENTE': '#80682D', 'ANNULÉ': '#8B4040' };
 const STATUT_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
 
 interface PrestationItem { id: string; qty: number; }
@@ -45,7 +45,7 @@ function loadArc(): SemaineArchivee[] { try { return JSON.parse(localStorage.get
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 
 const PAYEUR_COL: Partial<Record<Payeur, string>> = {
-  'Civil':              '#8B7355',
+  'Civil':              '#6A6D50',
   'Shérif':             '#6B7ABB',
   'Mairie West Elizabeth':     '#786030',
 };
@@ -121,7 +121,7 @@ export default function ArchivesCaisseComptabilitePage() {
 
     return (
       <div style={{ fontFamily: BODY }}>
-        <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
         {/* En-tête */}
         <div style={{ marginBottom: 24 }}>
@@ -138,8 +138,8 @@ export default function ArchivesCaisseComptabilitePage() {
           {[
             { l:'TOTAL ACTES',  v: String(openArc.factures.length), c: T.gold       },
             { l:'TOTAL BRUT',   v: fmt$(wTotal),                    c: T.gold       },
-            { l:'TOTAL PERÇU',  v: fmt$(wPercu),                    c: '#4A6048'    },
-            { l:'EN ATTENTE',   v: fmt$(wAtt),                      c: '#C8A850'    },
+            { l:'TOTAL PERÇU',  v: fmt$(wPercu),                    c: '#49654D'    },
+            { l:'EN ATTENTE',   v: fmt$(wAtt),                      c: '#80682D'    },
           ].map(s => (
             <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
               <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
@@ -159,8 +159,8 @@ export default function ArchivesCaisseComptabilitePage() {
                   <div style={{ fontFamily:DISPLAY, fontSize:20, color:col }}>{fmt$(s.montantTotal)}</div>
                   <div style={{ fontFamily:MONO, fontSize:11, color:T.dim }}>
                     {s.actes} acte(s)
-                    {s.percu > 0 && <span style={{color:'#4A6048', marginLeft:6}}>· {fmt$(s.percu)} perçu</span>}
-                    {s.attente > 0 && <span style={{color:'#C8A850', marginLeft:6}}>· {fmt$(s.attente)} en attente</span>}
+                    {s.percu > 0 && <span style={{color:'#49654D', marginLeft:6}}>· {fmt$(s.percu)} perçu</span>}
+                    {s.attente > 0 && <span style={{color:'#80682D', marginLeft:6}}>· {fmt$(s.attente)} en attente</span>}
                   </div>
                 </div>
               );
@@ -211,13 +211,13 @@ export default function ArchivesCaisseComptabilitePage() {
                         const cat = tarifs[p.id];
                         const isAchat = cat?.type === 'achat';
                         return (
-                          <span key={i} style={{ fontFamily:MONO, fontSize:13, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(200,168,80,0.10)', padding:'2px 8px', border: `1px solid ${isAchat ? 'rgba(200,132,90,0.25)' : 'rgba(200,168,80,0.20)'}` }}>
+                          <span key={i} style={{ fontFamily:MONO, fontSize:13, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(128,104,45,0.10)', padding:'2px 8px', border: `1px solid ${isAchat ? 'rgba(200,132,90,0.25)' : 'rgba(128,104,45,0.20)'}` }}>
                             {isAchat ? '🛒 ' : ''}{cat?.nom ?? p.id}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$((cat?.prix ?? 0) * p.qty)}</span>
                           </span>
                         );
                       })}
                       <span style={{ fontFamily:MONO, fontSize:12, color:pcol, background:`${pcol}18`, padding:'2px 7px', border:`1px solid ${pcol}40` }}>{f.payeur}</span>
-                      {f.medecin && <span style={{ fontFamily:MONO, fontSize:12, color:'#9B6AC8', background:'rgba(155,106,200,0.10)', padding:'2px 8px', border:'1px solid rgba(155,106,200,0.20)' }}>👤 {f.medecin}</span>}
+                      {f.medecin && <span style={{ fontFamily:MONO, fontSize:12, color:'#79638C', background:'rgba(155,106,200,0.10)', padding:'2px 8px', border:'1px solid rgba(155,106,200,0.20)' }}>👤 {f.medecin}</span>}
                       {f.notes && <span style={{ fontFamily:BODY, fontSize:14, color:T.muted, fontStyle:'italic' }}>{f.notes}</span>}
                     </div>
                   </div>
@@ -238,16 +238,16 @@ export default function ArchivesCaisseComptabilitePage() {
         </div>
 
         {/* Total filtré */}
-        <div style={{ marginTop:16, padding:'14px 20px', background:`rgba(200,168,80,0.06)`, border:`1px solid rgba(200,168,80,0.25)`, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <div style={{ marginTop:16, padding:'14px 20px', background:`rgba(128,104,45,0.06)`, border:`1px solid rgba(128,104,45,0.25)`, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
           <span style={{ fontFamily:MONO, fontSize:13, color:T.dim, letterSpacing:'0.1em' }}>
             {openView === 'tous' ? 'TOTAL SEMAINE' : `TOTAL ${openView.toUpperCase()}`} · {factures.length} acte(s)
           </span>
           <div style={{ display:'flex', gap:20, alignItems:'center' }}>
-            <span style={{ fontFamily:MONO, fontSize:13, color:'#4A6048' }}>
+            <span style={{ fontFamily:MONO, fontSize:13, color:'#49654D' }}>
               {fmt$(factures.filter(f=>f.statut==='PAYÉ').reduce((s,f)=>s+f.montant,0))} perçu
             </span>
             {factures.some(f=>f.statut==='EN ATTENTE') && (
-              <span style={{ fontFamily:MONO, fontSize:13, color:'#C8A850' }}>
+              <span style={{ fontFamily:MONO, fontSize:13, color:'#80682D' }}>
                 {fmt$(factures.filter(f=>f.statut==='EN ATTENTE').reduce((s,f)=>s+f.montant,0))} en attente
               </span>
             )}
@@ -263,7 +263,7 @@ export default function ArchivesCaisseComptabilitePage() {
   /* ── Vue liste des archives ── */
   return (
     <div style={{ fontFamily: BODY }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
       {/* En-tête */}
       <div style={{ marginBottom: 24 }}>
@@ -279,8 +279,8 @@ export default function ArchivesCaisseComptabilitePage() {
         {[
           { l:'SEMAINES ARCHIVÉES', v: String(archives.length),   c: T.gold    },
           { l:'TOTAL ACTES',        v: String(totalActes),         c: T.muted   },
-          { l:'TOTAL PERÇU',        v: fmt$(totalPercu),           c: '#4A6048' },
-          { l:'EN ATTENTE',         v: fmt$(totalAttente),         c: '#C8A850' },
+          { l:'TOTAL PERÇU',        v: fmt$(totalPercu),           c: '#49654D' },
+          { l:'EN ATTENTE',         v: fmt$(totalAttente),         c: '#80682D' },
         ].map(s => (
           <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
             <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
@@ -300,7 +300,7 @@ export default function ArchivesCaisseComptabilitePage() {
                 <div style={{ fontFamily:DISPLAY, fontSize:22, color:col }}>{fmt$(s.percu + s.attente)}</div>
                 <div style={{ fontFamily:MONO, fontSize:11, color:T.dim, marginTop:2 }}>
                   {s.actes} acte(s)
-                  {s.percu > 0 && <span style={{color:'#4A6048', marginLeft:5}}>· {fmt$(s.percu)} perçu</span>}
+                  {s.percu > 0 && <span style={{color:'#49654D', marginLeft:5}}>· {fmt$(s.percu)} perçu</span>}
                 </div>
               </div>
             );
@@ -331,7 +331,7 @@ export default function ArchivesCaisseComptabilitePage() {
             const allDone    = arc.factures.every(f => f.statut === 'PAYÉ' || f.statut === 'ANNULÉ');
             const payeurSet  = Array.from(new Set(arc.factures.map(f => f.payeur)));
             return (
-              <div key={arc.id} style={{ background:T.card, border:`1px solid rgba(74,96,72,0.40)`, borderLeft:`5px solid ${allDone ? '#4A6048' : '#C8A850'}`, overflow:'hidden', cursor:'pointer', transition:'background 0.15s' }}
+              <div key={arc.id} style={{ background:T.card, border:`1px solid rgba(74,96,72,0.40)`, borderLeft:`5px solid ${allDone ? '#49654D' : '#80682D'}`, overflow:'hidden', cursor:'pointer', transition:'background 0.15s' }}
                 onClick={() => { setOpenId(arc.id); setOpenView('tous'); }}
                 onMouseEnter={e=>(e.currentTarget.style.background='#26190E')}
                 onMouseLeave={e=>(e.currentTarget.style.background=T.card)}
@@ -343,7 +343,7 @@ export default function ArchivesCaisseComptabilitePage() {
                       <span style={{ fontFamily:DISPLAY, fontSize:19, color: allDone ? '#6A9A68' : T.gold }}>
                         {allDone ? '✔' : '📅'} {arc.weekLabel}
                       </span>
-                      {allDone && <span style={{ fontFamily:MONO, fontSize:11, color:'#4A6048', background:'rgba(74,96,72,0.20)', padding:'2px 8px', border:'1px solid rgba(74,96,72,0.40)' }}>SOLDÉ</span>}
+                      {allDone && <span style={{ fontFamily:MONO, fontSize:11, color:'#49654D', background:'rgba(74,96,72,0.20)', padding:'2px 8px', border:'1px solid rgba(74,96,72,0.40)' }}>SOLDÉ</span>}
                     </div>
                     <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'center' }}>
                       <span style={{ fontFamily:MONO, fontSize:13, color:T.dim }}>{arc.factures.length} acte(s)</span>
@@ -361,10 +361,10 @@ export default function ArchivesCaisseComptabilitePage() {
                       {fmt$(arc.totalPercu + arc.totalAttente)}
                     </div>
                     <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, display:'flex', gap:10 }}>
-                      {arc.totalPercu > 0 && <span style={{color:'#4A6048'}}>✔ {fmt$(arc.totalPercu)}</span>}
-                      {arc.totalAttente > 0 && <span style={{color:'#C8A850'}}>⏳ {fmt$(arc.totalAttente)}</span>}
+                      {arc.totalPercu > 0 && <span style={{color:'#49654D'}}>✔ {fmt$(arc.totalPercu)}</span>}
+                      {arc.totalAttente > 0 && <span style={{color:'#80682D'}}>⏳ {fmt$(arc.totalAttente)}</span>}
                     </div>
-                    <div style={{ fontFamily:MONO, fontSize:12, color:'rgba(200,168,80,0.5)', marginTop:2 }}>
+                    <div style={{ fontFamily:MONO, fontSize:12, color:'rgba(128,104,45,0.5)', marginTop:2 }}>
                       VOIR LE DÉTAIL →
                     </div>
                   </div>

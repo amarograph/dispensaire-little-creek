@@ -3,19 +3,19 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 
 const MODULES = [
-  { id: 'comptabilite', href: '/redm/direction/comptabilite', icon: '📊', label: 'Comptabilité', sub: 'REGISTRE & SALAIRES', desc: 'Registre hebdomadaire de la Caisse et calcul du salaire de chaque médecin selon les soins effectués.', color: '#C8A850', badge: 'FIN' },
-  { id: 'medecins', href: '/redm/direction/medecins', icon: '🩺', label: 'Liste des Médecins', sub: 'PERSONNEL DU DISPENSAIRE', desc: 'Annuaire du personnel médical : numéro de compte, date de naissance et parcours universitaire.', color: '#9B6AC8', badge: 'RH' },
+  { id: 'comptabilite', href: '/redm/direction/comptabilite', icon: '📊', label: 'Comptabilité', sub: 'REGISTRE & SALAIRES', desc: 'Registre hebdomadaire de la Caisse et calcul du salaire de chaque médecin selon les soins effectués.', color: '#80682D', badge: 'FIN' },
+  { id: 'medecins', href: '/redm/direction/medecins', icon: '🩺', label: 'Liste des Médecins', sub: 'PERSONNEL DU DISPENSAIRE', desc: 'Annuaire du personnel médical : numéro de compte, date de naissance et parcours universitaire.', color: '#79638C', badge: 'RH' },
   { id: 'tarifs', href: '/redm/direction/tarifs', icon: '🏷', label: 'Tarifs & Répartition', sub: 'PRIX & POURCENTAGES', desc: 'Définir le prix de chaque prestation et la répartition des honoraires entre le dispensaire et le médecin.', color: '#E8B860', badge: 'CFG' },
-  { id: 'stockage', href: '/redm/direction/stockage', icon: '📦', label: 'Gestionnaire de Stockage', sub: 'INVENTAIRE & RÉAPPROVISIONNEMENT', desc: 'Suivi des stocks de plantes et produits médicaux, avec alerte automatique en cas de rupture imminente.', color: '#8B6F47', badge: 'STK' },
-  { id: 'alerte-sanitaire', href: '/redm/direction/alerte-sanitaire', icon: '🚨', label: 'Alerte Sanitaire', sub: 'ÉPIDÉMIES & RISQUES', desc: "Déclarer une épidémie ou un risque sanitaire en cours, et marquer la situation comme critique pour alerter tous les joueurs.", color: '#C83030', badge: 'ALR' },
+  { id: 'stockage', href: '/redm/direction/stockage', icon: '📦', label: 'Gestionnaire de Stockage', sub: 'INVENTAIRE & RÉAPPROVISIONNEMENT', desc: 'Suivi des stocks de plantes et produits médicaux, avec alerte automatique en cas de rupture imminente.', color: '#806D40', badge: 'STK' },
+  { id: 'alerte-sanitaire', href: '/redm/direction/alerte-sanitaire', icon: '🚨', label: 'Alerte Sanitaire', sub: 'ÉPIDÉMIES & RISQUES', desc: "Déclarer une épidémie ou un risque sanitaire en cours, et marquer la situation comme critique pour alerter tous les joueurs.", color: '#963F36', badge: 'ALR' },
   { id: 'entretien-admission', href: '/redm/direction/entretien-admission', icon: '📋', label: "Entretien d'Admission", sub: 'RECRUTEMENT DU PERSONNEL', desc: "Formulaire d'entretien d'admission pour les candidats. Une fois rempli et accepté, crée automatiquement la fiche effectif dans la liste des médecins.", color: '#5A7896', badge: 'REC' },
   { id: 'absences',  href: '/redm/direction/absences',  icon: '🗓', label: 'Absences Déclarées',    sub: 'CONGÉS & INDISPONIBILITÉS',     desc: "Consulter et gérer les demandes d'absence du personnel médical. Approuver ou refuser les congés soumis à la Direction.", color: '#7A8AC8', badge: 'ABS' },
   { id: 'presences', href: '/redm/direction/presences', icon: '📅', label: 'Feuille de Présences', sub: 'SUIVI DE PRÉSENCE HEBDOMADAIRE', desc: "Cocher chaque jour les membres présents au dispensaire. Navigation semaine par semaine avec tableau récapitulatif.",         color: '#5A9858', badge: 'PRE' },
-  { id: 'salaires',  href: '/redm/direction/salaires',  icon: '💰', label: 'Grille Salariale',      sub: 'SALAIRES PAR GRADE',             desc: "Définir le salaire hebdomadaire de chaque grade du dispensaire. Directeur, Médecin, Infirmier, Apprenti…",                  color: '#C8A850', badge: 'SAL' },
+  { id: 'salaires',  href: '/redm/direction/salaires',  icon: '💰', label: 'Grille Salariale',      sub: 'SALAIRES PAR GRADE',             desc: "Définir le salaire hebdomadaire de chaque grade du dispensaire. Directeur, Médecin, Infirmier, Apprenti…",                  color: '#80682D', badge: 'SAL' },
   { id: 'cueilleurs', href: '/redm/direction/cueilleurs', icon: '🌿', label: 'Cueilleurs',              sub: 'PROFILS & CALENDRIER',           desc: "Gérer les profils des cueilleurs de plantes, saisir les quantités récoltées chaque jour et suivre la valeur des cueillettes.",  color: '#6A9860', badge: 'CUE' },
   { id: 'journal',   href: '/redm/direction/journal',   icon: '📜', label: "Journal d'activité",    sub: 'HISTORIQUE DES ACTIONS',         desc: "Consulter l'historique complet des actions de la direction : modifications de tarifs, salaires, inventaire, fiches médecins…", color: '#7A6A50', badge: 'LOG' },
 ];
@@ -25,20 +25,20 @@ export default function DirectionPage() {
   const [hover, setHover] = useState<string | null>(null);
 
   return (
-    <div style={{ fontFamily: "'Josefin Slab', Georgia, serif" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+    <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
       {/* Header */}
       <div style={{ marginBottom: 36 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18 }}>
           <button onClick={() => router.push('/redm')}
-            style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: '1px solid rgba(200,168,80,0.35)', color: '#A08850', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+            style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: '1px solid rgba(128,104,45,0.35)', color: '#A08850', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
             ← RETOUR
           </button>
-          <span style={{ fontFamily: MONO, fontSize: 14, color: '#C8A850', letterSpacing: '0.18em' }}>DISPENSAIRE · DIRECTION</span>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: '#80682D', letterSpacing: '0.18em' }}>DISPENSAIRE · DIRECTION</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#E8D8C0', margin: 0 }}>🏛 Direction</h1>
-        <p style={{ fontFamily: MONO, fontSize: 14, color: '#5A4A35', letterSpacing: '0.12em', marginTop: 8 }}>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#183746', margin: 0 }}>🏛 Direction</h1>
+        <p style={{ fontFamily: MONO, fontSize: 14, color: '#646850', letterSpacing: '0.12em', marginTop: 8 }}>
           ACCÈS RÉSERVÉ · DIRECTION & CO-DIRECTION — SÉLECTIONNEZ UNE SECTION
         </p>
       </div>
@@ -53,8 +53,8 @@ export default function DirectionPage() {
               onMouseEnter={() => setHover(m.id)}
               onMouseLeave={() => setHover(null)}
               style={{
-                background:  h ? '#1A0E0E' : '#120A0A',
-                border:      `2px solid ${h ? m.color + '90' : 'rgba(200,168,80,0.22)'}`,
+                background:  h ? '#1A0E0E' : '#EDE0C2',
+                border:      `2px solid ${h ? m.color + '90' : 'rgba(128,104,45,0.22)'}`,
                 borderLeft:  `4px solid ${h ? m.color : m.color + '55'}`,
                 padding:     '28px 24px',
                 cursor:      'pointer',
@@ -64,11 +64,11 @@ export default function DirectionPage() {
               }}>
               <div style={{ fontSize: 42, marginBottom: 14 }}>{m.icon}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                <span style={{ fontFamily: DISPLAY, fontSize: 23, color: '#E8D8C0' }}>{m.label}</span>
+                <span style={{ fontFamily: DISPLAY, fontSize: 23, color: '#183746' }}>{m.label}</span>
                 <span style={{ fontFamily: MONO, fontSize: 12, padding: '3px 7px', background: m.color + '22', color: m.color, border: `1px solid ${m.color + '55'}`, letterSpacing: '0.1em', flexShrink: 0 }}>{m.badge}</span>
               </div>
               <div style={{ fontFamily: MONO, fontSize: 12, color: m.color, letterSpacing: '0.12em', marginBottom: 10 }}>{m.sub}</div>
-              <div style={{ fontFamily: "'Josefin Slab', Georgia, serif", fontSize: 16, color: '#5A4030', lineHeight: 1.55 }}>{m.desc}</div>
+              <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 16, color: '#5A4030', lineHeight: 1.55 }}>{m.desc}</div>
               <div style={{ fontFamily: MONO, fontSize: 14, color: h ? m.color : '#2A1010', marginTop: 14, letterSpacing: '0.1em', transition: 'color 0.15s' }}>→ ACCÉDER</div>
             </div>
           );

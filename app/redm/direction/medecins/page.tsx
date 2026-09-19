@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
-const DISPLAY  = "'Rye', 'Georgia', serif";
-const BODY     = "'Josefin Slab', 'Georgia', serif";
-const MONO     = "'Special Elite', 'Courier New', monospace";
-const T = { bg: '#120A0A', card: '#1A1008', paper: '#1F1610', border: 'rgba(139,90,43,0.30)', gold: '#C8A850', text: '#E8D9C0', muted: '#8B7355', dim: '#5A4A35', sepia: '#D4B896' };
+const DISPLAY  = "'Burnic', 'Georgia', serif";
+const BODY     = "'Cormorant Garamond', 'Georgia', serif";
+const MONO     = "'Libre Baskerville', 'Courier New', monospace";
+const T = { bg: '#EDE0C2', card: '#F7EEDB', paper: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850', sepia: '#D4B896' };
 
 const GRADES      = ['Apprenti', 'Infirmier', 'Thérapeute', 'Médecin', 'Médecin Chef', 'Co-Directeur', 'Directeur'];
 const DISPENSAIRES = ['Little Creek', 'Valentine', 'Rhodes', 'Tous'];
@@ -16,12 +16,12 @@ const SPECIALITES = ['Médecine générale', 'Chirurgie', 'Aliénisme', 'Plantes
 const STATUTS     = ['En service', 'En congé', 'En mission', 'Suspendu'];
 
 const GRADE_COL: Record<string, string> = {
-  'Apprenti': '#888', 'Infirmier': '#5A8AB5', 'Thérapeute': '#9B6AC8',
-  'Médecin': '#5A9A58', 'Médecin Chef': '#C8A040',
+  'Apprenti': '#888', 'Infirmier': '#5A8AB5', 'Thérapeute': '#79638C',
+  'Médecin': '#42663C', 'Médecin Chef': '#80682D',
   'Co-Directeur': '#E8B860', 'Directeur': '#8B4040',
 };
 const STATUT_COL: Record<string, string> = {
-  'En service': '#5A9A58', 'En congé': '#C8A040', 'En mission': '#5A8AB5', 'Suspendu': '#C83030',
+  'En service': '#42663C', 'En congé': '#80682D', 'En mission': '#5A8AB5', 'Suspendu': '#963F36',
 };
 
 const ROLE_PRIORITY = ['redm_directeur', 'redm_co_directeur', 'redm_medecin_chef', 'redm_medecin', 'redm_therapeute', 'redm_infirmier', 'redm_apprenti'] as const;
@@ -31,7 +31,7 @@ const ROLE_LABEL: Record<string, string> = {
 };
 const ROLE_COL: Record<string, string> = {
   redm_directeur: '#E8B860', redm_co_directeur: '#E8B860', redm_medecin_chef: '#D8AC50',
-  redm_medecin: '#C8A040', redm_therapeute: '#9B6AC8', redm_infirmier: '#C87040', redm_apprenti: '#A05830',
+  redm_medecin: '#80682D', redm_therapeute: '#79638C', redm_infirmier: '#C87040', redm_apprenti: '#A05830',
 };
 function topRole(roles: string[]) { for (const r of ROLE_PRIORITY) if (roles.includes(r)) return r; return 'redm_apprenti'; }
 
@@ -106,7 +106,7 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
 
           {/* Identité */}
           <div>
-            <div style={{ fontFamily: DISPLAY, fontSize: 12, color: T.gold, letterSpacing: '0.18em', borderBottom: `1px solid rgba(200,168,80,0.18)`, paddingBottom: 8, marginBottom: 14 }}>IDENTITÉ</div>
+            <div style={{ fontFamily: DISPLAY, fontSize: 12, color: T.gold, letterSpacing: '0.18em', borderBottom: `1px solid rgba(128,104,45,0.18)`, paddingBottom: 8, marginBottom: 14 }}>IDENTITÉ</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div><label style={lbl}>Prénom RP</label><input style={inp} value={form.rp_prenom} onChange={e => set('rp_prenom', e.target.value)} placeholder="François" /></div>
               <div><label style={lbl}>Nom RP</label><input style={inp} value={form.rp_nom} onChange={e => set('rp_nom', e.target.value)} placeholder="De Millet" /></div>
@@ -117,9 +117,9 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
 
           {/* Fonction médicale */}
           <div>
-            <div style={{ fontFamily: DISPLAY, fontSize: 12, color: '#C83030', letterSpacing: '0.18em', borderBottom: '1px solid rgba(200,48,48,0.22)', paddingBottom: 8, marginBottom: 14 }}>
+            <div style={{ fontFamily: DISPLAY, fontSize: 12, color: '#963F36', letterSpacing: '0.18em', borderBottom: '1px solid rgba(200,48,48,0.22)', paddingBottom: 8, marginBottom: 14 }}>
               FONCTION MÉDICALE
-              <span style={{ fontFamily: MONO, fontSize: 9, marginLeft: 12, color: '#C83030', opacity: 0.7, letterSpacing: '0.12em' }}>DIRECTION UNIQUEMENT</span>
+              <span style={{ fontFamily: MONO, fontSize: 9, marginLeft: 12, color: '#963F36', opacity: 0.7, letterSpacing: '0.12em' }}>DIRECTION UNIQUEMENT</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -150,9 +150,9 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
                     return (
                       <button key={s} onClick={() => toggleSpec(s)} style={{
                         padding: '4px 10px', fontFamily: BODY, fontSize: 12,
-                        border: `1px solid ${active ? 'rgba(200,168,80,0.60)' : 'rgba(139,90,43,0.25)'}`,
+                        border: `1px solid ${active ? 'rgba(128,104,45,0.60)' : 'rgba(139,90,43,0.25)'}`,
                         borderRadius: 3,
-                        background: active ? 'rgba(200,168,80,0.16)' : 'rgba(0,0,0,0.15)',
+                        background: active ? 'rgba(128,104,45,0.16)' : 'rgba(0,0,0,0.15)',
                         color: active ? T.gold : T.dim,
                         cursor: 'pointer', outline: 'none', transition: 'all 0.12s',
                       }}>
@@ -167,7 +167,7 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
 
           {/* Fiche administrative */}
           <div>
-            <div style={{ fontFamily: DISPLAY, fontSize: 12, color: T.gold, letterSpacing: '0.18em', borderBottom: `1px solid rgba(200,168,80,0.18)`, paddingBottom: 8, marginBottom: 14 }}>FICHE ADMINISTRATIVE</div>
+            <div style={{ fontFamily: DISPLAY, fontSize: 12, color: T.gold, letterSpacing: '0.18em', borderBottom: `1px solid rgba(128,104,45,0.18)`, paddingBottom: 8, marginBottom: 14 }}>FICHE ADMINISTRATIVE</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div><label style={lbl}>N° de compte</label><input style={inp} value={form.numero_compte} onChange={e => set('numero_compte', e.target.value)} placeholder="00482" /></div>
@@ -264,9 +264,9 @@ export default function MedecinsPage() {
   return (
     <div style={{ fontFamily: BODY }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
         @keyframes slide-in { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        .med-card:hover { border-color: rgba(200,168,80,0.55) !important; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.6) !important; }
+        .med-card:hover { border-color: rgba(128,104,45,0.55) !important; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(74,62,32,0.14) !important; }
       `}</style>
 
       {/* Header */}

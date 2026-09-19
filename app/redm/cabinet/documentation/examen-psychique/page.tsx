@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
-const BODY    = "'Josefin Slab', 'Georgia', serif";
-const T = { bg: '#1A1208', card: '#1F1610', border: 'rgba(139,90,43,0.30)', gold: '#C8A850', text: '#E8D9C0', muted: '#8B7355', dim: '#5A4A35' };
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
+const BODY    = "'Cormorant Garamond', 'Georgia', serif";
+const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
 const COL = '#6B7ABB';
 
 /* ── LocalStorage ── */
@@ -57,7 +57,7 @@ function getVerdict(score: number): Verdict {
   if (score >= 41) return 'À SURVEILLER';
   return 'INAPTE';
 }
-const VERDICT_COL: Record<Verdict, string> = { 'APTE': '#4A8048', 'À SURVEILLER': '#C8A850', 'INAPTE': '#C06060' };
+const VERDICT_COL: Record<Verdict, string> = { 'APTE': '#4A8048', 'À SURVEILLER': '#80682D', 'INAPTE': '#963F36' };
 const VERDICT_DESC: Record<Verdict, string> = {
   'APTE':         'Présente toutes les dispositions requises pour l\'exercice de ses fonctions, sans réserve notable.',
   'À SURVEILLER': 'Présente certaines fragilités d\'ordre nerveux, émotionnel ou moral nécessitant une observation régulière et un suivi thérapeutique recommandé.',
@@ -98,7 +98,7 @@ const SCALES: { section: string; color: string; items: Scale[] }[] = [
     { question: 'Préférez-vous travailler :', left: 'Seul par méfiance', right: 'En équipe' },
     { question: 'Craignez-vous parfois de devenir dur, insensible ou cruel avec le temps ?', left: 'Souvent', right: 'Non' },
   ]},
-  { section: 'JUGEMENT FINAL DE L\'EXAMINATEUR', color: '#C8A850', items: [
+  { section: 'JUGEMENT FINAL DE L\'EXAMINATEUR', color: '#80682D', items: [
     { question: 'État de la raison', left: 'Préoccupant', right: 'Sain' },
     { question: 'Solidité morale', left: 'Déclinante', right: 'Forte' },
     { question: 'Aptitude à exercer l\'autorité', left: 'Insuffisante', right: 'Pleine' },
@@ -114,7 +114,7 @@ function ScaleInput({ id, scale, value, onChange }: { id: string; scale: Scale; 
     <div style={{ marginBottom: 22, paddingBottom: 22, borderBottom: `1px solid ${T.border}` }}>
       <div style={{ fontFamily: BODY, fontSize: 17, color: T.text, marginBottom: 14, lineHeight: 1.5 }}>{scale.question}</div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-        <span style={{ fontFamily: MONO, fontSize: 13, color: '#C06060', minWidth: 150, textAlign: 'right', lineHeight: 1.4 }}>{scale.left}</span>
+        <span style={{ fontFamily: MONO, fontSize: 13, color: '#963F36', minWidth: 150, textAlign: 'right', lineHeight: 1.4 }}>{scale.left}</span>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {[1, 2, 3, 4, 5].map(v => (
             <button key={v} type="button" onClick={() => onChange(v)}
@@ -235,7 +235,7 @@ export default function ExamenPsychiquePage() {
     const vc = VERDICT_COL[current.verdict];
     return (
       <div style={{ fontFamily: BODY, maxWidth: 720, margin: '0 auto' }}>
-        <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
         {/* Fiche résultat */}
         <div style={{ background: T.card, border: `2px solid ${vc}55`, borderTop: `6px solid ${vc}`, padding: '40px 44px', marginBottom: 24 }}>
@@ -276,10 +276,10 @@ export default function ExamenPsychiquePage() {
           <button onClick={() => setView('letter')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: `${COL}22`, color: COL, border: `1px solid ${COL}55`, flex: 1 }}>
             📄 VOIR LE CERTIFICAT
           </button>
-          <button onClick={() => setView('archives')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'rgba(200,168,80,0.12)', color: T.gold, border: `1px solid rgba(200,168,80,0.4)`, flex: 1 }}>
+          <button onClick={() => setView('archives')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'rgba(128,104,45,0.12)', color: T.gold, border: `1px solid rgba(128,104,45,0.4)`, flex: 1 }}>
             📁 ARCHIVES
           </button>
-          <button onClick={reset} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'rgba(74,96,72,0.2)', color: '#8BAB88', border: '1px solid rgba(74,96,72,0.4)', flex: 1 }}>
+          <button onClick={reset} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'rgba(74,96,72,0.2)', color: '#4C6A4D', border: '1px solid rgba(74,96,72,0.4)', flex: 1 }}>
             ✚ NOUVEL EXAMEN
           </button>
           <button onClick={() => router.push('/redm/cabinet/patients')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, flex: 1 }}>
@@ -310,27 +310,27 @@ export default function ExamenPsychiquePage() {
     return (
       <div style={{ fontFamily: BODY }}>
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
           @font-face {
-            font-family: 'Special Elite';
+            font-family: 'Libre Baskerville';
             src: url('/SpecialElite-Regular.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
           }
           @media print {
             .no-print { display: none !important; }
-            .print-area { background: white !important; color: black !important; padding: 40px !important; font-family: 'Special Elite', 'Courier New', monospace !important; }
+            .print-area { background: white !important; color: black !important; padding: 40px !important; font-family: 'Libre Baskerville', 'Courier New', monospace !important; }
           }
         `}</style>
 
         <div className="no-print" style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
           <button onClick={() => searchParams.get('id') ? router.push('/redm/cabinet/documentation') : setView('result')} style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
           <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: `${COL}22`, border: `1px solid ${COL}55`, color: COL, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>🖨 IMPRIMER</button>
-          <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#7A9A6A', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>💾 ENREGISTRER PNG</button>
+          <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#526C45', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>💾 ENREGISTRER PNG</button>
         </div>
 
         {/* Certificat */}
-        <div ref={printRef} className="print-area" style={{ background: '#FDFAF4', border: '2px solid #8B7355', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#2A1A08', fontFamily: "'Special Elite', 'Courier New', monospace" }}>
+        <div ref={printRef} className="print-area" style={{ background: '#FDFAF4', border: '2px solid #6A6D50', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#EADCB9', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
 
           {/* En-tête */}
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
@@ -377,7 +377,7 @@ export default function ExamenPsychiquePage() {
 
             {(['APTE', 'À SURVEILLER', 'INAPTE'] as Verdict[]).map(v => (
               <div key={v} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 12 }}>
-                <div style={{ width: 18, height: 18, border: '2px solid #2A1A08', background: current.verdict === v ? '#2A1A08' : 'transparent', flexShrink: 0, marginTop: 4 }} />
+                <div style={{ width: 18, height: 18, border: '2px solid #EADCB9', background: current.verdict === v ? '#EADCB9' : 'transparent', flexShrink: 0, marginTop: 4 }} />
                 <div style={{ lineHeight: 1.7 }}>
                   <strong>{v === 'INAPTE' ? 'POTENTIELLEMENT DANGEREUX / INAPTE' : v} :</strong>{' '}
                   <span style={{ fontStyle: 'italic', fontSize: 13 }}>{VERDICT_DESC[v]}</span>
@@ -415,7 +415,7 @@ export default function ExamenPsychiquePage() {
   /* ══════════════════════ VUE ARCHIVES ══════════════════════ */
   if (view === 'archives') return (
     <div style={{ fontFamily: BODY }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
       <div style={{ marginBottom: 28, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
         <button onClick={() => setView('form')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
         <span style={{ fontFamily: DISPLAY, fontSize: 26, color: T.gold }}>📁 Archives — Examens Psychiques</span>
@@ -458,7 +458,7 @@ export default function ExamenPsychiquePage() {
 
   return (
     <div style={{ fontFamily: BODY, maxWidth: 880, margin: '0 auto' }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
@@ -468,7 +468,7 @@ export default function ExamenPsychiquePage() {
             ← RETOUR
           </button>
           <span style={{ fontFamily: MONO, fontSize: 13, color: COL, letterSpacing: '0.16em' }}>CABINET · DOCUMENTATION · EXAMEN PSYCHIQUE</span>
-          <button onClick={() => setView('archives')} style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 13, background: 'rgba(200,168,80,0.10)', border: `1px solid rgba(200,168,80,0.3)`, color: T.gold, padding: '8px 16px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+          <button onClick={() => setView('archives')} style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 13, background: 'rgba(128,104,45,0.10)', border: `1px solid rgba(128,104,45,0.3)`, color: T.gold, padding: '8px 16px', cursor: 'pointer', letterSpacing: '0.1em' }}>
             📁 ARCHIVES ({archives.length})
           </button>
         </div>
@@ -557,7 +557,7 @@ export default function ExamenPsychiquePage() {
 
       {/* Bouton soumettre */}
       {!canSubmit && answered < TOTAL_QUESTIONS && answered > 0 && (
-        <div style={{ fontFamily: MONO, fontSize: 13, color: '#C8A850', marginBottom: 12, textAlign: 'center' }}>
+        <div style={{ fontFamily: MONO, fontSize: 13, color: '#80682D', marginBottom: 12, textAlign: 'center' }}>
           {TOTAL_QUESTIONS - answered} question{TOTAL_QUESTIONS - answered > 1 ? 's' : ''} restante{TOTAL_QUESTIONS - answered > 1 ? 's' : ''}
         </div>
       )}

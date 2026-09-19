@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const BODY    = "'Josefin Slab', Georgia, serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const BODY    = "'Cormorant Garamond', Georgia, serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const COLOR   = '#8B4040';
 
 const MOIS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin',
@@ -58,11 +58,11 @@ const STATUTS = ['En service', 'En congé', 'En mission', 'Suspendu'];
 const MOTIFS  = ['Maladie', 'Voyage', 'Affaires familiales', 'Repos imposé', 'Mission extérieure', 'Autre'];
 
 const GRADE_COL: Record<string, string> = {
-  'Apprenti': '#888', 'Infirmier': '#5A8AB5', 'Médecin': '#5A9A58',
-  'Médecin Chef': '#C8A040', 'Directeur': '#8B4040',
+  'Apprenti': '#888', 'Infirmier': '#5A8AB5', 'Médecin': '#42663C',
+  'Médecin Chef': '#80682D', 'Directeur': '#8B4040',
 };
 const STATUT_COL: Record<string, string> = {
-  'En service': '#5A9A58', 'En congé': '#C8A040', 'En mission': '#5A8AB5', 'Suspendu': '#C83030',
+  'En service': '#42663C', 'En congé': '#80682D', 'En mission': '#5A8AB5', 'Suspendu': '#963F36',
 };
 
 interface Profile {
@@ -158,15 +158,15 @@ function CropModal({ file, onConfirm, onCancel }: {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
       <div style={{
-        background: 'rgba(14,8,10,0.97)', border: '1px solid rgba(120,20,20,0.45)',
+        background: 'rgba(247,237,215,0.97)', border: '1px solid rgba(142,122,74,0.45)',
         borderRadius: 12, padding: '32px 36px',
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0,
         minWidth: CROP_D + 80,
       }}>
-        <div style={{ fontFamily: DISPLAY, fontSize: 22, color: '#C8B8A0', marginBottom: 6 }}>
+        <div style={{ fontFamily: DISPLAY, fontSize: 22, color: '#203C49', marginBottom: 6 }}>
           Recadrer le portrait
         </div>
-        <div style={{ fontFamily: MONO, fontSize: 10, color: '#7A5A40', letterSpacing: '0.14em', marginBottom: 24 }}>
+        <div style={{ fontFamily: MONO, fontSize: 10, color: '#676C51', letterSpacing: '0.14em', marginBottom: 24 }}>
           GLISSER POUR REPOSITIONNER · MOLETTE OU CURSEUR POUR ZOOMER
         </div>
 
@@ -194,14 +194,14 @@ function CropModal({ file, onConfirm, onCancel }: {
           {/* Anneau décoratif */}
           <div style={{
             position: 'absolute', inset: 0, borderRadius: '50%', pointerEvents: 'none',
-            border: '2px solid rgba(200,168,80,0.65)',
-            boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)',
+            border: '2px solid rgba(128,104,45,0.65)',
+            boxShadow: '0 0 0 9999px rgba(74,62,32,0.14)',
           }} />
         </div>
 
         {/* Slider de zoom */}
         <div style={{ marginTop: 24, width: CROP_D, display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontFamily: MONO, fontSize: 10, color: '#7A5A40', letterSpacing: '0.12em', flexShrink: 0 }}>
+          <span style={{ fontFamily: MONO, fontSize: 10, color: '#676C51', letterSpacing: '0.12em', flexShrink: 0 }}>
             🔍 ZOOM
           </span>
           <input
@@ -219,15 +219,15 @@ function CropModal({ file, onConfirm, onCancel }: {
         <div style={{ display: 'flex', gap: 14, marginTop: 28 }}>
           <button onClick={onCancel} style={{
             fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em',
-            background: 'transparent', border: '1px solid rgba(120,20,20,0.40)',
-            borderRadius: 5, padding: '11px 28px', color: '#7A5A40', cursor: 'pointer',
+            background: 'transparent', border: '1px solid rgba(142,122,74,0.40)',
+            borderRadius: 5, padding: '11px 28px', color: '#676C51', cursor: 'pointer',
           }}>
             ANNULER
           </button>
           <button onClick={confirm} style={{
             fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em',
-            background: 'rgba(120,20,20,0.20)', border: '1px solid rgba(120,20,20,0.60)',
-            borderRadius: 5, padding: '11px 28px', color: '#C8B8A0', cursor: 'pointer',
+            background: 'rgba(142,122,74,0.20)', border: '1px solid rgba(142,122,74,0.60)',
+            borderRadius: 5, padding: '11px 28px', color: '#203C49', cursor: 'pointer',
           }}>
             ✔ APPLIQUER
           </button>
@@ -438,29 +438,29 @@ export default function ProfilMedecinPage() {
 
   // ── styles ────────────────────────────────────────────────────────────────
   const card: React.CSSProperties = {
-    background: 'rgba(14,8,10,0.90)', border: '1px solid rgba(120,20,20,0.28)',
+    background: 'rgba(247,237,215,0.90)', border: '1px solid rgba(142,122,74,0.28)',
     borderRadius: 9, padding: '22px 26px',
   };
   const inp: React.CSSProperties = {
     width: '100%', boxSizing: 'border-box',
-    background: 'rgba(0,0,0,0.40)', border: '1px solid rgba(120,20,20,0.30)',
+    background: 'rgba(0,0,0,0.40)', border: '1px solid rgba(142,122,74,0.30)',
     borderRadius: 5, padding: '9px 13px',
-    color: '#C8B8A0', fontFamily: BODY, fontSize: 14, outline: 'none',
+    color: '#203C49', fontFamily: BODY, fontSize: 14, outline: 'none',
   };
   const lbl: React.CSSProperties = {
-    fontFamily: MONO, fontSize: 10, color: '#7A5A40',
+    fontFamily: MONO, fontSize: 10, color: '#676C51',
     letterSpacing: '0.14em', display: 'block', marginBottom: 5,
     textTransform: 'uppercase',
   };
   const secTitle: React.CSSProperties = {
     fontFamily: DISPLAY, fontSize: 13, color: COLOR,
     letterSpacing: '0.16em', textTransform: 'uppercase',
-    borderBottom: '1px solid rgba(120,20,20,0.20)',
+    borderBottom: '1px solid rgba(142,122,74,0.20)',
     paddingBottom: 12, marginBottom: 20,
   };
 
   if (loading) return (
-    <div style={{ fontFamily: BODY, color: '#9A8870', padding: 80, textAlign: 'center', fontSize: 18 }}>
+    <div style={{ fontFamily: BODY, color: '#60694F', padding: 80, textAlign: 'center', fontSize: 18 }}>
       Chargement du dossier…
     </div>
   );
@@ -500,7 +500,7 @@ export default function ProfilMedecinPage() {
             style={{
               width: 96, height: 96, borderRadius: '50%',
               cursor: uploading ? 'default' : 'pointer',
-              border: `2px solid rgba(120,20,20,0.55)`,
+              border: `2px solid rgba(142,122,74,0.55)`,
               overflow: 'hidden', position: 'relative',
             }}
           >
@@ -511,10 +511,10 @@ export default function ProfilMedecinPage() {
             ) : (
               <div style={{
                 width: '100%', height: '100%',
-                background: 'rgba(120,20,20,0.12)',
-                border: '1px dashed rgba(120,20,20,0.35)',
+                background: 'rgba(142,122,74,0.12)',
+                border: '1px dashed rgba(142,122,74,0.35)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: DISPLAY, fontSize: 28, color: 'rgba(120,20,20,0.5)',
+                fontFamily: DISPLAY, fontSize: 28, color: 'rgba(142,122,74,0.5)',
               }}>⚕</div>
             )}
             {/* Overlay au survol */}
@@ -524,7 +524,7 @@ export default function ProfilMedecinPage() {
                 background: 'rgba(0,0,0,0.52)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 opacity: 0, transition: 'opacity 0.18s',
-                fontFamily: MONO, fontSize: 10, color: '#E8D9C0',
+                fontFamily: MONO, fontSize: 10, color: '#183746',
                 letterSpacing: '0.1em', flexDirection: 'column', gap: 4,
               }}>
                 <span style={{ fontSize: 18 }}>📷</span>
@@ -536,22 +536,22 @@ export default function ProfilMedecinPage() {
                 position: 'absolute', inset: 0,
                 background: 'rgba(0,0,0,0.62)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: MONO, fontSize: 9, color: '#C8A850', letterSpacing: '0.12em',
+                fontFamily: MONO, fontSize: 9, color: '#80682D', letterSpacing: '0.12em',
               }}>
                 UPLOAD…
               </div>
             )}
           </div>
           <style>{`
-            @import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
             .portrait-hover-overlay:hover { opacity: 1 !important; }
             div:has(> .portrait-hover-overlay):hover .portrait-hover-overlay { opacity: 1 !important; }
           `}</style>
         </div>
 
         <div>
-          <div style={{ fontFamily: DISPLAY, fontSize: 28, color: '#C8B8A0', lineHeight: 1.1 }}>{fullName}</div>
-          <div style={{ fontFamily: MONO, fontSize: 11, color: '#7A5A40', letterSpacing: '0.12em', marginTop: 2 }}>
+          <div style={{ fontFamily: DISPLAY, fontSize: 28, color: '#203C49', lineHeight: 1.1 }}>{fullName}</div>
+          <div style={{ fontFamily: MONO, fontSize: 11, color: '#676C51', letterSpacing: '0.12em', marginTop: 2 }}>
             {username}
           </div>
           <div style={{ display: 'flex', gap: 8, marginTop: 10, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -566,7 +566,7 @@ export default function ProfilMedecinPage() {
               color: sc, borderRadius: 4, letterSpacing: '0.1em',
             }}>● {profile.statut.toUpperCase()}</span>
             {profile.dispensaire && (
-              <span style={{ fontFamily: BODY, fontSize: 13, color: '#9A8870' }}>
+              <span style={{ fontFamily: BODY, fontSize: 13, color: '#60694F' }}>
                 {profile.dispensaire}
               </span>
             )}
@@ -627,14 +627,14 @@ export default function ProfilMedecinPage() {
                 {profile.portrait_url ? (
                   <img src={profile.portrait_url} alt="Portrait" style={{
                     width: 52, height: 52, borderRadius: '50%', objectFit: 'cover',
-                    border: '1px solid rgba(120,20,20,0.40)', flexShrink: 0,
+                    border: '1px solid rgba(142,122,74,0.40)', flexShrink: 0,
                   }} />
                 ) : (
                   <div style={{
                     width: 52, height: 52, borderRadius: '50%', flexShrink: 0,
-                    background: 'rgba(120,20,20,0.10)', border: '1px dashed rgba(120,20,20,0.30)',
+                    background: 'rgba(142,122,74,0.10)', border: '1px dashed rgba(142,122,74,0.30)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontFamily: DISPLAY, fontSize: 18, color: 'rgba(120,20,20,0.4)',
+                    fontFamily: DISPLAY, fontSize: 18, color: 'rgba(142,122,74,0.4)',
                   }}>⚕</div>
                 )}
                 <button
@@ -642,9 +642,9 @@ export default function ProfilMedecinPage() {
                   disabled={uploading}
                   style={{
                     fontFamily: MONO, fontSize: 10, letterSpacing: '0.14em',
-                    background: 'rgba(120,20,20,0.12)', border: '1px solid rgba(120,20,20,0.40)',
+                    background: 'rgba(142,122,74,0.12)', border: '1px solid rgba(142,122,74,0.40)',
                     borderRadius: 4, padding: '9px 18px',
-                    color: uploading ? '#5A4030' : '#C8B8A0',
+                    color: uploading ? '#5A4030' : '#203C49',
                     cursor: uploading ? 'default' : 'pointer',
                   }}
                 >
@@ -655,7 +655,7 @@ export default function ProfilMedecinPage() {
                     onClick={() => setProfile(p => ({ ...p, portrait_url: '' }))}
                     style={{
                       fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em',
-                      background: 'transparent', border: '1px solid rgba(120,20,20,0.25)',
+                      background: 'transparent', border: '1px solid rgba(142,122,74,0.25)',
                       borderRadius: 4, padding: '9px 14px',
                       color: '#7A5040', cursor: 'pointer',
                     }}
@@ -676,7 +676,7 @@ export default function ProfilMedecinPage() {
         <div style={card}>
           <div style={secTitle}>✦ Fonction médicale</div>
           {!isDirection && (
-            <div style={{ fontFamily: MONO, fontSize: 10, color: '#7A5040', letterSpacing: '0.14em', marginBottom: 16, padding: '6px 12px', background: 'rgba(120,20,20,0.08)', border: '1px solid rgba(120,20,20,0.18)', borderRadius: 4 }}>
+            <div style={{ fontFamily: MONO, fontSize: 10, color: '#7A5040', letterSpacing: '0.14em', marginBottom: 16, padding: '6px 12px', background: 'rgba(142,122,74,0.08)', border: '1px solid rgba(142,122,74,0.18)', borderRadius: 4 }}>
               MODIFIABLE PAR LA DIRECTION UNIQUEMENT
             </div>
           )}
@@ -718,7 +718,7 @@ export default function ProfilMedecinPage() {
                 <div style={{
                   display: 'flex', flexWrap: 'wrap', gap: 7,
                   padding: '10px 12px',
-                  background: 'rgba(0,0,0,0.30)', border: '1px solid rgba(120,20,20,0.25)',
+                  background: 'rgba(0,0,0,0.30)', border: '1px solid rgba(142,122,74,0.25)',
                   borderRadius: 5,
                 }}>
                   {SPECIALITES.map(s => {
@@ -726,10 +726,10 @@ export default function ProfilMedecinPage() {
                     return (
                       <button key={s} onClick={() => toggleSpecialite(s)} style={{
                         padding: '5px 11px', fontFamily: BODY, fontSize: 13,
-                        border: `1px solid ${active ? 'rgba(120,20,20,0.70)' : 'rgba(120,20,20,0.22)'}`,
+                        border: `1px solid ${active ? 'rgba(142,122,74,0.70)' : 'rgba(142,122,74,0.22)'}`,
                         borderRadius: 4,
-                        background: active ? 'rgba(120,20,20,0.22)' : 'rgba(0,0,0,0.20)',
-                        color: active ? '#C8B8A0' : '#7A6050',
+                        background: active ? 'rgba(142,122,74,0.22)' : 'rgba(0,0,0,0.20)',
+                        color: active ? '#203C49' : '#7A6050',
                         cursor: 'pointer', transition: 'all 0.14s', outline: 'none',
                       }}>
                         {active && <span style={{ marginRight: 5, fontSize: 10, color: COLOR }}>✔</span>}{s}
@@ -766,16 +766,16 @@ export default function ProfilMedecinPage() {
       {/* Bouton enregistrer */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
         <button onClick={saveProfile} disabled={saving} style={{
-          background: 'rgba(120,20,20,0.18)', border: '1px solid rgba(120,20,20,0.55)',
+          background: 'rgba(142,122,74,0.18)', border: '1px solid rgba(142,122,74,0.55)',
           borderRadius: 6, padding: '12px 60px',
-          color: saving ? '#7A5A40' : '#C8B8A0',
+          color: saving ? '#676C51' : '#203C49',
           fontFamily: MONO, fontSize: 12, letterSpacing: '0.18em',
           cursor: saving ? 'default' : 'pointer', transition: 'all 0.15s',
         }}>
           {saving ? 'ENREGISTREMENT…' : '✔ ENREGISTRER LE PROFIL'}
         </button>
         {savedMsg && (
-          <div style={{ fontFamily: BODY, fontSize: 13, color: savedMsg.startsWith('Erreur') ? '#C83030' : '#5A9A58' }}>
+          <div style={{ fontFamily: BODY, fontSize: 13, color: savedMsg.startsWith('Erreur') ? '#963F36' : '#42663C' }}>
             {savedMsg}
           </div>
         )}
@@ -792,21 +792,21 @@ export default function ProfilMedecinPage() {
           ].map((item, i) => (
             <div key={i} style={{
               textAlign: 'center',
-              borderLeft:  i > 0 ? '1px solid rgba(120,20,20,0.18)' : undefined,
+              borderLeft:  i > 0 ? '1px solid rgba(142,122,74,0.18)' : undefined,
               paddingLeft: i > 0 ? 20 : undefined,
             }}>
               <div style={{
                 fontFamily: item.big ? DISPLAY : BODY,
                 fontSize: item.big ? 38 : 18,
-                color: '#C8B8A0', lineHeight: 1.2,
+                color: '#203C49', lineHeight: 1.2,
               }}>{item.value}</div>
-              <div style={{ fontFamily: MONO, fontSize: 9, color: '#7A5A40', letterSpacing: '0.12em', marginTop: 7 }}>
+              <div style={{ fontFamily: MONO, fontSize: 9, color: '#676C51', letterSpacing: '0.12em', marginTop: 7 }}>
                 {item.label}
               </div>
             </div>
           ))}
         </div>
-        <div style={{ fontFamily: BODY, fontSize: 11, color: '#5A4A38', marginTop: 16, fontStyle: 'italic' }}>
+        <div style={{ fontFamily: BODY, fontSize: 11, color: '#646850', marginTop: 16, fontStyle: 'italic' }}>
           * Calculé automatiquement à partir des certificats médicaux rédigés.
         </div>
       </div>
@@ -818,9 +818,9 @@ export default function ProfilMedecinPage() {
         <div style={card}>
           <div style={secTitle}>📋 Déclarer une absence</div>
           <div style={{
-            fontFamily: BODY, fontSize: 13, color: '#9A8870', fontStyle: 'italic',
+            fontFamily: BODY, fontSize: 13, color: '#60694F', fontStyle: 'italic',
             marginBottom: 18, paddingBottom: 14,
-            borderBottom: '1px solid rgba(120,20,20,0.15)',
+            borderBottom: '1px solid rgba(142,122,74,0.15)',
           }}>
             Demande de congé / indisponibilité
           </div>
@@ -856,9 +856,9 @@ export default function ProfilMedecinPage() {
               />
             </div>
             <button onClick={submitAbsence} disabled={absBusy} style={{
-              background: 'rgba(120,20,20,0.15)', border: '1px solid rgba(120,20,20,0.50)',
+              background: 'rgba(142,122,74,0.15)', border: '1px solid rgba(142,122,74,0.50)',
               borderRadius: 5, padding: '12px',
-              color: absBusy ? '#7A5A40' : '#C8B8A0',
+              color: absBusy ? '#676C51' : '#203C49',
               fontFamily: MONO, fontSize: 11, letterSpacing: '0.16em',
               cursor: absBusy ? 'default' : 'pointer', transition: 'all 0.15s',
             }}>
@@ -872,21 +872,21 @@ export default function ProfilMedecinPage() {
           <div style={secTitle}>🗄 Historique des congés</div>
           {absMsg && (
             <div style={{ fontFamily: BODY, fontSize: 13, marginBottom: 12, textAlign: 'center',
-              color: absMsg.startsWith('Erreur') ? '#C83030' : '#5A9A58' }}>
+              color: absMsg.startsWith('Erreur') ? '#963F36' : '#42663C' }}>
               {absMsg}
             </div>
           )}
           {absences.length === 0 ? (
-            <div style={{ fontFamily: BODY, fontSize: 13, color: '#5A4A38', fontStyle: 'italic' }}>
+            <div style={{ fontFamily: BODY, fontSize: 13, color: '#646850', fontStyle: 'italic' }}>
               Aucun congé enregistré.
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 420, overflowY: 'auto' }}>
               {absences.map(a => {
                 const ACOL: Record<string, string> = {
-                  'Absence': '#C8A040', 'Vue et lu': '#5A9A58', 'Annulée': '#C83030',
+                  'Absence': '#80682D', 'Vue et lu': '#42663C', 'Annulée': '#963F36',
                 };
-                const asc = ACOL[a.statut] ?? '#C8A040';
+                const asc = ACOL[a.statut] ?? '#80682D';
                 const isEditing = editAbsId === a.id;
                 const isBusy2 = absBusy2 === a.id;
                 return (
@@ -898,7 +898,7 @@ export default function ProfilMedecinPage() {
                     {isEditing ? (
                       /* ── Formulaire de modification ── */
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                        <div style={{ fontFamily: MONO, fontSize: 10, color: '#C8A040', letterSpacing: '0.12em', marginBottom: 2 }}>
+                        <div style={{ fontFamily: MONO, fontSize: 10, color: '#80682D', letterSpacing: '0.12em', marginBottom: 2 }}>
                           MODIFIER L'ABSENCE
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -930,15 +930,15 @@ export default function ProfilMedecinPage() {
                           <button onClick={() => saveAbsenceEdit(a.id)} disabled={isBusy2} style={{
                             fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em',
                             padding: '7px 14px', cursor: isBusy2 ? 'default' : 'pointer',
-                            background: 'rgba(200,160,64,0.15)', border: '1px solid rgba(200,160,64,0.50)',
-                            color: '#C8A040', borderRadius: 4, opacity: isBusy2 ? 0.5 : 1,
+                            background: 'rgba(128,104,45,0.15)', border: '1px solid rgba(128,104,45,0.50)',
+                            color: '#80682D', borderRadius: 4, opacity: isBusy2 ? 0.5 : 1,
                           }}>
                             {isBusy2 ? '…' : '✔ ENREGISTRER'}
                           </button>
                           <button onClick={() => setEditAbsId(null)} style={{
                             fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em',
                             padding: '7px 14px', cursor: 'pointer',
-                            background: 'transparent', border: '1px solid rgba(120,20,20,0.30)',
+                            background: 'transparent', border: '1px solid rgba(142,122,74,0.30)',
                             color: '#7A6050', borderRadius: 4,
                           }}>ANNULER</button>
                         </div>
@@ -947,7 +947,7 @@ export default function ProfilMedecinPage() {
                       /* ── Affichage normal ── */
                       <>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 5 }}>
-                          <div style={{ fontFamily: BODY, fontSize: 14, color: '#C8B8A0', fontWeight: 600 }}>
+                          <div style={{ fontFamily: BODY, fontSize: 14, color: '#203C49', fontWeight: 600 }}>
                             {a.motif}
                           </div>
                           <span style={{
@@ -956,11 +956,11 @@ export default function ProfilMedecinPage() {
                             color: asc, borderRadius: 3, letterSpacing: '0.08em', flexShrink: 0,
                           }}>{a.statut.toUpperCase()}</span>
                         </div>
-                        <div style={{ fontFamily: MONO, fontSize: 10, color: '#7A5A40' }}>
+                        <div style={{ fontFamily: MONO, fontSize: 10, color: '#676C51' }}>
                           {a.date_debut} → {a.date_fin}
                         </div>
                         {a.note && (
-                          <div style={{ fontFamily: BODY, fontSize: 12, color: '#9A8870', fontStyle: 'italic', marginTop: 5 }}>
+                          <div style={{ fontFamily: BODY, fontSize: 12, color: '#60694F', fontStyle: 'italic', marginTop: 5 }}>
                             « {a.note} »
                           </div>
                         )}
@@ -972,14 +972,14 @@ export default function ProfilMedecinPage() {
                             }} disabled={isBusy2} style={{
                               fontFamily: MONO, fontSize: 9, letterSpacing: '0.10em',
                               padding: '5px 11px', cursor: isBusy2 ? 'default' : 'pointer',
-                              background: 'rgba(200,160,64,0.10)', border: '1px solid rgba(200,160,64,0.35)',
-                              color: '#C8A040', borderRadius: 3,
+                              background: 'rgba(128,104,45,0.10)', border: '1px solid rgba(128,104,45,0.35)',
+                              color: '#80682D', borderRadius: 3,
                             }}>✎ MODIFIER</button>
                             <button onClick={() => cancelAbsence(a.id)} disabled={isBusy2} style={{
                               fontFamily: MONO, fontSize: 9, letterSpacing: '0.10em',
                               padding: '5px 11px', cursor: isBusy2 ? 'default' : 'pointer',
                               background: 'rgba(200,48,48,0.08)', border: '1px solid rgba(200,48,48,0.35)',
-                              color: '#C83030', borderRadius: 3, opacity: isBusy2 ? 0.5 : 1,
+                              color: '#963F36', borderRadius: 3, opacity: isBusy2 ? 0.5 : 1,
                             }}>
                               {isBusy2 ? '…' : '✕ ANNULER'}
                             </button>

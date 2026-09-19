@@ -20,8 +20,8 @@ export const DEFAULT_DISPENSAIRE_STATUS: DispensaireStatus = {
 
 /** Vert (aucune cause), Ambre (cause active), Rouge (marquée critique). */
 export function sanitaireColor(e: SanitaireEntry) {
-  if (!e.nom) return '#5A9A58';
-  return e.critique ? '#C83030' : '#C8A040';
+  if (!e.nom) return '#42663C';
+  return e.critique ? '#963F36' : '#80682D';
 }
 
 export function sanitaireLabel(e: SanitaireEntry) {

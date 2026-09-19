@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const BODY    = "'Josefin Slab', 'Georgia', serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const BODY    = "'Cormorant Garamond', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const T = {
-  bg: '#1A1208', card: '#1F1610', border: 'rgba(139,90,43,0.30)',
-  gold: '#C8A850', text: '#E8D9C0', muted: '#8B7355', dim: '#5A4A35',
+  bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)',
+  gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850',
 };
 
 type Statut     = 'EN COURS' | 'TERMINÉE' | 'ABANDONNÉE';
@@ -38,7 +38,7 @@ const METIERS = [
 ];
 const EQUILIBRES: { val: Equilibre; label: string; desc: string; col: string }[] = [
   { val: '',    label: '— Non évalué',      desc: '',                                                                                                      col: T.dim   },
-  { val: 'I',   label: 'Degré I — Léger',   desc: "Troubles passagers, n'altérant point durablement les facultés du sujet",                               col: '#4A6048' },
+  { val: 'I',   label: 'Degré I — Léger',   desc: "Troubles passagers, n'altérant point durablement les facultés du sujet",                               col: '#49654D' },
   { val: 'II',  label: 'Degré II — Modéré', desc: 'Atteinte notable nécessitant observation régulière et encadrement',                                    col: '#786030' },
   { val: 'III', label: 'Degré III — Grave', desc: 'Altération profonde des fonctions morales, nécessitant surveillance étroite',                          col: '#8B4040' },
 ];
@@ -72,7 +72,7 @@ function Row({ children, cols }: { children: React.ReactNode; cols: string }) {
 function Field({ label, children, req }: { label: string; children: React.ReactNode; req?: boolean }) {
   return (
     <div>
-      <label style={lbl}>{label}{req && <span style={{ color: '#C06060', marginLeft: 4 }}>*</span>}</label>
+      <label style={lbl}>{label}{req && <span style={{ color: '#963F36', marginLeft: 4 }}>*</span>}</label>
       {children}
     </div>
   );
@@ -127,7 +127,7 @@ export default function NouveauDossierPage() {
 
   if (saved) return (
     <div style={{ fontFamily: BODY, maxWidth: 640, margin: '80px auto', textAlign: 'center' }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
       <div style={{ background: T.card, border: `2px solid rgba(74,96,72,0.55)`, padding: '56px 44px' }}>
         <div style={{ fontSize: 57, marginBottom: 18 }}>✔</div>
         <div style={{ fontFamily: DISPLAY, fontSize: 33, color: T.gold, marginBottom: 10 }}>Dossier ouvert</div>
@@ -135,11 +135,11 @@ export default function NouveauDossierPage() {
         <div style={{ fontFamily: MONO, fontSize: 15, color: T.dim, marginBottom: 36 }}>{type} · {dateConsult}</div>
         <div style={{ display: 'flex', gap: 14, justifyContent: 'center' }}>
           <button onClick={() => router.push('/redm/cabinet/patients')}
-            style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '13px 28px', cursor: 'pointer', background: 'rgba(74,96,72,0.25)', color: '#8BAB88', border: '1px solid rgba(74,96,72,0.5)' }}>
+            style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '13px 28px', cursor: 'pointer', background: 'rgba(74,96,72,0.25)', color: '#4C6A4D', border: '1px solid rgba(74,96,72,0.5)' }}>
             ← RETOUR AUX DOSSIERS
           </button>
           <button onClick={() => { setSaved(false); setPatientNom(''); setPatientPrenom(''); setPatientAge(''); setDateConsult((() => { const n = new Date(); const s = n.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2])-136); return s.join('/'); })()); setType('Première consultation'); setPlainte(''); setAntecedentsPersonnels(''); setAntecedentsFamiliaux(''); setEvenementsRecents(''); setObservations(''); setObservationMedecin(''); setEquilibreNerveux(''); setNoteThérapeute(''); setTraitement(''); setProchaine(''); setStatut('EN COURS'); setConfidentiel(false); }}
-            style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '13px 28px', cursor: 'pointer', background: 'rgba(200,168,80,0.15)', color: T.gold, border: `1px solid rgba(200,168,80,0.4)` }}>
+            style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '13px 28px', cursor: 'pointer', background: 'rgba(128,104,45,0.15)', color: T.gold, border: `1px solid rgba(128,104,45,0.4)` }}>
             ✚ NOUVEAU DOSSIER
           </button>
         </div>
@@ -149,7 +149,7 @@ export default function NouveauDossierPage() {
 
   return (
     <div style={{ fontFamily: BODY, maxWidth: 900, margin: '0 auto' }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
       {/* Header */}
       <div style={{ marginBottom: 36 }}>
@@ -227,7 +227,7 @@ export default function NouveauDossierPage() {
       </Section>
 
       {/* ── 7. TRAITEMENT & STATUT ── */}
-      <Section icon="💊" title="TRAITEMENT & RECOMMANDATIONS" color="#4A6048">
+      <Section icon="💊" title="TRAITEMENT & RECOMMANDATIONS" color="#49654D">
         <Field label="PRESCRIPTIONS / CONSEILS">
           <Textarea value={traitement} onChange={setTraitement} placeholder="Remèdes, exercices, conseils spirituels, recommandations pratiques…" rows={4} />
         </Field>
@@ -241,7 +241,7 @@ export default function NouveauDossierPage() {
             </select>
           </Field>
           <div style={{ paddingTop: 26 }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontFamily: MONO, fontSize: 14, color: confidentiel ? '#C06060' : T.dim, whiteSpace: 'nowrap' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontFamily: MONO, fontSize: 14, color: confidentiel ? '#963F36' : T.dim, whiteSpace: 'nowrap' }}>
               <input type="checkbox" checked={confidentiel} onChange={e => setConfidentiel(e.target.checked)} style={{ width: 17, height: 17 }} />
               DOSSIER CONFIDENTIEL
             </label>
@@ -256,7 +256,7 @@ export default function NouveauDossierPage() {
           ANNULER
         </button>
         <button onClick={submit} disabled={!patientNom.trim() || submitting}
-          style={{ fontFamily: MONO, fontSize: 16, letterSpacing: '0.14em', padding: '14px 40px', cursor: patientNom.trim() ? 'pointer' : 'not-allowed', background: patientNom.trim() ? 'rgba(74,96,72,0.40)' : 'rgba(255,255,255,0.04)', color: patientNom.trim() ? '#8BAB88' : T.dim, border: `2px solid ${patientNom.trim() ? 'rgba(74,96,72,0.65)' : 'rgba(255,255,255,0.06)'}`, transition: 'all 0.2s' }}>
+          style={{ fontFamily: MONO, fontSize: 16, letterSpacing: '0.14em', padding: '14px 40px', cursor: patientNom.trim() ? 'pointer' : 'not-allowed', background: patientNom.trim() ? 'rgba(74,96,72,0.40)' : 'rgba(255,255,255,0.04)', color: patientNom.trim() ? '#4C6A4D' : T.dim, border: `2px solid ${patientNom.trim() ? 'rgba(74,96,72,0.65)' : 'rgba(255,255,255,0.06)'}`, transition: 'all 0.2s' }}>
           {submitting ? '…' : '✔ OUVRIR LE DOSSIER'}
         </button>
       </div>

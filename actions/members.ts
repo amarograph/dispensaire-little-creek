@@ -57,6 +57,7 @@ export async function decideMember(userId: string, status: 'approved' | 'rejecte
 
   if (error) throw error;
   revalidatePath('/admin/access');
+  revalidatePath('/admin');
 }
 
 export async function updateMemberRoles(userId: string, roles: string[]) {
@@ -73,4 +74,5 @@ export async function updateMemberRoles(userId: string, roles: string[]) {
 
   if (error) throw error;
   revalidatePath('/admin/access');
+  revalidatePath('/admin');
 }

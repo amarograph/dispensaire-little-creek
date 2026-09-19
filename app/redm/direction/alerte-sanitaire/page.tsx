@@ -11,10 +11,10 @@ import {
 } from '@/app/redm/_lib/sanitaireListes';
 
 
-const DISPLAY = "'Rye', 'Georgia', serif";
-const BODY    = "'Josefin Slab', 'Georgia', serif";
-const MONO    = "'Special Elite', 'Courier New', monospace";
-const T = { bg: '#1A1208', card: '#1F1610', border: 'rgba(139,90,43,0.30)', gold: '#C8A850', text: '#E8D9C0', muted: '#8B7355', dim: '#5A4A35' };
+const DISPLAY = "'Burnic', 'Georgia', serif";
+const BODY    = "'Cormorant Garamond', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
+const T = { bg: '#EDE0C2', card: '#F7EEDB', border: 'rgba(139,90,43,0.30)', gold: '#80682D', text: '#183746', muted: '#6A6D50', dim: '#646850' };
 
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.25)', border: `1px solid ${T.border}`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%', cursor: 'pointer' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
@@ -95,9 +95,9 @@ export default function AlerteSanitairePage() {
                 fontFamily: MONO, fontSize: 13, letterSpacing: '0.12em', padding: '10px 20px',
                 cursor: (saving || !entry.nom) ? 'default' : 'pointer',
                 opacity: !entry.nom ? 0.4 : 1,
-                background: entry.critique ? 'rgba(200,48,48,0.18)' : 'rgba(200,160,64,0.10)',
+                background: entry.critique ? 'rgba(200,48,48,0.18)' : 'rgba(128,104,45,0.10)',
                 color: entry.critique ? '#E86060' : T.gold,
-                border: `1px solid ${entry.critique ? 'rgba(200,48,48,0.5)' : 'rgba(200,160,64,0.35)'}`,
+                border: `1px solid ${entry.critique ? 'rgba(200,48,48,0.5)' : 'rgba(128,104,45,0.35)'}`,
               }}>
               {entry.critique ? '⚠ CRITIQUE' : 'MARQUER CRITIQUE'}
             </button>
@@ -109,7 +109,7 @@ export default function AlerteSanitairePage() {
 
   return (
     <div style={{ fontFamily: BODY }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rye&family=Josefin+Slab:wght@300;400;600;700&family=Special+Elite&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
       <div style={{ marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
