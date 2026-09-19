@@ -53,7 +53,7 @@ export default function DirectionPage() {
               onMouseEnter={() => setHover(m.id)}
               onMouseLeave={() => setHover(null)}
               style={{
-                background:  h ? '#1A0E0E' : '#102B3B',
+                background:  h ? '#254B5C' : '#102B3B',
                 border:      `2px solid ${h ? m.color + '90' : 'rgba(209,183,124,0.22)'}`,
                 borderLeft:  `4px solid ${h ? m.color : m.color + '55'}`,
                 padding:     '28px 24px',

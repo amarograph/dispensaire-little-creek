@@ -732,7 +732,7 @@ export default function PatientDetailPage() {
                     {/* En-tête cliquable */}
                     <div onClick={() => setExpandedDoc(isOpen ? null : doc.id)}
                       style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}
-                      onMouseEnter={e => (e.currentTarget.style.background = '#26190E')}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#254B5C')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                       <div style={{ width: 36, height: 36, background: isOpen ? 'rgba(209,183,124,0.18)' : 'rgba(209,183,124,0.08)', border: `1px solid rgba(200,168,80,${isOpen ? '0.5' : '0.2'})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontSize: 16, color: T.gold, flexShrink: 0, transition: 'all 0.15s' }}>
                         {String(idx + 1).padStart(2, '0')}

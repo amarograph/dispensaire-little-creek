@@ -45,7 +45,7 @@ export default function CabinetPage() {
               onClick={() => router.push(m.href)}
               onMouseEnter={() => setHover(m.id)}
               onMouseLeave={() => setHover(null)}
-              style={{ background: h ? '#241B0E' : '#183746', border: `2px solid ${h ? m.color + '90' : 'rgba(139,90,43,0.25)'}`, borderLeft: `4px solid ${h ? m.color : m.color + '60'}`, padding: '30px 26px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? `0 8px 30px rgba(0,0,0,0.5), 0 0 20px ${m.color}20` : '0 2px 8px rgba(0,0,0,0.35)' }}>
+              style={{ background: h ? '#254B5C' : '#183746', border: `2px solid ${h ? m.color + '90' : 'rgba(139,90,43,0.25)'}`, borderLeft: `4px solid ${h ? m.color : m.color + '60'}`, padding: '30px 26px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? `0 8px 30px rgba(0,0,0,0.5), 0 0 20px ${m.color}20` : '0 2px 8px rgba(0,0,0,0.35)' }}>
               <div style={{ fontSize: 45, marginBottom: 16 }}>{m.icon}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
                 <span style={{ fontFamily: DISPLAY, fontSize: 26, color: '#EADCB9' }}>{m.label}</span>

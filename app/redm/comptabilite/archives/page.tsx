@@ -333,7 +333,7 @@ export default function ArchivesCaisseComptabilitePage() {
             return (
               <div key={arc.id} style={{ background:T.card, border:`1px solid rgba(74,96,72,0.40)`, borderLeft:`5px solid ${allDone ? '#A8B991' : '#D1B77C'}`, overflow:'hidden', cursor:'pointer', transition:'background 0.15s' }}
                 onClick={() => { setOpenId(arc.id); setOpenView('tous'); }}
-                onMouseEnter={e=>(e.currentTarget.style.background='#26190E')}
+                onMouseEnter={e=>(e.currentTarget.style.background='#254B5C')}
                 onMouseLeave={e=>(e.currentTarget.style.background=T.card)}
               >
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'16px 20px' }}>

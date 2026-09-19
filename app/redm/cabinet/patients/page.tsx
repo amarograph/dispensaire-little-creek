@@ -223,7 +223,7 @@ export default function PatientsPage() {
               return (
                 <div key={d.id} style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `3px solid ${col}`, display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px', cursor: 'pointer', transition: 'background 0.15s' }}
                   onClick={() => router.push('/redm/cabinet/patients/' + d.id)}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#26190E')}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#254B5C')}
                   onMouseLeave={e => (e.currentTarget.style.background = T.card)}>
                   <div style={{ width: 44, height: 44, background: col+'28', border: `1px solid ${col}60`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <span style={{ fontFamily: DISPLAY, fontSize: 24, color: col }}>{initiales}</span>

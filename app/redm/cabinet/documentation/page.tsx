@@ -500,7 +500,7 @@ export default function DocumentationPage() {
             const h = hover === m.id;
             return (
               <div key={m.id} onClick={() => router.push(m.href)} onMouseEnter={() => setHover(m.id)} onMouseLeave={() => setHover(null)}
-                style={{ background: h ? '#1A1A28' : T.card, border: `2px solid ${h ? m.color + '90' : T.border}`, borderLeft: `4px solid ${h ? m.color : m.color + '60'}`, padding: '28px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
+                style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? m.color + '90' : T.border}`, borderLeft: `4px solid ${h ? m.color : m.color + '60'}`, padding: '28px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
                 <div style={{ fontSize: 42, marginBottom: 14 }}>{m.icon}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                   <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}>{m.label}</span>
@@ -516,7 +516,7 @@ export default function DocumentationPage() {
           {/* Synthèse de consultation */}
           {(() => { const h = hover === 'synthese'; return (
             <div onClick={() => router.push('/redm/cabinet/documentation/synthese-consultation')} onMouseEnter={() => setHover('synthese')} onMouseLeave={() => setHover(null)}
-              style={{ background: h ? '#1A2018' : T.card, border: `2px solid ${h ? COL_S + '90' : T.border}`, borderLeft: `4px solid ${h ? COL_S : COL_S + '60'}`, padding: '28px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
+              style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? COL_S + '90' : T.border}`, borderLeft: `4px solid ${h ? COL_S : COL_S + '60'}`, padding: '28px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
               <div style={{ fontSize: 42, marginBottom: 14 }}>📋</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                 <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}>Synthèse de consultation</span>
@@ -531,7 +531,7 @@ export default function DocumentationPage() {
           {/* Prescription médicale */}
           {(() => { const h = hover === 'prescription'; return (
             <div onClick={() => router.push('/redm/cabinet/documentation/prescription-medicale')} onMouseEnter={() => setHover('prescription')} onMouseLeave={() => setHover(null)}
-              style={{ background: h ? '#201808' : T.card, border: `2px solid ${h ? COL_P + '90' : T.border}`, borderLeft: `4px solid ${h ? COL_P : COL_P + '60'}`, padding: '28px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
+              style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? COL_P + '90' : T.border}`, borderLeft: `4px solid ${h ? COL_P : COL_P + '60'}`, padding: '28px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
               <div style={{ fontSize: 42, marginBottom: 14 }}>💊</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                 <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}>Prescription médicale</span>

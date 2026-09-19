@@ -52,7 +52,7 @@ export default function CabinetArchivesHubPage() {
               onMouseEnter={() => setHover(m.id)}
               onMouseLeave={() => setHover(null)}
               style={{
-                background:  h ? '#241B0E' : '#183746',
+                background:  h ? '#254B5C' : '#183746',
                 border:      `2px solid ${h ? m.color + '90' : 'rgba(139,90,43,0.25)'}`,
                 borderLeft:  `4px solid ${h ? m.color : m.color + '60'}`,
                 padding:     '30px 26px',
