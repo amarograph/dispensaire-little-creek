@@ -144,13 +144,22 @@ export default function AdminDashboardClient({ members }: { members: Member[] })
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Link href="/admin/redm-dashboard" className="text-xs bg-gray-900 border border-gray-800 hover:border-gray-600 text-gray-300 px-4 py-2 rounded-lg transition">
-            🏛 Accueil RedM
-          </Link>
           <Link href="/redm" className="text-xs bg-gray-900 border border-gray-800 hover:border-gray-600 text-gray-400 px-4 py-2 rounded-lg transition">
             ← Retour
           </Link>
         </div>
+      </div>
+
+      {/* Accès rapide */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+        <Link href="/admin/redm-dashboard" className="bg-gray-900 border border-gray-800 hover:border-yellow-700/60 rounded-xl p-5 transition group flex items-center gap-4">
+          <span className="text-3xl">📖</span>
+          <div className="flex-1">
+            <div className="font-medium text-gray-200 group-hover:text-yellow-400 transition">Tableau de Bord RedM</div>
+            <div className="text-xs text-gray-500 mt-1">Éditer le contenu de la page d&apos;accueil RedM</div>
+          </div>
+          <span className="text-gray-600 group-hover:text-yellow-500 transition">→</span>
+        </Link>
       </div>
 
       {/* Stats */}
