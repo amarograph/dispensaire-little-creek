@@ -441,13 +441,13 @@ export default function EntretienAdmissionPage() {
         {/* En-tête officiel */}
         <div style={{ textAlign: 'center', marginBottom: 48, paddingBottom: 36, borderBottom: `2px solid ${T.gold}35` }}>
           <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.25em', marginBottom: 14 }}>
-            DISPENSAIRE DE LEMOYNE · TERRITOIRE DE NEW HANOVER
+            DISPENSAIRE DE WEST ELIZABETH · TERRITOIRE DE EAST WELLSTER'S
           </div>
           <h2 style={{ fontFamily: DISPLAY, fontSize: 42, color: T.gold, margin: '0 0 10px 0', letterSpacing: '0.03em' }}>
             Entretien d'Admission
           </h2>
           <div style={{ fontFamily: MONO, fontSize: 13, color: T.muted, letterSpacing: '0.15em' }}>
-            FORMULAIRE OFFICIEL — USAGE INTERNE — DISPENSAIRE DE LEMOYNE, 1890
+            FORMULAIRE OFFICIEL — USAGE INTERNE — DISPENSAIRE DE WEST ELIZABETH, 1890
           </div>
         </div>
 
@@ -634,8 +634,8 @@ export default function EntretienAdmissionPage() {
             </div>
           </div>
           <div style={{ fontFamily: MONO, fontSize: 10, color: T.dim + '80', letterSpacing: '0.1em', textAlign: 'center', maxWidth: 300, lineHeight: 1.8 }}>
-            DISPENSAIRE DE LEMOYNE<br />
-            LEMOYNE, TERRITOIRE DE NEW HANOVER<br />
+            DISPENSAIRE DE WEST ELIZABETH<br />
+            WEST ELIZABETH, TERRITOIRE DE EAST WELLSTER'S<br />
             FONDÉ EN L'AN DE GRÂCE 1890
           </div>
         </div>
