@@ -284,7 +284,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
             </Link>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <RPProfileButton universe="redm" accentColor="#80682D" accentRgb="200,160,64" />
+              <RPProfileButton universe="redm" accentColor="#5A9858" accentRgb="90,152,88" />
               <AdminButton />
               <span className="redm-status-badge">✦ Ouvert</span>
               <Link href="/login" className="redm-topbar-btn redm-quit-btn">⏻ Quitter</Link>

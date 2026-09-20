@@ -102,7 +102,7 @@ export default function RPProfileButton({ universe, accentColor, accentRgb }: Pr
         <div style={{ textAlign: 'left' }}>
           <div style={{
             fontFamily: DISPLAY, fontWeight: 700, fontSize: 17,
-            color: hasName ? '#E2E8F0' : '#475569', lineHeight: 1,
+            color: hasName ? '#203C49' : '#6B7A80', lineHeight: 1,
             whiteSpace: 'nowrap',
           }}>
             {displayName}
