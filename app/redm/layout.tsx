@@ -279,7 +279,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
               <img src="/logo-redm.png" alt="Dispensaire de Little Creek" style={{ width: 62, height: 62, objectFit: 'contain', flexShrink: 0 }} />
               <div>
                 <div className="redm-logo-title">LITTLE CREEK</div>
-                <div className="redm-logo-sub">Dispensaire · RedM · 1890</div>
+                <div className="redm-logo-sub">Dispensaire · 1890</div>
               </div>
             </Link>
 
@@ -320,7 +320,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
             Dispensaire de Little Creek
           </span>
           <span style={{ fontFamily: "'Libre Baskerville', monospace", fontSize: 11, color: '#C8BEA5', letterSpacing: '0.12em' }}>
-            AMAROGRAPH REDM
+            AMAROGRAPH
           </span>
         </footer>
       </div>

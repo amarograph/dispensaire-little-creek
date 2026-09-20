@@ -20,7 +20,7 @@ export default function HomePreview() {
         <div className="redm-topbar">
           <div style={{display:'flex',alignItems:'center',gap:12}}>
             <img src="/logo-redm.png" alt="Dispensaire de Little Creek" width={62} height={62} style={{objectFit:'contain'}} />
-            <div><div className="redm-logo-title">LITTLE CREEK</div><div className="redm-logo-sub">Dispensaire · RedM · 1890</div></div>
+            <div><div className="redm-logo-title">LITTLE CREEK</div><div className="redm-logo-sub">Dispensaire · 1890</div></div>
           </div>
           <span className="redm-status-badge">Aperçu visuel · sans données privées</span>
         </div>
