@@ -52,15 +52,17 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({ dates: (data ?? []).map((r: { date: string }) => r.date), rate });
 }
 
-/* POST — marque la caisse du jour (date réelle du serveur) */
-export async function POST() {
+/* POST { date?: YYYY-MM-DD } — marque la caisse du jour (date locale du client, comme pour GET) */
+export async function POST(req: NextRequest) {
   const session = await getApiSession();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const rate = caisseRateForRoles(session.roles);
   if (rate == null) return NextResponse.json({ error: 'Grade non concerné par le registre des caisses' }, { status: 403 });
 
-  const today = new Date().toISOString().slice(0, 10);
+  const body = await req.json().catch(() => ({}));
+  const clientDate = typeof body?.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.date) ? body.date : null;
+  const today = clientDate ?? new Date().toISOString().slice(0, 10);
   const supabase = await createServiceClient();
 
   const { error } = await supabase

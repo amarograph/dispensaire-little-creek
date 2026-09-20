@@ -83,7 +83,11 @@ export default function RegistreCaissesPage() {
     setMarking(true);
     setError('');
     try {
-      const res = await fetch('/api/redm/caisses', { method: 'POST' });
+      const res = await fetch('/api/redm/caisses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date: todayISO }),
+      });
       if (!res.ok) {
         const d = await res.json().catch(() => ({}));
         setError(d.error ?? 'Erreur serveur.');
