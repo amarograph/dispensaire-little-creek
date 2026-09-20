@@ -31,24 +31,14 @@ interface Toast {
 }
 
 const PLANTES_DEFAULT: StockItem[] = [
-  { id: 'absinthe', intitule: 'Absinthe', quantite: 10 },
-  { id: 'sauge-rouge', intitule: 'Sauge Rouge', quantite: 10 },
-  { id: 'pavot-somnifere', intitule: 'Pavot somnifère', quantite: 10 },
-  { id: 'sauge-du-colibris', intitule: 'Sauge du colibris', quantite: 10 },
-  { id: 'achillee-millefeuille', intitule: 'Achillée millefeuille', quantite: 10 },
-  { id: 'aloe-verra', intitule: 'Aloe Verra', quantite: 10 },
-  { id: 'alaska-ginseng', intitule: 'Alaska Ginseng', quantite: 10 },
-  { id: 'rhubarbe', intitule: 'Rhubarbe', quantite: 10 },
-  { id: 'verge-dor', intitule: "Verge d'or", quantite: 10 },
-  { id: 'echinacee', intitule: 'Échinacée', quantite: 10 },
-  { id: 'cassis', intitule: 'Cassis', quantite: 10 },
-  { id: 'aubepine', intitule: 'Aubépine', quantite: 10 },
-  { id: 'figue-de-barbarie', intitule: 'Figue de barbarie', quantite: 10 },
-  { id: 'champignon-bolai-bai', intitule: 'Champignon Bolai Bai', quantite: 10 },
-  { id: 'panax-quinquefolius', intitule: 'Panax quinquefolius', quantite: 10 },
+  { id: 'ginseng-americain', intitule: 'Ginseng Americain', quantite: 10 },
+  { id: 'gingseng-alaska', intitule: 'Gingseng Alaska', quantite: 10 },
   { id: 'camomille', intitule: 'Camomille', quantite: 10 },
-  { id: 'perce-neige-violet', intitule: 'Perce Neige Viollet', quantite: 10 },
-  { id: 'amanite-tulouche', intitule: 'Amanite Tulouche', quantite: 10 },
+  { id: 'menthe', intitule: 'Menthe', quantite: 10 },
+  { id: 'thym', intitule: 'Thym', quantite: 10 },
+  { id: 'laurier-rose', intitule: 'Laurier Rose', quantite: 10 },
+  { id: 'pavot', intitule: 'Pavot', quantite: 10 },
+  { id: 'bardane', intitule: 'Bardane', quantite: 10 },
 ];
 
 const DEFAULT_CATEGORIES: StockCategorie[] = [
