@@ -12,7 +12,7 @@ const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
 type TypeCategorie = 'vente' | 'achat';
-interface TarifCategory { id: string; nom: string; type: TypeCategorie; prix: number; pctDispensaire: number; pctMedecin: number; ordre: number; }
+interface TarifCategory { id: string; nom: string; type: TypeCategorie; prix: number; pctDispensaire: number; pctMedecin: number; ordre: number; commandeSeulement?: boolean; }
 
 const TYPE_ICON: Record<TypeCategorie, string> = { vente: '🩺', achat: '🛒' };
 
@@ -161,24 +161,32 @@ export default function DirectionTarifsPage() {
                 </div>
 
                 {canEdit ? (
-                  <div style={{ display:'grid', gridTemplateColumns: isVente ? 'repeat(3,1fr)' : '1fr', gap:14, marginBottom:14 }}>
-                    <div>
-                      <label style={lbl}>PRIX ($)</label>
-                      <input type="number" step="0.01" min="0" style={inp} value={t.prix} onChange={e=>update(t.id,{prix:Number(e.target.value)})} />
+                  <>
+                    <div style={{ display:'grid', gridTemplateColumns: isVente ? 'repeat(3,1fr)' : '1fr', gap:14, marginBottom:14 }}>
+                      <div>
+                        <label style={lbl}>PRIX ($)</label>
+                        <input type="number" step="0.01" min="0" style={inp} value={t.prix} onChange={e=>update(t.id,{prix:Number(e.target.value)})} />
+                      </div>
+                      {isVente && (
+                        <>
+                          <div>
+                            <label style={lbl}>% DISPENSAIRE</label>
+                            <input type="number" step="1" min="0" max="100" style={inp} value={t.pctDispensaire} onChange={e=>setPct(t.id,'pctDispensaire',Number(e.target.value))} />
+                          </div>
+                          <div>
+                            <label style={lbl}>% MÉDECIN</label>
+                            <input type="number" step="1" min="0" max="100" style={inp} value={t.pctMedecin} onChange={e=>setPct(t.id,'pctMedecin',Number(e.target.value))} />
+                          </div>
+                        </>
+                      )}
                     </div>
                     {isVente && (
-                      <>
-                        <div>
-                          <label style={lbl}>% DISPENSAIRE</label>
-                          <input type="number" step="1" min="0" max="100" style={inp} value={t.pctDispensaire} onChange={e=>setPct(t.id,'pctDispensaire',Number(e.target.value))} />
-                        </div>
-                        <div>
-                          <label style={lbl}>% MÉDECIN</label>
-                          <input type="number" step="1" min="0" max="100" style={inp} value={t.pctMedecin} onChange={e=>setPct(t.id,'pctMedecin',Number(e.target.value))} />
-                        </div>
-                      </>
+                      <label style={{ display:'flex', alignItems:'center', gap:8, marginBottom:14, cursor:'pointer', fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.06em' }}>
+                        <input type="checkbox" checked={!!t.commandeSeulement} onChange={e=>update(t.id,{commandeSeulement:e.target.checked})} />
+                        COMMANDE UNIQUEMENT — masqué du catalogue VENTE, visible seulement en COMMANDE
+                      </label>
                     )}
-                  </div>
+                  </>
                 ) : (
                   <div style={{ display:'grid', gridTemplateColumns: isVente ? 'repeat(3,1fr)' : '1fr', gap:14, marginBottom:14 }}>
                     <div>
@@ -198,6 +206,9 @@ export default function DirectionTarifsPage() {
                       </>
                     )}
                   </div>
+                )}
+                {!canEdit && isVente && t.commandeSeulement && (
+                  <div style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.06em', marginBottom:14 }}>📦 COMMANDE UNIQUEMENT</div>
                 )}
 
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>

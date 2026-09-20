@@ -9,7 +9,7 @@ const DEFAULT_CATEGORIES = [
   { id: 'Traitement',   nom: 'Traitement',   type: 'vente' as TypeCategorie, prix: 0.4, pct_dispensaire: 50, pct_medecin: 50, ordre: 1 },
 ];
 
-function toCategory(row: any) {
+function toCategory(row: any, commandeSeulementIds: Set<string>) {
   return {
     id:             row.id,
     nom:            row.nom,
@@ -18,6 +18,7 @@ function toCategory(row: any) {
     pctDispensaire: row.pct_dispensaire,
     pctMedecin:     row.pct_medecin,
     ordre:          row.ordre,
+    commandeSeulement: commandeSeulementIds.has(row.id),
   };
 }
 
@@ -27,8 +28,12 @@ export async function GET() {
   if (!session) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 });
 
   const supabase = await createServiceClient();
-  const { data: rows } = await supabase.from('redm_tarifs').select('*').order('ordre');
+  const [{ data: rows }, { data: flagRow }] = await Promise.all([
+    supabase.from('redm_tarifs').select('*').order('ordre'),
+    supabase.from('site_config').select('value').eq('key', 'redm_tarifs_commande_seulement').single(),
+  ]);
   const source = rows && rows.length > 0 ? rows : DEFAULT_CATEGORIES;
+  const commandeSeulementIds = new Set<string>(Array.isArray(flagRow?.value) ? flagRow.value : []);
 
-  return NextResponse.json({ categories: source.map(toCategory) });
+  return NextResponse.json({ categories: source.map(r => toCategory(r, commandeSeulementIds)) });
 }

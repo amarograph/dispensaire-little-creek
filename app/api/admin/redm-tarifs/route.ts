@@ -47,7 +47,20 @@ const DEFAULT_CATEGORIES = [
   { id: 'Traitement',   nom: 'Traitement',   type: 'vente' as TypeCategorie, prix: 0.4, pct_dispensaire: 50, pct_medecin: 50, ordre: 1 },
 ];
 
-function toCategory(row: any) {
+const COMMANDE_SEULEMENT_KEY = 'redm_tarifs_commande_seulement';
+
+async function getCommandeSeulementIds(): Promise<Set<string>> {
+  const { data } = await admin().from('site_config').select('value').eq('key', COMMANDE_SEULEMENT_KEY).single();
+  return new Set<string>(Array.isArray(data?.value) ? data.value : []);
+}
+
+async function setCommandeSeulement(id: string, actif: boolean) {
+  const ids = await getCommandeSeulementIds();
+  if (actif) ids.add(id); else ids.delete(id);
+  await admin().from('site_config').upsert({ key: COMMANDE_SEULEMENT_KEY, value: Array.from(ids) }, { onConflict: 'key' });
+}
+
+function toCategory(row: any, commandeSeulementIds: Set<string>) {
   return {
     id:             row.id,
     nom:            row.nom,
@@ -56,6 +69,7 @@ function toCategory(row: any) {
     pctDispensaire: row.pct_dispensaire,
     pctMedecin:     row.pct_medecin,
     ordre:          row.ordre,
+    commandeSeulement: commandeSeulementIds.has(row.id),
   };
 }
 
@@ -80,8 +94,9 @@ export async function GET(req: NextRequest) {
     await admin().from('redm_tarifs').insert(DEFAULT_CATEGORIES);
     rows = DEFAULT_CATEGORIES;
   }
+  const commandeSeulementIds = await getCommandeSeulementIds();
 
-  return NextResponse.json({ categories: rows.map(toCategory) });
+  return NextResponse.json({ categories: rows.map(r => toCategory(r, commandeSeulementIds)) });
 }
 
 /* ── POST : création d'une nouvelle catégorie ───────────────────────── */
@@ -118,7 +133,7 @@ export async function PATCH(req: NextRequest) {
   if (!actor) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const body = await req.json();
-  const { id, nom, type, prix, pctDispensaire, pctMedecin } = body;
+  const { id, nom, type, prix, pctDispensaire, pctMedecin, commandeSeulement } = body;
   if (!id) return NextResponse.json({ error: 'id manquant' }, { status: 400 });
 
   const patch: Record<string, any> = { updated_at: new Date().toISOString() };
@@ -131,7 +146,9 @@ export async function PATCH(req: NextRequest) {
   const { error } = await admin().from('redm_tarifs').update(patch).eq('id', id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  redmLog(actor, { action: 'tarif_update', category: 'tarifs', description: `A modifié le tarif « ${nom ?? id} »${typeof prix === 'number' ? ` → $${prix}` : ''}`, meta: { id, ...patch } });
+  if (typeof commandeSeulement === 'boolean') await setCommandeSeulement(id, commandeSeulement);
+
+  redmLog(actor, { action: 'tarif_update', category: 'tarifs', description: `A modifié le tarif « ${nom ?? id} »${typeof prix === 'number' ? ` → $${prix}` : ''}`, meta: { id, ...patch, commandeSeulement } });
   return NextResponse.json({ ok: true });
 }
 
@@ -145,6 +162,8 @@ export async function DELETE(req: NextRequest) {
 
   const { error } = await admin().from('redm_tarifs').delete().eq('id', id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await setCommandeSeulement(id, false);
 
   redmLog(actor, { action: 'tarif_delete', category: 'tarifs', description: `A supprimé la catégorie de tarif « ${id} »`, meta: { id } });
   return NextResponse.json({ ok: true });

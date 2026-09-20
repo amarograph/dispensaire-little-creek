@@ -15,7 +15,7 @@ type TypeCategorie  = 'vente' | 'achat';
 type TypeNote       = 'vente' | 'achat' | 'commande';
 type Payeur         = 'Civil' | 'Shérif' | 'Mairie West Elizabeth';
 
-interface TarifCategory { id: string; nom: string; type: TypeCategorie; prix: number; pctDispensaire: number; pctMedecin: number; ordre: number; }
+interface TarifCategory { id: string; nom: string; type: TypeCategorie; prix: number; pctDispensaire: number; pctMedecin: number; ordre: number; commandeSeulement?: boolean; }
 const DEFAULT_CATEGORIES: TarifCategory[] = [
   { id: 'Consultation', nom: 'Consultation', type: 'vente', prix: 1,   pctDispensaire: 50, pctMedecin: 50, ordre: 0 },
   { id: 'Traitement',   nom: 'Traitement',   type: 'vente', prix: 0.4, pctDispensaire: 50, pctMedecin: 50, ordre: 1 },
@@ -124,8 +124,11 @@ export default function CaisseComptabilitePage() {
   const currentKey  = mondayISO(todayMonday);
   const montantAuto = calcMontant(form.prestations, tarifs);
   const categoriesSorted = Object.values(tarifs).sort((a,b) => a.ordre - b.ordre);
-  const categoriesVente  = categoriesSorted.filter(c => c.type === 'vente');
-  const categoriesAchat  = categoriesSorted.filter(c => c.type === 'achat');
+  const categoriesVenteTout = categoriesSorted.filter(c => c.type === 'vente');
+  const categoriesVente     = categoriesVenteTout.filter(c => !c.commandeSeulement);
+  const categoriesCommande  = categoriesVenteTout;
+  const categoriesAchat     = categoriesSorted.filter(c => c.type === 'achat');
+  const categoriesActives   = typeFiltre === 'commande' ? categoriesCommande : categoriesVente;
 
   /* ── Hydratation ── */
   useEffect(() => {
@@ -212,7 +215,7 @@ export default function CaisseComptabilitePage() {
     if (typeFiltre === 'achat') {
       setForm(f => ({ ...f, prestations: [...f.prestations, { id: uid(), qty: 1, nom: '', prix: 0 }] }));
     } else {
-      const first = categoriesVente[0]?.id ?? 'Consultation';
+      const first = categoriesActives[0]?.id ?? 'Consultation';
       setForm(f => ({ ...f, prestations: [...f.prestations, { id: first, qty: 1 }] }));
     }
   }
@@ -341,7 +344,7 @@ export default function CaisseComptabilitePage() {
                     💰 VENTE
                   </button>
                   <button
-                    onClick={()=>{ setTypeFiltre('commande'); setForm(f=>({...f, prestations:[{ id: categoriesVente[0]?.id ?? 'Consultation', qty:1 }]})); }}
+                    onClick={()=>{ setTypeFiltre('commande'); setForm(f=>({...f, prestations:[{ id: categoriesCommande[0]?.id ?? 'Consultation', qty:1 }]})); }}
                     style={{ flex:1, fontFamily:MONO, fontSize: 14, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='commande' ? 'rgba(209,183,124,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='commande' ? T.gold : T.border}`, color: typeFiltre==='commande' ? T.gold : T.dim }}>
                     📦 COMMANDE
                   </button>
@@ -369,7 +372,7 @@ export default function CaisseComptabilitePage() {
                     form.prestations.map((p,idx) => (
                       <div key={idx} style={{ display:'flex', gap:5 }}>
                         <select style={{...inp,flex:1,cursor:'pointer'}} value={p.id} onChange={e=>setPrestation(idx,e.target.value)}>
-                          {categoriesVente.map(c=><option key={c.id} value={c.id}>{c.nom} — {fmt$(c.prix)}</option>)}
+                          {categoriesActives.map(c=><option key={c.id} value={c.id}>{c.nom} — {fmt$(c.prix)}</option>)}
                         </select>
                         <input type="number" min={1} max={99} value={p.qty} onChange={e=>setPrestationQty(idx,Number(e.target.value))}
                           style={{...inp, width:56, flexShrink:0, textAlign:'center', padding:'9px 6px'}} title="Quantité" />
