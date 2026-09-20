@@ -45,7 +45,6 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
         { href: '/redm/archives',         label: 'Archives',              icon: '🗄' },
         { href: '/redm/cabinet',          label: 'Cabinet Thérapeutique', icon: '🛋' },
         ...(hasDirectionAccess ? [{ href: '/redm/direction', label: 'Direction', icon: '🏛' }] : []),
-        { href: '/redm/inventaire',       label: 'Inventaire',            icon: '📦' },
       ];
 
   return (

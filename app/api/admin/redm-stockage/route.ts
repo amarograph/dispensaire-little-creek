@@ -39,8 +39,9 @@ const PLANTES_DEFAULT: StockItem[] = [
 ];
 
 const DEFAULT_CATEGORIES: StockCategorie[] = [
+  { id: 'materiaux', nom: 'Matériaux', icon: '🧰', items: [] },
   { id: 'plantes', nom: 'Plantes', icon: '🌿', items: PLANTES_DEFAULT },
-  { id: 'produits-medicaux', nom: 'Produits médicaux', icon: '💊', items: [] },
+  { id: 'materiels-medicaux', nom: 'Matériels médicaux', icon: '💊', items: [] },
 ];
 
 /* Lecture : direction, co-direction, médecin en chef (lecteur) */

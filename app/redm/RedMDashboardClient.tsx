@@ -17,7 +17,6 @@ const MODULES = [
   { id: 'archives',     href: '/redm/archives',      icon: '🗄', label: 'Archives',               sub: 'REGISTRES',         desc: 'Consulter les registres de consultations et dossiers des patients.',           color: '#A8B991', badge: 'REG' },
   { id: 'cabinet',      href: '/redm/cabinet',       icon: '🛋', label: 'Cabinet Thérapeutique',  sub: "SOINS DE L'ÂME",   desc: "Suivi psychologique, consultations de l'esprit et thérapies de l'époque.",   color: '#A8B991', badge: 'PSY' },
   { id: 'direction',    href: '/redm/direction',     icon: '🏛', label: 'Direction',              sub: 'ACCÈS RÉSERVÉ',     desc: 'Comptabilité et gestion administrative du dispensaire — direction & co-direction.', color: '#D1B77C', badge: 'DIR' },
-  { id: 'inventaire',   href: '/redm/inventaire',    icon: '📦', label: 'Inventaire',             sub: 'STOCKS DU DISPENSAIRE', desc: "Consulter l'état des stocks de plantes et de produits médicaux du dispensaire.", color: '#D1B77C', badge: 'INV' },
 ];
 
 const DEFAULT_DISPENSAIRE = {
