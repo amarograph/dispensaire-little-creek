@@ -40,10 +40,21 @@ const MATERIAUX_DEFAULT: StockItem[] = [
   { id: 'souffre', intitule: 'Souffre', quantite: 10 },
 ];
 
+const MATERIELS_MEDICAUX_DEFAULT: StockItem[] = [
+  { id: 'bandage-simple', intitule: 'Bandage simple', quantite: 10 },
+  { id: 'bandage-ameliorer', intitule: 'Bandage améliorer', quantite: 10 },
+  { id: 'trousse-de-soins', intitule: 'Trousse de soins', quantite: 10 },
+  { id: 'ammoniaque', intitule: 'Ammoniaque', quantite: 10 },
+  { id: 'infusion-de-ginseng', intitule: 'Infusion de Ginseng', quantite: 10 },
+  { id: 'lait-de-pavot', intitule: 'Lait de Pavot', quantite: 10 },
+  { id: 'canne', intitule: 'Canne', quantite: 10 },
+  { id: 'cercueil', intitule: 'Cercueil', quantite: 10 },
+];
+
 const DEFAULT_CATEGORIES: StockCategorie[] = [
   { id: 'materiaux', nom: 'Matériaux', icon: '🧰', items: MATERIAUX_DEFAULT },
   { id: 'plantes', nom: 'Plantes', icon: '🌿', items: PLANTES_DEFAULT },
-  { id: 'materiels-medicaux', nom: 'Matériels médicaux', icon: '💊', items: [] },
+  { id: 'materiels-medicaux', nom: 'Matériels médicaux', icon: '💊', items: MATERIELS_MEDICAUX_DEFAULT },
 ];
 
 /* Lecture : direction, co-direction, médecin en chef (lecteur) */
