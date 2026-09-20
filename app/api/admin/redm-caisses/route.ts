@@ -17,14 +17,14 @@ function db() {
   );
 }
 
-/* GET ?from=YYYY-MM-DD&to=YYYY-MM-DD — caisses de tout le personnel concerné sur la période */
+/* GET ?from=YYYY-MM-DD&to=YYYY-MM-DD — caisses de tout le personnel concerné sur la période. Sans from/to : historique complet. */
 export async function GET(req: NextRequest) {
   if (!await requireDirectionRead()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const { searchParams } = req.nextUrl;
   const from = searchParams.get('from');
   const to   = searchParams.get('to');
-  if (!from || !to) return NextResponse.json({ error: 'Missing from/to' }, { status: 400 });
+  if ((from && !to) || (to && !from)) return NextResponse.json({ error: 'from et to doivent être fournis ensemble' }, { status: 400 });
 
   const supabase = db();
 
@@ -45,11 +45,9 @@ export async function GET(req: NextRequest) {
   const rp: Record<string, { nom_rp: string; prenom_rp: string }> = {};
   for (const row of profiles ?? []) rp[row.discord_id] = row;
 
-  const { data: caisses, error } = await supabase
-    .from('redm_caisses')
-    .select('discord_id, date')
-    .gte('date', from)
-    .lte('date', to);
+  let caissesQuery = supabase.from('redm_caisses').select('discord_id, date');
+  if (from && to) caissesQuery = caissesQuery.gte('date', from).lte('date', to);
+  const { data: caisses, error } = await caissesQuery;
 
   if (error) {
     if (error.code === '42P01') return NextResponse.json({ staff: [], missing_table: true });

@@ -11,6 +11,9 @@ const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
+/** Prix de vente d'une caisse au client ; la différence avec le tarif du grade (5$/5.50$/6$) revient au dispensaire. */
+const PRIX_CAISSE = 7.5;
+
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
 type TypeCategorie  = 'vente' | 'achat';
 type Payeur         = 'Civil' | 'Shérif' | 'Mairie West Elizabeth';
@@ -163,6 +166,14 @@ export default function DirectionComptabilitePage() {
   const caisseIsThisWeek = fmtISODate(caisseMonday) === fmtISODate(getMondayOf(new Date()));
   const caissesTotalSemaine = caissesStaff.reduce((s, x) => s + x.count, 0);
 
+  /* ── Marge dispensaire des caisses (prix client 7.50$ − tarif versé au grade) ── */
+  const [margeCaissesSemaine, setMargeCaissesSemaine] = useState(0);
+  const [margeCaissesTotal,   setMargeCaissesTotal]   = useState(0);
+
+  function margeCaisses(staff: { count: number; rate: number }[]): number {
+    return Math.round(staff.reduce((s, x) => s + x.count * (PRIX_CAISSE - x.rate), 0) * 100) / 100;
+  }
+
   /* ── Registre des caisses (self-service du personnel + édition Direction) ── */
   const loadCaisses = useCallback(() => {
     setCaissesLoading(true);
@@ -174,6 +185,25 @@ export default function DirectionComptabilitePage() {
   }, [caisseFrom, caisseTo]);
 
   useEffect(() => { loadCaisses(); }, [loadCaisses]);
+
+  /* Marge de la semaine EN COURS (indépendante de la navigation du registre ci-dessus) */
+  useEffect(() => {
+    const from = fmtISODate(todayMonday);
+    const to   = fmtISODate(addDaysReal(todayMonday, 6));
+    fetch(`/api/admin/redm-caisses?from=${from}&to=${to}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d?.staff) setMargeCaissesSemaine(margeCaisses(d.staff)); })
+      .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /* Marge cumulée depuis toujours, pour le solde global du dispensaire */
+  useEffect(() => {
+    fetch(`/api/admin/redm-caisses`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d?.staff) setMargeCaissesTotal(margeCaisses(d.staff)); })
+      .catch(() => {});
+  }, []);
 
   async function toggleCaisse(discordId: string, date: string) {
     if (!canEditCaisses) return;
@@ -255,8 +285,13 @@ export default function DirectionComptabilitePage() {
   const totalAttente = semaineActuelle.filter(f=>f.statut==='EN ATTENTE').reduce((s,f)=>s+f.montant,0);
   const salaires     = salairesByMedecin(semaineActuelle, tarifs);
 
-  const tresorerieSemaine = tresorerie(semaineActuelle, tarifs);
-  const soldeDispensaire  = tresorerie([...items, ...archives.flatMap(a => a.factures)], tarifs).solde;
+  const tresorerieSemaineBrute = tresorerie(semaineActuelle, tarifs);
+  const tresorerieSemaine = {
+    ...tresorerieSemaineBrute,
+    ventes: Math.round((tresorerieSemaineBrute.ventes + margeCaissesSemaine) * 100) / 100,
+    solde:  Math.round((tresorerieSemaineBrute.solde  + margeCaissesSemaine) * 100) / 100,
+  };
+  const soldeDispensaire = Math.round((tresorerie([...items, ...archives.flatMap(a => a.factures)], tarifs).solde + margeCaissesTotal) * 100) / 100;
 
   /* ── Ligne de registre (lecture seule) ── */
   function RegistreLine({ f }: { f: Facture }) {
@@ -334,6 +369,12 @@ export default function DirectionComptabilitePage() {
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)` }}>
               <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>🏦 TRÉSORERIE DU DISPENSAIRE</span>
             </div>
+
+            {margeCaissesSemaine > 0 && (
+              <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.06em', marginBottom:10 }}>
+                💰 Inclut {fmt$(margeCaissesSemaine)} de marge sur les caisses vendues {PRIX_CAISSE}$ (part au-delà du tarif reversé à chaque grade)
+              </div>
+            )}
 
             <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`5px solid ${soldeDispensaire>=0 ? '#A8B991' : '#8B4040'}`, padding:'22px 24px', textAlign:'center', marginBottom:10 }}>
               <div style={{ fontFamily:DISPLAY, fontSize:42, color: soldeDispensaire>=0 ? '#6A9A68' : '#DF9A88' }}>{fmt$(soldeDispensaire)}</div>
