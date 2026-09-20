@@ -836,7 +836,7 @@ export default function PatientDetailPage() {
 
             <div style={{ marginTop: 14, fontFamily: MONO, fontSize: 12, color: T.dim, textAlign: 'center', borderTop: `1px solid ${T.border}`, paddingTop: 10 }}>
               Factures associées par correspondance de nom · Gestion complète dans{' '}
-              <span onClick={() => router.push('/redm/comptabilite')} style={{ color: T.gold, cursor: 'pointer', textDecoration: 'underline' }}>Caisse et Comptabilité</span>
+              <span onClick={() => router.push('/redm/comptabilite')} style={{ color: T.gold, cursor: 'pointer', textDecoration: 'underline' }}>Comptabilité</span>
             </div>
           </div>
         );

@@ -46,7 +46,6 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
         { href: '/redm/cabinet',          label: 'Cabinet Thérapeutique', icon: '🛋' },
         ...(hasDirectionAccess ? [{ href: '/redm/direction', label: 'Direction', icon: '🏛' }] : []),
         { href: '/redm/inventaire',       label: 'Inventaire',            icon: '📦' },
-        { href: '/redm/registre-malades', label: 'Registre Patient',      icon: '📋' },
       ];
 
   return (

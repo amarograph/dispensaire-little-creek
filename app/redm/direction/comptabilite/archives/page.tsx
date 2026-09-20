@@ -25,18 +25,22 @@ function categoriesToMap(categories: TarifCategory[]): Record<string, TarifCateg
   return m;
 }
 
-interface PrestationItem { id: string; qty: number; }
+interface PrestationItem { id: string; qty: number; nom?: string; prix?: number; }
 function normPrestations(raw: unknown): PrestationItem[] {
   if (!Array.isArray(raw) || raw.length === 0) return [{ id: 'Consultation', qty: 1 }];
-  return raw.map(p => typeof p === 'string'
-    ? { id: p, qty: 1 }
-    : { id: (p as PrestationItem).id, qty: Math.max(1, Math.min(99, Number((p as PrestationItem).qty) || 1)) });
+  return raw.map(p => {
+    if (typeof p === 'string') return { id: p, qty: 1 };
+    const o = p as PrestationItem;
+    const qty = Math.max(1, Math.min(99, Number(o.qty) || 1));
+    return o.prix != null ? { id: o.id, qty, nom: o.nom, prix: o.prix } : { id: o.id, qty };
+  });
 }
 
 interface Facture {
   id: string; medecin: string; patientNom: string; dateSeance: string;
   prestations: (string | PrestationItem)[]; montant: number;
   payeur: Payeur; statut: StatutPaiement; notes: string; createdAt: string;
+  estCommande?: boolean;
 }
 interface SemaineArchivee {
   id: string; weekLabel: string; weekStart: string;
@@ -64,12 +68,13 @@ interface Salaire { medecin: string; actes: number; ca: number; salaire: number;
 function salairesByMedecin(factures: Facture[], tarifs: Record<string, TarifCategory>): Salaire[] {
   const map: Record<string, Salaire> = {};
   factures.forEach(f => {
-    if (f.statut === 'ANNULÉ') return;
+    if (f.statut === 'ANNULÉ' || f.estCommande) return;
     const key = (f.medecin ?? '').trim() || '— Non assigné —';
     if (!map[key]) map[key] = { medecin: key, actes: 0, ca: 0, salaire: 0 };
     const s = map[key];
     s.actes++;
     normPrestations(f.prestations).forEach(p => {
+      if (p.prix != null) return;
       const t = tarifs[p.id];
       if (!t || t.type !== 'vente') return;
       s.ca      += t.prix * p.qty;
@@ -96,12 +101,14 @@ function RegistreLine({ f, tarifs }: { f: Facture; tarifs: Record<string, TarifC
             <span style={{ fontFamily:MONO, fontSize: 12, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
           </div>
           <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+            {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 12, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
             {pres.map((p,i) => {
               const cat = tarifs[p.id];
-              const isAchat = cat?.type === 'achat';
+              const nom = p.nom ?? cat?.nom ?? p.id;
+              const isAchat = p.prix != null || cat?.type === 'achat';
               return (
                 <span key={i} style={{ fontFamily:MONO, fontSize: 12, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
-                  {isAchat ? '🛒 ' : ''}{cat?.nom ?? p.id}{p.qty > 1 ? ` ×${p.qty}` : ''}
+                  {isAchat ? '🛒 ' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''}
                 </span>
               );
             })}

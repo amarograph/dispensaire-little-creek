@@ -10,6 +10,7 @@ const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold
 
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
 type TypeCategorie  = 'vente' | 'achat';
+type TypeNote       = 'vente' | 'achat' | 'commande';
 type Payeur         = 'Civil' | 'Shérif' | 'Mairie West Elizabeth';
 
 interface TarifCategory { id: string; nom: string; type: TypeCategorie; prix: number; pctDispensaire: number; pctMedecin: number; ordre: number; }
@@ -24,18 +25,22 @@ function categoriesToMap(categories: TarifCategory[]): Record<string, TarifCateg
 }
 const PAYEURS: Payeur[] = ['Civil', 'Shérif', 'Mairie West Elizabeth'];
 
-interface PrestationItem { id: string; qty: number; }
+interface PrestationItem { id: string; qty: number; nom?: string; prix?: number; }
 function normPrestations(raw: unknown): PrestationItem[] {
   if (!Array.isArray(raw) || raw.length === 0) return [{ id: 'Consultation', qty: 1 }];
-  return raw.map(p => typeof p === 'string'
-    ? { id: p, qty: 1 }
-    : { id: (p as PrestationItem).id, qty: Math.max(1, Math.min(99, Number((p as PrestationItem).qty) || 1)) });
+  return raw.map(p => {
+    if (typeof p === 'string') return { id: p, qty: 1 };
+    const o = p as PrestationItem;
+    const qty = Math.max(1, Math.min(99, Number(o.qty) || 1));
+    return o.prix != null ? { id: o.id, qty, nom: o.nom, prix: o.prix } : { id: o.id, qty };
+  });
 }
 
 interface Facture {
   id: string; medecin: string; patientNom: string; dateSeance: string;
   prestations: (string | PrestationItem)[]; montant: number;
   payeur: Payeur; statut: StatutPaiement; notes: string; createdAt: string;
+  estCommande?: boolean;
 }
 interface SemaineArchivee {
   id: string; weekLabel: string; weekStart: string;
@@ -51,7 +56,7 @@ function save(d: Facture[])            { try { localStorage.setItem(LS,     JSON
 function saveArc(d: SemaineArchivee[]) { try { localStorage.setItem(LS_ARC, JSON.stringify(d)); } catch {} }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
-function calcMontant(p: PrestationItem[], tarifs: Record<string, TarifCategory>) { return Math.round(p.reduce((s, x) => s + (tarifs[x.id]?.prix ?? 0) * x.qty, 0) * 100) / 100; }
+function calcMontant(p: PrestationItem[], tarifs: Record<string, TarifCategory>) { return Math.round(p.reduce((s, x) => s + (x.prix ?? tarifs[x.id]?.prix ?? 0) * x.qty, 0) * 100) / 100; }
 
 function getMondayOf(date: Date): Date {
   const d = new Date(date); const day = d.getDay();
@@ -105,7 +110,7 @@ export default function CaisseComptabilitePage() {
   const [medecins,       setMedecins]       = useState<string[]>([]);
   const [editing,        setEditing]        = useState<Facture | null>(null);
   const [delConfirm,     setDelConfirm]     = useState<string | null>(null);
-  const [typeFiltre,     setTypeFiltre]     = useState<TypeCategorie>('vente');
+  const [typeFiltre,     setTypeFiltre]     = useState<TypeNote>('vente');
   const [tarifs,         setTarifs]         = useState<Record<string, TarifCategory>>(() => categoriesToMap(DEFAULT_CATEGORIES));
   const autoArchiveDone  = useRef(false);
 
@@ -186,15 +191,24 @@ export default function CaisseComptabilitePage() {
   function setPrestation(idx: number, val: string) {
     setForm(f => { const p=[...f.prestations]; p[idx]={...p[idx], id:val}; return {...f,prestations:p}; });
   }
+  function setPrestationNom(idx: number, nom: string) {
+    setForm(f => { const p=[...f.prestations]; p[idx]={...p[idx], nom}; return {...f,prestations:p}; });
+  }
+  function setPrestationPrix(idx: number, prix: number) {
+    setForm(f => { const p=[...f.prestations]; p[idx]={...p[idx], prix: isNaN(prix) ? 0 : prix}; return {...f,prestations:p}; });
+  }
   function setPrestationQty(idx: number, qty: number) {
     const clamped = Math.max(1, Math.min(99, Math.round(qty) || 1));
     setForm(f => { const p=[...f.prestations]; p[idx]={...p[idx], qty:clamped}; return {...f,prestations:p}; });
   }
   function addPrestation() {
     if (form.prestations.length >= 10) return;
-    const list = typeFiltre === 'vente' ? categoriesVente : categoriesAchat;
-    const first = list[0]?.id ?? 'Consultation';
-    setForm(f => ({ ...f, prestations: [...f.prestations, { id: first, qty: 1 }] }));
+    if (typeFiltre === 'achat') {
+      setForm(f => ({ ...f, prestations: [...f.prestations, { id: uid(), qty: 1, nom: '', prix: 0 }] }));
+    } else {
+      const first = categoriesVente[0]?.id ?? 'Consultation';
+      setForm(f => ({ ...f, prestations: [...f.prestations, { id: first, qty: 1 }] }));
+    }
   }
   function removePrestation(idx: number) {
     setForm(f => ({ ...f, prestations: f.prestations.filter((_,i) => i!==idx) }));
@@ -203,14 +217,15 @@ export default function CaisseComptabilitePage() {
   function startEdit(f: Facture) {
     setEditing(f);
     const pres = normPrestations(f.prestations);
-    setTypeFiltre(tarifs[pres[0]?.id]?.type ?? 'vente');
+    const t: TypeNote = f.estCommande ? 'commande' : (pres[0]?.prix != null || tarifs[pres[0]?.id]?.type === 'achat') ? 'achat' : 'vente';
+    setTypeFiltre(t);
     setForm({ medecin:f.medecin??defaultMedecin, patientNom:f.patientNom, dateSeance:f.dateSeance, prestations:pres, payeur:f.payeur??'Civil', statut:f.statut, notes:f.notes });
   }
   function resetForm() { setForm({ ...EMPTY_FORM, medecin:defaultMedecin, dateSeance:rpDate() }); setTypeFiltre('vente'); }
   function cancelEdit() { setEditing(null); resetForm(); }
 
   function submit() {
-    const fac: Omit<Facture,'id'|'createdAt'> = { medecin:form.medecin, patientNom:form.patientNom, dateSeance:form.dateSeance, prestations:form.prestations, montant:montantAuto, payeur:form.payeur, statut:form.statut, notes:form.notes };
+    const fac: Omit<Facture,'id'|'createdAt'> = { medecin:form.medecin, patientNom:form.patientNom, dateSeance:form.dateSeance, prestations:form.prestations, montant:montantAuto, payeur:form.payeur, statut:form.statut, notes:form.notes, estCommande: typeFiltre === 'commande' };
     if (editing) { setItems(p=>p.map(h=>h.id===editing.id?{...editing,...fac}:h)); setEditing(null); }
     else         { setItems(p=>[{id:uid(),createdAt:new Date().toISOString(),...fac},...p]); }
     resetForm();
@@ -238,12 +253,15 @@ export default function CaisseComptabilitePage() {
           <div style={{ flex:1, minWidth:0 }}>
             <div style={{ fontFamily:DISPLAY, fontSize: 18, color:T.text, marginBottom:4 }}>{f.patientNom}</div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+              {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 13, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
               {pres.map((p,i) => {
                 const cat = tarifs[p.id];
-                const isAchat = cat?.type === 'achat';
+                const nom = p.nom ?? cat?.nom ?? p.id;
+                const prix = p.prix ?? cat?.prix ?? 0;
+                const isAchat = p.prix != null || cat?.type === 'achat';
                 return (
                   <span key={i} style={{ fontFamily:MONO, fontSize: 13, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
-                    {isAchat ? '🛒 ' : ''}{cat?.nom ?? p.id}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$((cat?.prix ?? 0) * p.qty)}</span>
+                    {isAchat ? '🛒 ' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$(prix * p.qty)}</span>
                   </span>
                 );
               })}
@@ -276,7 +294,7 @@ export default function CaisseComptabilitePage() {
           <button onClick={()=>router.push('/redm')} style={{ fontFamily:MONO, fontSize: 15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.16em' }}>DISPENSAIRE · COMPTABILITÉ</span>
         </div>
-        <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 }}>💰 Caisse et Comptabilité</h1>
+        <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 }}>💰 Comptabilité</h1>
         <p style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
           REGISTRE DES HONORAIRES, FACTURES ET RECETTES DU DISPENSAIRE
         </p>
@@ -307,30 +325,51 @@ export default function CaisseComptabilitePage() {
                 <div style={{ display:'flex', gap:6, marginBottom:10 }}>
                   <button
                     onClick={()=>{ setTypeFiltre('vente'); setForm(f=>({...f, prestations:[{ id: categoriesVente[0]?.id ?? 'Consultation', qty:1 }]})); }}
-                    style={{ flex:1, fontFamily:MONO, fontSize:13, letterSpacing:'0.08em', padding:'9px', cursor:'pointer', background: typeFiltre==='vente' ? 'rgba(90,152,88,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='vente' ? '#5A9858' : T.border}`, color: typeFiltre==='vente' ? '#A8B991' : T.dim }}>
+                    style={{ flex:1, fontFamily:MONO, fontSize:12, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='vente' ? 'rgba(90,152,88,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='vente' ? '#5A9858' : T.border}`, color: typeFiltre==='vente' ? '#A8B991' : T.dim }}>
                     💰 VENTE
                   </button>
                   <button
-                    onClick={()=>{ setTypeFiltre('achat'); setForm(f=>({...f, prestations:[{ id: categoriesAchat[0]?.id ?? '', qty:1 }]})); }}
-                    style={{ flex:1, fontFamily:MONO, fontSize:13, letterSpacing:'0.08em', padding:'9px', cursor:'pointer', background: typeFiltre==='achat' ? 'rgba(200,132,90,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='achat' ? '#C8845A' : T.border}`, color: typeFiltre==='achat' ? '#C8845A' : T.dim }}>
+                    onClick={()=>{ setTypeFiltre('commande'); setForm(f=>({...f, prestations:[{ id: categoriesVente[0]?.id ?? 'Consultation', qty:1 }]})); }}
+                    style={{ flex:1, fontFamily:MONO, fontSize:12, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='commande' ? 'rgba(209,183,124,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='commande' ? T.gold : T.border}`, color: typeFiltre==='commande' ? T.gold : T.dim }}>
+                    📦 COMMANDE
+                  </button>
+                  <button
+                    onClick={()=>{ setTypeFiltre('achat'); setForm(f=>({...f, prestations:[{ id: uid(), qty:1, nom:'', prix:0 }]})); }}
+                    style={{ flex:1, fontFamily:MONO, fontSize:12, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='achat' ? 'rgba(200,132,90,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='achat' ? '#C8845A' : T.border}`, color: typeFiltre==='achat' ? '#C8845A' : T.dim }}>
                     🛒 ACHAT
                   </button>
                 </div>
                 <p style={{ fontFamily:MONO, fontSize:11, color:T.dim, letterSpacing:'0.04em', margin:'-6px 0 10px' }}>
-                  {typeFiltre==='vente' ? 'AJOUTÉ À LA CAISSE ET AU COMPTE DU DISPENSAIRE' : 'RETIRÉ DE LA CAISSE ET DU COMPTE DU DISPENSAIRE'}
+                  {typeFiltre==='vente' && 'AJOUTÉ À LA CAISSE ET AU COMPTE DU DISPENSAIRE (SELON RÉPARTITION)'}
+                  {typeFiltre==='commande' && 'AJOUTÉ EN TOTALITÉ (100%) AU COMPTE DU DISPENSAIRE'}
+                  {typeFiltre==='achat' && 'RETIRÉ DE LA CAISSE ET DU COMPTE DU DISPENSAIRE'}
                 </p>
                 <label style={lbl}>ÉLÉMENT(S)</label>
                 <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
-                  {form.prestations.map((p,idx) => (
-                    <div key={idx} style={{ display:'flex', gap:5 }}>
-                      <select style={{...inp,flex:1,cursor:'pointer'}} value={p.id} onChange={e=>setPrestation(idx,e.target.value)}>
-                        {(typeFiltre==='vente' ? categoriesVente : categoriesAchat).map(c=><option key={c.id} value={c.id}>{c.nom} — {fmt$(c.prix)}</option>)}
-                      </select>
-                      <input type="number" min={1} max={99} value={p.qty} onChange={e=>setPrestationQty(idx,Number(e.target.value))}
-                        style={{...inp, width:56, flexShrink:0, textAlign:'center', padding:'9px 6px'}} title="Quantité" />
-                      {form.prestations.length > 1 && <button onClick={()=>removePrestation(idx)} style={{ fontFamily:MONO, fontSize: 15, padding:'6px 9px', cursor:'pointer', background:'transparent', color:'#8B6060', border:`1px solid rgba(139,64,64,0.3)` }}>✕</button>}
-                    </div>
-                  ))}
+                  {typeFiltre === 'achat' ? (
+                    form.prestations.map((p,idx) => (
+                      <div key={idx} style={{ display:'flex', gap:5 }}>
+                        <input value={p.nom ?? ''} onChange={e=>setPrestationNom(idx,e.target.value)} placeholder="Nom de l'article"
+                          style={{...inp, flex:2}} />
+                        <input type="number" min={0} step={0.01} value={p.prix ?? 0} onChange={e=>setPrestationPrix(idx,Number(e.target.value))}
+                          style={{...inp, width:78, flexShrink:0, textAlign:'center', padding:'9px 6px'}} title="Prix unitaire" placeholder="Prix" />
+                        <input type="number" min={1} max={99} value={p.qty} onChange={e=>setPrestationQty(idx,Number(e.target.value))}
+                          style={{...inp, width:56, flexShrink:0, textAlign:'center', padding:'9px 6px'}} title="Quantité" />
+                        {form.prestations.length > 1 && <button onClick={()=>removePrestation(idx)} style={{ fontFamily:MONO, fontSize: 15, padding:'6px 9px', cursor:'pointer', background:'transparent', color:'#8B6060', border:`1px solid rgba(139,64,64,0.3)` }}>✕</button>}
+                      </div>
+                    ))
+                  ) : (
+                    form.prestations.map((p,idx) => (
+                      <div key={idx} style={{ display:'flex', gap:5 }}>
+                        <select style={{...inp,flex:1,cursor:'pointer'}} value={p.id} onChange={e=>setPrestation(idx,e.target.value)}>
+                          {categoriesVente.map(c=><option key={c.id} value={c.id}>{c.nom} — {fmt$(c.prix)}</option>)}
+                        </select>
+                        <input type="number" min={1} max={99} value={p.qty} onChange={e=>setPrestationQty(idx,Number(e.target.value))}
+                          style={{...inp, width:56, flexShrink:0, textAlign:'center', padding:'9px 6px'}} title="Quantité" />
+                        {form.prestations.length > 1 && <button onClick={()=>removePrestation(idx)} style={{ fontFamily:MONO, fontSize: 15, padding:'6px 9px', cursor:'pointer', background:'transparent', color:'#8B6060', border:`1px solid rgba(139,64,64,0.3)` }}>✕</button>}
+                      </div>
+                    ))
+                  )}
                   {form.prestations.length < 10 && <button onClick={addPrestation} style={{ fontFamily:MONO, fontSize: 13, padding:'5px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px dashed ${T.border}` }}>+ AJOUTER UN ÉLÉMENT</button>}
                 </div>
               </div>

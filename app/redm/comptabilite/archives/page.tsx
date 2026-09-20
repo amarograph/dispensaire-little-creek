@@ -21,18 +21,22 @@ function categoriesToMap(categories: TarifCategory[]): Record<string, TarifCateg
 const STATUT_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#A8B991', 'EN ATTENTE': '#D1B77C', 'ANNULÉ': '#8B4040' };
 const STATUT_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
 
-interface PrestationItem { id: string; qty: number; }
+interface PrestationItem { id: string; qty: number; nom?: string; prix?: number; }
 function normPrestations(raw: unknown): PrestationItem[] {
   if (!Array.isArray(raw) || raw.length === 0) return [{ id: 'Consultation', qty: 1 }];
-  return raw.map(p => typeof p === 'string'
-    ? { id: p, qty: 1 }
-    : { id: (p as PrestationItem).id, qty: Math.max(1, Math.min(99, Number((p as PrestationItem).qty) || 1)) });
+  return raw.map(p => {
+    if (typeof p === 'string') return { id: p, qty: 1 };
+    const o = p as PrestationItem;
+    const qty = Math.max(1, Math.min(99, Number(o.qty) || 1));
+    return o.prix != null ? { id: o.id, qty, nom: o.nom, prix: o.prix } : { id: o.id, qty };
+  });
 }
 
 interface Facture {
   id: string; medecin: string; patientNom: string; dateSeance: string;
   prestations: (string | PrestationItem)[]; montant: number;
   payeur: Payeur; statut: StatutPaiement; notes: string; createdAt: string;
+  estCommande?: boolean;
 }
 interface SemaineArchivee {
   id: string; weekLabel: string; weekStart: string;
@@ -207,12 +211,15 @@ export default function ArchivesCaisseComptabilitePage() {
                   <div style={{ flex:1, minWidth:0 }}>
                     <div style={{ fontFamily:DISPLAY, fontSize:20, color:T.text, marginBottom:6 }}>{f.patientNom}</div>
                     <div style={{ display:'flex', gap:6, flexWrap:'wrap', alignItems:'center' }}>
+                      {f.estCommande && <span style={{ fontFamily:MONO, fontSize:12, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'2px 8px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
                       {pres.map((p,i) => {
                         const cat = tarifs[p.id];
-                        const isAchat = cat?.type === 'achat';
+                        const nom = p.nom ?? cat?.nom ?? p.id;
+                        const prix = p.prix ?? cat?.prix ?? 0;
+                        const isAchat = p.prix != null || cat?.type === 'achat';
                         return (
                           <span key={i} style={{ fontFamily:MONO, fontSize:13, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'2px 8px', border: `1px solid ${isAchat ? 'rgba(200,132,90,0.25)' : 'rgba(209,183,124,0.20)'}` }}>
-                            {isAchat ? '🛒 ' : ''}{cat?.nom ?? p.id}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$((cat?.prix ?? 0) * p.qty)}</span>
+                            {isAchat ? '🛒 ' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$(prix * p.qty)}</span>
                           </span>
                         );
                       })}
@@ -376,7 +383,7 @@ export default function ArchivesCaisseComptabilitePage() {
       )}
 
       <div style={{ marginTop:24, fontFamily:MONO, fontSize:12, color:T.dim, textAlign:'center', padding:'12px', borderTop:`1px solid ${T.border}` }}>
-        ↻ Les semaines passées s'archivent automatiquement à chaque ouverture de la page Caisse et Comptabilité
+        ↻ Les semaines passées s'archivent automatiquement à chaque ouverture de la page Comptabilité
       </div>
     </div>
   );
