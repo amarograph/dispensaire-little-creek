@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
-import { canRead, isAdmin, ROUTE_SECTION } from '@/lib/permissions';
+import { canRead, isAdmin, isDirection, ROUTE_SECTION } from '@/lib/permissions';
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -73,10 +73,13 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    if (request.nextUrl.pathname.startsWith('/admin') && !isAdmin(roles)) {
-      const url = request.nextUrl.clone();
-      url.pathname = '/redm';
-      return NextResponse.redirect(url);
+    if (request.nextUrl.pathname.startsWith('/admin')) {
+      const whitelistOnly = request.nextUrl.pathname.startsWith('/admin/access') && isDirection(roles);
+      if (!isAdmin(roles) && !whitelistOnly) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/redm';
+        return NextResponse.redirect(url);
+      }
     }
 
     if (!isAdmin(roles)) {

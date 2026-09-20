@@ -4,6 +4,7 @@ import { isAdmin } from '@/lib/permissions';
 const DIRECTION_ROLES = ['redm_directeur', 'redm_co_directeur'];
 const DIRECTION_READ_ROLES = [...DIRECTION_ROLES, 'redm_medecin_chef'];
 const CABINET_ROLES = ['redm_therapeute', 'redm_directeur', 'redm_co_directeur'];
+const OBSTETRIQUE_ROLES = ['redm_obstetricien', 'redm_directeur', 'redm_co_directeur'];
 
 /** Direction / co-direction (ou dev) — accès complet aux routes d'admin RedM. */
 export async function requireDirectionActor(): Promise<{ id: string; name: string } | null> {
@@ -22,7 +23,7 @@ export async function requireDirectionRead(): Promise<string | null> {
   return ok ? session.discordId : null;
 }
 
-/** Thérapeute / directeur (ou dev) — accès au cabinet thérapeutique. */
+/** Thérapeute / directeur / co-directeur (ou dev) — accès au cabinet thérapeutique. */
 export async function requireCabinetActor(): Promise<{ discordId: string; isAdmin: boolean } | null> {
   const session = await getApiSession();
   if (!session) return null;
@@ -32,9 +33,19 @@ export async function requireCabinetActor(): Promise<{ discordId: string; isAdmi
   return { discordId: session.discordId, isAdmin: admin };
 }
 
+/** Obstétricien / directeur / co-directeur (ou dev) — accès à l'obstétrique. isAdmin=true voit tous les dossiers (direction/dev). */
+export async function requireObstetriqueActor(): Promise<{ discordId: string; isAdmin: boolean } | null> {
+  const session = await getApiSession();
+  if (!session) return null;
+  const admin = isAdmin(session.roles) || session.roles.some(r => DIRECTION_ROLES.includes(r));
+  const ok = admin || session.roles.some(r => OBSTETRIQUE_ROLES.includes(r));
+  if (!ok) return null;
+  return { discordId: session.discordId, isAdmin: admin };
+}
+
 const REDM_STAFF_ROLES = [
   'redm_directeur', 'redm_co_directeur', 'redm_medecin_chef', 'redm_medecin',
-  'redm_infirmier', 'redm_apprenti', 'redm_therapeute',
+  'redm_infirmier', 'redm_apprenti', 'redm_therapeute', 'redm_obstetricien',
 ];
 
 /** N'importe quel membre du personnel RedM (ou dev) — profil, portrait… */

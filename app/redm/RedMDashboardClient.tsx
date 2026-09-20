@@ -16,6 +16,7 @@ const MODULES = [
   { id: 'bibliotheque', href: '/redm/bibliotheque',  icon: '📚', label: 'Bibliothèque',           sub: 'TRAITÉS & MANUELS', desc: "Traités médicaux, formulaires de remèdes et guides de soins de l'époque.",    color: '#AAB9C6', badge: 'REF' },
   { id: 'agenda',       href: '/redm/agenda',        icon: '📅', label: 'Agenda',                 sub: 'RENDEZ-VOUS',       desc: 'Planifier et consulter les rendez-vous du dispensaire. RDV du cabinet anonymisés.', color: '#A8B991', badge: 'AGD' },
   { id: 'cabinet',      href: '/redm/cabinet',       icon: '🛋', label: 'Cabinet Thérapeutique',  sub: "SOINS DE L'ÂME",   desc: "Suivi psychologique, consultations de l'esprit et thérapies de l'époque.",   color: '#A8B991', badge: 'PSY' },
+  { id: 'obstetrique',  href: '/redm/obstetrique',   icon: '🤱', label: 'Obstétrique',            sub: 'ACCÈS RÉSERVÉ',    desc: 'Suivi de grossesse, accouchements et soins maternels — obstétricien, direction & co-direction.', color: '#A8B991', badge: 'OBS' },
   { id: 'direction',    href: '/redm/direction',     icon: '🏛', label: 'Direction',              sub: 'ACCÈS RÉSERVÉ',     desc: 'Comptabilité et gestion administrative du dispensaire — direction & co-direction.', color: '#D1B77C', badge: 'DIR' },
 ];
 
@@ -54,8 +55,12 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
   const router = useRouter();
   const isAdmin = checkIsAdmin(roles);
   const canAccessCabinet = isAdmin || roles.some(r => ['redm_therapeute', 'redm_directeur', 'redm_co_directeur'].includes(r));
+  const canAccessObstetrique = isAdmin || canRead(roles, 'redm_obstetrique');
   const canAccessDirection = isAdmin || canRead(roles, 'redm_direction');
-  const visibleModules = MODULES.filter(m => m.id !== 'direction' || canAccessDirection);
+  const visibleModules = MODULES.filter(m =>
+    (m.id !== 'direction' || canAccessDirection) &&
+    (m.id !== 'obstetrique' || canAccessObstetrique)
+  );
   const [hover, setHover] = useState<string | null>(null);
   const [time, setTime] = useState('──:──');
   const [date, setDate] = useState('');

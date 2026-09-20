@@ -33,6 +33,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
   const isPreparateurOnly  = roles.length === 1 && roles[0] === 'redm_preparateur_caisse';
   const hasCaisseAccess    = caisseRateForRoles(roles) !== null;
   const hasDirectionAccess = checkIsAdmin(roles) || canRead(roles, 'redm_direction');
+  const hasObstetriqueAccess = checkIsAdmin(roles) || canRead(roles, 'redm_obstetrique');
 
   const navItems = isPreparateurOnly
     ? [{ href: '/redm/registre-caisses', label: 'Registre des Caisses', icon: '💰' }]
@@ -44,6 +45,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
         { href: '/redm/bibliotheque',     label: 'Bibliothèque',          icon: '📚' },
         { href: '/redm/agenda',           label: 'Agenda',                icon: '📅' },
         { href: '/redm/cabinet',          label: 'Cabinet Thérapeutique', icon: '🛋' },
+        ...(hasObstetriqueAccess ? [{ href: '/redm/obstetrique', label: 'Obstétrique', icon: '🤱' }] : []),
         ...(hasDirectionAccess ? [{ href: '/redm/direction', label: 'Direction', icon: '🏛' }] : []),
       ];
 

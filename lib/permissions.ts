@@ -20,18 +20,19 @@ export type Section =
   | 'redm_comptabilite'  // Comptabilité dispensaire
   | 'redm_guide'         // Guide RP
   | 'redm_cabinet'       // Cabinet thérapeutique
+  | 'redm_obstetrique'   // Obstétrique
   | 'redm_direction';    // Direction (réservé direction/co-direction)
 
 type PermMap = Record<Section, PermLevel>;
 
 const ALL_MANAGER: PermMap = {
   redm_certificats: 3, redm_archives: 3, redm_bibliotheque: 3,
-  redm_contexte: 3, redm_comptabilite: 3, redm_guide: 3, redm_cabinet: 3, redm_direction: 3,
+  redm_contexte: 3, redm_comptabilite: 3, redm_guide: 3, redm_cabinet: 3, redm_obstetrique: 3, redm_direction: 3,
 };
 
 const NONE_MAP: PermMap = {
   redm_certificats: 0, redm_archives: 0, redm_bibliotheque: 0,
-  redm_contexte: 0, redm_comptabilite: 0, redm_guide: 0, redm_cabinet: 0, redm_direction: 0,
+  redm_contexte: 0, redm_comptabilite: 0, redm_guide: 0, redm_cabinet: 0, redm_obstetrique: 0, redm_direction: 0,
 };
 
 export const ROLES = [
@@ -44,6 +45,7 @@ export const ROLES = [
   'redm_infirmier',
   'redm_preparateur_caisse',
   'redm_therapeute',
+  'redm_obstetricien',
 ] as const;
 
 export type Role = typeof ROLES[number];
@@ -66,6 +68,7 @@ export const ROLE_LABELS: Record<Role, string> = {
   redm_infirmier: 'Infirmier',
   redm_preparateur_caisse: 'Préparateur de caisse',
   redm_therapeute: 'Thérapeute',
+  redm_obstetricien: 'Obstétricien',
 };
 
 export function isRole(value: string): value is Role {
@@ -153,6 +156,20 @@ export const ROLE_PERMISSIONS: Record<Role, PermMap> = {
     ...NONE_MAP,
     redm_comptabilite: PERM.EDITOR,
   },
+
+  // ── Obstétricien dispensaire ─────────────────────────────────────────────
+  redm_obstetricien: {
+    ...NONE_MAP,
+    redm_certificats:  PERM.READ,
+    redm_archives:     PERM.EDITOR,
+    redm_bibliotheque: PERM.READ,
+    redm_contexte:     PERM.READ,
+    redm_guide:        PERM.READ,
+    redm_cabinet:      PERM.NONE,
+    redm_obstetrique:  PERM.EDITOR,
+    redm_comptabilite: PERM.NONE,
+    redm_direction:    PERM.NONE,
+  },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -187,6 +204,7 @@ export const ROUTE_SECTION: Array<{ prefix: string; section: Section }> = [
   { prefix: '/redm/direction/comptabilite', section: 'redm_comptabilite' },
   { prefix: '/redm/direction',            section: 'redm_direction'     },
   { prefix: '/redm/cabinet',              section: 'redm_cabinet'       },
+  { prefix: '/redm/obstetrique',          section: 'redm_obstetrique'   },
   { prefix: '/redm/certificats',          section: 'redm_certificats'   },
   { prefix: '/redm/archives',             section: 'redm_archives'      },
   { prefix: '/redm/bibliotheque',         section: 'redm_bibliotheque'  },
