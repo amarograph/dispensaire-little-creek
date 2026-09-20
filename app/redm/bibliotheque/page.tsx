@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './bibliotheque.css';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
+import { isAdmin } from '@/lib/permissions';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
@@ -8058,6 +8060,37 @@ const BUILTIN_SHELVES: { label: string; items: { id: string; icon: string; t1: s
 
 const BUILTIN_IDS = new Set(BUILTIN_SHELVES.flatMap(s => s.items.map(i => i.id)));
 
+interface LayoutGroup { label: string; items: { id: string; title: string }[] }
+interface LayoutOverride { groups: LayoutGroup[] }
+
+function bookMeta(id: string, categories: BiblioCategorie[]) {
+  const builtin = BUILTIN_SHELVES.flatMap(s => s.items).find(i => i.id === id);
+  if (builtin) return { icon: builtin.icon, col: builtin.col, defaultTitle: [builtin.t1, builtin.t2].filter(Boolean).join(' ') };
+  const cat = categories.find(c => c.id === id);
+  return { icon: cat?.icon ?? '📖', col: undefined as string | undefined, defaultTitle: cat?.nom ?? id };
+}
+
+function defaultGroups(categories: BiblioCategorie[]): LayoutGroup[] {
+  const userCats = categories.filter(c => !BUILTIN_IDS.has(c.id));
+  return [
+    ...BUILTIN_SHELVES.map(s => ({ label: s.label, items: s.items.map(b => ({ id: b.id, title: categories.find(c => c.id === b.id)?.nom ?? [b.t1, b.t2].filter(Boolean).join(' ') })) })),
+    { label: 'Vos documents', items: userCats.map(c => ({ id: c.id, title: c.nom })) },
+  ];
+}
+
+function effectiveGroups(categories: BiblioCategorie[], override: LayoutOverride | null): LayoutGroup[] {
+  if (!override?.groups?.length) return defaultGroups(categories);
+  const base = override.groups;
+  const knownIds = new Set(base.flatMap(g => g.items.map(i => i.id)));
+  const missing = categories.filter(c => !knownIds.has(c.id));
+  if (!missing.length) return base;
+  const extraItems = missing.map(c => ({ id: c.id, title: c.nom }));
+  const hasVosDocs = base.some(g => g.label === 'Vos documents');
+  return hasVosDocs
+    ? base.map(g => g.label === 'Vos documents' ? { ...g, items: [...g.items, ...extraItems] } : g)
+    : [...base, { label: 'Vos documents', items: extraItems }];
+}
+
 const BOOK_COLS: Record<string, { bg: string; spine: string; border: string }> = {
   rouge:  { bg: 'linear-gradient(160deg,#2e0a0a,#1e0404 55%,#280808)', spine: '#8C2828', border: '#4a0e0e' },
   vert:   { bg: 'linear-gradient(160deg,#0c2a0a,#071904 55%,#0a2208)', spine: '#3CB83A', border: '#164e14' },
@@ -8128,6 +8161,7 @@ function ShelfRow({ label, children }: { label: string; children: React.ReactNod
 function BiblioEtageres({
   categories, openCatId, setOpenCatId,
   creatingCat, setCreatingCat, newCatNom, setNewCatNom, newCatIcon, setNewCatIcon, createCategory,
+  devMode, layoutOverride, onSaveLayout,
 }: {
   categories: BiblioCategorie[];
   openCatId: string | null;
@@ -8139,14 +8173,56 @@ function BiblioEtageres({
   newCatIcon: string;
   setNewCatIcon: (v: string) => void;
   createCategory: () => void;
+  devMode: boolean;
+  layoutOverride: LayoutOverride | null;
+  onSaveLayout: (groups: LayoutGroup[]) => void;
 }) {
   const [query, setQuery] = useState('');
   const [section, setSection] = useState('Tout le catalogue');
-  const userCats = categories.filter(c => !BUILTIN_IDS.has(c.id));
-  const groups = [...BUILTIN_SHELVES.map(s => ({ label: s.label, items: s.items.map(b => ({ id: b.id, title: categories.find(c => c.id === b.id)?.nom ?? [b.t1, b.t2].filter(Boolean).join(' ') })) })), { label: 'Vos documents', items: userCats.map(c => ({ id: c.id, title: c.nom })) }];
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingVal, setEditingVal] = useState('');
+  const dragRef = useRef<{ fromLabel: string; id: string } | null>(null);
+
+  const groups = effectiveGroups(categories, layoutOverride);
   const normalize = (v: string) => v.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const visible = groups.filter(g => section === 'Tout le catalogue' || g.label === section).map(g => ({ ...g, items: g.items.filter(b => normalize(b.title).includes(normalize(query))) })).filter(g => g.items.length);
   const total = groups.reduce((n, g) => n + g.items.length, 0);
+
+  function startRename(id: string, current: string) {
+    if (!devMode) return;
+    setEditingId(id);
+    setEditingVal(current);
+  }
+  function commitRename() {
+    if (!editingId) return;
+    const val = editingVal.trim();
+    if (val) {
+      const next = groups.map(g => ({ ...g, items: g.items.map(it => it.id === editingId ? { ...it, title: val } : it) }));
+      onSaveLayout(next);
+    }
+    setEditingId(null);
+  }
+
+  function handleDrop(toLabel: string, beforeId: string | null) {
+    const drag = dragRef.current;
+    dragRef.current = null;
+    if (!devMode || !drag) return;
+    const next = groups.map(g => ({ ...g, items: [...g.items] }));
+    const fromGroup = next.find(g => g.label === drag.fromLabel);
+    const toGroup = next.find(g => g.label === toLabel);
+    if (!fromGroup || !toGroup) return;
+    const idx = fromGroup.items.findIndex(it => it.id === drag.id);
+    if (idx === -1) return;
+    const [moved] = fromGroup.items.splice(idx, 1);
+    if (beforeId) {
+      const insertAt = toGroup.items.findIndex(it => it.id === beforeId);
+      toGroup.items.splice(insertAt === -1 ? toGroup.items.length : insertAt, 0, moved);
+    } else {
+      toGroup.items.push(moved);
+    }
+    onSaveLayout(next);
+  }
+
   return <div className="library-catalogue">
     <header className="library-heading">
       <div><p className="library-eyebrow">LITTLE CREEK · COLLECTION MÉDICALE · 1890</p><h1>La Bibliothèque</h1><p className="library-intro">Le savoir au service des soins.</p></div>
@@ -8160,9 +8236,56 @@ function BiblioEtageres({
       <div className="library-main">
         <div className="library-tools"><label><span>Rechercher un ouvrage</span><input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Titre, discipline, mot-clé…" /></label><button className="library-add" onClick={() => setCreatingCat(!creatingCat)}>Nouvelle catégorie</button></div>
         {creatingCat && <form className="library-create" onSubmit={e => { e.preventDefault(); createCategory(); }}><label>Nom de la catégorie<input value={newCatNom} onChange={e => setNewCatNom(e.target.value)} placeholder="Ex. Pharmacopée" autoFocus required /></label><button type="submit">Créer</button><button type="button" onClick={() => { setCreatingCat(false); setNewCatNom(''); }}>Annuler</button></form>}
+        {devMode && <div style={{ margin: '0 0 14px', padding: '8px 14px', background: 'rgba(209,183,124,0.10)', border: `1px solid ${T.gold}`, fontFamily: MONO, fontSize: 12, color: T.gold, letterSpacing: '0.06em' }}>MODE DEV — glissez un ouvrage pour le déplacer, cliquez sur ✎ pour renommer une catégorie</div>}
         <div aria-live="polite" className="library-count">{visible.reduce((n, g) => n + g.items.length, 0)} ouvrages · {section}</div>
         {!visible.length && <p className="library-empty">Aucun ouvrage dans cette sélection. Essayez un autre titre ou une autre collection.</p>}
-        {visible.map(g => <section className="library-section" key={g.label}><div className="library-section-heading"><h2>{g.label}</h2><span>{String(g.items.length).padStart(2, '0')}</span></div><div className="library-grid">{g.items.map(b => <button className="library-volume" title={b.title} aria-label={b.title} key={b.id} onClick={() => setOpenCatId(b.id)}><span className="library-volume-label">DISPENSAIRE DE LITTLE CREEK</span><h3>{(() => { const book = BUILTIN_SHELVES.flatMap(s => s.items).find(i => i.id === b.id); return book ? [book.t1, book.t2].filter(Boolean).join(' ') : b.title; })()}</h3><span className="library-volume-bottom"><span>LC</span><span aria-hidden="true">→</span></span></button>)}</div></section>)}
+        {visible.map(g => (
+          <section className="library-section" key={g.label}>
+            <div className="library-section-heading"><h2>{g.label}</h2><span>{String(g.items.length).padStart(2, '0')}</span></div>
+            <div
+              className="library-grid"
+              onDragOver={e => devMode && e.preventDefault()}
+              onDrop={e => { e.preventDefault(); handleDrop(g.label, null); }}
+            >
+              {g.items.map(b => (
+                <div
+                  key={b.id}
+                  draggable={devMode && editingId !== b.id}
+                  onDragStart={() => { dragRef.current = { fromLabel: g.label, id: b.id }; }}
+                  onDragOver={e => devMode && e.preventDefault()}
+                  onDrop={e => { e.preventDefault(); e.stopPropagation(); handleDrop(g.label, b.id); }}
+                  style={{ position: 'relative', cursor: devMode ? 'grab' : undefined }}
+                >
+                  {devMode && editingId === b.id ? (
+                    <div className="library-volume" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
+                      <input
+                        autoFocus
+                        value={editingVal}
+                        onChange={e => setEditingVal(e.target.value)}
+                        onBlur={commitRename}
+                        onKeyDown={e => { if (e.key === 'Enter') commitRename(); if (e.key === 'Escape') setEditingId(null); }}
+                        style={{ width: '100%', fontFamily: MONO, fontSize: 12, background: 'rgba(0,0,0,0.4)', border: `1px solid ${T.gold}`, color: T.text, padding: '6px 8px', outline: 'none' }}
+                      />
+                    </div>
+                  ) : (
+                    <button className="library-volume" title={b.title} aria-label={b.title} onClick={() => !devMode && setOpenCatId(b.id)}>
+                      <span className="library-volume-label">DISPENSAIRE DE LITTLE CREEK</span>
+                      <h3>{b.title}</h3>
+                      <span className="library-volume-bottom"><span>LC</span><span aria-hidden="true">→</span></span>
+                    </button>
+                  )}
+                  {devMode && editingId !== b.id && (
+                    <button
+                      onClick={() => startRename(b.id, b.title)}
+                      title="Renommer"
+                      style={{ position: 'absolute', top: 4, right: 4, width: 22, height: 22, fontSize: 12, background: 'rgba(0,0,0,0.55)', border: `1px solid ${T.gold}`, color: T.gold, cursor: 'pointer', borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}
+                    >✎</button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
       </div>
     </div>
   </div>;
@@ -8171,6 +8294,10 @@ function BiblioEtageres({
 export default function BibliothequePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { roles } = useRedmSession();
+  const canDev = isAdmin(roles);
+  const [devMode, setDevMode] = useState(false);
+  const [layoutOverride, setLayoutOverride] = useState<LayoutOverride | null>(null);
   const [categories, setCategories] = useState<BiblioCategorie[]>(DEFAULT_CATEGORIES);
   const [hydrated, setHydrated] = useState(false);
 
@@ -8202,6 +8329,23 @@ export default function BibliothequePage() {
   useEffect(() => {
     if (hydrated) save(categories);
   }, [categories, hydrated]);
+
+  useEffect(() => {
+    fetch('/api/redm/bibliotheque-layout')
+      .then(r => r.json())
+      .then(d => { if (d && d.groups) setLayoutOverride(d); })
+      .catch(() => {});
+  }, []);
+
+  function saveLayout(groups: LayoutGroup[]) {
+    const next = { groups };
+    setLayoutOverride(next);
+    fetch('/api/redm/bibliotheque-layout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(next),
+    }).catch(() => {});
+  }
 
   const openCat = categories.find(c => c.id === openCatId) ?? null;
   const reglementCat = categories.find(c => c.id === 'reglement-interne') ?? null;
@@ -8302,6 +8446,31 @@ export default function BibliothequePage() {
         <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.16em' }}>
           DISPENSAIRE · BIBLIOTHÈQUE{openCat ? ` · ${openCat.nom.toUpperCase()}` : ''}
         </span>
+        {canDev && !openCat && (
+          <button
+            onClick={() => setDevMode(v => !v)}
+            title="Basculer le mode dev"
+            style={{
+              marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8,
+              fontFamily: MONO, fontSize: 12, letterSpacing: '0.08em', cursor: 'pointer',
+              padding: '7px 14px', borderRadius: 20,
+              background: devMode ? 'rgba(209,183,124,0.18)' : 'rgba(255,255,255,0.04)',
+              border: `1px solid ${devMode ? T.gold : T.border}`,
+              color: devMode ? T.gold : T.muted,
+            }}
+          >
+            <span style={{
+              width: 30, height: 16, borderRadius: 10, position: 'relative', flexShrink: 0,
+              background: devMode ? T.gold : 'rgba(255,255,255,0.15)', transition: 'background 0.15s',
+            }}>
+              <span style={{
+                position: 'absolute', top: 2, left: devMode ? 16 : 2, width: 12, height: 12, borderRadius: '50%',
+                background: '#102B3B', transition: 'left 0.15s',
+              }} />
+            </span>
+            MODE DEV {devMode ? 'ON' : 'OFF'}
+          </button>
+        )}
       </div>
 
       {!openCat && (
@@ -8316,6 +8485,9 @@ export default function BibliothequePage() {
           newCatIcon={newCatIcon}
           setNewCatIcon={setNewCatIcon}
           createCategory={createCategory}
+          devMode={canDev && devMode}
+          layoutOverride={layoutOverride}
+          onSaveLayout={saveLayout}
         />
       )}
 
