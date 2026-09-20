@@ -207,9 +207,9 @@ export default function ArchivesCaisseComptabilitePage() {
                     <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>{f.dateSeance.slice(6)}</div>
                   </div>
 
-                  {/* Patient + prestations */}
+                  {/* Médecin/soignant + prestations */}
                   <div style={{ flex:1, minWidth:0 }}>
-                    <div style={{ fontFamily:DISPLAY, fontSize:20, color:T.text, marginBottom:6 }}>{f.patientNom}</div>
+                    <div style={{ fontFamily:DISPLAY, fontSize:20, color:T.text, marginBottom:6 }}>{f.medecin || '— Non assigné —'}</div>
                     <div style={{ display:'flex', gap:6, flexWrap:'wrap', alignItems:'center' }}>
                       {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'2px 8px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
                       {pres.map((p,i) => {
@@ -224,7 +224,6 @@ export default function ArchivesCaisseComptabilitePage() {
                         );
                       })}
                       <span style={{ fontFamily:MONO, fontSize: 14, color:pcol, background:`${pcol}18`, padding:'2px 7px', border:`1px solid ${pcol}40` }}>{f.payeur}</span>
-                      {f.medecin && <span style={{ fontFamily:MONO, fontSize: 14, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'2px 8px', border:'1px solid rgba(155,106,200,0.20)' }}>👤 {f.medecin}</span>}
                       {f.notes && <span style={{ fontFamily:BODY, fontSize:14, color:T.muted, fontStyle:'italic' }}>{f.notes}</span>}
                     </div>
                   </div>

@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
+import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
@@ -100,8 +102,12 @@ const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: '
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
 const EMPTY_FORM = { medecin: '', patientNom: '', dateSeance: '', prestations: [{ id: 'Consultation', qty: 1 }] as PrestationItem[], payeur: 'Civil' as Payeur, statut: 'EN ATTENTE' as StatutPaiement, notes: '' };
 
+const ASSIGNE_AUTRE_ROLES = ['redm_medecin_chef', 'redm_co_directeur', 'redm_directeur'];
+
 export default function CaisseComptabilitePage() {
   const router = useRouter();
+  const { roles } = useRedmSession();
+  const peutAssignerAutrui = checkIsAdmin(roles) || roles.some(r => ASSIGNE_AUTRE_ROLES.includes(r));
   const [items,          setItems]          = useState<Facture[]>([]);
   const [archives,       setArchives]       = useState<SemaineArchivee[]>([]);
   const [hydrated,       setHydrated]       = useState(false);
@@ -219,13 +225,14 @@ export default function CaisseComptabilitePage() {
     const pres = normPrestations(f.prestations);
     const t: TypeNote = f.estCommande ? 'commande' : (pres[0]?.prix != null || tarifs[pres[0]?.id]?.type === 'achat') ? 'achat' : 'vente';
     setTypeFiltre(t);
-    setForm({ medecin:f.medecin??defaultMedecin, patientNom:f.patientNom, dateSeance:f.dateSeance, prestations:pres, payeur:f.payeur??'Civil', statut:f.statut, notes:f.notes });
+    setForm({ medecin: peutAssignerAutrui ? (f.medecin??defaultMedecin) : defaultMedecin, patientNom:f.patientNom, dateSeance:f.dateSeance, prestations:pres, payeur:f.payeur??'Civil', statut:f.statut, notes:f.notes });
   }
   function resetForm() { setForm({ ...EMPTY_FORM, medecin:defaultMedecin, dateSeance:rpDate() }); setTypeFiltre('vente'); }
   function cancelEdit() { setEditing(null); resetForm(); }
 
   function submit() {
-    const fac: Omit<Facture,'id'|'createdAt'> = { medecin:form.medecin, patientNom:form.patientNom, dateSeance:form.dateSeance, prestations:form.prestations, montant:montantAuto, payeur:form.payeur, statut:form.statut, notes:form.notes, estCommande: typeFiltre === 'commande' };
+    const medecin = peutAssignerAutrui ? form.medecin : defaultMedecin;
+    const fac: Omit<Facture,'id'|'createdAt'> = { medecin, patientNom:form.patientNom, dateSeance:form.dateSeance, prestations:form.prestations, montant:montantAuto, payeur:form.payeur, statut:form.statut, notes:form.notes, estCommande: typeFiltre === 'commande' };
     if (editing) { setItems(p=>p.map(h=>h.id===editing.id?{...editing,...fac}:h)); setEditing(null); }
     else         { setItems(p=>[{id:uid(),createdAt:new Date().toISOString(),...fac},...p]); }
     resetForm();
@@ -251,7 +258,7 @@ export default function CaisseComptabilitePage() {
             <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>{f.dateSeance.slice(6)}</div>
           </div>
           <div style={{ flex:1, minWidth:0 }}>
-            <div style={{ fontFamily:DISPLAY, fontSize: 18, color:T.text, marginBottom:4 }}>{f.patientNom}</div>
+            <div style={{ fontFamily:DISPLAY, fontSize: 18, color:T.text, marginBottom:4 }}>{f.medecin || '— Non assigné —'}</div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
               {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
               {pres.map((p,i) => {
@@ -265,7 +272,6 @@ export default function CaisseComptabilitePage() {
                   </span>
                 );
               })}
-              {f.medecin && <span style={{ fontFamily:MONO, fontSize: 14, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin}</span>}
               {f.notes && <span style={{ fontFamily:BODY, fontSize: 14, color:T.muted, fontStyle:'italic' }}>{f.notes}</span>}
             </div>
           </div>
@@ -311,13 +317,19 @@ export default function CaisseComptabilitePage() {
             </div>
             <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
               <div><label style={lbl}>MÉDECIN / SOIGNANT</label>
-                <select style={{...inp,cursor:'pointer'}} value={form.medecin} onChange={e=>setForm(f=>({...f,medecin:e.target.value}))}>
-                  <option value="">— Sélectionner —</option>
-                  {medecins.map(m => <option key={m} value={m}>{m}</option>)}
-                  {form.medecin && !medecins.includes(form.medecin) && <option value={form.medecin}>{form.medecin}</option>}
-                </select>
+                {peutAssignerAutrui ? (
+                  <select style={{...inp,cursor:'pointer'}} value={form.medecin} onChange={e=>setForm(f=>({...f,medecin:e.target.value}))}>
+                    <option value="">— Sélectionner —</option>
+                    {medecins.map(m => <option key={m} value={m}>{m}</option>)}
+                    {form.medecin && !medecins.includes(form.medecin) && <option value={form.medecin}>{form.medecin}</option>}
+                  </select>
+                ) : (
+                  <div style={{...inp, display:'flex', alignItems:'center', justifyContent:'space-between', color:T.muted, cursor:'default'}}>
+                    <span>{defaultMedecin || '—'}</span>
+                    <span style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>VOUS</span>
+                  </div>
+                )}
               </div>
-              <div><label style={lbl}>NOM DU PATIENT</label><input style={inp} value={form.patientNom} onChange={e=>setForm(f=>({...f,patientNom:e.target.value}))} placeholder="Nom complet" /></div>
               <div><label style={lbl}>DATE</label><div style={{...inp, display:'flex', alignItems:'center', justifyContent:'space-between', color:T.muted, cursor:'default'}}><span>{form.dateSeance}</span><span style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>AUTO</span></div></div>
 
               <div>

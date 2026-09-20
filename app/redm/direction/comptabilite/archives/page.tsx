@@ -97,8 +97,7 @@ function RegistreLine({ f, tarifs }: { f: Facture; tarifs: Record<string, TarifC
         </div>
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4, flexWrap:'wrap' }}>
-            <span style={{ fontFamily:DISPLAY, fontSize: 17, color:T.text }}>{f.patientNom}</span>
-            <span style={{ fontFamily:MONO, fontSize: 14, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
+            <span style={{ fontFamily:DISPLAY, fontSize: 17, color:T.text }}>{f.medecin || '— Non assigné —'}</span>
           </div>
           <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
             {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
