@@ -41,8 +41,20 @@ const PLANTES_DEFAULT: StockItem[] = [
   { id: 'bardane', intitule: 'Bardane', quantite: 10 },
 ];
 
+const MATERIAUX_DEFAULT: StockItem[] = [
+  { id: 'tissu-solide', intitule: 'Tissu solide', quantite: 10 },
+  { id: 'gourde-d-eau', intitule: "Gourde d'eau", quantite: 10 },
+  { id: 'ethanol', intitule: 'Ethanol', quantite: 10 },
+  { id: 'lotion-antiseptique', intitule: 'Lotion antiseptique', quantite: 10 },
+  { id: 'composte', intitule: 'Composte', quantite: 10 },
+  { id: 'dechet-organique', intitule: 'Déchet organique', quantite: 10 },
+  { id: 'fil-de-peche', intitule: 'Fil de pêche', quantite: 10 },
+  { id: 'salpetre', intitule: 'Salpêtre', quantite: 10 },
+  { id: 'souffre', intitule: 'Souffre', quantite: 10 },
+];
+
 const DEFAULT_CATEGORIES: StockCategorie[] = [
-  { id: 'materiaux', nom: 'Matériaux', icon: '🧰', items: [] },
+  { id: 'materiaux', nom: 'Matériaux', icon: '🧰', items: MATERIAUX_DEFAULT },
   { id: 'plantes', nom: 'Plantes', icon: '🌿', items: PLANTES_DEFAULT },
   { id: 'materiels-medicaux', nom: 'Matériels médicaux', icon: '💊', items: [] },
 ];
