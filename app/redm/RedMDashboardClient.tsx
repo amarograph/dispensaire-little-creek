@@ -12,6 +12,7 @@ const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const MODULES = [
   { id: 'registre-caisses', href: '/redm/registre-caisses', icon: '📖', label: 'Registre des Caisses', sub: 'SUIVI HEBDOMADAIRE', desc: "Faire sa caisse du jour et suivre son nombre de caisses et son salaire de la semaine.", color: '#B7C3A4', badge: 'RGC' },
   { id: 'comptabilite', href: '/redm/comptabilite',  icon: '💰', label: 'Comptabilité', sub: 'HONORAIRES & RECETTES', desc: 'Enregistrer les honoraires, suivre les paiements et consulter les comptes du dispensaire.', color: '#D1B77C', badge: 'FIN' },
+  { id: 'depot-stock',  href: '/redm/depot-stock',   icon: '📥', label: 'Dépôt de Stock', sub: 'RÉAPPROVISIONNEMENT', desc: "Déclarer les plantes, matériaux ou produits ramenés — ajoutés immédiatement à l'inventaire.", color: '#A8B991', badge: 'STK' },
   { id: 'bibliotheque', href: '/redm/bibliotheque',  icon: '📚', label: 'Bibliothèque',           sub: 'TRAITÉS & MANUELS', desc: "Traités médicaux, formulaires de remèdes et guides de soins de l'époque.",    color: '#AAB9C6', badge: 'REF' },
   { id: 'agenda',       href: '/redm/agenda',        icon: '📅', label: 'Agenda',                 sub: 'RENDEZ-VOUS',       desc: 'Planifier et consulter les rendez-vous du dispensaire. RDV du cabinet anonymisés.', color: '#A8B991', badge: 'AGD' },
   { id: 'cabinet',      href: '/redm/cabinet',       icon: '🛋', label: 'Cabinet Thérapeutique',  sub: "SOINS DE L'ÂME",   desc: "Suivi psychologique, consultations de l'esprit et thérapies de l'époque.",   color: '#A8B991', badge: 'PSY' },
@@ -180,7 +181,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
           <div
             onClick={() => router.push('/redm/bibliotheque?cat=reglement-interne')}
             style={{ ...PANEL, borderLeft: '4px solid #D1B77C', padding: '16px 24px', display: 'flex', alignItems: 'center', gap: 18, cursor: 'pointer', transition: 'background 0.15s' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(20,16,8,0.97)')}
+            onMouseEnter={e => (e.currentTarget.style.background = '#254B5C')}
             onMouseLeave={e => (e.currentTarget.style.background = CARD_BG)}
           >
             <div style={{ width: 46, height: 46, background: 'rgba(209,183,124,0.12)', border: '1px solid rgba(209,183,124,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>⚖</div>
@@ -195,7 +196,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
           <div
             onClick={() => router.push('/redm/bibliotheque?cat=serment-hippocrate')}
             style={{ ...PANEL, borderLeft: '4px solid #D1B77C', padding: '16px 24px', display: 'flex', alignItems: 'center', gap: 18, cursor: 'pointer', transition: 'background 0.15s' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(20,16,8,0.97)')}
+            onMouseEnter={e => (e.currentTarget.style.background = '#254B5C')}
             onMouseLeave={e => (e.currentTarget.style.background = CARD_BG)}
           >
             <div style={{ width: 46, height: 46, background: 'rgba(209,183,124,0.12)', border: '1px solid rgba(209,183,124,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>⚕</div>
@@ -210,7 +211,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
           <div
             onClick={() => router.push('/redm/circuit-cueillette')}
             style={{ ...PANEL, borderLeft: '4px solid #4A7A40', padding: '16px 24px', display: 'flex', alignItems: 'center', gap: 18, cursor: 'pointer', transition: 'background 0.15s' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(8,14,8,0.97)')}
+            onMouseEnter={e => (e.currentTarget.style.background = '#254B5C')}
             onMouseLeave={e => (e.currentTarget.style.background = CARD_BG)}
           >
             <div style={{ width: 46, height: 46, background: 'rgba(74,122,64,0.14)', border: '1px solid rgba(74,122,64,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>🌿</div>
