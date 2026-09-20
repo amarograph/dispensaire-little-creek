@@ -170,8 +170,10 @@ export default function DirectionComptabilitePage() {
   const caissesTotalSemaine = caissesStaff.reduce((s, x) => s + x.count, 0);
 
   /* ── Marge dispensaire des caisses (prix client 7.50$ − tarif versé au grade) ── */
+  interface CaisseSemaineStaff { discord_id: string; nom: string; rate: number; count: number; salaire: number; }
   const [margeCaissesSemaine, setMargeCaissesSemaine] = useState(0);
   const [margeCaissesTotal,   setMargeCaissesTotal]   = useState(0);
+  const [caissesActuelleStaff, setCaissesActuelleStaff] = useState<CaisseSemaineStaff[]>([]);
 
   /* ── Ajustements manuels du compte du dispensaire (ajout / retrait libre) ── */
   const [ajustements,      setAjustements]      = useState<Ajustement[]>([]);
@@ -235,13 +237,17 @@ export default function DirectionComptabilitePage() {
 
   useEffect(() => { loadCaisses(); }, [loadCaisses]);
 
-  /* Marge de la semaine EN COURS (indépendante de la navigation du registre ci-dessus) */
+  /* Caisses de la semaine EN COURS (indépendant de la navigation du registre ci-dessus) */
   useEffect(() => {
     const from = fmtISODate(todayMonday);
     const to   = fmtISODate(addDaysReal(todayMonday, 6));
     fetch(`/api/admin/redm-caisses?from=${from}&to=${to}`)
       .then(r => r.ok ? r.json() : null)
-      .then(d => { if (d?.staff) setMargeCaissesSemaine(margeCaisses(d.staff)); })
+      .then(d => {
+        if (!d?.staff) return;
+        setMargeCaissesSemaine(margeCaisses(d.staff));
+        setCaissesActuelleStaff(d.staff.filter((s: CaisseSemaineStaff) => s.count > 0));
+      })
       .catch(() => {});
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -327,7 +333,21 @@ export default function DirectionComptabilitePage() {
 
   const totalPercu   = semaineActuelle.filter(f=>f.statut==='PAYÉ').reduce((s,f)=>s+f.montant,0);
   const totalAttente = semaineActuelle.filter(f=>f.statut==='EN ATTENTE').reduce((s,f)=>s+f.montant,0);
-  const salaires     = salairesByMedecin(semaineActuelle, tarifs);
+  const salairesActes = salairesByMedecin(semaineActuelle, tarifs);
+
+  /* Fusion des salaires (ventes) avec les gains de caisses de la semaine, par nom */
+  const salaires = (() => {
+    const map: Record<string, Salaire & { caisses: number; salaireCaisses: number }> = {};
+    salairesActes.forEach(s => { map[s.medecin] = { ...s, caisses: 0, salaireCaisses: 0 }; });
+    caissesActuelleStaff.forEach(c => {
+      const key = c.nom.trim() || '— Non assigné —';
+      if (!map[key]) map[key] = { medecin: key, actes: 0, ca: 0, salaire: 0, caisses: 0, salaireCaisses: 0 };
+      map[key].caisses = c.count;
+      map[key].salaireCaisses = c.salaire;
+      map[key].salaire = Math.round((map[key].salaire + c.salaire) * 100) / 100;
+    });
+    return Object.values(map).sort((a,b) => b.salaire - a.salaire);
+  })();
 
   const tresorerieSemaineBrute = tresorerie(semaineActuelle, tarifs);
   const tresorerieSemaine = {
@@ -412,12 +432,6 @@ export default function DirectionComptabilitePage() {
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)` }}>
               <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>🏦 TRÉSORERIE DU DISPENSAIRE</span>
             </div>
-
-            {margeCaissesSemaine > 0 && (
-              <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.06em', marginBottom:10 }}>
-                💰 Inclut {fmt$(margeCaissesSemaine)} de marge sur les caisses vendues {PRIX_CAISSE}$ (part au-delà du tarif reversé à chaque grade)
-              </div>
-            )}
 
             <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`5px solid ${soldeDispensaire>=0 ? '#A8B991' : '#8B4040'}`, padding:'22px 24px', textAlign:'center', marginBottom:10 }}>
               <div style={{ fontFamily:DISPLAY, fontSize:42, color: soldeDispensaire>=0 ? '#6A9A68' : '#DF9A88' }}>{fmt$(soldeDispensaire)}</div>
@@ -609,7 +623,9 @@ export default function DirectionComptabilitePage() {
                     <div key={s.medecin} style={{ background:T.card, border:`1px solid rgba(155,106,200,0.35)`, borderLeft:`4px solid #BAAAC6`, padding:'12px 18px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>
                       <div>
                         <div style={{ fontFamily:DISPLAY, fontSize: 19, color:T.text }}>{s.medecin}</div>
-                        <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3 }}>{s.actes} acte{s.actes>1?'s':''}</div>
+                        <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3 }}>
+                          {s.actes} acte{s.actes>1?'s':''}{s.caisses > 0 && ` · ${s.caisses} caisse${s.caisses>1?'s':''} (${fmt$(s.salaireCaisses)})`}
+                        </div>
                       </div>
                       <div style={{ display:'flex', gap:24, alignItems:'center' }}>
                         <div style={{ textAlign:'right' }}>
@@ -618,7 +634,7 @@ export default function DirectionComptabilitePage() {
                         </div>
                         <div style={{ textAlign:'right' }}>
                           <div style={{ fontFamily:DISPLAY, fontSize: 28, color:'#BAAAC6' }}>{fmt$(s.salaire)}</div>
-                          <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>SALAIRE (APRÈS %)</div>
+                          <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>SALAIRE TOTAL</div>
                         </div>
                       </div>
                     </div>
