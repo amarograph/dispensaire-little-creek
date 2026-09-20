@@ -12,54 +12,23 @@ const COLOR   = '#8B4040';
 const MOIS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin',
   'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
-function rpDateNamed(offsetDays = 0): string {
-  const d = new Date(Date.now() + offsetDays * 86400000);
-  return `${d.getDate()} ${MOIS_FR[d.getMonth()]} ${d.getFullYear() - 136}`;
-}
 function rpDateFromIso(iso: string | null): string {
   if (!iso) return '—';
   const d = new Date(iso);
   return `${d.getDate()} ${MOIS_FR[d.getMonth()]} ${d.getFullYear() - 136}`;
 }
-function parseRpDate(s: string) {
-  const parts = s.trim().split(/\s+/);
-  if (parts.length !== 3) return null;
-  const day   = parseInt(parts[0]);
-  const month = MOIS_FR.indexOf(parts[1]) + 1;
-  const year  = parseInt(parts[2]);
-  if (!day || month < 1 || !year) return null;
-  return { day, month, year };
-}
-function rpDatesInRange(startStr: string, endStr: string): string[] {
-  const s = parseRpDate(startStr);
-  const e = parseRpDate(endStr);
-  if (!s || !e) return [];
-  const cur = new Date(s.year + 136, s.month - 1, s.day);
-  const end = new Date(e.year + 136, e.month - 1, e.day);
-  const dates: string[] = [];
-  while (cur <= end && dates.length < 90) {
-    const d = String(cur.getDate()).padStart(2, '0');
-    const m = String(cur.getMonth() + 1).padStart(2, '0');
-    const y = cur.getFullYear() - 136;
-    dates.push(`${d}/${m}/${y}`);
-    cur.setDate(cur.getDate() + 1);
-  }
-  return dates;
-}
 
-const GRADES       = ['Apprenti', 'Infirmier', 'Médecin', 'Médecin Chef', 'Directeur'];
-const DISPENSAIRES = ['Little Creek', 'Valentine', 'Rhodes', 'Tous'];
+const GRADES       = ['Directeur', 'Co-Directeur', 'Médecin Chef', 'Médecin', 'Apprenti', 'Infirmier', 'Préparateur de Caisse', 'Thérapeute'];
 const SPECIALITES  = [
   'Médecine générale', 'Chirurgie', 'Aliénisme', 'Plantes médicinales',
   'Obstétrique', 'Traumatologie', 'Dentisterie',
   'Ophtalmologie', 'Hygiène', 'Autre',
 ];
-const STATUTS = ['En service', 'En congé', 'En mission', 'Suspendu'];
-const MOTIFS  = ['Maladie', 'Voyage', 'Affaires familiales', 'Repos imposé', 'Mission extérieure', 'Autre'];
 
 const GRADE_COL: Record<string, string> = {
-  'Apprenti': '#888', 'Infirmier': '#5A8AB5', 'Médecin': '#A8B991',
-  'Médecin Chef': '#D1B77C', 'Directeur': '#8B4040',
+  'Directeur': '#8B4040', 'Co-Directeur': '#8B4040', 'Médecin Chef': '#D1B77C',
+  'Médecin': '#A8B991', 'Apprenti': '#888', 'Infirmier': '#5A8AB5',
+  'Préparateur de Caisse': '#C8845A', 'Thérapeute': '#9B6AC8',
 };
 const STATUT_COL: Record<string, string> = {
   'En service': '#A8B991', 'En congé': '#D1B77C', 'En mission': '#5A8AB5', 'Suspendu': '#DF9A88',
@@ -71,10 +40,6 @@ interface Profile {
   specialites: string[]; statut: string;
 }
 interface Presence { jours_semaine: number; derniere_prise: string | null; moyenne: string; }
-interface Absence {
-  id: string; date_debut: string; date_fin: string; motif: string;
-  note: string; statut: string; created_at: string;
-}
 
 const EMPTY: Profile = {
   nom_rp: '', prenom_rp: '', age_rp: '', origine: '', portrait_url: '',
@@ -246,29 +211,17 @@ export default function ProfilMedecinPage() {
 
   const [profile,  setProfile]  = useState<Profile>(EMPTY);
   const [presence, setPresence] = useState<Presence>({ jours_semaine: 0, derniere_prise: null, moyenne: '0' });
-  const [absences, setAbsences] = useState<Absence[]>([]);
   const [loading,  setLoading]  = useState(true);
   const [saving,   setSaving]   = useState(false);
   const [savedMsg, setSavedMsg] = useState('');
 
-  const [absForm, setAbsForm] = useState({
-    date_debut: rpDateNamed(0), date_fin: rpDateNamed(3), motif: 'Maladie', note: '',
-  });
-  const [absBusy,    setAbsBusy]    = useState(false);
-  const [absMsg,     setAbsMsg]     = useState('');
-  const [editAbsId,  setEditAbsId]  = useState<string | null>(null);
-  const [editForm,   setEditForm]   = useState({ date_debut: '', date_fin: '', motif: '', note: '' });
-  const [absBusy2,   setAbsBusy2]   = useState<string | null>(null);
   const [cropFile,  setCropFile]  = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    Promise.all([
-      fetch('/api/redm/profil-medecin').then(r => r.json()),
-      fetch('/api/redm/absences').then(r => r.json()),
-    ]).then(([p, a]) => {
+    fetch('/api/redm/profil-medecin').then(r => r.json()).then(p => {
       if (p && !p.error) {
         setProfile({
           nom_rp:       p.nom_rp       ?? '',
@@ -283,52 +236,8 @@ export default function ProfilMedecinPage() {
         });
         if (p.presence) setPresence(p.presence);
       }
-      if (a?.absences) setAbsences(a.absences);
     }).finally(() => setLoading(false));
   }, []);
-
-  // Sync agenda : si une absence "Vue et lu" n'a pas d'entrée dans l'agenda commun, l'ajouter
-  useEffect(() => {
-    const approved = absences.filter(a => a.statut === 'Vue et lu');
-    if (approved.length === 0) return;
-    const nomRp = `${profile.prenom_rp} ${profile.nom_rp}`.trim();
-    if (!nomRp) return;
-
-    fetch('/api/agenda-commun').then(r => r.json()).then(async (raw: any) => {
-      const current: any[] = Array.isArray(raw) ? raw : [];
-      const missing = approved.filter(a =>
-        !current.some((e: any) => String(e.id ?? '').startsWith(`abs_${a.id}_`))
-      );
-      if (missing.length === 0) return;
-
-      let agenda = current;
-      for (const abs of missing) {
-        const dates = rpDatesInRange(abs.date_debut, abs.date_fin);
-        if (dates.length === 0) continue;
-        const rangeNote = dates.length > 1
-          ? `Du ${abs.date_debut} au ${abs.date_fin}`
-          : abs.date_debut;
-        const entries = dates.map(date => ({
-          id:         `abs_${abs.id}_${date}`,
-          patientNom: nomRp,
-          date,
-          heure:      '—',
-          type:       'Absence',
-          statut:     'CONFIRMÉ',
-          notes:      [rangeNote, abs.motif].filter(Boolean).join(' — '),
-          createdAt:  new Date().toISOString(),
-        }));
-        const prefix = `abs_${abs.id}_`;
-        agenda = [...agenda.filter((e: any) => !String(e.id ?? '').startsWith(prefix)), ...entries];
-      }
-
-      await fetch('/api/agenda-commun', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(agenda),
-      });
-    }).catch(() => {});
-  }, [absences, profile.prenom_rp, profile.nom_rp]);
 
   function toggleSpecialite(s: string) {
     setProfile(p => ({
@@ -384,56 +293,6 @@ export default function ProfilMedecinPage() {
       if (d.error) setSavedMsg('Erreur : ' + d.error);
       else { setSavedMsg('Profil enregistré.'); setTimeout(() => setSavedMsg(''), 3000); }
     } finally { setSaving(false); }
-  }
-
-  async function cancelAbsence(id: string) {
-    setAbsBusy2(id);
-    try {
-      const r = await fetch('/api/redm/absences', {
-        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, statut: 'Annulée' }),
-      });
-      const d = await r.json();
-      if (d.error) { setAbsMsg('Erreur : ' + d.error); return; }
-      setAbsences(prev => prev.map(a => a.id === id ? d.absence : a));
-      setAbsMsg('Absence annulée.');
-      setTimeout(() => setAbsMsg(''), 3000);
-    } finally { setAbsBusy2(null); }
-  }
-
-  async function saveAbsenceEdit(id: string) {
-    setAbsBusy2(id);
-    try {
-      const r = await fetch('/api/redm/absences', {
-        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, ...editForm }),
-      });
-      const d = await r.json();
-      if (d.error) { setAbsMsg('Erreur : ' + d.error); return; }
-      setAbsences(prev => prev.map(a => a.id === id ? d.absence : a));
-      setEditAbsId(null);
-      setAbsMsg('Absence modifiée — en attente de validation.');
-      setTimeout(() => setAbsMsg(''), 4000);
-    } finally { setAbsBusy2(null); }
-  }
-
-  async function submitAbsence() {
-    if (!absForm.date_debut || !absForm.date_fin) { setAbsMsg('Veuillez renseigner les dates.'); return; }
-    setAbsBusy(true); setAbsMsg('');
-    try {
-      const r = await fetch('/api/redm/absences', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...absForm, nom_rp: `${profile.prenom_rp} ${profile.nom_rp}`.trim() }),
-      });
-      const d = await r.json();
-      if (d.error) setAbsMsg('Erreur : ' + d.error);
-      else {
-        setAbsMsg('Demande envoyée à la Direction.');
-        setAbsences(prev => [d.absence, ...prev]);
-        setAbsForm({ date_debut: rpDateNamed(0), date_fin: rpDateNamed(3), motif: 'Maladie', note: '' });
-        setTimeout(() => setAbsMsg(''), 4000);
-      }
-    } finally { setAbsBusy(false); }
   }
 
   // ── styles ────────────────────────────────────────────────────────────────
@@ -695,17 +554,6 @@ export default function ProfilMedecinPage() {
               )}
             </div>
             <div>
-              <label style={lbl}>Dispensaire</label>
-              {isDirection ? (
-                <select style={{ ...inp, cursor: 'pointer' }} value={profile.dispensaire}
-                  onChange={e => setProfile(p => ({ ...p, dispensaire: e.target.value }))}>
-                  {DISPENSAIRES.map(d => <option key={d} value={d}>{d}</option>)}
-                </select>
-              ) : (
-                <div style={{ ...inp, cursor: 'default' }}>{profile.dispensaire || '—'}</div>
-              )}
-            </div>
-            <div>
               <label style={lbl}>
                 Spécialité(s)
                 {profile.specialites.length > 0 && (
@@ -742,19 +590,6 @@ export default function ProfilMedecinPage() {
                   {profile.specialites.length > 0
                     ? profile.specialites.join(', ')
                     : <span style={{ color: '#5A4030', fontStyle: 'italic' }}>Aucune spécialité</span>}
-                </div>
-              )}
-            </div>
-            <div>
-              <label style={lbl}>Statut</label>
-              {isDirection ? (
-                <select style={{ ...inp, cursor: 'pointer' }} value={profile.statut}
-                  onChange={e => setProfile(p => ({ ...p, statut: e.target.value }))}>
-                  {STATUTS.map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
-              ) : (
-                <div style={{ ...inp, cursor: 'default', color: STATUT_COL[profile.statut] ?? '#888' }}>
-                  ● {profile.statut || '—'}
                 </div>
               )}
             </div>
@@ -811,190 +646,6 @@ export default function ProfilMedecinPage() {
         </div>
       </div>
 
-      {/* ══════════════════════ ABSENCES ══════════════════════ */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-
-        {/* Formulaire */}
-        <div style={card}>
-          <div style={secTitle}>📋 Déclarer une absence</div>
-          <div style={{
-            fontFamily: BODY, fontSize: 13, color: '#C8BEA5', fontStyle: 'italic',
-            marginBottom: 18, paddingBottom: 14,
-            borderBottom: '1px solid rgba(180,160,113,0.15)',
-          }}>
-            Demande de congé / indisponibilité
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <div>
-                <label style={lbl}>Du</label>
-                <input style={inp} value={absForm.date_debut}
-                  onChange={e => setAbsForm(p => ({ ...p, date_debut: e.target.value }))}
-                  placeholder={rpDateNamed(0)} />
-              </div>
-              <div>
-                <label style={lbl}>Au</label>
-                <input style={inp} value={absForm.date_fin}
-                  onChange={e => setAbsForm(p => ({ ...p, date_fin: e.target.value }))}
-                  placeholder={rpDateNamed(3)} />
-              </div>
-            </div>
-            <div>
-              <label style={lbl}>Motif</label>
-              <select style={{ ...inp, cursor: 'pointer' }} value={absForm.motif}
-                onChange={e => setAbsForm(p => ({ ...p, motif: e.target.value }))}>
-                {MOTIFS.map(m => <option key={m} value={m}>{m}</option>)}
-              </select>
-            </div>
-            <div>
-              <label style={lbl}>Note facultative</label>
-              <textarea
-                style={{ ...inp, minHeight: 80, resize: 'vertical' } as React.CSSProperties}
-                value={absForm.note}
-                onChange={e => setAbsForm(p => ({ ...p, note: e.target.value }))}
-                placeholder='Je serai retenu hors de Little Creek quelques jours…'
-              />
-            </div>
-            <button onClick={submitAbsence} disabled={absBusy} style={{
-              background: 'rgba(180,160,113,0.15)', border: '1px solid rgba(180,160,113,0.50)',
-              borderRadius: 5, padding: '12px',
-              color: absBusy ? '#C8BEA5' : '#EADCB9',
-              fontFamily: MONO, fontSize: 11, letterSpacing: '0.16em',
-              cursor: absBusy ? 'default' : 'pointer', transition: 'all 0.15s',
-            }}>
-              {absBusy ? 'ENVOI…' : '✉ ENVOYER À LA DIRECTION'}
-            </button>
-          </div>
-        </div>
-
-        {/* Historique */}
-        <div style={card}>
-          <div style={secTitle}>🗄 Historique des congés</div>
-          {absMsg && (
-            <div style={{ fontFamily: BODY, fontSize: 13, marginBottom: 12, textAlign: 'center',
-              color: absMsg.startsWith('Erreur') ? '#DF9A88' : '#A8B991' }}>
-              {absMsg}
-            </div>
-          )}
-          {absences.length === 0 ? (
-            <div style={{ fontFamily: BODY, fontSize: 13, color: '#C8BEA5', fontStyle: 'italic' }}>
-              Aucun congé enregistré.
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 420, overflowY: 'auto' }}>
-              {absences.map(a => {
-                const ACOL: Record<string, string> = {
-                  'Absence': '#D1B77C', 'Vue et lu': '#A8B991', 'Annulée': '#DF9A88',
-                };
-                const asc = ACOL[a.statut] ?? '#D1B77C';
-                const isEditing = editAbsId === a.id;
-                const isBusy2 = absBusy2 === a.id;
-                return (
-                  <div key={a.id} style={{
-                    background: 'rgba(0,0,0,0.30)', border: `1px solid ${asc}30`,
-                    borderLeft: `3px solid ${asc}`,
-                    borderRadius: 5, padding: '12px 14px',
-                  }}>
-                    {isEditing ? (
-                      /* ── Formulaire de modification ── */
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                        <div style={{ fontFamily: MONO, fontSize: 10, color: '#D1B77C', letterSpacing: '0.12em', marginBottom: 2 }}>
-                          MODIFIER L'ABSENCE
-                        </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                          <div>
-                            <label style={{ ...lbl }}>Du</label>
-                            <input style={inp} value={editForm.date_debut}
-                              onChange={e => setEditForm(f => ({ ...f, date_debut: e.target.value }))} />
-                          </div>
-                          <div>
-                            <label style={{ ...lbl }}>Au</label>
-                            <input style={inp} value={editForm.date_fin}
-                              onChange={e => setEditForm(f => ({ ...f, date_fin: e.target.value }))} />
-                          </div>
-                        </div>
-                        <div>
-                          <label style={{ ...lbl }}>Motif</label>
-                          <select style={{ ...inp, cursor: 'pointer' }} value={editForm.motif}
-                            onChange={e => setEditForm(f => ({ ...f, motif: e.target.value }))}>
-                            {MOTIFS.map(m => <option key={m} value={m}>{m}</option>)}
-                          </select>
-                        </div>
-                        <div>
-                          <label style={{ ...lbl }}>Note</label>
-                          <textarea style={{ ...inp, minHeight: 56, resize: 'vertical' } as React.CSSProperties}
-                            value={editForm.note}
-                            onChange={e => setEditForm(f => ({ ...f, note: e.target.value }))} />
-                        </div>
-                        <div style={{ display: 'flex', gap: 8 }}>
-                          <button onClick={() => saveAbsenceEdit(a.id)} disabled={isBusy2} style={{
-                            fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em',
-                            padding: '7px 14px', cursor: isBusy2 ? 'default' : 'pointer',
-                            background: 'rgba(209,183,124,0.15)', border: '1px solid rgba(209,183,124,0.50)',
-                            color: '#D1B77C', borderRadius: 4, opacity: isBusy2 ? 0.5 : 1,
-                          }}>
-                            {isBusy2 ? '…' : '✔ ENREGISTRER'}
-                          </button>
-                          <button onClick={() => setEditAbsId(null)} style={{
-                            fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em',
-                            padding: '7px 14px', cursor: 'pointer',
-                            background: 'transparent', border: '1px solid rgba(180,160,113,0.30)',
-                            color: '#7A6050', borderRadius: 4,
-                          }}>ANNULER</button>
-                        </div>
-                      </div>
-                    ) : (
-                      /* ── Affichage normal ── */
-                      <>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 5 }}>
-                          <div style={{ fontFamily: BODY, fontSize: 14, color: '#EADCB9', fontWeight: 600 }}>
-                            {a.motif}
-                          </div>
-                          <span style={{
-                            fontFamily: MONO, fontSize: 9, padding: '2px 8px',
-                            border: `1px solid ${asc}80`, background: `${asc}1A`,
-                            color: asc, borderRadius: 3, letterSpacing: '0.08em', flexShrink: 0,
-                          }}>{a.statut.toUpperCase()}</span>
-                        </div>
-                        <div style={{ fontFamily: MONO, fontSize: 10, color: '#C8BEA5' }}>
-                          {a.date_debut} → {a.date_fin}
-                        </div>
-                        {a.note && (
-                          <div style={{ fontFamily: BODY, fontSize: 12, color: '#C8BEA5', fontStyle: 'italic', marginTop: 5 }}>
-                            « {a.note} »
-                          </div>
-                        )}
-                        {a.statut !== 'Annulée' && (
-                          <div style={{ display: 'flex', gap: 6, marginTop: 10 }}>
-                            <button onClick={() => {
-                              setEditAbsId(a.id);
-                              setEditForm({ date_debut: a.date_debut, date_fin: a.date_fin, motif: a.motif, note: a.note });
-                            }} disabled={isBusy2} style={{
-                              fontFamily: MONO, fontSize: 9, letterSpacing: '0.10em',
-                              padding: '5px 11px', cursor: isBusy2 ? 'default' : 'pointer',
-                              background: 'rgba(209,183,124,0.10)', border: '1px solid rgba(209,183,124,0.35)',
-                              color: '#D1B77C', borderRadius: 3,
-                            }}>✎ MODIFIER</button>
-                            <button onClick={() => cancelAbsence(a.id)} disabled={isBusy2} style={{
-                              fontFamily: MONO, fontSize: 9, letterSpacing: '0.10em',
-                              padding: '5px 11px', cursor: isBusy2 ? 'default' : 'pointer',
-                              background: 'rgba(200,48,48,0.08)', border: '1px solid rgba(200,48,48,0.35)',
-                              color: '#DF9A88', borderRadius: 3, opacity: isBusy2 ? 0.5 : 1,
-                            }}>
-                              {isBusy2 ? '…' : '✕ ANNULER'}
-                            </button>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-      </div>
     </div>
   );
 }
