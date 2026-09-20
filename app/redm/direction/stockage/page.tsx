@@ -83,6 +83,8 @@ const btnGold: React.CSSProperties = { ...btn, border: `1px solid ${T.gold}`, co
 const btnRed: React.CSSProperties = { ...btn, border: '1px solid rgba(180,70,70,0.5)', color: '#C87060', background: 'rgba(180,70,70,0.08)' };
 const stepBtn: React.CSSProperties = { fontFamily: MONO, fontSize: 14, width: 28, height: 28, cursor: 'pointer', border: `1px solid ${T.border}`, background: 'rgba(0,0,0,0.25)', color: T.muted, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, padding: 0 };
 
+interface Depot { id: string; auteur: string; categorie: string; item: string; quantite: number; date: string; createdAt: string; }
+
 export default function StockagePage() {
   const router = useRouter();
   const { roles } = useRedmSession();
@@ -91,6 +93,14 @@ export default function StockagePage() {
   const [categories, setCategories] = useState<StockCategorie[]>(DEFAULT_CATEGORIES);
   const [hydrated, setHydrated] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [depots, setDepots] = useState<Depot[]>([]);
+
+  useEffect(() => {
+    fetch('/api/admin/redm-stockage-depots')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (Array.isArray(d?.depots)) setDepots(d.depots); })
+      .catch(() => {});
+  }, []);
 
   const [creatingCat, setCreatingCat] = useState(false);
   const [newCatNom, setNewCatNom] = useState('');
@@ -203,6 +213,22 @@ export default function StockagePage() {
           ⚠ UNE ALERTE EST ENVOYÉE DÈS QU'UN ARTICLE DESCEND SOUS {SEUIL_ALERTE} UNITÉS
         </div>
       </div>
+
+      {/* Dépôts récents déclarés par le personnel */}
+      {depots.length > 0 && (
+        <div style={{ marginBottom: 26 }}>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.12em', marginBottom: 8 }}>📥 DÉPÔTS RÉCENTS DÉCLARÉS PAR LE PERSONNEL</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5, maxHeight: 240, overflowY: 'auto' }}>
+            {depots.map(d => (
+              <div key={d.id} style={{ display: 'flex', alignItems: 'center', gap: 10, background: T.card, border: `1px solid ${T.border}`, borderLeft: '3px solid #A8B991', padding: '7px 12px' }}>
+                <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim, minWidth: 70, flexShrink: 0 }}>{d.date}</span>
+                <span style={{ fontFamily: BODY, fontSize: 15, color: T.text, flex: 1, minWidth: 0 }}>+{d.quantite} × {d.item} <span style={{ color: T.dim }}>({d.categorie})</span></span>
+                <span style={{ fontFamily: MONO, fontSize: 13, color: '#BAAAC6', flexShrink: 0 }}>👤 {d.auteur}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Grille des catégories */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16, alignItems: 'start' }}>

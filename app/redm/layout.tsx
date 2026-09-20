@@ -40,6 +40,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
         { href: '/redm',                  label: 'Accueil',               icon: '⌂'  },
         ...(hasCaisseAccess ? [{ href: '/redm/registre-caisses', label: 'Registre des Caisses', icon: '💰' }] : []),
         { href: '/redm/comptabilite',     label: 'Comptabilité',          icon: '💰' },
+        { href: '/redm/depot-stock',      label: 'Dépôt de Stock',        icon: '📥' },
         { href: '/redm/bibliotheque',     label: 'Bibliothèque',          icon: '📚' },
         { href: '/redm/agenda',           label: 'Agenda',                icon: '📅' },
         { href: '/redm/cabinet',          label: 'Cabinet Thérapeutique', icon: '🛋' },
