@@ -34,121 +34,126 @@ interface DocResult {
   titre: string; contenu: string; date: string; createdAt: string;
 }
 
-const TEMPLATE_SUIVI = `SUIVI DE GROSSESSE
+/* ── Scénarios proposés par type de document ── */
+interface Scenario { id: string; label: string; texte: string; }
+
+const SUIVI_SCENARIOS: Scenario[] = [
+  { id: 'normal',     label: 'Grossesse normale — suivi de routine',
+    texte: "La grossesse suit son cours normalement. Aucun signe inquiétant n'a été relevé lors de cet examen. Le suivi de routine est maintenu." },
+  { id: 'surveiller', label: 'À surveiller — facteurs de risque modérés',
+    texte: "Certains éléments observés justifient une surveillance accrue, sans qu'il y ait lieu de s'alarmer outre mesure à ce stade. Un rythme de consultation plus rapproché est recommandé." },
+  { id: 'risque',     label: 'Risque élevé — surveillance rapprochée',
+    texte: "L'état de la grossesse présente des facteurs de risque notables. Une surveillance étroite est requise et la patiente doit être avertie des signes devant motiver une consultation immédiate." },
+  { id: 'urgence',    label: "Consultation d'urgence",
+    texte: "La patiente s'est présentée en urgence. La situation a nécessité une prise en charge immédiate." },
+];
+
+const RX_SCENARIOS: Scenario[] = [
+  { id: 'nausees',  label: 'Nausées et malaises de grossesse', texte: 'Nausées, vertiges et malaises rapportés par la patiente, sans caractère de gravité.' },
+  { id: 'douleurs', label: 'Douleurs et tensions',             texte: 'Douleurs et tensions rapportées par la patiente, nécessitant un soulagement.' },
+  { id: 'sommeil',  label: 'Troubles du sommeil',              texte: 'Difficultés d’endormissement et sommeil agité rapportés par la patiente.' },
+  { id: 'anemie',   label: 'Fortifiant / anémie',              texte: 'Signes de fatigue et de pâleur évoquant une anémie légère.' },
+  { id: 'autre',    label: 'Autre indication',                 texte: '' },
+];
+
+const ACC_SCENARIOS: Scenario[] = [
+  { id: 'normal',     label: 'Accouchement normal, sans complication',
+    texte: "L'accouchement s'est déroulé normalement, sans complication notable. La mère et l'enfant se portent bien." },
+  { id: 'complique',  label: 'Accouchement avec complications maîtrisées',
+    texte: "L'accouchement a présenté des complications, maîtrisées grâce aux soins prodigués. La mère et l'enfant se portent bien à l'issue." },
+  { id: 'difficile',  label: 'Accouchement difficile — mère et enfant sauvés',
+    texte: "L'accouchement s'est révélé difficile et a mis en péril la mère et l'enfant. Les soins prodigués ont permis de les sauver l'un et l'autre." },
+  { id: 'mortne',     label: "Issue tragique — enfant mort-né",
+    texte: "Malgré tous les soins prodigués, l'enfant n'a pu être sauvé. La mère a survécu à l'accouchement." },
+  { id: 'perte_mere', label: 'Issue tragique — perte de la mère',
+    texte: "Malgré tous les soins prodigués, la mère n'a pu survivre à l'accouchement." },
+];
+
+/* ── Champs structurés par type ── */
+interface SuiviFields { terme: string; poids: string; mouvements: string; complications: string; }
+const SUIVI_EMPTY: SuiviFields = { terme: '', poids: '', mouvements: '', complications: '' };
+const MOUVEMENTS_OPTIONS = ['', 'Perçus, réguliers', 'Perçus, faibles', 'Non perçus', 'Non applicable (début de grossesse)'];
+
+interface RxFields { indication: string; remede: string; posologie: string; }
+const RX_EMPTY: RxFields = { indication: '', remede: '', posologie: '' };
+
+interface AccFields { heure: string; lieu: string; duree: string; presentation: string; sexe: string; }
+const ACC_EMPTY: AccFields = { heure: '', lieu: '', duree: '', presentation: '', sexe: '' };
+const LIEU_OPTIONS = ['', 'Dispensaire', 'Domicile'];
+const PRESENTATION_OPTIONS = ['', 'Céphalique', 'Siège', 'Autre'];
+const SEXE_OPTIONS = ['', 'Garçon', 'Fille'];
+
+/* ── Génération du document à partir des champs + scénario ── */
+function genSuivi(nom: string, age: string, date: string, f: SuiviFields, scenario: Scenario): string {
+  return `SUIVI DE GROSSESSE
 DISPENSAIRE DE LITTLE CREEK — OBSTÉTRIQUE
 Année 1890
 
 IDENTITÉ DE LA PATIENTE
-Nom et prénom : [Nom de la patiente]
-Âge : [Âge]
+Nom et prénom : ${nom}
+Âge : ${age || '—'}
+Date de l'examen : ${date}
 
 TERME DE LA GROSSESSE
-Semaines de grossesse : [Nombre de semaines]
-Date présumée de l'accouchement : [Date]
+Semaines de grossesse : ${f.terme || '—'}
+Poids constaté : ${f.poids || '—'}
+Mouvements de l'enfant : ${f.mouvements || '—'}
 
-EXAMEN DU JOUR
-État général :
-[Tenue, posture, mine générale]
-Poids et évolution :
-[Observation]
-Mouvements de l'enfant :
-[Perçus / non perçus, fréquence]
-
-SIGNES OBSERVÉS
-• [Signe]
-• [Signe]
-• [Signe]
-
-COMPLICATIONS ÉVENTUELLES
-[Saignements, douleurs, œdèmes, autre — ou "néant"]
-
-RECOMMANDATIONS
-[Repos, alimentation, activité]
-[Prochaine visite recommandée]
+OBSERVATIONS
+${scenario.texte}
+${f.complications ? `\nComplications relevées : ${f.complications}` : "\nComplications relevées : néant"}
 
 CONCLUSION
-[État général de la grossesse — favorable / à surveiller / préoccupant]`;
+${scenario.label}`;
+}
 
-const TEMPLATE_RX = `Prescription Médicale
+function genRx(nom: string, date: string, f: RxFields, scenario: Scenario): string {
+  return `Prescription Médicale
 Obstétrique — Dispensaire de Little Creek
 
 Patiente
-Nom et prénom : [Nom de la patiente]
+Nom et prénom : ${nom}
+Date : ${date}
+
+Indication
+${scenario.texte || f.indication || '—'}${scenario.texte && f.indication ? `\n${f.indication}` : ''}
 
 ──────────────────────────────────────
 
-[Nom du remède] – usage [de jour / nocturne]
+${f.remede || '[Nom du remède]'}
 
-À consommer en cas de :
-[Symptômes / indication précise], afin de :
-[Effet recherché].
-
-Composition :
-• [Plante]
-• [Plante]
-• [Plante]
-
-──────────────────────────────────────
-
-Consignes complémentaires
-
-Repos recommandé durant :
-[Durée]
-
-Éviter :
-[Alcool / efforts / autre]
-
-Noter tout épisode d'aggravation :
-• [Symptôme]
-• [Symptôme]
+Posologie et conseils
+${f.posologie || '[À préciser]'}
 
 ──────────────────────────────────────
 
 Suivi
 
-Une nouvelle consultation est requise dans [durée],
-ou immédiatement en cas de :
-[Aggravation / symptôme critique]`;
+Une nouvelle consultation est requise en cas de persistance ou d'aggravation des symptômes.`;
+}
 
-const TEMPLATE_ACCOUCHEMENT = `COMPTE-RENDU D'ACCOUCHEMENT
+function genAccouchement(nom: string, age: string, date: string, f: AccFields, scenario: Scenario): string {
+  return `COMPTE-RENDU D'ACCOUCHEMENT
 DISPENSAIRE DE LITTLE CREEK — OBSTÉTRIQUE
 Année 1890
 
 IDENTITÉ DE LA PATIENTE
-Nom et prénom : [Nom de la patiente]
-Âge : [Âge]
+Nom et prénom : ${nom}
+Âge : ${age || '—'}
 
 DÉROULEMENT DE L'ACCOUCHEMENT
-Date et heure : [Date] à [Heure]
-Lieu : [Dispensaire / domicile]
-Durée du travail : [Durée]
-Présentation : [Céphalique / siège / autre]
+Date et heure : ${date}${f.heure ? ` à ${f.heure}` : ''}
+Lieu : ${f.lieu || '—'}
+Durée du travail : ${f.duree || '—'}
+Présentation : ${f.presentation || '—'}
+Sexe de l'enfant : ${f.sexe || '—'}
 
 ISSUE
-Enfant : [Vivant / mort-né], [Sexe]
-État de l'enfant à la naissance :
-[Observations]
-État de la mère :
-[Observations]
-
-COMPLICATIONS
-[Hémorragie, déchirure, autre — ou "néant"]
-
-SOINS PRODIGUÉS
-[Soins apportés à la mère et à l'enfant]
+${scenario.texte}
 
 RECOMMANDATIONS POST-NATALES
-[Repos, alimentation, surveillance]
-[Prochaine visite recommandée]
-
-CONCLUSION
-[État général à l'issue de l'accouchement]`;
-
-const TEMPLATES: Record<DocCreationType, string> = {
-  'Suivi de grossesse': TEMPLATE_SUIVI,
-  'Prescription médicale': TEMPLATE_RX,
-  "Compte-rendu d'accouchement": TEMPLATE_ACCOUCHEMENT,
-};
+Repos, surveillance et prochaine visite à prévoir selon l'état de la patiente.`;
+}
 
 export default function ObstetriqueDocumentationPage() {
   const router  = useRouter();
@@ -161,6 +166,7 @@ export default function ObstetriqueDocumentationPage() {
   const [allDocs,    setAllDocs]    = useState<DocResult[]>([]);
 
   const [createType,      setCreateType]      = useState<DocCreationType | null>(null);
+  const [step,            setStep]            = useState<'form' | 'preview'>('form');
   const [useExisting,     setUseExisting]      = useState(true);
   const [selectedPat,     setSelectedPat]      = useState('');
   const [newNom,          setNewNom]           = useState('');
@@ -170,6 +176,11 @@ export default function ObstetriqueDocumentationPage() {
   const [createDate,      setCreateDate]       = useState('');
   const [createContenu,   setCreateContenu]    = useState('');
   const [patSearch,       setPatSearch]        = useState('');
+
+  const [scenarioId,  setScenarioId]  = useState('');
+  const [suiviF,      setSuiviF]      = useState<SuiviFields>({ ...SUIVI_EMPTY });
+  const [rxF,         setRxF]         = useState<RxFields>({ ...RX_EMPTY });
+  const [accF,        setAccF]        = useState<AccFields>({ ...ACC_EMPTY });
 
   const [certDoc,    setCertDoc]    = useState<DocResult | null>(null);
   const [certPat,    setCertPat]    = useState<Patiente | null>(null);
@@ -198,13 +209,41 @@ export default function ObstetriqueDocumentationPage() {
 
   function openCreate(type: DocCreationType) {
     setCreateType(type);
+    setStep('form');
     setUseExisting(true);
     setSelectedPat(patientes[0]?.id ?? '');
     setNewNom(''); setNewPrenom(''); setNewAge('');
     setCreateTitre('');
     setCreateDate(rpDate());
-    setCreateContenu(TEMPLATES[type]);
+    setCreateContenu('');
     setPatSearch('');
+    setScenarioId('');
+    setSuiviF({ ...SUIVI_EMPTY });
+    setRxF({ ...RX_EMPTY });
+    setAccF({ ...ACC_EMPTY });
+  }
+
+  function scenariosFor(type: DocCreationType): Scenario[] {
+    if (type === 'Suivi de grossesse') return SUIVI_SCENARIOS;
+    if (type === 'Prescription médicale') return RX_SCENARIOS;
+    return ACC_SCENARIOS;
+  }
+
+  function generateDocument() {
+    if (!createType) return;
+    const scenario = scenariosFor(createType).find(s => s.id === scenarioId) ?? scenariosFor(createType)[0];
+    const nom = useExisting
+      ? (() => { const p = patientes.find(x => x.id === selectedPat); return p ? `${p.patientPrenom} ${p.patientNom}`.trim() : ''; })()
+      : `${newPrenom} ${newNom}`.trim();
+    const age = useExisting ? (patientes.find(x => x.id === selectedPat)?.patientAge ?? '') : newAge;
+
+    let contenu = '';
+    if (createType === 'Suivi de grossesse') contenu = genSuivi(nom, age, createDate, suiviF, scenario);
+    else if (createType === 'Prescription médicale') contenu = genRx(nom, createDate, rxF, scenario);
+    else contenu = genAccouchement(nom, age, createDate, accF, scenario);
+
+    setCreateContenu(contenu);
+    setStep('preview');
   }
 
   async function submitCreate() {
@@ -460,76 +499,179 @@ export default function ObstetriqueDocumentationPage() {
       {createType && (
         <>
           <div onClick={() => setCreateType(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', zIndex: 40 }} />
-          <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 620, background: T.bg, borderLeft: `2px solid ${createType === 'Suivi de grossesse' ? COL_SUIVI : createType === 'Prescription médicale' ? COL_RX : COL_ACC}`, zIndex: 50, display: 'flex', flexDirection: 'column', animation: 'slide-in 0.25s ease' }}>
+          {(() => {
+            const col = createType === 'Suivi de grossesse' ? COL_SUIVI : createType === 'Prescription médicale' ? COL_RX : COL_ACC;
+            const scenarios = scenariosFor(createType);
+            const canGenerate = (useExisting ? !!selectedPat : !!newNom.trim()) && !!scenarioId;
+            return (
+          <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 620, background: T.bg, borderLeft: `2px solid ${col}`, zIndex: 50, display: 'flex', flexDirection: 'column', animation: 'slide-in 0.25s ease' }}>
             <div style={{ padding: '24px 28px 18px', borderBottom: `1px solid ${T.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
               <div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 22, color: createType === 'Suivi de grossesse' ? COL_SUIVI : createType === 'Prescription médicale' ? COL_RX : COL_ACC }}>
+                <div style={{ fontFamily: DISPLAY, fontSize: 22, color: col }}>
                   {createType === 'Suivi de grossesse' ? '🤰' : createType === 'Prescription médicale' ? '💊' : '👶'} {createType}
                 </div>
-                <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 4 }}>Nouveau document — rattacher à une patiente</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 4 }}>
+                  {step === 'form' ? 'Étape 1 — informations et scénario' : 'Étape 2 — relecture avant enregistrement'}
+                </div>
               </div>
               <button onClick={() => setCreateType(null)} style={{ background: 'transparent', border: 'none', color: T.muted, fontSize: 26, cursor: 'pointer' }}>✕</button>
             </div>
 
-            <div style={{ flex: 1, overflowY: 'auto', padding: '22px 28px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {step === 'form' ? (
+              <>
+                <div style={{ flex: 1, overflowY: 'auto', padding: '22px 28px', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
-              <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '16px 18px' }}>
-                <div style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.1em', marginBottom: 12 }}>PATIENTE</div>
-                <div style={{ display: 'flex', gap: 0, marginBottom: 14, border: `1px solid ${T.border}` }}>
-                  {(['existing', 'new'] as const).map(opt => (
-                    <button key={opt} onClick={() => setUseExisting(opt === 'existing')}
-                      style={{ flex: 1, fontFamily: MONO, fontSize: 14, padding: '8px', cursor: 'pointer', letterSpacing: '0.08em', border: 'none', background: (opt === 'existing') === useExisting ? 'rgba(209,183,124,0.18)' : 'transparent', color: (opt === 'existing') === useExisting ? T.gold : T.dim, borderBottom: (opt === 'existing') === useExisting ? `2px solid ${T.gold}` : '2px solid transparent' }}>
-                      {opt === 'existing' ? '👤 PATIENTE EXISTANTE' : '✚ NOUVELLE PATIENTE'}
-                    </button>
-                  ))}
-                </div>
+                  <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '16px 18px' }}>
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.1em', marginBottom: 12 }}>PATIENTE</div>
+                    <div style={{ display: 'flex', gap: 0, marginBottom: 14, border: `1px solid ${T.border}` }}>
+                      {(['existing', 'new'] as const).map(opt => (
+                        <button key={opt} onClick={() => setUseExisting(opt === 'existing')}
+                          style={{ flex: 1, fontFamily: MONO, fontSize: 14, padding: '8px', cursor: 'pointer', letterSpacing: '0.08em', border: 'none', background: (opt === 'existing') === useExisting ? 'rgba(209,183,124,0.18)' : 'transparent', color: (opt === 'existing') === useExisting ? T.gold : T.dim, borderBottom: (opt === 'existing') === useExisting ? `2px solid ${T.gold}` : '2px solid transparent' }}>
+                          {opt === 'existing' ? '👤 PATIENTE EXISTANTE' : '✚ NOUVELLE PATIENTE'}
+                        </button>
+                      ))}
+                    </div>
 
-                {useExisting ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    <input style={inp} placeholder="Rechercher une patiente…" value={patSearch} onChange={e => setPatSearch(e.target.value)} />
-                    <select style={{ ...inp, cursor: 'pointer', maxHeight: 160 }} size={Math.min(5, filteredPats.length + 1)} value={selectedPat} onChange={e => setSelectedPat(e.target.value)}>
-                      {filteredPats.length === 0
-                        ? <option disabled>Aucune patiente trouvée</option>
-                        : filteredPats.map(p => <option key={p.id} value={p.id}>{p.patientPrenom} {p.patientNom}{p.patientAge ? ` — ${p.patientAge} ans` : ''}</option>)
-                      }
-                    </select>
+                    {useExisting ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                        <input style={inp} placeholder="Rechercher une patiente…" value={patSearch} onChange={e => setPatSearch(e.target.value)} />
+                        <select style={{ ...inp, cursor: 'pointer', maxHeight: 160 }} size={Math.min(5, filteredPats.length + 1)} value={selectedPat} onChange={e => setSelectedPat(e.target.value)}>
+                          {filteredPats.length === 0
+                            ? <option disabled>Aucune patiente trouvée</option>
+                            : filteredPats.map(p => <option key={p.id} value={p.id}>{p.patientPrenom} {p.patientNom}{p.patientAge ? ` — ${p.patientAge} ans` : ''}</option>)
+                          }
+                        </select>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                        <div><label style={lbl}>NOM *</label><input style={inp} value={newNom} onChange={e => setNewNom(e.target.value)} placeholder="Dupont" /></div>
+                        <div><label style={lbl}>PRÉNOM</label><input style={inp} value={newPrenom} onChange={e => setNewPrenom(e.target.value)} placeholder="Jeanne" /></div>
+                        <div style={{ gridColumn: '1/-1' }}><label style={lbl}>ÂGE</label><input style={inp} value={newAge} onChange={e => setNewAge(e.target.value)} placeholder="28 ans" /></div>
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <div><label style={lbl}>NOM *</label><input style={inp} value={newNom} onChange={e => setNewNom(e.target.value)} placeholder="Dupont" /></div>
-                    <div><label style={lbl}>PRÉNOM</label><input style={inp} value={newPrenom} onChange={e => setNewPrenom(e.target.value)} placeholder="Jeanne" /></div>
-                    <div style={{ gridColumn: '1/-1' }}><label style={lbl}>ÂGE</label><input style={inp} value={newAge} onChange={e => setNewAge(e.target.value)} placeholder="28 ans" /></div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12 }}>
+                    <div><label style={lbl}>TITRE DU DOCUMENT</label>
+                      <input style={inp} value={createTitre} onChange={e => setCreateTitre(e.target.value)} placeholder={createType} />
+                    </div>
+                    <div><label style={lbl}>DATE</label>
+                      <input style={{ ...inp, width: 150 }} value={createDate} onChange={e => setCreateDate(e.target.value)} placeholder="JJ/MM/AAAA" />
+                    </div>
                   </div>
-                )}
-              </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12 }}>
-                <div><label style={lbl}>TITRE DU DOCUMENT</label>
-                  <input style={inp} value={createTitre} onChange={e => setCreateTitre(e.target.value)} placeholder={createType} />
+                  {/* Champs structurés selon le type */}
+                  {createType === 'Suivi de grossesse' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                        <div><label style={lbl}>SEMAINES DE GROSSESSE</label><input style={inp} value={suiviF.terme} onChange={e => setSuiviF(f => ({ ...f, terme: e.target.value }))} placeholder="ex : 24 semaines" /></div>
+                        <div><label style={lbl}>POIDS CONSTATÉ</label><input style={inp} value={suiviF.poids} onChange={e => setSuiviF(f => ({ ...f, poids: e.target.value }))} placeholder="ex : stable" /></div>
+                      </div>
+                      <div><label style={lbl}>MOUVEMENTS DE L&apos;ENFANT</label>
+                        <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.mouvements} onChange={e => setSuiviF(f => ({ ...f, mouvements: e.target.value }))}>
+                          {MOUVEMENTS_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                        </select>
+                      </div>
+                      <div><label style={lbl}>COMPLICATIONS ÉVENTUELLES</label><input style={inp} value={suiviF.complications} onChange={e => setSuiviF(f => ({ ...f, complications: e.target.value }))} placeholder="Laisser vide si néant" /></div>
+                    </div>
+                  )}
+                  {createType === 'Prescription médicale' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      <div><label style={lbl}>INDICATION / PRÉCISIONS</label><input style={inp} value={rxF.indication} onChange={e => setRxF(f => ({ ...f, indication: e.target.value }))} placeholder="Précision optionnelle en plus du scénario" /></div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                        <div><label style={lbl}>REMÈDE</label><input style={inp} value={rxF.remede} onChange={e => setRxF(f => ({ ...f, remede: e.target.value }))} placeholder="ex : Décoction de framboisier" /></div>
+                        <div><label style={lbl}>POSOLOGIE / CONSEILS</label><input style={inp} value={rxF.posologie} onChange={e => setRxF(f => ({ ...f, posologie: e.target.value }))} placeholder="ex : 2 fois par jour" /></div>
+                      </div>
+                    </div>
+                  )}
+                  {createType === "Compte-rendu d'accouchement" && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                        <div><label style={lbl}>HEURE</label><input style={inp} value={accF.heure} onChange={e => setAccF(f => ({ ...f, heure: e.target.value }))} placeholder="ex : 14h30" /></div>
+                        <div><label style={lbl}>DURÉE DU TRAVAIL</label><input style={inp} value={accF.duree} onChange={e => setAccF(f => ({ ...f, duree: e.target.value }))} placeholder="ex : 6 heures" /></div>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+                        <div><label style={lbl}>LIEU</label>
+                          <select style={{ ...inp, cursor: 'pointer' }} value={accF.lieu} onChange={e => setAccF(f => ({ ...f, lieu: e.target.value }))}>
+                            {LIEU_OPTIONS.map(o => <option key={o} value={o}>{o || '—'}</option>)}
+                          </select>
+                        </div>
+                        <div><label style={lbl}>PRÉSENTATION</label>
+                          <select style={{ ...inp, cursor: 'pointer' }} value={accF.presentation} onChange={e => setAccF(f => ({ ...f, presentation: e.target.value }))}>
+                            {PRESENTATION_OPTIONS.map(o => <option key={o} value={o}>{o || '—'}</option>)}
+                          </select>
+                        </div>
+                        <div><label style={lbl}>SEXE DE L&apos;ENFANT</label>
+                          <select style={{ ...inp, cursor: 'pointer' }} value={accF.sexe} onChange={e => setAccF(f => ({ ...f, sexe: e.target.value }))}>
+                            {SEXE_OPTIONS.map(o => <option key={o} value={o}>{o || '—'}</option>)}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Scénario */}
+                  <div>
+                    <label style={lbl}>SCÉNARIO *</label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {scenarios.map(s => {
+                        const on = scenarioId === s.id;
+                        return (
+                          <button key={s.id} type="button" onClick={() => setScenarioId(s.id)}
+                            style={{ fontFamily: MONO, fontSize: 14, padding: '9px 12px', cursor: 'pointer', textAlign: 'left', letterSpacing: '0.02em', background: on ? col + '22' : 'transparent', color: on ? col : T.dim, border: `1px solid ${on ? col + '70' : T.border}` }}>
+                            {s.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
-                <div><label style={lbl}>DATE</label>
-                  <input style={{ ...inp, width: 150 }} value={createDate} onChange={e => setCreateDate(e.target.value)} placeholder="JJ/MM/AAAA" />
+
+                <div style={{ padding: '16px 28px 24px', borderTop: `1px solid ${T.border}`, flexShrink: 0 }}>
+                  <button onClick={generateDocument}
+                    disabled={!canGenerate}
+                    style={{ width: '100%', fontFamily: MONO, fontSize: 16, letterSpacing: '0.14em', padding: '14px', cursor: canGenerate ? 'pointer' : 'not-allowed', opacity: canGenerate ? 1 : 0.5, background: `${col}25`, color: col, border: `2px solid ${col}60` }}>
+                    GÉNÉRER LE DOCUMENT →
+                  </button>
                 </div>
-              </div>
+              </>
+            ) : (
+              <>
+                <div style={{ flex: 1, overflowY: 'auto', padding: '22px 28px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12 }}>
+                    <div><label style={lbl}>TITRE DU DOCUMENT</label>
+                      <input style={inp} value={createTitre} onChange={e => setCreateTitre(e.target.value)} placeholder={createType} />
+                    </div>
+                    <div><label style={lbl}>DATE</label>
+                      <input style={{ ...inp, width: 150 }} value={createDate} onChange={e => setCreateDate(e.target.value)} placeholder="JJ/MM/AAAA" />
+                    </div>
+                  </div>
 
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <label style={lbl}>CONTENU — REMPLISSEZ LES [ ] AVEC LES INFORMATIONS DE LA PATIENTE</label>
-                <textarea
-                  style={{ ...inp, flex: 1, resize: 'none', minHeight: 420, lineHeight: 1.8, fontSize: 14, padding: '14px' }}
-                  value={createContenu}
-                  onChange={e => setCreateContenu(e.target.value)}
-                />
-              </div>
-            </div>
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <label style={lbl}>DOCUMENT GÉNÉRÉ — MODIFIEZ CE QUI EST NÉCESSAIRE AVANT D&apos;ENREGISTRER</label>
+                    <textarea
+                      style={{ ...inp, flex: 1, resize: 'none', minHeight: 420, lineHeight: 1.8, fontSize: 14, padding: '14px' }}
+                      value={createContenu}
+                      onChange={e => setCreateContenu(e.target.value)}
+                    />
+                  </div>
+                </div>
 
-            <div style={{ padding: '16px 28px 24px', borderTop: `1px solid ${T.border}`, flexShrink: 0 }}>
-              <button onClick={submitCreate}
-                disabled={useExisting ? !selectedPat : !newNom.trim()}
-                style={{ width: '100%', fontFamily: MONO, fontSize: 16, letterSpacing: '0.14em', padding: '14px', cursor: 'pointer', background: `${createType === 'Suivi de grossesse' ? COL_SUIVI : createType === 'Prescription médicale' ? COL_RX : COL_ACC}25`, color: createType === 'Suivi de grossesse' ? COL_SUIVI : createType === 'Prescription médicale' ? COL_RX : COL_ACC, border: `2px solid ${createType === 'Suivi de grossesse' ? COL_SUIVI : createType === 'Prescription médicale' ? COL_RX : COL_ACC}60` }}>
-                ✔ ENREGISTRER LE DOCUMENT
-              </button>
-            </div>
+                <div style={{ padding: '16px 28px 24px', borderTop: `1px solid ${T.border}`, flexShrink: 0, display: 'flex', gap: 10 }}>
+                  <button onClick={() => setStep('form')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.08em', padding: '14px 18px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>
+                    ← MODIFIER LES CHAMPS
+                  </button>
+                  <button onClick={submitCreate}
+                    disabled={useExisting ? !selectedPat : !newNom.trim()}
+                    style={{ flex: 1, fontFamily: MONO, fontSize: 16, letterSpacing: '0.14em', padding: '14px', cursor: 'pointer', background: `${col}25`, color: col, border: `2px solid ${col}60` }}>
+                    ✔ ENREGISTRER LE DOCUMENT
+                  </button>
+                </div>
+              </>
+            )}
           </div>
+            );
+          })()}
         </>
       )}
     </div>
