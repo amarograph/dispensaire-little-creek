@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { isDirection } from '@/lib/permissions';
 import { listMembers } from '@/actions/members';
@@ -25,6 +26,9 @@ export default async function AccessRequestsPage() {
 
   return (
     <div>
+      <Link href="/redm/direction" className="inline-flex items-center gap-2 text-xs bg-gray-900 border border-gray-800 hover:border-gray-600 text-gray-400 px-4 py-2 rounded-lg transition mb-6">
+        ← Retour
+      </Link>
       <h1 className="text-2xl font-bold mb-8">Demandes d'accès</h1>
 
       <div className="mb-10">

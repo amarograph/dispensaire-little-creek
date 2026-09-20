@@ -2,9 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
+import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
+
+const WHITELIST_ROLES = ['redm_directeur', 'redm_co_directeur'];
 
 const MODULES = [
   { id: 'comptabilite', href: '/redm/direction/comptabilite', icon: '📊', label: 'Comptabilité', sub: 'REGISTRE & SALAIRES', desc: 'Registre hebdomadaire de la Caisse et calcul du salaire de chaque médecin selon les soins effectués.', color: '#D1B77C', badge: 'FIN' },
@@ -14,11 +18,15 @@ const MODULES = [
   { id: 'inventaire', href: '/redm/direction/inventaire', icon: '🔒', label: 'Inventaire', sub: 'CONSULTATION — LECTURE SEULE', desc: "Voir l'état complet des stocks par catégorie sans pouvoir le modifier, avec alerte en cas de rupture imminente.", color: '#AAB9C6', badge: 'INV' },
   { id: 'alerte-sanitaire', href: '/redm/direction/alerte-sanitaire', icon: '🚨', label: 'Alerte Sanitaire', sub: 'ÉPIDÉMIES & RISQUES', desc: "Déclarer une épidémie ou un risque sanitaire en cours, et marquer la situation comme critique pour alerter tous les joueurs.", color: '#DF9A88', badge: 'ALR' },
   { id: 'journal',   href: '/redm/direction/journal',   icon: '📜', label: "Journal d'activité",    sub: 'HISTORIQUE DES ACTIONS',         desc: "Consulter l'historique complet des actions de la direction : modifications de tarifs, salaires, inventaire, fiches médecins…", color: '#C8BEA5', badge: 'LOG' },
+  { id: 'whitelist', href: '/admin/access', icon: '📋', label: 'Validation Whitelist', sub: 'DEMANDES D’ACCÈS', desc: "Valider ou refuser les nouvelles demandes d'accès au site et attribuer leurs rôles.", color: '#B7C3A4', badge: 'WL', roles: WHITELIST_ROLES },
 ];
 
 export default function DirectionPage() {
   const router = useRouter();
+  const { roles } = useRedmSession();
+  const isAdmin = checkIsAdmin(roles);
   const [hover, setHover] = useState<string | null>(null);
+  const visibleModules = MODULES.filter(m => !m.roles || isAdmin || roles.some(r => m.roles!.includes(r)));
 
   return (
     <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
@@ -41,7 +49,7 @@ export default function DirectionPage() {
 
       {/* Grille */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
-        {MODULES.map(m => {
+        {visibleModules.map(m => {
           const h = hover === m.id;
           return (
             <div key={m.id}
