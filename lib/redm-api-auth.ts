@@ -3,7 +3,7 @@ import { isAdmin } from '@/lib/permissions';
 
 const DIRECTION_ROLES = ['redm_directeur', 'redm_co_directeur'];
 const DIRECTION_READ_ROLES = [...DIRECTION_ROLES, 'redm_medecin_chef'];
-const CABINET_ROLES = ['redm_therapeute', 'redm_directeur'];
+const CABINET_ROLES = ['redm_therapeute', 'redm_directeur', 'redm_co_directeur'];
 
 /** Direction / co-direction (ou dev) — accès complet aux routes d'admin RedM. */
 export async function requireDirectionActor(): Promise<{ id: string; name: string } | null> {
