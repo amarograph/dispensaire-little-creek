@@ -4,6 +4,10 @@ import { useState, useTransition } from 'react';
 import { decideMember, updateMemberRoles } from '@/actions/members';
 import { ROLES, ASSIGNABLE_ROLES, ROLE_LABELS, type Role } from '@/lib/permissions';
 
+const DISPLAY = "'Central Station', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
+const T = { card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
+
 type Member = {
   user_id: string;
   discord_id: string;
@@ -12,6 +16,11 @@ type Member = {
   roles: string[];
   requested_at: string;
 };
+
+const btn: React.CSSProperties = { fontFamily: MONO, fontSize: 14, letterSpacing: '0.06em', padding: '7px 14px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` };
+const btnGreen: React.CSSProperties = { ...btn, color: '#A8B991', border: '1px solid rgba(90,152,88,0.45)', background: 'rgba(90,152,88,0.12)' };
+const btnRed: React.CSSProperties = { ...btn, color: '#DF9A88', border: '1px solid rgba(139,64,64,0.45)', background: 'rgba(139,64,64,0.10)' };
+const btnGold: React.CSSProperties = { ...btn, color: T.gold, border: '1px solid rgba(209,183,124,0.4)', background: 'rgba(209,183,124,0.08)' };
 
 export default function MemberRow({ member }: { member: Member }) {
   const [isPending, startTransition] = useTransition();
@@ -51,24 +60,29 @@ export default function MemberRow({ member }: { member: Member }) {
     });
   }
 
-  const statusLabel = {
-    pending: { text: 'En attente', className: 'bg-yellow-900/40 text-yellow-400' },
-    approved: { text: 'Validé', className: 'bg-green-900/40 text-green-400' },
-    rejected: { text: 'Refusé', className: 'bg-red-900/40 text-red-400' },
-  }[member.status] ?? { text: member.status, className: 'bg-gray-800 text-gray-400' };
+  const statusInfo = {
+    pending:  { text: 'EN ATTENTE', col: '#D1B77C' },
+    approved: { text: 'VALIDÉ',     col: '#A8B991' },
+    rejected: { text: 'REFUSÉ',     col: '#DF9A88' },
+  }[member.status] ?? { text: member.status.toUpperCase(), col: T.dim };
 
   const showRolePicker = member.status === 'pending' || editingRoles;
+  const initiale = (member.username?.[0] ?? '?').toUpperCase();
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="font-medium text-white">{member.username}</div>
-          <div className="text-xs text-gray-500 font-mono">{member.discord_id}</div>
+    <div style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `3px solid ${statusInfo.col}`, padding: '16px 20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+        <div style={{ width: 40, height: 40, background: statusInfo.col + '20', border: `1px solid ${statusInfo.col}50`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <span style={{ fontFamily: DISPLAY, fontSize: 19, color: statusInfo.col }}>{initiale}</span>
+        </div>
+
+        <div style={{ flex: 1, minWidth: 220 }}>
+          <div style={{ fontFamily: DISPLAY, fontSize: 19, color: T.text }}>{member.username}</div>
+          <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginTop: 2 }}>{member.discord_id}</div>
           {member.status === 'approved' && member.roles.length > 0 && !editingRoles && (
-            <div className="flex flex-wrap gap-1 mt-2">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
               {member.roles.map(r => (
-                <span key={r} className="text-xs bg-blue-900/40 text-blue-400 px-2 py-0.5 rounded-full">
+                <span key={r} style={{ fontFamily: MONO, fontSize: 13, color: '#BAAAC6', background: 'rgba(155,106,200,0.10)', padding: '1px 8px', border: '1px solid rgba(155,106,200,0.25)' }}>
                   {ROLE_LABELS[r as Role] ?? r}
                 </span>
               ))}
@@ -76,74 +90,56 @@ export default function MemberRow({ member }: { member: Member }) {
           )}
         </div>
 
-        <div className="flex items-center gap-2">
-          {error && <span className="text-xs text-red-400">{error}</span>}
-          <span className={`text-xs px-2 py-1 rounded-full ${statusLabel.className}`}>
-            {statusLabel.text}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          {error && <span style={{ fontFamily: MONO, fontSize: 13, color: '#DF9A88' }}>{error}</span>}
+          <span style={{ fontFamily: MONO, fontSize: 13, letterSpacing: '0.08em', color: statusInfo.col, background: statusInfo.col + '18', padding: '4px 10px', border: `1px solid ${statusInfo.col}40` }}>
+            {statusInfo.text}
           </span>
           {member.status === 'approved' && !editingRoles && (
-            <button
-              onClick={() => setEditingRoles(true)}
-              className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition"
-            >
-              Modifier les rôles
-            </button>
+            <button onClick={() => setEditingRoles(true)} style={btnGold}>✎ Rôles</button>
           )}
           {member.status !== 'approved' && (
-            <button
-              onClick={() => handleDecide('approved')}
-              disabled={isPending}
-              className="text-xs bg-green-900/40 hover:bg-green-900/70 text-green-400 px-3 py-1.5 rounded-lg transition disabled:opacity-50"
-            >
-              Valider
-            </button>
+            <button onClick={() => handleDecide('approved')} disabled={isPending} style={{ ...btnGreen, opacity: isPending ? 0.5 : 1 }}>Valider</button>
           )}
           {member.status !== 'rejected' && (
-            <button
-              onClick={() => handleDecide('rejected')}
-              disabled={isPending}
-              className="text-xs bg-red-900/30 hover:bg-red-900/60 text-red-400 px-3 py-1.5 rounded-lg transition disabled:opacity-50"
-            >
-              Refuser
-            </button>
+            <button onClick={() => handleDecide('rejected')} disabled={isPending} style={{ ...btnRed, opacity: isPending ? 0.5 : 1 }}>Refuser</button>
           )}
         </div>
       </div>
 
       {showRolePicker && (
-        <div className="mt-3 pt-3 border-t border-gray-800">
-          <div className="flex flex-wrap gap-2 mb-3">
-            {ASSIGNABLE_ROLES.map(role => (
-              <button
-                key={role}
-                type="button"
-                onClick={() => toggleRole(role)}
-                disabled={isPending}
-                className={`text-xs px-3 py-1.5 rounded-lg border transition ${
-                  selectedRoles.includes(role)
-                    ? 'bg-blue-900/50 border-blue-700 text-blue-300'
-                    : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600'
-                }`}
-              >
-                {ROLE_LABELS[role]}
-              </button>
-            ))}
+        <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${T.border}` }}>
+          <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.1em', marginBottom: 10 }}>RÔLES À ATTRIBUER</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
+            {ASSIGNABLE_ROLES.map(role => {
+              const on = selectedRoles.includes(role);
+              return (
+                <button
+                  key={role}
+                  type="button"
+                  onClick={() => toggleRole(role)}
+                  disabled={isPending}
+                  style={{
+                    fontFamily: MONO, fontSize: 13, letterSpacing: '0.04em', padding: '7px 12px', cursor: 'pointer',
+                    background: on ? 'rgba(209,183,124,0.18)' : 'transparent',
+                    color: on ? T.gold : T.dim,
+                    border: `1px solid ${on ? 'rgba(209,183,124,0.5)' : T.border}`,
+                  }}
+                >
+                  {ROLE_LABELS[role]}
+                </button>
+              );
+            })}
           </div>
           {editingRoles && (
-            <div className="flex gap-2">
-              <button
-                onClick={handleSaveRoles}
-                disabled={isPending}
-                className="text-xs bg-blue-900/50 hover:bg-blue-900/80 text-blue-300 px-3 py-1.5 rounded-lg transition disabled:opacity-50"
-              >
-                Enregistrer
-              </button>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button onClick={handleSaveRoles} disabled={isPending} style={{ ...btnGold, opacity: isPending ? 0.5 : 1 }}>✔ Enregistrer</button>
               <button
                 onClick={() => {
                   setEditingRoles(false);
                   setSelectedRoles((member.roles ?? []).filter((r): r is Role => (ROLES as readonly string[]).includes(r)));
                 }}
-                className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition"
+                style={btn}
               >
                 Annuler
               </button>
