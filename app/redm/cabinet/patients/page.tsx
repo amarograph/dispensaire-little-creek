@@ -39,8 +39,8 @@ const EQUILIBRES = [
 ];
 
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
-const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
-const sec: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.gold, letterSpacing: '0.16em', marginBottom: 10, marginTop: 4, paddingBottom: 6, borderBottom: `1px solid rgba(139,90,43,0.20)` };
+const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
+const sec: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.16em', marginBottom: 10, marginTop: 4, paddingBottom: 6, borderBottom: `1px solid rgba(139,90,43,0.20)` };
 
 /** Convertit une ligne Supabase (snake_case) en Dossier (camelCase) */
 function mapFromDb(row: Record<string, unknown>): Dossier {
@@ -196,7 +196,7 @@ export default function PatientsPage() {
         ].map(s =>
           <div key={s.l} style={{ background: T.card, border: `1px solid ${T.border}`, padding: '14px 18px', textAlign: 'center' }}>
             <div style={{ fontFamily: DISPLAY, fontSize: 30, color: s.c }}>{s.v}</div>
-            <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginTop: 3, letterSpacing: '0.1em' }}>{s.l}</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 3, letterSpacing: '0.1em' }}>{s.l}</div>
           </div>
         )}
       </div>
@@ -205,7 +205,7 @@ export default function PatientsPage() {
       <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Rechercher un patient…" style={{ ...inp, flex: 1 }} />
         <button onClick={() => router.push('/redm/cabinet/archives/cloturees')}
-          style={{ fontFamily: MONO, fontSize: 13, padding: '9px 18px', cursor: 'pointer', whiteSpace: 'nowrap', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, letterSpacing: '0.08em' }}>
+          style={{ fontFamily: MONO, fontSize: 14, padding: '9px 18px', cursor: 'pointer', whiteSpace: 'nowrap', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, letterSpacing: '0.08em' }}>
           🗄 Archives{archiveesCount > 0 ? ` (${archiveesCount})` : ''}
         </button>
         <button onClick={openNew} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '9px 20px', cursor: 'pointer', background: 'rgba(74,96,72,0.25)', color: '#A8B991', border: '1px solid rgba(74,96,72,0.5)', whiteSpace: 'nowrap' }}>✚ NOUVEAU DOSSIER</button>
@@ -231,24 +231,24 @@ export default function PatientsPage() {
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                       <span style={{ fontFamily: DISPLAY, fontSize: 20, color: T.text }}>{nomComplet || d.patientNom}</span>
-                      {d.patientAge && <span style={{ fontFamily: MONO, fontSize: 13, color: T.muted }}>{d.patientAge} ans</span>}
-                      {d.patientMetier && <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim }}>· {d.patientMetier}</span>}
-                      {d.confidentiel && <span style={{ fontFamily: MONO, fontSize: 12, color: '#DF9A88', background: '#8B404018', padding: '1px 6px' }}>CONFIDENTIEL</span>}
+                      {d.patientAge && <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted }}>{d.patientAge} ans</span>}
+                      {d.patientMetier && <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>· {d.patientMetier}</span>}
+                      {d.confidentiel && <span style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', background: '#8B404018', padding: '1px 6px' }}>CONFIDENTIEL</span>}
                     </div>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                      <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: col+'18', padding: '1px 7px' }}>{d.statut}</span>
-                      <span style={{ fontFamily: MONO, fontSize: 13, color: T.gold, background: 'rgba(209,183,124,0.10)', padding: '1px 7px' }}>{d.type}</span>
-                      <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim }}>{d.dateConsult}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 14, color: col, background: col+'18', padding: '1px 7px' }}>{d.statut}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, background: 'rgba(209,183,124,0.10)', padding: '1px 7px' }}>{d.type}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>{d.dateConsult}</span>
                     </div>
                     {d.plainte && <div style={{ fontFamily: BODY, fontSize: 16, color: T.muted, marginTop: 4, fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>« {d.plainte} »</div>}
                   </div>
                   <div style={{ display: 'flex', gap: 6, flexShrink: 0 }} onClick={e => e.stopPropagation()}>
                     <button onClick={() => openEdit(d)} title="Modifier" style={{ fontFamily: MONO, fontSize: 14, padding: '5px 8px', cursor: 'pointer', background: 'rgba(209,183,124,0.10)', color: T.gold, border: `1px solid rgba(209,183,124,0.3)` }}>✎</button>
                     {archConfirm === d.id
-                      ? <><button onClick={() => archiveDossier(d)} style={{ fontFamily: MONO, fontSize: 11, padding: '5px 7px', cursor: 'pointer', background: 'rgba(90,74,106,0.25)', color: '#9A8AB0', border: '1px solid rgba(90,74,106,0.55)' }}>CLÔTURER</button><button onClick={() => setArchConfirm(null)} style={{ fontFamily: MONO, fontSize: 13, padding: '5px 6px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
+                      ? <><button onClick={() => archiveDossier(d)} style={{ fontFamily: MONO, fontSize: 14, padding: '5px 7px', cursor: 'pointer', background: 'rgba(90,74,106,0.25)', color: '#9A8AB0', border: '1px solid rgba(90,74,106,0.55)' }}>CLÔTURER</button><button onClick={() => setArchConfirm(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '5px 6px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
                       : <button onClick={() => setArchConfirm(d.id)} title="Clôturer le dossier" style={{ fontFamily: MONO, fontSize: 14, padding: '5px 8px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>📦</button>}
                     {delConfirm === d.id
-                      ? <><button onClick={() => { deleteDossier(d.id); setDelConfirm(null); }} style={{ fontFamily: MONO, fontSize: 13, padding: '5px 8px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button><button onClick={() => setDelConfirm(null)} style={{ fontFamily: MONO, fontSize: 13, padding: '5px 6px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
+                      ? <><button onClick={() => { deleteDossier(d.id); setDelConfirm(null); }} style={{ fontFamily: MONO, fontSize: 14, padding: '5px 8px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button><button onClick={() => setDelConfirm(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '5px 6px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
                       : <button onClick={() => setDelConfirm(d.id)} style={{ fontFamily: MONO, fontSize: 14, padding: '5px 8px', cursor: 'pointer', background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)' }}>✕</button>}
                     <span style={{ fontFamily: MONO, fontSize: 17, color: T.dim, display: 'flex', alignItems: 'center' }}>›</span>
                   </div>
@@ -323,7 +323,7 @@ export default function PatientsPage() {
               <div><label style={lbl}>PROCHAINE SÉANCE</label><input style={inp} value={form.prochaine} onChange={e => setForm(f=>({...f,prochaine:e.target.value}))} placeholder="Date ou note de suivi" /></div>
               <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
                 <div style={{ flex: 1 }}><label style={lbl}>STATUT</label><select style={{...inp,cursor:'pointer'}} value={form.statut} onChange={e => setForm(f=>({...f,statut:e.target.value as Statut}))}><option>EN COURS</option><option>TERMINÉE</option><option>ABANDONNÉE</option><option>CLÔTURÉE</option></select></div>
-                <label style={{ display:'flex', alignItems:'center', gap:6, cursor:'pointer', fontFamily:MONO, fontSize: 13, color: form.confidentiel?'#DF9A88':T.dim, paddingTop:16 }}>
+                <label style={{ display:'flex', alignItems:'center', gap:6, cursor:'pointer', fontFamily:MONO, fontSize: 14, color: form.confidentiel?'#DF9A88':T.dim, paddingTop:16 }}>
                   <input type="checkbox" checked={form.confidentiel} onChange={e => setForm(f=>({...f,confidentiel:e.target.checked}))} style={{width:15,height:15}} /> CONFIDENTIEL
                 </label>
               </div>

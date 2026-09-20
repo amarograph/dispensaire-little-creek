@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 export const ZOOM_KEY = 'ui-zoom';
-export const ZOOMS = { S: 0.85, M: 1.0, L: 1.3 } as const;
+export const ZOOMS = { S: 1.0, M: 1.1, L: 1.3 } as const;
 export type ZoomKey = keyof typeof ZOOMS;
 
 interface Props {
@@ -38,12 +38,16 @@ export default function ZoomPicker({
         <button
           key={key}
           onClick={() => pick(key)}
-          title={key === 'S' ? 'Compact (85%)' : key === 'M' ? 'Normal (100%)' : 'Grand (130%)'}
+          title={key === 'S' ? 'Compact (100%)' : key === 'M' ? 'Confort (110%)' : 'Grand (130%)'}
+          aria-label={key === 'S' ? 'Texte compact' : key === 'M' ? 'Texte confort' : 'Grand texte'}
+          aria-pressed={active === key}
           style={{
             fontFamily:   font,
-            fontSize:     11,
+            fontSize:     14,
             fontWeight:   active === key ? 700 : 400,
-            padding:      '3px 8px',
+            padding:      '8px 10px',
+            minWidth:     40,
+            minHeight:    40,
             border:       `1px solid rgba(${accentRgb}, ${active === key ? '0.7' : '0.25'})`,
             background:   active === key ? `rgba(${accentRgb}, 0.18)` : 'transparent',
             color:        active === key ? activeColor : mutedColor,

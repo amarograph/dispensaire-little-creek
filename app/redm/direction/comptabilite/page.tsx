@@ -267,30 +267,30 @@ export default function DirectionComptabilitePage() {
         <div style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 16px' }}>
           <div style={{ textAlign:'center', minWidth:46, flexShrink:0 }}>
             <div style={{ fontFamily:DISPLAY, fontSize: 16, color:T.gold }}>{f.dateSeance.slice(0,5)}</div>
-            <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim }}>{f.dateSeance.slice(6)}</div>
+            <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>{f.dateSeance.slice(6)}</div>
           </div>
           <div style={{ flex:1, minWidth:0 }}>
             <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4, flexWrap:'wrap' }}>
               <span style={{ fontFamily:DISPLAY, fontSize: 17, color:T.text }}>{f.patientNom}</span>
-              <span style={{ fontFamily:MONO, fontSize: 12, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
+              <span style={{ fontFamily:MONO, fontSize: 14, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
             </div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
-              {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 12, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
+              {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
               {pres.map((p,i) => {
                 const cat = tarifs[p.id];
                 const nom = p.nom ?? cat?.nom ?? p.id;
                 const isAchat = p.prix != null || cat?.type === 'achat';
                 return (
-                  <span key={i} style={{ fontFamily:MONO, fontSize: 12, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
+                  <span key={i} style={{ fontFamily:MONO, fontSize: 14, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
                     {isAchat ? '🛒 ' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''}
                   </span>
                 );
               })}
-              <span style={{ fontFamily:MONO, fontSize: 12, color:T.muted, background:'rgba(255,255,255,0.04)', padding:'1px 7px' }}>{f.payeur}</span>
+              <span style={{ fontFamily:MONO, fontSize: 14, color:T.muted, background:'rgba(255,255,255,0.04)', padding:'1px 7px' }}>{f.payeur}</span>
             </div>
           </div>
           <div style={{ fontFamily:DISPLAY, fontSize: 19, color:col, flexShrink:0, minWidth:65, textAlign:'right' }}>{fmt$(f.montant)}</div>
-          <div style={{ fontFamily:MONO, fontSize: 12, padding:'4px 8px', background:col+'18', color:col, border:`1px solid ${col}50`, flexShrink:0 }}>
+          <div style={{ fontFamily:MONO, fontSize: 14, padding:'4px 8px', background:col+'18', color:col, border:`1px solid ${col}50`, flexShrink:0 }}>
             {STATUT_ICON[f.statut]} {f.statut}
           </div>
         </div>
@@ -316,12 +316,12 @@ export default function DirectionComptabilitePage() {
               onClick={()=>router.push('/redm/direction/comptabilite/archives')}
               style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'9px 20px', cursor:'pointer', background:'rgba(74,96,72,0.18)', color:'#6A9A68', border:`1px solid rgba(74,96,72,0.50)`, display:'flex', alignItems:'center', gap:8 }}>
               📦 ARCHIVES
-              {archives.length > 0 && <span style={{ fontFamily:MONO, fontSize:12, color:'#6A9A68', background:'rgba(74,96,72,0.30)', padding:'1px 7px', borderRadius:2 }}>{archives.length}</span>}
+              {archives.length > 0 && <span style={{ fontFamily:MONO, fontSize: 14, color:'#6A9A68', background:'rgba(74,96,72,0.30)', padding:'1px 7px', borderRadius:2 }}>{archives.length}</span>}
             </button>
           </div>
         </div>
         <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 }}>📊 Comptabilité</h1>
-        <p style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
+        <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
           REGISTRE HEBDOMADAIRE & SALAIRES DES MÉDECINS — D&apos;APRÈS « COMPTABILITÉ »
         </p>
       </div>
@@ -337,21 +337,21 @@ export default function DirectionComptabilitePage() {
 
             <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`5px solid ${soldeDispensaire>=0 ? '#A8B991' : '#8B4040'}`, padding:'22px 24px', textAlign:'center', marginBottom:10 }}>
               <div style={{ fontFamily:DISPLAY, fontSize:42, color: soldeDispensaire>=0 ? '#6A9A68' : '#DF9A88' }}>{fmt$(soldeDispensaire)}</div>
-              <div style={{ fontFamily:MONO, fontSize:13, color:T.dim, marginTop:4, letterSpacing:'0.14em' }}>SOLDE DU COMPTE DU DISPENSAIRE</div>
+              <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:4, letterSpacing:'0.14em' }}>SOLDE DU COMPTE DU DISPENSAIRE</div>
             </div>
 
             <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
               <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
                 <div style={{ fontFamily:DISPLAY, fontSize:24, color:T.gold }}>{fmt$(tresorerieSemaine.ventes)}</div>
-                <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>VENTES (SEMAINE)</div>
+                <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>VENTES (SEMAINE)</div>
               </div>
               <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
                 <div style={{ fontFamily:DISPLAY, fontSize:24, color:'#C8845A' }}>{fmt$(tresorerieSemaine.achats)}</div>
-                <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>ACHATS (SEMAINE)</div>
+                <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>ACHATS (SEMAINE)</div>
               </div>
               <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
                 <div style={{ fontFamily:DISPLAY, fontSize:24, color:'#A8B991' }}>{caissesTotalSemaine}</div>
-                <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>CAISSES (SEMAINE)</div>
+                <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>CAISSES (SEMAINE)</div>
               </div>
             </div>
           </div>
@@ -361,38 +361,38 @@ export default function DirectionComptabilitePage() {
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)`, flexWrap:'wrap', gap:10 }}>
               <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>💵 REGISTRE DES CAISSES — {fmtDayShort(caisseDays[0])} AU {fmtDayShort(caisseDays[6])}</span>
               <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                <button onClick={() => setCaisseMonday(m => addDaysReal(m, -7))} style={{ fontFamily:MONO, fontSize:12, padding:'7px 12px', cursor:'pointer', background:T.card, border:`1px solid ${T.border}`, color:T.gold }}>◀</button>
+                <button onClick={() => setCaisseMonday(m => addDaysReal(m, -7))} style={{ fontFamily:MONO, fontSize: 14, padding:'7px 12px', cursor:'pointer', background:T.card, border:`1px solid ${T.border}`, color:T.gold }}>◀</button>
                 {!caisseIsThisWeek && (
-                  <button onClick={() => setCaisseMonday(getMondayOf(new Date()))} style={{ fontFamily:MONO, fontSize:11, letterSpacing:'0.08em', padding:'7px 12px', cursor:'pointer', background:'rgba(209,183,124,0.08)', border:`1px solid rgba(209,183,124,0.35)`, color:T.gold }}>AUJOURD'HUI</button>
+                  <button onClick={() => setCaisseMonday(getMondayOf(new Date()))} style={{ fontFamily:MONO, fontSize: 14, letterSpacing:'0.08em', padding:'7px 12px', cursor:'pointer', background:'rgba(209,183,124,0.08)', border:`1px solid rgba(209,183,124,0.35)`, color:T.gold }}>AUJOURD'HUI</button>
                 )}
-                <button onClick={() => setCaisseMonday(m => addDaysReal(m, 7))} disabled={caisseIsThisWeek} style={{ fontFamily:MONO, fontSize:12, padding:'7px 12px', cursor: caisseIsThisWeek ? 'default' : 'pointer', background:T.card, border:`1px solid ${T.border}`, color: caisseIsThisWeek ? T.dim : T.gold, opacity: caisseIsThisWeek ? 0.4 : 1 }}>▶</button>
-                <button onClick={() => router.push('/redm/registre-caisses')} style={{ fontFamily:MONO, fontSize:12, letterSpacing:'0.1em', padding:'7px 16px', cursor:'pointer', background:'rgba(209,183,124,0.10)', color:T.gold, border:`1px solid rgba(209,183,124,0.35)` }}>
+                <button onClick={() => setCaisseMonday(m => addDaysReal(m, 7))} disabled={caisseIsThisWeek} style={{ fontFamily:MONO, fontSize: 14, padding:'7px 12px', cursor: caisseIsThisWeek ? 'default' : 'pointer', background:T.card, border:`1px solid ${T.border}`, color: caisseIsThisWeek ? T.dim : T.gold, opacity: caisseIsThisWeek ? 0.4 : 1 }}>▶</button>
+                <button onClick={() => router.push('/redm/registre-caisses')} style={{ fontFamily:MONO, fontSize: 14, letterSpacing:'0.1em', padding:'7px 16px', cursor:'pointer', background:'rgba(209,183,124,0.10)', color:T.gold, border:`1px solid rgba(209,183,124,0.35)` }}>
                   MA CAISSE →
                 </button>
               </div>
             </div>
 
             {canEditCaisses && (
-              <p style={{ fontFamily:MONO, fontSize:11, color:T.dim, letterSpacing:'0.06em', marginTop:-8, marginBottom:12 }}>
+              <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.06em', marginTop:-8, marginBottom:12 }}>
                 Cliquez sur une case du tableau pour cocher/décocher une caisse.
               </p>
             )}
 
             {caissesLoading ? (
-              <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Chargement…</div>
+              <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Chargement…</div>
             ) : caissesStaff.length === 0 ? (
-              <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucun membre concerné par le registre des caisses.</div>
+              <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucun membre concerné par le registre des caisses.</div>
             ) : (
               <div style={{ overflowX:'auto' }}>
                 <table style={{ width:'100%', borderCollapse:'collapse', border:`1px solid ${T.border}` }}>
                   <thead>
                     <tr>
-                      <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 16px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.14em', textAlign:'left' }}>MEMBRE</th>
+                      <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 16px', fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.14em', textAlign:'left' }}>MEMBRE</th>
                       {JOURS_CAISSE.map((j, i) => (
-                        <th key={i} style={{ background:'rgba(209,183,124,0.06)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 8px', fontFamily:MONO, fontSize:11, color:T.gold, textAlign:'center', minWidth:34 }}>{j}</th>
+                        <th key={i} style={{ background:'rgba(209,183,124,0.06)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 8px', fontFamily:MONO, fontSize: 14, color:T.gold, textAlign:'center', minWidth:34 }}>{j}</th>
                       ))}
-                      <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'center' }}>NB</th>
-                      <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'right' }}>SALAIRE</th>
+                      <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.1em', textAlign:'center' }}>NB</th>
+                      <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.1em', textAlign:'right' }}>SALAIRE</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -400,7 +400,7 @@ export default function DirectionComptabilitePage() {
                       <tr key={s.discord_id} style={{ borderBottom: idx < caissesStaff.length-1 ? `1px solid rgba(139,90,43,0.12)` : 'none' }}>
                         <td style={{ padding:'10px 16px', borderRight:`1px solid ${T.border}`, background:T.card }}>
                           <div style={{ fontFamily:DISPLAY, fontSize:15, color:T.text }}>{s.nom}</div>
-                          <div style={{ fontFamily:MONO, fontSize:10, color:T.dim, marginTop:2 }}>{fmt$(s.rate)} / caisse</div>
+                          <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:2 }}>{fmt$(s.rate)} / caisse</div>
                         </td>
                         {caisseDays.map((d, i) => {
                           const iso = fmtISODate(d);
@@ -422,8 +422,8 @@ export default function DirectionComptabilitePage() {
                               title={canEditCaisses ? `Cliquer pour basculer — ${fmtDayShort(d)}` : done ? `Caisse faite le ${fmtDayShort(d)}` : missed ? `Non faite le ${fmtDayShort(d)}` : ''}>
                               {done ? <span style={{ color:'#A8B991', fontSize:16 }}>✔</span>
                                 : missed ? <span style={{ color:T.gold, fontSize:16 }}>✕</span>
-                                : future ? <span style={{ color:T.dim, fontSize:12 }}>—</span>
-                                : <span style={{ color:T.dim, fontSize:12 }}>·</span>}
+                                : future ? <span style={{ color:T.dim, fontSize: 14 }}>—</span>
+                                : <span style={{ color:T.dim, fontSize: 14 }}>·</span>}
                             </td>
                           );
                         })}
@@ -453,7 +453,7 @@ export default function DirectionComptabilitePage() {
               ].map(s => (
                 <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
                   <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
-                  <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
+                  <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
                 </div>
               ))}
             </div>
@@ -469,16 +469,16 @@ export default function DirectionComptabilitePage() {
                     <div key={s.medecin} style={{ background:T.card, border:`1px solid rgba(155,106,200,0.35)`, borderLeft:`4px solid #BAAAC6`, padding:'12px 18px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>
                       <div>
                         <div style={{ fontFamily:DISPLAY, fontSize: 19, color:T.text }}>{s.medecin}</div>
-                        <div style={{ fontFamily:MONO, fontSize: 12, color:T.dim, marginTop:3 }}>{s.actes} acte{s.actes>1?'s':''}</div>
+                        <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3 }}>{s.actes} acte{s.actes>1?'s':''}</div>
                       </div>
                       <div style={{ display:'flex', gap:24, alignItems:'center' }}>
                         <div style={{ textAlign:'right' }}>
                           <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.gold }}>{fmt$(s.ca)}</div>
-                          <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim, letterSpacing:'0.1em' }}>CHIFFRE D&apos;AFFAIRES</div>
+                          <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>CHIFFRE D&apos;AFFAIRES</div>
                         </div>
                         <div style={{ textAlign:'right' }}>
                           <div style={{ fontFamily:DISPLAY, fontSize: 28, color:'#BAAAC6' }}>{fmt$(s.salaire)}</div>
-                          <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim, letterSpacing:'0.1em' }}>SALAIRE (APRÈS %)</div>
+                          <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>SALAIRE (APRÈS %)</div>
                         </div>
                       </div>
                     </div>
@@ -511,22 +511,22 @@ export default function DirectionComptabilitePage() {
             </div>
           )}
 
-          <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, textAlign:'center', padding:'12px', borderTop:`1px solid ${T.border}` }}>
+          <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, textAlign:'center', padding:'12px', borderTop:`1px solid ${T.border}` }}>
             ↻ Ce registre reflète automatiquement la « Comptabilité » · les semaines passées sont archivées dès leur clôture
           </div>
 
           {/* Zone de réinitialisation */}
           {canEdit && (
             <div style={{ padding:'14px 18px', background:'rgba(139,64,64,0.06)', border:`1px solid rgba(139,64,64,0.30)`, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:10 }}>
-              <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, letterSpacing:'0.06em' }}>
+              <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.06em' }}>
                 ⚠ Efface définitivement le registre en cours et toutes les semaines archivées (Comptabilité + Trésorerie).
               </div>
               {resetConfirm
                 ? <div style={{ display:'flex', gap:8, flexShrink:0 }}>
-                    <button onClick={resetTout} style={{ fontFamily:MONO, fontSize:13, padding:'9px 16px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>CONFIRMER LA SUPPRESSION ?</button>
-                    <button onClick={()=>setResetConfirm(false)} style={{ fontFamily:MONO, fontSize:13, padding:'9px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>ANNULER</button>
+                    <button onClick={resetTout} style={{ fontFamily:MONO, fontSize: 14, padding:'9px 16px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>CONFIRMER LA SUPPRESSION ?</button>
+                    <button onClick={()=>setResetConfirm(false)} style={{ fontFamily:MONO, fontSize: 14, padding:'9px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>ANNULER</button>
                   </div>
-                : <button onClick={()=>setResetConfirm(true)} style={{ fontFamily:MONO, fontSize:13, letterSpacing:'0.1em', padding:'9px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)', flexShrink:0 }}>🗑 RÉINITIALISER TOUS LES COMPTES</button>}
+                : <button onClick={()=>setResetConfirm(true)} style={{ fontFamily:MONO, fontSize: 14, letterSpacing:'0.1em', padding:'9px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)', flexShrink:0 }}>🗑 RÉINITIALISER TOUS LES COMPTES</button>}
             </div>
           )}
         </div>

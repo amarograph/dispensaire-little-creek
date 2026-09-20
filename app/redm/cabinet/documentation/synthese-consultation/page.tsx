@@ -271,11 +271,11 @@ export default function SyntheseConsultationPage() {
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: 20, letterSpacing: '0.12em', fontWeight: 'bold', marginBottom: 4 }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
           <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
-          <div style={{ fontSize: 13, color: '#6A5030', lineHeight: 1.7 }}>Sous la direction du Docteur François De Millet<br />Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales</div>
+          <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 1.7 }}>Sous la direction du Docteur François De Millet<br />Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales</div>
         </div>
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
           <div style={{ fontSize: 17, letterSpacing: '0.1em', textDecoration: 'underline', textUnderlineOffset: 6, fontWeight: 'bold' }}>{savedDoc.titre.toUpperCase()}</div>
-          <div style={{ fontSize: 13, color: '#6A5030', marginTop: 6 }}>Synthèse de consultation</div>
+          <div style={{ fontSize: 14, color: '#6A5030', marginTop: 6 }}>Synthèse de consultation</div>
         </div>
         <div style={{ fontSize: 15, lineHeight: 2 }}>
           <p style={{ margin: '0 0 16px' }}>Je soussigné, <strong>Docteur François De Millet</strong>, médecin – thérapeute exerçant au sein du L'ORDRES DES MÉDECINS - Hôpital de Little Creek - Dispensaire de Valentine, certifie avoir procédé, en date du <strong>{rpDisplay(savedDoc.date)}</strong>, à la consultation de :</p>
@@ -305,7 +305,7 @@ export default function SyntheseConsultationPage() {
           ← RETOUR
         </button>
         <div>
-          <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.18em', marginBottom: 4 }}>CABINET · DOCUMENTATION</div>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.18em', marginBottom: 4 }}>CABINET · DOCUMENTATION</div>
           <div style={{ fontFamily: DISPLAY, fontSize: 32, color: COL, lineHeight: 1 }}>📋 Synthèse de consultation</div>
         </div>
       </div>
@@ -315,13 +315,13 @@ export default function SyntheseConsultationPage() {
         {/* ── Bloc Patient ── */}
         <section style={{ background: T.card, border: `1px solid ${T.border}`, borderTop: `3px solid ${COL}`, overflow: 'hidden' }}>
           <div style={{ padding: '16px 24px', borderBottom: `1px solid ${T.border}`, background: COL + '10' }}>
-            <span style={{ fontFamily: MONO, fontSize: 13, color: COL, letterSpacing: '0.16em' }}>PATIENT CONCERNÉ</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: COL, letterSpacing: '0.16em' }}>PATIENT CONCERNÉ</span>
           </div>
           <div style={{ padding: '20px 24px' }}>
             <div style={{ display: 'inline-flex', border: `1px solid ${T.border}`, marginBottom: 20, overflow: 'hidden' }}>
               {([true, false] as const).map(isEx => (
                 <button key={String(isEx)} onClick={() => setUseExisting(isEx)}
-                  style={{ fontFamily: MONO, fontSize: 13, padding: '9px 22px', cursor: 'pointer', border: 'none', letterSpacing: '0.08em', background: useExisting === isEx ? COL + '25' : 'transparent', color: useExisting === isEx ? COL : T.dim, borderRight: isEx ? `1px solid ${T.border}` : 'none', transition: 'all 0.15s' }}>
+                  style={{ fontFamily: MONO, fontSize: 14, padding: '9px 22px', cursor: 'pointer', border: 'none', letterSpacing: '0.08em', background: useExisting === isEx ? COL + '25' : 'transparent', color: useExisting === isEx ? COL : T.dim, borderRight: isEx ? `1px solid ${T.border}` : 'none', transition: 'all 0.15s' }}>
                   {isEx ? '👤 Patient existant' : '✚ Nouveau patient'}
                 </button>
               ))}
@@ -335,16 +335,16 @@ export default function SyntheseConsultationPage() {
                     placeholder="🔍 Rechercher…" value={search} onChange={e => setSearch(e.target.value)} />
                   <div style={{ border: `1px solid ${T.border}`, maxHeight: 200, overflowY: 'auto' }}>
                     {!hydrated
-                      ? <div style={{ padding: 16, fontFamily: MONO, fontSize: 13, color: T.dim, textAlign: 'center' }}>Chargement…</div>
+                      ? <div style={{ padding: 16, fontFamily: MONO, fontSize: 14, color: T.dim, textAlign: 'center' }}>Chargement…</div>
                       : filtered.length === 0
-                        ? <div style={{ padding: 16, fontFamily: MONO, fontSize: 13, color: T.dim, textAlign: 'center' }}>Aucun patient</div>
+                        ? <div style={{ padding: 16, fontFamily: MONO, fontSize: 14, color: T.dim, textAlign: 'center' }}>Aucun patient</div>
                         : filtered.map(p => (
                             <div key={p.id} onClick={() => setSelectedPat(p)}
                               style={{ padding: '10px 14px', cursor: 'pointer', background: selectedPat?.id === p.id ? COL + '20' : 'transparent', borderLeft: `3px solid ${selectedPat?.id === p.id ? COL : 'transparent'}`, borderBottom: `1px solid ${T.border}`, transition: 'all 0.12s' }}
                               onMouseEnter={e => { if (selectedPat?.id !== p.id) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'; }}
                               onMouseLeave={e => { if (selectedPat?.id !== p.id) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
                               <div style={{ fontFamily: DISPLAY, fontSize: 16, color: T.text }}>{p.patientPrenom} {p.patientNom}</div>
-                              <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 2 }}>{p.patientAge ? `${p.patientAge} ans · ` : ''}{p.type}</div>
+                              <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 2 }}>{p.patientAge ? `${p.patientAge} ans · ` : ''}{p.type}</div>
                             </div>
                           ))}
                   </div>
@@ -354,27 +354,27 @@ export default function SyntheseConsultationPage() {
                     ? <div style={{ background: COL + '08', border: `1px solid ${COL}30`, padding: '18px 22px', height: '100%', boxSizing: 'border-box' }}>
                         <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text, marginBottom: 10 }}>{selectedPat.patientPrenom} {selectedPat.patientNom}</div>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                          {selectedPat.patientAge && <span style={{ fontFamily: MONO, fontSize: 12, color: T.muted, background: 'rgba(255,255,255,0.06)', padding: '3px 10px', border: `1px solid ${T.border}` }}>{selectedPat.patientAge} ans</span>}
-                          {selectedPat.type && <span style={{ fontFamily: MONO, fontSize: 12, color: COL, background: COL + '15', padding: '3px 10px', border: `1px solid ${COL}40` }}>{selectedPat.type}</span>}
-                          {selectedPat.dateConsult && <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, background: 'rgba(255,255,255,0.04)', padding: '3px 10px', border: `1px solid ${T.border}` }}>Dossier ouvert le {selectedPat.dateConsult}</span>}
+                          {selectedPat.patientAge && <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted, background: 'rgba(255,255,255,0.06)', padding: '3px 10px', border: `1px solid ${T.border}` }}>{selectedPat.patientAge} ans</span>}
+                          {selectedPat.type && <span style={{ fontFamily: MONO, fontSize: 14, color: COL, background: COL + '15', padding: '3px 10px', border: `1px solid ${COL}40` }}>{selectedPat.type}</span>}
+                          {selectedPat.dateConsult && <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, background: 'rgba(255,255,255,0.04)', padding: '3px 10px', border: `1px solid ${T.border}` }}>Dossier ouvert le {selectedPat.dateConsult}</span>}
                         </div>
                         {selectedPat.plainte && <div style={{ fontFamily: BODY, fontSize: 15, color: T.muted, marginTop: 12, fontStyle: 'italic', lineHeight: 1.6 }}>"{selectedPat.plainte}"</div>}
                       </div>
-                    : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120, border: `1px dashed ${T.border}`, fontFamily: MONO, fontSize: 13, color: T.dim }}>Sélectionner un patient</div>}
+                    : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120, border: `1px dashed ${T.border}`, fontFamily: MONO, fontSize: 14, color: T.dim }}>Sélectionner un patient</div>}
                 </div>
               </div>
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
                 <div style={{ gridColumn: '1/3' }}>
-                  <label style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' }}>NOM *</label>
+                  <label style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' }}>NOM *</label>
                   <input style={{ fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '10px 14px', outline: 'none', width: '100%', boxSizing: 'border-box' }} value={newNom} onChange={e => setNewNom(e.target.value)} placeholder="Dupont" />
                 </div>
                 <div>
-                  <label style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' }}>ÂGE</label>
+                  <label style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' }}>ÂGE</label>
                   <input style={{ fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '10px 14px', outline: 'none', width: '100%', boxSizing: 'border-box' }} value={newAge} onChange={e => setNewAge(e.target.value)} placeholder="32 ans" />
                 </div>
                 <div style={{ gridColumn: '1/-1' }}>
-                  <label style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' }}>PRÉNOM</label>
+                  <label style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' }}>PRÉNOM</label>
                   <input style={{ fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '10px 14px', outline: 'none', width: '100%', boxSizing: 'border-box' }} value={newPrenom} onChange={e => setNewPrenom(e.target.value)} placeholder="Jean" />
                 </div>
               </div>
@@ -385,16 +385,16 @@ export default function SyntheseConsultationPage() {
         {/* ── Bloc Titre & Date ── */}
         <section style={{ background: T.card, border: `1px solid ${T.border}`, borderTop: `3px solid ${T.gold}`, overflow: 'hidden' }}>
           <div style={{ padding: '16px 24px', borderBottom: `1px solid ${T.border}`, background: T.gold + '10' }}>
-            <span style={{ fontFamily: MONO, fontSize: 13, color: T.gold, letterSpacing: '0.16em' }}>DOCUMENT</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.16em' }}>DOCUMENT</span>
           </div>
           <div style={{ padding: '20px 24px', display: 'grid', gridTemplateColumns: '1fr 200px', gap: 16 }}>
             <div>
-              <label style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' }}>TITRE</label>
+              <label style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' }}>TITRE</label>
               <input style={{ fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '11px 16px', outline: 'none', width: '100%', boxSizing: 'border-box' }}
                 value={titre} onChange={e => setTitre(e.target.value)} placeholder="Synthèse de consultation" />
             </div>
             <div>
-              <label style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' }}>DATE (RP)</label>
+              <label style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' }}>DATE (RP)</label>
               <input style={{ fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '11px 14px', outline: 'none', width: '100%', boxSizing: 'border-box' }}
                 value={date} onChange={e => setDate(e.target.value)} placeholder="JJ/MM/AAAA" />
             </div>
@@ -404,8 +404,8 @@ export default function SyntheseConsultationPage() {
         {/* ── Bloc Contenu ── */}
         <section style={{ background: T.card, border: `1px solid ${T.border}`, borderTop: `3px solid ${T.muted}`, overflow: 'hidden' }}>
           <div style={{ padding: '16px 24px', borderBottom: `1px solid ${T.border}`, background: 'rgba(139,115,85,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontFamily: MONO, fontSize: 13, color: T.muted, letterSpacing: '0.16em' }}>CONTENU DE LA SYNTHÈSE</span>
-            <span style={{ fontFamily: MONO, fontSize: 11, color: T.dim }}>Remplacer les [ ] par les informations du patient</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.16em' }}>CONTENU DE LA SYNTHÈSE</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>Remplacer les [ ] par les informations du patient</span>
           </div>
           <textarea
             style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(0,0,0,0.18)', border: 'none', borderBottom: `1px solid ${T.border}`, color: T.text, padding: '20px 24px', outline: 'none', width: '100%', boxSizing: 'border-box', resize: 'vertical', minHeight: 560, lineHeight: 1.85, display: 'block' }}
@@ -414,7 +414,7 @@ export default function SyntheseConsultationPage() {
 
         {/* ── Erreur ── */}
         {saveError && (
-          <div style={{ padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 13 }}>
+          <div style={{ padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}>
             ⚠ {saveError}
           </div>
         )}

@@ -133,7 +133,7 @@ export default function ArchivesCaisseComptabilitePage() {
             <button onClick={()=>setOpenId(null)} style={{ fontFamily:MONO, fontSize:15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR AUX ARCHIVES</button>
             <button onClick={()=>router.push('/redm/comptabilite')} style={{ fontFamily:MONO, fontSize:14, background:'transparent', border:'none', color:T.dim, padding:'8px 12px', cursor:'pointer', letterSpacing:'0.08em' }}>COMPTABILITÉ</button>
           </div>
-          <div style={{ fontFamily:MONO, fontSize:13, color:T.dim, letterSpacing:'0.14em', marginBottom:6 }}>ARCHIVES · DÉTAIL SEMAINE</div>
+          <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.14em', marginBottom:6 }}>ARCHIVES · DÉTAIL SEMAINE</div>
           <h1 style={{ fontFamily:DISPLAY, fontSize:30, color:T.gold, margin:0 }}>📅 {openArc.weekLabel}</h1>
         </div>
 
@@ -147,7 +147,7 @@ export default function ArchivesCaisseComptabilitePage() {
           ].map(s => (
             <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
               <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
-              <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
+              <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
             </div>
           ))}
         </div>
@@ -159,9 +159,9 @@ export default function ArchivesCaisseComptabilitePage() {
               const col = PAYEUR_COL[p as Payeur] ?? T.muted;
               return (
                 <div key={p} style={{ background:`${col}15`, border:`1px solid ${col}50`, padding:'10px 16px', display:'flex', flexDirection:'column', gap:3 }}>
-                  <div style={{ fontFamily:MONO, fontSize:13, color:col, letterSpacing:'0.1em' }}>{p}</div>
+                  <div style={{ fontFamily:MONO, fontSize: 14, color:col, letterSpacing:'0.1em' }}>{p}</div>
                   <div style={{ fontFamily:DISPLAY, fontSize:20, color:col }}>{fmt$(s.montantTotal)}</div>
-                  <div style={{ fontFamily:MONO, fontSize:11, color:T.dim }}>
+                  <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>
                     {s.actes} acte(s)
                     {s.percu > 0 && <span style={{color:'#A8B991', marginLeft:6}}>· {fmt$(s.percu)} perçu</span>}
                     {s.attente > 0 && <span style={{color:'#D1B77C', marginLeft:6}}>· {fmt$(s.attente)} en attente</span>}
@@ -181,9 +181,9 @@ export default function ArchivesCaisseComptabilitePage() {
               const cnt = p === 'tous' ? openArc.factures.length : openArc.factures.filter(f=>f.payeur===p).length;
               return (
                 <button key={p} onClick={() => setOpenView(p as typeof openView)}
-                  style={{ fontFamily:MONO, fontSize:13, letterSpacing:'0.1em', padding:'9px 18px', cursor:'pointer', background: on ? `${col}18` : 'transparent', color: on ? col : T.dim, border:'none', borderBottom:`3px solid ${on ? col : 'transparent'}`, whiteSpace:'nowrap', flexShrink:0 }}>
+                  style={{ fontFamily:MONO, fontSize: 14, letterSpacing:'0.1em', padding:'9px 18px', cursor:'pointer', background: on ? `${col}18` : 'transparent', color: on ? col : T.dim, border:'none', borderBottom:`3px solid ${on ? col : 'transparent'}`, whiteSpace:'nowrap', flexShrink:0 }}>
                   {p === 'tous' ? 'TOUS' : p.toUpperCase()}
-                  <span style={{ marginLeft:6, fontFamily:MONO, fontSize:11, color:col, background:`${col}22`, padding:'1px 5px' }}>{cnt}</span>
+                  <span style={{ marginLeft:6, fontFamily:MONO, fontSize: 14, color:col, background:`${col}22`, padding:'1px 5px' }}>{cnt}</span>
                 </button>
               );
             })}
@@ -204,27 +204,27 @@ export default function ArchivesCaisseComptabilitePage() {
                   {/* Date */}
                   <div style={{ textAlign:'center', minWidth:52, flexShrink:0 }}>
                     <div style={{ fontFamily:DISPLAY, fontSize:19, color:T.gold }}>{f.dateSeance.slice(0,5)}</div>
-                    <div style={{ fontFamily:MONO, fontSize:12, color:T.dim }}>{f.dateSeance.slice(6)}</div>
+                    <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>{f.dateSeance.slice(6)}</div>
                   </div>
 
                   {/* Patient + prestations */}
                   <div style={{ flex:1, minWidth:0 }}>
                     <div style={{ fontFamily:DISPLAY, fontSize:20, color:T.text, marginBottom:6 }}>{f.patientNom}</div>
                     <div style={{ display:'flex', gap:6, flexWrap:'wrap', alignItems:'center' }}>
-                      {f.estCommande && <span style={{ fontFamily:MONO, fontSize:12, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'2px 8px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
+                      {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'2px 8px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
                       {pres.map((p,i) => {
                         const cat = tarifs[p.id];
                         const nom = p.nom ?? cat?.nom ?? p.id;
                         const prix = p.prix ?? cat?.prix ?? 0;
                         const isAchat = p.prix != null || cat?.type === 'achat';
                         return (
-                          <span key={i} style={{ fontFamily:MONO, fontSize:13, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'2px 8px', border: `1px solid ${isAchat ? 'rgba(200,132,90,0.25)' : 'rgba(209,183,124,0.20)'}` }}>
+                          <span key={i} style={{ fontFamily:MONO, fontSize: 14, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'2px 8px', border: `1px solid ${isAchat ? 'rgba(200,132,90,0.25)' : 'rgba(209,183,124,0.20)'}` }}>
                             {isAchat ? '🛒 ' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$(prix * p.qty)}</span>
                           </span>
                         );
                       })}
-                      <span style={{ fontFamily:MONO, fontSize:12, color:pcol, background:`${pcol}18`, padding:'2px 7px', border:`1px solid ${pcol}40` }}>{f.payeur}</span>
-                      {f.medecin && <span style={{ fontFamily:MONO, fontSize:12, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'2px 8px', border:'1px solid rgba(155,106,200,0.20)' }}>👤 {f.medecin}</span>}
+                      <span style={{ fontFamily:MONO, fontSize: 14, color:pcol, background:`${pcol}18`, padding:'2px 7px', border:`1px solid ${pcol}40` }}>{f.payeur}</span>
+                      {f.medecin && <span style={{ fontFamily:MONO, fontSize: 14, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'2px 8px', border:'1px solid rgba(155,106,200,0.20)' }}>👤 {f.medecin}</span>}
                       {f.notes && <span style={{ fontFamily:BODY, fontSize:14, color:T.muted, fontStyle:'italic' }}>{f.notes}</span>}
                     </div>
                   </div>
@@ -235,7 +235,7 @@ export default function ArchivesCaisseComptabilitePage() {
                   </div>
 
                   {/* Statut */}
-                  <div style={{ fontFamily:MONO, fontSize:13, color:col, background:`${col}15`, padding:'6px 12px', border:`1px solid ${col}50`, flexShrink:0, display:'flex', alignItems:'center', gap:5 }}>
+                  <div style={{ fontFamily:MONO, fontSize: 14, color:col, background:`${col}15`, padding:'6px 12px', border:`1px solid ${col}50`, flexShrink:0, display:'flex', alignItems:'center', gap:5 }}>
                     {STATUT_ICON[f.statut]} {f.statut}
                   </div>
                 </div>
@@ -246,15 +246,15 @@ export default function ArchivesCaisseComptabilitePage() {
 
         {/* Total filtré */}
         <div style={{ marginTop:16, padding:'14px 20px', background:`rgba(209,183,124,0.06)`, border:`1px solid rgba(209,183,124,0.25)`, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-          <span style={{ fontFamily:MONO, fontSize:13, color:T.dim, letterSpacing:'0.1em' }}>
+          <span style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>
             {openView === 'tous' ? 'TOTAL SEMAINE' : `TOTAL ${openView.toUpperCase()}`} · {factures.length} acte(s)
           </span>
           <div style={{ display:'flex', gap:20, alignItems:'center' }}>
-            <span style={{ fontFamily:MONO, fontSize:13, color:'#A8B991' }}>
+            <span style={{ fontFamily:MONO, fontSize: 14, color:'#A8B991' }}>
               {fmt$(factures.filter(f=>f.statut==='PAYÉ').reduce((s,f)=>s+f.montant,0))} perçu
             </span>
             {factures.some(f=>f.statut==='EN ATTENTE') && (
-              <span style={{ fontFamily:MONO, fontSize:13, color:'#D1B77C' }}>
+              <span style={{ fontFamily:MONO, fontSize: 14, color:'#D1B77C' }}>
                 {fmt$(factures.filter(f=>f.statut==='EN ATTENTE').reduce((s,f)=>s+f.montant,0))} en attente
               </span>
             )}
@@ -276,7 +276,7 @@ export default function ArchivesCaisseComptabilitePage() {
       <div style={{ marginBottom: 24 }}>
         <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14 }}>
           <button onClick={()=>router.push('/redm/comptabilite')} style={{ fontFamily:MONO, fontSize:15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR</button>
-          <span style={{ fontFamily:MONO, fontSize:13, color:T.gold, letterSpacing:'0.16em' }}>COMPTABILITÉ · ARCHIVES</span>
+          <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.16em' }}>COMPTABILITÉ · ARCHIVES</span>
         </div>
         <h1 style={{ fontFamily:DISPLAY, fontSize:35, color:T.gold, margin:0 }}>📦 Archives des comptes</h1>
       </div>
@@ -291,7 +291,7 @@ export default function ArchivesCaisseComptabilitePage() {
         ].map(s => (
           <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
             <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
-            <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
+            <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
           </div>
         ))}
       </div>
@@ -303,9 +303,9 @@ export default function ArchivesCaisseComptabilitePage() {
             const col = PAYEUR_COL[p as Payeur] ?? T.muted;
             return (
               <div key={p} style={{ background:`${col}12`, border:`1px solid ${col}45`, padding:'10px 16px' }}>
-                <div style={{ fontFamily:MONO, fontSize:12, color:col, letterSpacing:'0.12em', marginBottom:4 }}>{p.toUpperCase()}</div>
+                <div style={{ fontFamily:MONO, fontSize: 14, color:col, letterSpacing:'0.12em', marginBottom:4 }}>{p.toUpperCase()}</div>
                 <div style={{ fontFamily:DISPLAY, fontSize:22, color:col }}>{fmt$(s.percu + s.attente)}</div>
-                <div style={{ fontFamily:MONO, fontSize:11, color:T.dim, marginTop:2 }}>
+                <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:2 }}>
                   {s.actes} acte(s)
                   {s.percu > 0 && <span style={{color:'#A8B991', marginLeft:5}}>· {fmt$(s.percu)} perçu</span>}
                 </div>
@@ -350,14 +350,14 @@ export default function ArchivesCaisseComptabilitePage() {
                       <span style={{ fontFamily:DISPLAY, fontSize:19, color: allDone ? '#6A9A68' : T.gold }}>
                         {allDone ? '✔' : '📅'} {arc.weekLabel}
                       </span>
-                      {allDone && <span style={{ fontFamily:MONO, fontSize:11, color:'#A8B991', background:'rgba(74,96,72,0.20)', padding:'2px 8px', border:'1px solid rgba(74,96,72,0.40)' }}>SOLDÉ</span>}
+                      {allDone && <span style={{ fontFamily:MONO, fontSize: 14, color:'#A8B991', background:'rgba(74,96,72,0.20)', padding:'2px 8px', border:'1px solid rgba(74,96,72,0.40)' }}>SOLDÉ</span>}
                     </div>
                     <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'center' }}>
-                      <span style={{ fontFamily:MONO, fontSize:13, color:T.dim }}>{arc.factures.length} acte(s)</span>
+                      <span style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>{arc.factures.length} acte(s)</span>
                       {payeurSet.map(p => {
                         const col = PAYEUR_COL[p as Payeur] ?? T.muted;
                         const cnt = arc.factures.filter(f=>f.payeur===p).length;
-                        return <span key={p} style={{ fontFamily:MONO, fontSize:12, color:col, background:`${col}18`, padding:'1px 7px', border:`1px solid ${col}35` }}>{p} ×{cnt}</span>;
+                        return <span key={p} style={{ fontFamily:MONO, fontSize: 14, color:col, background:`${col}18`, padding:'1px 7px', border:`1px solid ${col}35` }}>{p} ×{cnt}</span>;
                       })}
                     </div>
                   </div>
@@ -367,11 +367,11 @@ export default function ArchivesCaisseComptabilitePage() {
                     <div style={{ fontFamily:DISPLAY, fontSize:26, color: allDone ? '#6A9A68' : T.gold }}>
                       {fmt$(arc.totalPercu + arc.totalAttente)}
                     </div>
-                    <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, display:'flex', gap:10 }}>
+                    <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, display:'flex', gap:10 }}>
                       {arc.totalPercu > 0 && <span style={{color:'#A8B991'}}>✔ {fmt$(arc.totalPercu)}</span>}
                       {arc.totalAttente > 0 && <span style={{color:'#D1B77C'}}>⏳ {fmt$(arc.totalAttente)}</span>}
                     </div>
-                    <div style={{ fontFamily:MONO, fontSize:12, color:'rgba(209,183,124,0.5)', marginTop:2 }}>
+                    <div style={{ fontFamily:MONO, fontSize: 14, color:'rgba(209,183,124,0.5)', marginTop:2 }}>
                       VOIR LE DÉTAIL →
                     </div>
                   </div>
@@ -382,7 +382,7 @@ export default function ArchivesCaisseComptabilitePage() {
         </div>
       )}
 
-      <div style={{ marginTop:24, fontFamily:MONO, fontSize:12, color:T.dim, textAlign:'center', padding:'12px', borderTop:`1px solid ${T.border}` }}>
+      <div style={{ marginTop:24, fontFamily:MONO, fontSize: 14, color:T.dim, textAlign:'center', padding:'12px', borderTop:`1px solid ${T.border}` }}>
         ↻ Les semaines passées s'archivent automatiquement à chaque ouverture de la page Comptabilité
       </div>
     </div>

@@ -316,10 +316,10 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
 
         {/* ════ FOOTER ════ */}
         <footer className="redm-footer">
-          <span style={{ fontFamily: "'Libre Baskerville', monospace", fontSize: 11, color: '#C8BEA5', letterSpacing: '0.08em' }}>
+          <span style={{ fontFamily: "'Libre Baskerville', monospace", fontSize: 14, color: '#C8BEA5', letterSpacing: '0.08em' }}>
             Dispensaire de Little Creek
           </span>
-          <span style={{ fontFamily: "'Libre Baskerville', monospace", fontSize: 11, color: '#C8BEA5', letterSpacing: '0.12em' }}>
+          <span style={{ fontFamily: "'Libre Baskerville', monospace", fontSize: 14, color: '#C8BEA5', letterSpacing: '0.12em' }}>
             AMAROGRAPH
           </span>
         </footer>

@@ -97,7 +97,7 @@ function groupByWeek(factures: Facture[]) {
 const STATUT_COL: Record<StatutPaiement, string>  = { 'PAYÉ': '#A8B991', 'EN ATTENTE': '#D1B77C', 'ANNULÉ': '#8B4040' };
 const STATUT_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
-const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
+const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
 const EMPTY_FORM = { medecin: '', patientNom: '', dateSeance: '', prestations: [{ id: 'Consultation', qty: 1 }] as PrestationItem[], payeur: 'Civil' as Payeur, statut: 'EN ATTENTE' as StatutPaiement, notes: '' };
 
 export default function CaisseComptabilitePage() {
@@ -248,36 +248,36 @@ export default function CaisseComptabilitePage() {
         <div style={{ display:'flex', alignItems:'center', gap:12, padding:'11px 16px' }}>
           <div style={{ textAlign:'center', minWidth:46, flexShrink:0 }}>
             <div style={{ fontFamily:DISPLAY, fontSize: 17, color:T.gold }}>{f.dateSeance.slice(0,5)}</div>
-            <div style={{ fontFamily:MONO, fontSize: 12, color:T.dim }}>{f.dateSeance.slice(6)}</div>
+            <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>{f.dateSeance.slice(6)}</div>
           </div>
           <div style={{ flex:1, minWidth:0 }}>
             <div style={{ fontFamily:DISPLAY, fontSize: 18, color:T.text, marginBottom:4 }}>{f.patientNom}</div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
-              {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 13, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
+              {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
               {pres.map((p,i) => {
                 const cat = tarifs[p.id];
                 const nom = p.nom ?? cat?.nom ?? p.id;
                 const prix = p.prix ?? cat?.prix ?? 0;
                 const isAchat = p.prix != null || cat?.type === 'achat';
                 return (
-                  <span key={i} style={{ fontFamily:MONO, fontSize: 13, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
+                  <span key={i} style={{ fontFamily:MONO, fontSize: 14, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
                     {isAchat ? '🛒 ' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$(prix * p.qty)}</span>
                   </span>
                 );
               })}
-              {f.medecin && <span style={{ fontFamily:MONO, fontSize: 13, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin}</span>}
+              {f.medecin && <span style={{ fontFamily:MONO, fontSize: 14, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin}</span>}
               {f.notes && <span style={{ fontFamily:BODY, fontSize: 14, color:T.muted, fontStyle:'italic' }}>{f.notes}</span>}
             </div>
           </div>
           <div style={{ fontFamily:DISPLAY, fontSize: 20, color:col, flexShrink:0, minWidth:70, textAlign:'right' }}>{fmt$(f.montant)}</div>
           <div style={{ display:'flex', gap:5, flexShrink:0 }}>
-            <button onClick={()=>cycleStatut(f.id)} style={{ fontFamily:MONO, fontSize: 12, padding:'4px 8px', cursor:'pointer', background:col+'18', color:col, border:`1px solid ${col}50`, display:'flex', alignItems:'center', gap:3 }}>
+            <button onClick={()=>cycleStatut(f.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 8px', cursor:'pointer', background:col+'18', color:col, border:`1px solid ${col}50`, display:'flex', alignItems:'center', gap:3 }}>
               {STATUT_ICON[f.statut]} {f.statut}
             </button>
             <button onClick={()=>startEdit(f)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'rgba(209,183,124,0.10)', color:T.gold, border:`1px solid rgba(209,183,124,0.3)` }}>✎</button>
             {delConfirm===f.id
-              ? <><button onClick={()=>{setItems(p=>p.filter(x=>x.id!==f.id));setDelConfirm(null);}} style={{ fontFamily:MONO, fontSize: 13, padding:'4px 7px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>OK?</button>
-                  <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize: 13, padding:'4px 5px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button></>
+              ? <><button onClick={()=>{setItems(p=>p.filter(x=>x.id!==f.id));setDelConfirm(null);}} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>OK?</button>
+                  <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 5px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button></>
               : <button onClick={()=>setDelConfirm(f.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕</button>}
           </div>
         </div>
@@ -295,7 +295,7 @@ export default function CaisseComptabilitePage() {
           <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.16em' }}>DISPENSAIRE · COMPTABILITÉ</span>
         </div>
         <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 }}>💰 Comptabilité</h1>
-        <p style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
+        <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
           REGISTRE DES HONORAIRES, FACTURES ET RECETTES DU DISPENSAIRE
         </p>
       </div>
@@ -318,28 +318,28 @@ export default function CaisseComptabilitePage() {
                 </select>
               </div>
               <div><label style={lbl}>NOM DU PATIENT</label><input style={inp} value={form.patientNom} onChange={e=>setForm(f=>({...f,patientNom:e.target.value}))} placeholder="Nom complet" /></div>
-              <div><label style={lbl}>DATE</label><div style={{...inp, display:'flex', alignItems:'center', justifyContent:'space-between', color:T.muted, cursor:'default'}}><span>{form.dateSeance}</span><span style={{ fontFamily:MONO, fontSize:11, color:T.dim, letterSpacing:'0.1em' }}>AUTO</span></div></div>
+              <div><label style={lbl}>DATE</label><div style={{...inp, display:'flex', alignItems:'center', justifyContent:'space-between', color:T.muted, cursor:'default'}}><span>{form.dateSeance}</span><span style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>AUTO</span></div></div>
 
               <div>
                 <label style={lbl}>TYPE</label>
                 <div style={{ display:'flex', gap:6, marginBottom:10 }}>
                   <button
                     onClick={()=>{ setTypeFiltre('vente'); setForm(f=>({...f, prestations:[{ id: categoriesVente[0]?.id ?? 'Consultation', qty:1 }]})); }}
-                    style={{ flex:1, fontFamily:MONO, fontSize:12, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='vente' ? 'rgba(90,152,88,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='vente' ? '#5A9858' : T.border}`, color: typeFiltre==='vente' ? '#A8B991' : T.dim }}>
+                    style={{ flex:1, fontFamily:MONO, fontSize: 14, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='vente' ? 'rgba(90,152,88,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='vente' ? '#5A9858' : T.border}`, color: typeFiltre==='vente' ? '#A8B991' : T.dim }}>
                     💰 VENTE
                   </button>
                   <button
                     onClick={()=>{ setTypeFiltre('commande'); setForm(f=>({...f, prestations:[{ id: categoriesVente[0]?.id ?? 'Consultation', qty:1 }]})); }}
-                    style={{ flex:1, fontFamily:MONO, fontSize:12, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='commande' ? 'rgba(209,183,124,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='commande' ? T.gold : T.border}`, color: typeFiltre==='commande' ? T.gold : T.dim }}>
+                    style={{ flex:1, fontFamily:MONO, fontSize: 14, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='commande' ? 'rgba(209,183,124,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='commande' ? T.gold : T.border}`, color: typeFiltre==='commande' ? T.gold : T.dim }}>
                     📦 COMMANDE
                   </button>
                   <button
                     onClick={()=>{ setTypeFiltre('achat'); setForm(f=>({...f, prestations:[{ id: uid(), qty:1, nom:'', prix:0 }]})); }}
-                    style={{ flex:1, fontFamily:MONO, fontSize:12, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='achat' ? 'rgba(200,132,90,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='achat' ? '#C8845A' : T.border}`, color: typeFiltre==='achat' ? '#C8845A' : T.dim }}>
+                    style={{ flex:1, fontFamily:MONO, fontSize: 14, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='achat' ? 'rgba(200,132,90,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='achat' ? '#C8845A' : T.border}`, color: typeFiltre==='achat' ? '#C8845A' : T.dim }}>
                     🛒 ACHAT
                   </button>
                 </div>
-                <p style={{ fontFamily:MONO, fontSize:11, color:T.dim, letterSpacing:'0.04em', margin:'-6px 0 10px' }}>
+                <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.04em', margin:'-6px 0 10px' }}>
                   {typeFiltre==='vente' && 'AJOUTÉ À LA CAISSE ET AU COMPTE DU DISPENSAIRE (SELON RÉPARTITION)'}
                   {typeFiltre==='commande' && 'AJOUTÉ EN TOTALITÉ (100%) AU COMPTE DU DISPENSAIRE'}
                   {typeFiltre==='achat' && 'RETIRÉ DE LA CAISSE ET DU COMPTE DU DISPENSAIRE'}
@@ -370,12 +370,12 @@ export default function CaisseComptabilitePage() {
                       </div>
                     ))
                   )}
-                  {form.prestations.length < 10 && <button onClick={addPrestation} style={{ fontFamily:MONO, fontSize: 13, padding:'5px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px dashed ${T.border}` }}>+ AJOUTER UN ÉLÉMENT</button>}
+                  {form.prestations.length < 10 && <button onClick={addPrestation} style={{ fontFamily:MONO, fontSize: 14, padding:'5px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px dashed ${T.border}` }}>+ AJOUTER UN ÉLÉMENT</button>}
                 </div>
               </div>
 
               <div style={{ background:'rgba(0,0,0,0.22)', border:`1px solid ${T.border}`, padding:'9px 13px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                <span style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.1em' }}>MONTANT TOTAL</span>
+                <span style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>MONTANT TOTAL</span>
                 <span style={{ fontFamily:DISPLAY, fontSize: 24, color:T.gold }}>{fmt$(montantAuto)}</span>
               </div>
 
@@ -397,7 +397,7 @@ export default function CaisseComptabilitePage() {
                 style={{ fontFamily:MONO, fontSize: 15, letterSpacing:'0.12em', padding:'11px', cursor:'pointer', background:'rgba(120,96,48,0.35)', color:T.gold, border:'2px solid rgba(120,96,48,0.6)' }}>
                 {editing ? '✔ ENREGISTRER' : '✔ CRÉER LA NOTE DE FRAIS'}
               </button>
-              {editing && <button onClick={cancelEdit} style={{ fontFamily:MONO, fontSize: 13, padding:'7px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>ANNULER</button>}
+              {editing && <button onClick={cancelEdit} style={{ fontFamily:MONO, fontSize: 14, padding:'7px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>ANNULER</button>}
             </div>
           </div>
 
@@ -410,9 +410,9 @@ export default function CaisseComptabilitePage() {
                   <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)` }}>
                     <div>
                       <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>📅 {weekLabel(todayMonday)}</span>
-                      <span style={{ fontFamily:MONO, fontSize: 13, color:T.dim, marginLeft:10 }}>SEMAINE EN COURS</span>
+                      <span style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginLeft:10 }}>SEMAINE EN COURS</span>
                     </div>
-                    {allByWeek[currentKey] && <span style={{ fontFamily:MONO, fontSize: 13, color:'#A8B991' }}>{allByWeek[currentKey].factures.length} acte(s) · {fmt$(allByWeek[currentKey].factures.filter(f=>f.statut==='PAYÉ').reduce((s,f)=>s+f.montant,0))} perçu</span>}
+                    {allByWeek[currentKey] && <span style={{ fontFamily:MONO, fontSize: 14, color:'#A8B991' }}>{allByWeek[currentKey].factures.length} acte(s) · {fmt$(allByWeek[currentKey].factures.filter(f=>f.statut==='PAYÉ').reduce((s,f)=>s+f.montant,0))} perçu</span>}
                   </div>
                   {allByWeek[currentKey]
                     ? <div style={{display:'flex',flexDirection:'column',gap:7}}>{allByWeek[currentKey].factures.map(f=><FactureLine key={f.id} f={f} isCurrent={true}/>)}</div>

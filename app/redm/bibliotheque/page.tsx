@@ -101,8 +101,8 @@ function save(d: BiblioCategorie[]) {
 }
 
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 14, background: 'rgba(0,0,0,0.25)', border: `1px solid ${T.border}`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
-const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
-const btn: React.CSSProperties = { fontFamily: MONO, fontSize: 12, letterSpacing: '0.10em', padding: '9px 16px', cursor: 'pointer', border: `1px solid ${T.border}`, background: 'rgba(0,0,0,0.25)', color: T.muted };
+const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
+const btn: React.CSSProperties = { fontFamily: MONO, fontSize: 14, letterSpacing: '0.10em', padding: '9px 16px', cursor: 'pointer', border: `1px solid ${T.border}`, background: 'rgba(0,0,0,0.25)', color: T.muted };
 const btnGold: React.CSSProperties = { ...btn, border: `1px solid ${T.gold}`, color: T.gold, background: 'rgba(209,183,124,0.08)' };
 const btnRed: React.CSSProperties = { ...btn, border: '1px solid rgba(180,70,70,0.5)', color: '#C87060', background: 'rgba(180,70,70,0.08)' };
 
@@ -128,7 +128,7 @@ function RegSectionHeader({ num, title, icon, col }: { num: string; title: strin
         <span style={{ fontFamily: DISPLAY, fontSize: 20, color: col }}>{num}</span>
       </div>
       <div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: col, letterSpacing: '0.22em', marginBottom: 2 }}>CHAPITRE {num}</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: col, letterSpacing: '0.22em', marginBottom: 2 }}>CHAPITRE {num}</div>
         <div style={{ fontFamily: DISPLAY, fontSize: 21, color: T.sepia, letterSpacing: '0.06em' }}>{icon} {title}</div>
       </div>
       <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, ${col}60, transparent)`, marginLeft: 8 }} />
@@ -166,7 +166,7 @@ function RegCitation({ text, author }: { text: string; author: string }) {
     <div style={{ margin: '18px 0 0', padding: '16px 24px', borderLeft: `3px solid ${T.gold}`, background: 'rgba(209,183,124,0.06)', position: 'relative' }}>
       <span style={{ position: 'absolute', top: -12, left: 16, fontFamily: DISPLAY, fontSize: 40, color: T.gold, opacity: 0.35, lineHeight: 1 }}>"</span>
       <p style={{ fontFamily: BODY, fontSize: 16, color: T.sepia, fontStyle: 'italic', lineHeight: 1.85, margin: '0 0 8px', paddingTop: 8 }}>{text}</p>
-      <div style={{ fontFamily: MONO, fontSize: 12, color: T.muted, letterSpacing: '0.12em' }}>— {author}</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.12em' }}>— {author}</div>
     </div>
   );
 }
@@ -179,19 +179,19 @@ function ReglementDocument() {
         {['top-left', 'top-right', 'bottom-left', 'bottom-right'].map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderBottom: pos.includes('bottom') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderLeft: pos.includes('left') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderRight: pos.includes('right') ? '2px solid rgba(209,183,124,0.45)' : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ DOCUMENT OFFICIEL ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ DOCUMENT OFFICIEL ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 8px', letterSpacing: '0.05em' }}>📜 Règlement Général du Dispensaire</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>Révisé et approuvé en l'an de grâce 1890</div>
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>SOUS LA DIRECTION DU DOCTEUR FRANÇOIS DE MILLET · MÉDECIN FORMÉ À PARIS</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>SOUS LA DIRECTION DU DOCTEUR FRANÇOIS DE MILLET · MÉDECIN FORMÉ À PARIS</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${T.gold}, transparent)`, margin: '0 auto 14px' }} />
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.2em' }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
       </div>
 
       {/* Sommaire */}
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: 'rgba(209,183,124,0.04)', border: `1px solid rgba(209,183,124,0.18)` }}>
-        <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SOMMAIRE</span>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SOMMAIRE</span>
         {REGLEMENT_CHAPITRES.map(c => (
-          <a key={c.num} href={`#chap-${c.num}`} style={{ fontFamily: MONO, fontSize: 12, color: c.col, background: `${c.col}15`, border: `1px solid ${c.col}40`, padding: '4px 12px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.08em' }}>
+          <a key={c.num} href={`#chap-${c.num}`} style={{ fontFamily: MONO, fontSize: 14, color: c.col, background: `${c.col}15`, border: `1px solid ${c.col}40`, padding: '4px 12px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.08em' }}>
             {c.num}. {c.title}
           </a>
         ))}
@@ -219,7 +219,7 @@ function ReglementDocument() {
         <RegList items={['Respect', 'Patience', 'Discrétion', 'Courtoisie', 'Sang-froid']} />
         <RegPara>Les querelles, insultes, comportements agressifs ou attitudes portant atteinte à la réputation du dispensaire sont strictement interdits.</RegPara>
         <div style={{ background: 'rgba(139,64,64,0.10)', border: '1px solid rgba(139,64,64,0.30)', padding: '14px 20px' }}>
-          <div style={{ fontFamily: MONO, fontSize: 12, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 6 }}>⚠ AVERTISSEMENT</div>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 6 }}>⚠ AVERTISSEMENT</div>
           <RegPara>L'état d'ivresse, l'usage abusif de substances altérant le jugement ou toute négligence mettant en danger un patient pourront entraîner des <strong style={{ color: '#DF9A88' }}>sanctions immédiates</strong>.</RegPara>
         </div>
       </div>
@@ -279,8 +279,8 @@ function ReglementDocument() {
         <RegPara>Toute substance inconnue, dangereuse ou d'origine douteuse est interdite dans l'enceinte du dispensaire.</RegPara>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '24px 0 14px' }}>
-          <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, letterSpacing: '0.18em' }}>—</span>
-          <span style={{ fontFamily: MONO, fontSize: 13, color: T.gold, letterSpacing: '0.15em' }}>DES MÉDICAMENTS ET PRÉPARATIONS PHARMACEUTIQUES</span>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>—</span>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.15em' }}>DES MÉDICAMENTS ET PRÉPARATIONS PHARMACEUTIQUES</span>
           <div style={{ flex: 1, height: '1px', background: 'rgba(209,183,124,0.18)' }} />
         </div>
         <RegPara>Le dispensaire reconnaît également l'usage des médicaments issus des avancées récentes de la médecine et de la pharmacie moderne.</RegPara>
@@ -369,7 +369,7 @@ function ReglementDocument() {
       {/* Signature */}
       <div style={{ textAlign: 'center', padding: '8px 0 0' }}>
         <RegPara>Fait à West Elizabeth, en l'an de grâce 1890.</RegPara>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.16em', marginBottom: 22 }}>DIRECTEUR DU DISPENSAIRE DE LITTLE CREEK</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em', marginBottom: 22 }}>DIRECTEUR DU DISPENSAIRE DE LITTLE CREEK</div>
       </div>
     </div>
   );
@@ -407,14 +407,14 @@ function PlantFiche({ nom, latin, icon, apparence, vertus, preparation, danger }
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
         <span style={{ fontSize: 22 }}>{icon}</span>
         <h3 style={{ fontFamily: DISPLAY, fontSize: 19, color: T.gold, margin: 0 }}>{nom}</h3>
-        {latin && <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, fontStyle: 'italic', letterSpacing: '0.05em' }}>{latin}</span>}
+        {latin && <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, fontStyle: 'italic', letterSpacing: '0.05em' }}>{latin}</span>}
       </div>
       <RegPara><strong style={{ color: T.sepia }}>Apparence — </strong>{apparence}</RegPara>
       <RegPara><strong style={{ color: T.sepia }}>Vertus — </strong>{vertus}</RegPara>
       <RegPara><strong style={{ color: T.sepia }}>Préparation — </strong>{preparation}</RegPara>
       {danger && (
         <div style={{ background: 'rgba(139,64,64,0.10)', border: '1px solid rgba(139,64,64,0.30)', padding: '12px 16px', marginTop: 10 }}>
-          <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 6 }}>⚠ PRÉCAUTION</div>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 6 }}>⚠ PRÉCAUTION</div>
           <RegPara>{danger}</RegPara>
         </div>
       )}
@@ -430,19 +430,19 @@ function GuideHerboristeDocument() {
         {['top-left', 'top-right', 'bottom-left', 'bottom-right'].map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderBottom: pos.includes('bottom') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderLeft: pos.includes('left') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderRight: pos.includes('right') ? '2px solid rgba(209,183,124,0.45)' : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ MANUEL DE BOTANIQUE MÉDICALE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ MANUEL DE BOTANIQUE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 8px', letterSpacing: '0.05em' }}>🌿 Guide de l'Herboriste</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>Plantes, racines et champignons du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>RECUEIL ÉTABLI PAR MÈRE AGATHE VOCLAIN · HERBORISTE DU DISPENSAIRE</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>RECUEIL ÉTABLI PAR MÈRE AGATHE VOCLAIN · HERBORISTE DU DISPENSAIRE</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${T.gold}, transparent)`, margin: '0 auto 14px' }} />
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.2em' }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
       </div>
 
       {/* Sommaire */}
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: 'rgba(209,183,124,0.04)', border: `1px solid rgba(209,183,124,0.18)` }}>
-        <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SOMMAIRE</span>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SOMMAIRE</span>
         {HERBORISTE_CHAPITRES.map(c => (
-          <a key={c.num} href={`#herb-chap-${c.num}`} style={{ fontFamily: MONO, fontSize: 12, color: c.col, background: `${c.col}15`, border: `1px solid ${c.col}40`, padding: '4px 12px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.08em' }}>
+          <a key={c.num} href={`#herb-chap-${c.num}`} style={{ fontFamily: MONO, fontSize: 14, color: c.col, background: `${c.col}15`, border: `1px solid ${c.col}40`, padding: '4px 12px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.08em' }}>
             {c.num}. {c.title}
           </a>
         ))}
@@ -637,7 +637,7 @@ function GuideHerboristeDocument() {
       <div style={{ textAlign: 'center', padding: '8px 0 0' }}>
         <RegPara>Recueil tenu à jour dans la réserve botanique du dispensaire, à l'usage du personnel médical.</RegPara>
         <div style={{ fontFamily: DISPLAY, fontSize: 19, color: T.sepia, marginBottom: 2 }}>Mère Agathe Voclain</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.16em', marginBottom: 22 }}>HERBORISTE DU DISPENSAIRE DE LITTLE CREEK</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em', marginBottom: 22 }}>HERBORISTE DU DISPENSAIRE DE LITTLE CREEK</div>
         <RegCitation text="La nature met à notre portée plus de remèdes que nous n'aurons jamais le temps d'en apprendre ; à nous de les connaître avec humilité et de les employer avec mesure." author="Mère Agathe Voclain" />
       </div>
     </div>
@@ -666,12 +666,12 @@ function SpecialitesDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderBottom: pos.includes('bottom') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderLeft: pos.includes('left') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderRight: pos.includes('right') ? '2px solid rgba(209,183,124,0.45)' : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ CATALOGUE MÉDICAL ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ CATALOGUE MÉDICAL ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 8px', letterSpacing: '0.05em' }}>Spécialités Proposées</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>Disciplines médicales du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${T.gold}, transparent)`, margin: '0 auto 14px' }} />
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.2em' }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
       </div>
 
       {/* Liste des spécialités */}
@@ -683,7 +683,7 @@ function SpecialitesDocument() {
                 <span style={{ fontFamily: DISPLAY, fontSize: 18, color: s.col }}>✦</span>
               </div>
               <div>
-                <div style={{ fontFamily: MONO, fontSize: 10, color: s.col, letterSpacing: '0.22em', marginBottom: 2 }}>SPÉCIALITÉ</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: s.col, letterSpacing: '0.22em', marginBottom: 2 }}>SPÉCIALITÉ</div>
                 <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{s.titre}</div>
               </div>
               <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, ${s.col}50, transparent)`, marginLeft: 8 }} />
@@ -727,7 +727,7 @@ function ArticleHeader({ num, title, icon, col }: { num: string; title: string; 
         <span style={{ fontFamily: DISPLAY, fontSize: 14, color: col, textAlign: 'center', lineHeight: 1.1 }}>{num}</span>
       </div>
       <div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: col, letterSpacing: '0.22em', marginBottom: 2 }}>ARTICLE {num}</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: col, letterSpacing: '0.22em', marginBottom: 2 }}>ARTICLE {num}</div>
         <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.sepia, letterSpacing: '0.06em' }}>{icon} {title}</div>
       </div>
       <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, ${col}60, transparent)`, marginLeft: 8 }} />
@@ -746,17 +746,17 @@ function DoctrinePureteDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${DC}60` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${DC}60` : 'none', borderLeft: pos.includes('left') ? `2px solid ${DC}60` : 'none', borderRight: pos.includes('right') ? `2px solid ${DC}60` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: DC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ DOCTRINE MÉDICALE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: DC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ DOCTRINE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: DC, margin: '0 0 8px', letterSpacing: '0.04em' }}>🌿 Doctrine de Pureté et de Santé Naturelle</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Fondée sur les travaux du Docteur Pasteur et la sagesse des plantes</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${DC}, transparent)`, margin: '0 auto 18px' }} />
         {/* Toggle version */}
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${DC}50` }}>
-          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${DC}28` : 'transparent', color: version === 'complete' ? DC : T.dim, borderRight: `1px solid ${DC}40` }}>
+          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${DC}28` : 'transparent', color: version === 'complete' ? DC : T.dim, borderRight: `1px solid ${DC}40` }}>
             VERSION COMPLÈTE
           </button>
-          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${DC}28` : 'transparent', color: version === 'resume' ? DC : T.dim }}>
+          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${DC}28` : 'transparent', color: version === 'resume' ? DC : T.dim }}>
             VERSION RÉSUMÉE
           </button>
         </div>
@@ -780,9 +780,9 @@ function DoctrinePureteDocument() {
         <div>
           {/* Sommaire */}
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: `rgba(90,136,120,0.05)`, border: `1px solid ${DC}30` }}>
-            <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>ARTICLES</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>ARTICLES</span>
             {DOCTRINE_ARTICLES.map(a => (
-              <a key={a.num} href={`#doc-art-${a.num}`} style={{ fontFamily: MONO, fontSize: 11, color: a.col, background: `${a.col}15`, border: `1px solid ${a.col}40`, padding: '3px 10px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>
+              <a key={a.num} href={`#doc-art-${a.num}`} style={{ fontFamily: MONO, fontSize: 14, color: a.col, background: `${a.col}15`, border: `1px solid ${a.col}40`, padding: '3px 10px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>
                 {a.num}
               </a>
             ))}
@@ -905,7 +905,7 @@ function DoctrinePureteDocument() {
               <p style={{ fontFamily: BODY, fontSize: 16, color: T.sepia, fontStyle: 'italic', lineHeight: 1.9, margin: '0 0 8px', paddingTop: 10 }}>
                 Je jure devant mes pairs et sous le regard de la Nature de préserver la pureté de l'eau, la clarté de l'air, et la propreté du lieu. Je combattrai la saleté comme on combat la fièvre. J'unirai la science du végétal à la sagesse de la propreté. Et par la main propre et l'esprit calme, je servirai la vie.
               </p>
-              <div style={{ fontFamily: MONO, fontSize: 12, color: T.muted, letterSpacing: '0.12em' }}>— Serment du serviteur de santé</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.12em' }}>— Serment du serviteur de santé</div>
             </div>
           </div>
 
@@ -995,16 +995,16 @@ function BotaniqueMedicaleDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${BC}60` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${BC}60` : 'none', borderLeft: pos.includes('left') ? `2px solid ${BC}60` : 'none', borderRight: pos.includes('right') ? `2px solid ${BC}60` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: BC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE BOTANIQUE MÉDICALE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: BC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE BOTANIQUE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: BC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🌱 Les Plantes Purificatrices</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Tradition des herboristes &amp; science de l'hygiène naturelle</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${BC}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${BC}50` }}>
-          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${BC}28` : 'transparent', color: version === 'complete' ? BC_LIGHT : T.dim, borderRight: `1px solid ${BC}40` }}>
+          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${BC}28` : 'transparent', color: version === 'complete' ? BC_LIGHT : T.dim, borderRight: `1px solid ${BC}40` }}>
             VERSION COMPLÈTE
           </button>
-          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${BC}28` : 'transparent', color: version === 'resume' ? BC_LIGHT : T.dim }}>
+          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${BC}28` : 'transparent', color: version === 'resume' ? BC_LIGHT : T.dim }}>
             VERSION RÉSUMÉE
           </button>
         </div>
@@ -1020,7 +1020,7 @@ function BotaniqueMedicaleDocument() {
             <RegPara>Au-delà de leurs propriétés médicinales, les plantes purificatrices rappellent l'importance de vivre en harmonie avec la nature. Leur préparation et leur usage exigent rigueur, respect et discipline, car elles constituent un complément essentiel aux règles d'hygiène et de salubrité enseignées au dispensaire.</RegPara>
           </RegBlock>
           <div style={{ background: T.paper, border: `1px solid ${BC}40`, borderLeft: `4px solid ${BC}`, padding: '18px 24px', margin: '24px 0' }}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: BC, letterSpacing: '0.2em', marginBottom: 8 }}>PRINCIPE FONDAMENTAL</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: BC, letterSpacing: '0.2em', marginBottom: 8 }}>PRINCIPE FONDAMENTAL</div>
             <RegPara>La nature entretient la vie ; lorsqu'elle est comprise et respectée, elle devient l'une des plus fidèles alliées de la santé humaine.</RegPara>
           </div>
           <RegCitation text="Là où la plante pousse, la maladie recule ; là où elle agit, la santé prospère." author="Devise du Dispensaire" />
@@ -1057,12 +1057,12 @@ function BotaniqueMedicaleDocument() {
               {PLANTES.map(p => (
                 <div key={p.num} style={{ background: T.card, border: `1px solid ${p.col}40`, borderLeft: `4px solid ${p.col}`, padding: '18px 22px' }}>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 8 }}>
-                    <span style={{ fontFamily: MONO, fontSize: 11, color: p.col, background: `${p.col}18`, padding: '3px 10px', border: `1px solid ${p.col}40`, letterSpacing: '0.1em' }}>{p.num}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 14, color: p.col, background: `${p.col}18`, padding: '3px 10px', border: `1px solid ${p.col}40`, letterSpacing: '0.1em' }}>{p.num}</span>
                     <span style={{ fontFamily: DISPLAY, fontSize: 20, color: p.col }}>{p.icon} {p.nom}</span>
-                    <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, fontStyle: 'italic' }}>{p.lat}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, fontStyle: 'italic' }}>{p.lat}</span>
                   </div>
                   <RegPara>{p.desc}</RegPara>
-                  <div style={{ fontFamily: MONO, fontSize: 11, color: p.col, letterSpacing: '0.14em', margin: '10px 0 6px' }}>USAGES :</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.14em', margin: '10px 0 6px' }}>USAGES :</div>
                   <RegList items={p.usages as unknown as string[]} />
                   <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted, fontStyle: 'italic', marginTop: 10, paddingTop: 10, borderTop: `1px solid ${p.col}25` }}>
                     <em>Devise : {p.devise}</em>
@@ -1080,7 +1080,7 @@ function BotaniqueMedicaleDocument() {
                 <div key={i} style={{ background: T.card, border: `1px solid ${BC}35`, borderLeft: `3px solid ${BC}`, padding: '16px 20px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 17, color: BC_LIGHT, marginBottom: 8 }}>{m.nom}</div>
                   <RegPara>{m.desc}</RegPara>
-                  <div style={{ fontFamily: MONO, fontSize: 12, color: BC, marginTop: 6, letterSpacing: '0.08em' }}>{m.usage}</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: BC, marginTop: 6, letterSpacing: '0.08em' }}>{m.usage}</div>
                 </div>
               ))}
             </div>
@@ -1149,16 +1149,16 @@ function ManuelInfirmiersDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${MC}60` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${MC}60` : 'none', borderLeft: pos.includes('left') ? `2px solid ${MC}60` : 'none', borderRight: pos.includes('right') ? `2px solid ${MC}60` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: MC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ FORMATION MÉDICALE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: MC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ FORMATION MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: MC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩹 Manuel des Soins Infirmiers</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Les Fondamentaux et Soins Autorisés</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${MC}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${MC}50` }}>
-          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${MC}28` : 'transparent', color: version === 'complete' ? MC_LIGHT : T.dim, borderRight: `1px solid ${MC}40` }}>
+          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${MC}28` : 'transparent', color: version === 'complete' ? MC_LIGHT : T.dim, borderRight: `1px solid ${MC}40` }}>
             VERSION COMPLÈTE
           </button>
-          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${MC}28` : 'transparent', color: version === 'resume' ? MC_LIGHT : T.dim }}>
+          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${MC}28` : 'transparent', color: version === 'resume' ? MC_LIGHT : T.dim }}>
             VERSION RÉSUMÉE
           </button>
         </div>
@@ -1192,7 +1192,7 @@ function ManuelInfirmiersDocument() {
               { label: 'Sous autorisation médicale', items: ["Laudanum", "Élixir Parégorique"], col: '#A06028' },
             ].map(cat => (
               <div key={cat.label} style={{ marginBottom: 12, paddingBottom: 12, borderBottom: `1px solid ${MC}20` }}>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: cat.col, letterSpacing: '0.14em', marginBottom: 6 }}>{cat.label.toUpperCase()}</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: cat.col, letterSpacing: '0.14em', marginBottom: 6 }}>{cat.label.toUpperCase()}</div>
                 <RegList items={cat.items} />
               </div>
             ))}
@@ -1201,7 +1201,7 @@ function ManuelInfirmiersDocument() {
           {/* Ce qu'un infirmier ne peut pas faire */}
           <div style={{ marginBottom: 24, background: `rgba(160,72,72,0.05)`, border: `1px solid ${MC}40`, borderLeft: `4px solid ${MC}`, padding: '18px 22px' }}>
             <div style={{ fontFamily: DISPLAY, fontSize: 18, color: MC_LIGHT, marginBottom: 12 }}>Ce qu'un infirmier ne peut pas faire</div>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: MC, letterSpacing: '0.12em', marginBottom: 8 }}>SANS PRÉSENCE OU AUTORISATION D'UN MÉDECIN :</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: MC, letterSpacing: '0.12em', marginBottom: 8 }}>SANS PRÉSENCE OU AUTORISATION D'UN MÉDECIN :</div>
             <RegList items={["Réaliser une intervention chirurgicale.", "Modifier une prescription.", "Administrer seul du Laudanum ou de l'Élixir Parégorique.", "Poser un diagnostic médical définitif.", "Créer ou expérimenter de nouveaux traitements."]} />
           </div>
 
@@ -1219,9 +1219,9 @@ function ManuelInfirmiersDocument() {
         <div>
           {/* Sommaire */}
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: `rgba(160,72,72,0.05)`, border: `1px solid ${MC}30` }}>
-            <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>CHAPITRES</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>CHAPITRES</span>
             {['I','II','III','IV','V','VI','VII','VIII'].map(n => (
-              <a key={n} href={`#inf-ch-${n}`} style={{ fontFamily: MONO, fontSize: 11, color: MC, background: `${MC}15`, border: `1px solid ${MC}40`, padding: '3px 10px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>{n}</a>
+              <a key={n} href={`#inf-ch-${n}`} style={{ fontFamily: MONO, fontSize: 14, color: MC, background: `${MC}15`, border: `1px solid ${MC}40`, padding: '3px 10px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>{n}</a>
             ))}
           </div>
 
@@ -1469,7 +1469,7 @@ const PLANTES_TABLE_RESUME = [
 ] as const;
 
 const tblCell: React.CSSProperties = { padding: '9px 14px', fontFamily: 'var(--body)', fontSize: 14, borderBottom: `1px solid ${CC}25`, color: '#C8B898', verticalAlign: 'top' };
-const tblHead: React.CSSProperties = { ...tblCell, fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.14em', color: CC_LIGHT, background: `${CC}18`, paddingTop: 10, paddingBottom: 10 };
+const tblHead: React.CSSProperties = { ...tblCell, fontFamily: 'var(--mono)', fontSize: 14, letterSpacing: '0.14em', color: CC_LIGHT, background: `${CC}18`, paddingTop: 10, paddingBottom: 10 };
 
 function CataplasmesTable({ cols, rows }: { cols: string[]; rows: readonly (readonly string[])[] }) {
   return (
@@ -1494,7 +1494,7 @@ function CataplasmeCard({ cat, compact = false }: { cat: typeof CATAPLASMES[numb
   return (
     <div style={{ background: T.card, border: `1px solid ${cat.col}45`, borderTop: `3px solid ${cat.col}`, padding: compact ? '14px 18px' : '22px 26px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-        <span style={{ fontFamily: MONO, fontSize: 11, color: cat.col, background: `${cat.col}18`, border: `1px solid ${cat.col}40`, padding: '3px 10px', letterSpacing: '0.12em' }}>{cat.id}</span>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: cat.col, background: `${cat.col}18`, border: `1px solid ${cat.col}40`, padding: '3px 10px', letterSpacing: '0.12em' }}>{cat.id}</span>
         <span style={{ fontFamily: DISPLAY, fontSize: compact ? 17 : 20, color: cat.col }}>{cat.nom}</span>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: compact ? '1fr 1fr 1fr' : '1fr 1fr 1fr', gap: 14 }}>
@@ -1504,11 +1504,11 @@ function CataplasmeCard({ cat, compact = false }: { cat: typeof CATAPLASMES[numb
           { label: 'EFFETS', items: cat.effets },
         ].map(col => (
           <div key={col.label}>
-            <div style={{ fontFamily: MONO, fontSize: 10, color: cat.col, letterSpacing: '0.18em', marginBottom: 6 }}>{col.label}</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: cat.col, letterSpacing: '0.18em', marginBottom: 6 }}>{col.label}</div>
             <ul style={{ margin: 0, padding: '0 0 0 14px', listStyle: 'none' }}>
               {(col.items as readonly string[]).map((item, i) => (
-                <li key={i} style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.7, marginBottom: 2, position: 'relative', paddingLeft: 12 }}>
-                  <span style={{ position: 'absolute', left: 0, color: cat.col, fontSize: 10, top: 4 }}>▸</span>
+                <li key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.7, marginBottom: 2, position: 'relative', paddingLeft: 12 }}>
+                  <span style={{ position: 'absolute', left: 0, color: cat.col, fontSize: 14, top: 4 }}>▸</span>
                   {item}
                 </li>
               ))}
@@ -1530,16 +1530,16 @@ function DoctrineCataplasmeDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${CC}60` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${CC}60` : 'none', borderLeft: pos.includes('left') ? `2px solid ${CC}60` : 'none', borderRight: pos.includes('right') ? `2px solid ${CC}60` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: CC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE MÉDECINE VÉGÉTALE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: CC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE MÉDECINE VÉGÉTALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: CC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🫙 Doctrine des Cataplasmes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>et de leur Usage Thérapeutique</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${CC}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${CC}50` }}>
-          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${CC}28` : 'transparent', color: version === 'complete' ? CC_LIGHT : T.dim, borderRight: `1px solid ${CC}40` }}>
+          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${CC}28` : 'transparent', color: version === 'complete' ? CC_LIGHT : T.dim, borderRight: `1px solid ${CC}40` }}>
             VERSION COMPLÈTE
           </button>
-          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${CC}28` : 'transparent', color: version === 'resume' ? CC_LIGHT : T.dim }}>
+          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${CC}28` : 'transparent', color: version === 'resume' ? CC_LIGHT : T.dim }}>
             VERSION RÉSUMÉE
           </button>
         </div>
@@ -1584,9 +1584,9 @@ function DoctrineCataplasmeDocument() {
         <div>
           {/* Sommaire */}
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: `${CC}08`, border: `1px solid ${CC}30` }}>
-            <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SECTIONS</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SECTIONS</span>
             {['Préambule','I','II','III','IV','V','Conclusion'].map(n => (
-              <a key={n} href={`#cat-${n}`} style={{ fontFamily: MONO, fontSize: 11, color: CC, background: `${CC}15`, border: `1px solid ${CC}40`, padding: '3px 10px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>{n}</a>
+              <a key={n} href={`#cat-${n}`} style={{ fontFamily: MONO, fontSize: 14, color: CC, background: `${CC}15`, border: `1px solid ${CC}40`, padding: '3px 10px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>{n}</a>
             ))}
           </div>
 
@@ -1698,7 +1698,7 @@ const TRAITEMENTS = [
 ] as const;
 
 function MedTable({ rows }: { rows: readonly (readonly string[])[] }) {
-  const hStyle: React.CSSProperties = { padding: '9px 14px', fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em', color: MMC_LIGHT, background: `${MMC}20`, borderBottom: `1px solid ${MMC}40`, textAlign: 'left' };
+  const hStyle: React.CSSProperties = { padding: '9px 14px', fontFamily: MONO, fontSize: 14, letterSpacing: '0.14em', color: MMC_LIGHT, background: `${MMC}20`, borderBottom: `1px solid ${MMC}40`, textAlign: 'left' };
   const tdStyle: React.CSSProperties = { padding: '9px 14px', fontFamily: BODY, fontSize: 14, color: '#EADCB9', borderBottom: `1px solid ${MMC}20`, verticalAlign: 'top' };
   const td0Style: React.CSSProperties = { ...tdStyle, fontFamily: DISPLAY, fontSize: 15, color: MMC_LIGHT };
   return (
@@ -1739,16 +1739,16 @@ function ManuelMedecinDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${MMC}60` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${MMC}60` : 'none', borderLeft: pos.includes('left') ? `2px solid ${MMC}60` : 'none', borderRight: pos.includes('right') ? `2px solid ${MMC}60` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: MMC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ FORMATION MÉDICALE SUPÉRIEURE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: MMC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ FORMATION MÉDICALE SUPÉRIEURE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: MMC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩺 Manuel de Médecine à Base de Plantes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>et de Pharmacologie Médicale</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${MMC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${MMC}50` }}>
-          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${MMC}30` : 'transparent', color: version === 'complete' ? MMC_LIGHT : T.dim, borderRight: `1px solid ${MMC}40` }}>
+          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${MMC}30` : 'transparent', color: version === 'complete' ? MMC_LIGHT : T.dim, borderRight: `1px solid ${MMC}40` }}>
             VERSION COMPLÈTE
           </button>
-          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${MMC}30` : 'transparent', color: version === 'resume' ? MMC_LIGHT : T.dim }}>
+          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${MMC}30` : 'transparent', color: version === 'resume' ? MMC_LIGHT : T.dim }}>
             VERSION RÉSUMÉE
           </button>
         </div>
@@ -1868,9 +1868,9 @@ function ManuelMedecinDocument() {
 
           {/* Sommaire */}
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: `${MMC}08`, border: `1px solid ${MMC}30` }}>
-            <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>CHAPITRES</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>CHAPITRES</span>
             {['I','II','III','IV','V','VI','VII'].map(n => (
-              <a key={n} href={`#med-ch-${n}`} style={{ fontFamily: MONO, fontSize: 11, color: MMC_LIGHT, background: `${MMC}15`, border: `1px solid ${MMC}40`, padding: '3px 10px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>{n}</a>
+              <a key={n} href={`#med-ch-${n}`} style={{ fontFamily: MONO, fontSize: 14, color: MMC_LIGHT, background: `${MMC}15`, border: `1px solid ${MMC}40`, padding: '3px 10px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>{n}</a>
             ))}
           </div>
 
@@ -1968,7 +1968,7 @@ function ManuelMedecinDocument() {
             <RegSectionHeader num="IV" title="TRAITEMENTS AUTORISÉS" icon="💊" col={MMC_LIGHT} />
             <MedTable rows={TRAITEMENTS} />
             <div style={{ marginTop: 18, background: `${MMC}08`, border: `1px solid ${MMC}35`, borderLeft: `4px solid ${MMC}`, padding: '14px 18px' }}>
-              <div style={{ fontFamily: MONO, fontSize: 11, color: MMC_LIGHT, letterSpacing: '0.18em', marginBottom: 8 }}>DEVOIR DU PRATICIEN</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: MMC_LIGHT, letterSpacing: '0.18em', marginBottom: 8 }}>DEVOIR DU PRATICIEN</div>
               <RegList items={["Adapter le traitement.", "Surveiller le malade.", "Réévaluer régulièrement l'évolution.", "Modifier les prescriptions si nécessaire."]} />
             </div>
           </>)}
@@ -2128,46 +2128,46 @@ function AffectionBlock({ aff, compact }: { aff: typeof AFFECTIONS[number]; comp
   return (
     <div style={{ background: T.paper, border: `1px solid ${a.col}40`, borderLeft: `4px solid ${a.col}`, padding: compact ? '14px 18px' : '20px 24px', marginBottom: compact ? 10 : 0 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-        <span style={{ fontFamily: MONO, fontSize: 11, color: a.col, background: `${a.col}18`, border: `1px solid ${a.col}40`, padding: '3px 8px', letterSpacing: '0.1em', flexShrink: 0 }}>{a.num}</span>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: a.col, background: `${a.col}18`, border: `1px solid ${a.col}40`, padding: '3px 8px', letterSpacing: '0.1em', flexShrink: 0 }}>{a.num}</span>
         <span style={{ fontFamily: DISPLAY, fontSize: compact ? 17 : 20, color: a.col }}>{a.nom}</span>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: compact ? '1fr 1fr' : 'repeat(auto-fill, minmax(180px, 1fr))', gap: 10 }}>
         {a.symptomes && (
           <div>
-            <div style={{ fontFamily: MONO, fontSize: 10, color: a.col, letterSpacing: '0.16em', marginBottom: 5 }}>SYMPTÔMES</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: a.col, letterSpacing: '0.16em', marginBottom: 5 }}>SYMPTÔMES</div>
             <ul style={{ margin: 0, padding: '0 0 0 14px', listStyle: 'none' }}>
-              {(a.symptomes as string[]).map((s: string, i: number) => <li key={i} style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65, position: 'relative', paddingLeft: 10 }}><span style={{ position: 'absolute', left: 0, color: a.col, fontSize: 9, top: 4 }}>▸</span>{s}</li>)}
+              {(a.symptomes as string[]).map((s: string, i: number) => <li key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.65, position: 'relative', paddingLeft: 10 }}><span style={{ position: 'absolute', left: 0, color: a.col, fontSize: 14, top: 4 }}>▸</span>{s}</li>)}
             </ul>
           </div>
         )}
         {(a.traitement || a.conduite) && (
           <div>
-            <div style={{ fontFamily: MONO, fontSize: 10, color: a.col, letterSpacing: '0.16em', marginBottom: 5 }}>{a.conduite && !a.traitement ? 'CONDUITE' : 'TRAITEMENT'}</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: a.col, letterSpacing: '0.16em', marginBottom: 5 }}>{a.conduite && !a.traitement ? 'CONDUITE' : 'TRAITEMENT'}</div>
             <ul style={{ margin: 0, padding: '0 0 0 14px', listStyle: 'none' }}>
-              {((a.traitement ?? a.conduite) as string[]).map((s: string, i: number) => <li key={i} style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65, position: 'relative', paddingLeft: 10 }}><span style={{ position: 'absolute', left: 0, color: a.col, fontSize: 9, top: 4 }}>▸</span>{s}</li>)}
+              {((a.traitement ?? a.conduite) as string[]).map((s: string, i: number) => <li key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.65, position: 'relative', paddingLeft: 10 }}><span style={{ position: 'absolute', left: 0, color: a.col, fontSize: 14, top: 4 }}>▸</span>{s}</li>)}
             </ul>
             {a.conduite && a.traitement && (
-              <><div style={{ fontFamily: MONO, fontSize: 10, color: a.col, letterSpacing: '0.16em', marginBottom: 5, marginTop: 8 }}>RECOMMANDATIONS</div>
+              <><div style={{ fontFamily: MONO, fontSize: 14, color: a.col, letterSpacing: '0.16em', marginBottom: 5, marginTop: 8 }}>RECOMMANDATIONS</div>
               <ul style={{ margin: 0, padding: '0 0 0 14px', listStyle: 'none' }}>
-                {(a.conduite as string[]).map((s: string, i: number) => <li key={i} style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65, position: 'relative', paddingLeft: 10 }}><span style={{ position: 'absolute', left: 0, color: a.col, fontSize: 9, top: 4 }}>▸</span>{s}</li>)}
+                {(a.conduite as string[]).map((s: string, i: number) => <li key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.65, position: 'relative', paddingLeft: 10 }}><span style={{ position: 'absolute', left: 0, color: a.col, fontSize: 14, top: 4 }}>▸</span>{s}</li>)}
               </ul></>
             )}
           </div>
         )}
         <div>
-          <div style={{ fontFamily: MONO, fontSize: 10, color: a.col, letterSpacing: '0.16em', marginBottom: 5 }}>CHIRURGIE</div>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: a.col, letterSpacing: '0.16em', marginBottom: 5 }}>CHIRURGIE</div>
           {a.chirurgie ? (
             <ul style={{ margin: 0, padding: '0 0 0 14px', listStyle: 'none' }}>
-              {(a.chirurgie as string[]).map((s: string, i: number) => <li key={i} style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65, position: 'relative', paddingLeft: 10 }}><span style={{ position: 'absolute', left: 0, color: a.col, fontSize: 9, top: 4 }}>▸</span>{s}</li>)}
+              {(a.chirurgie as string[]).map((s: string, i: number) => <li key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.65, position: 'relative', paddingLeft: 10 }}><span style={{ position: 'absolute', left: 0, color: a.col, fontSize: 14, top: 4 }}>▸</span>{s}</li>)}
             </ul>
           ) : (
-            <span style={{ fontFamily: BODY, fontSize: 13, color: T.dim, fontStyle: 'italic' }}>Aucune.</span>
+            <span style={{ fontFamily: BODY, fontSize: 14, color: T.dim, fontStyle: 'italic' }}>Aucune.</span>
           )}
-          {a.chirurgieNote && <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, fontStyle: 'italic', margin: '6px 0 0' }}>{a.chirurgieNote}</p>}
+          {a.chirurgieNote && <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, fontStyle: 'italic', margin: '6px 0 0' }}>{a.chirurgieNote}</p>}
         </div>
       </div>
       {a.complement && !compact && (
-        <div style={{ marginTop: 10, padding: '8px 14px', background: `${a.col}08`, borderLeft: `2px solid ${a.col}50`, fontFamily: BODY, fontSize: 13, color: T.muted, fontStyle: 'italic' }}>{a.complement}</div>
+        <div style={{ marginTop: 10, padding: '8px 14px', background: `${a.col}08`, borderLeft: `2px solid ${a.col}50`, fontFamily: BODY, fontSize: 14, color: T.muted, fontStyle: 'italic' }}>{a.complement}</div>
       )}
     </div>
   );
@@ -2183,16 +2183,16 @@ function MedecineGeneraleDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${GMC}60` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${GMC}60` : 'none', borderLeft: pos.includes('left') ? `2px solid ${GMC}60` : 'none', borderRight: pos.includes('right') ? `2px solid ${GMC}60` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: GMC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE MÉDECINE GÉNÉRALE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: GMC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE MÉDECINE GÉNÉRALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: GMC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>📋 Traitement des Affections Communes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>et leurs Remèdes</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${GMC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${GMC}50` }}>
-          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${GMC}28` : 'transparent', color: version === 'complete' ? GMC_LIGHT : T.dim, borderRight: `1px solid ${GMC}40` }}>
+          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${GMC}28` : 'transparent', color: version === 'complete' ? GMC_LIGHT : T.dim, borderRight: `1px solid ${GMC}40` }}>
             VERSION COMPLÈTE
           </button>
-          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${GMC}28` : 'transparent', color: version === 'resume' ? GMC_LIGHT : T.dim }}>
+          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${GMC}28` : 'transparent', color: version === 'resume' ? GMC_LIGHT : T.dim }}>
             VERSION RÉSUMÉE
           </button>
         </div>
@@ -2233,9 +2233,9 @@ function MedecineGeneraleDocument() {
         <div>
           {/* Sommaire */}
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: `${GMC}08`, border: `1px solid ${GMC}30` }}>
-            <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SECTIONS</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SECTIONS</span>
             {['Prémb','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'].map(n => (
-              <a key={n} href={`#gm-${n}`} style={{ fontFamily: MONO, fontSize: 11, color: GMC_LIGHT, background: `${GMC}15`, border: `1px solid ${GMC}40`, padding: '3px 8px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>{n}</a>
+              <a key={n} href={`#gm-${n}`} style={{ fontFamily: MONO, fontSize: 14, color: GMC_LIGHT, background: `${GMC}15`, border: `1px solid ${GMC}40`, padding: '3px 8px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>{n}</a>
             ))}
           </div>
 
@@ -2288,7 +2288,7 @@ function MedecineGeneraleDocument() {
                 return (
                   <div key={r.nom} style={{ background: T.card, border: `1px solid ${r.col}40`, borderLeft: `4px solid ${r.col}`, padding: '16px 20px' }}>
                     <div style={{ fontFamily: DISPLAY, fontSize: 17, color: rLight, marginBottom: 10 }}>{r.nom}</div>
-                    <div style={{ fontFamily: MONO, fontSize: 10, color: r.col, letterSpacing: '0.16em', marginBottom: 6 }}>UTILISÉ POUR</div>
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: r.col, letterSpacing: '0.16em', marginBottom: 6 }}>UTILISÉ POUR</div>
                     <RegList items={r.usages as unknown as string[]} />
                   </div>
                 );
@@ -2387,16 +2387,16 @@ function PharmacieAntidouleurDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${PAC}60` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${PAC}60` : 'none', borderLeft: pos.includes('left') ? `2px solid ${PAC}60` : 'none', borderRight: pos.includes('right') ? `2px solid ${PAC}60` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: PAC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE PHARMACIE MÉDICALE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: PAC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE PHARMACIE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: PAC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>⚗ Doctrine des Anti-Douleurs</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Naturels et Pharmaceutiques</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${PAC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${PAC}50` }}>
-          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${PAC}28` : 'transparent', color: version === 'complete' ? PAC_LIGHT : T.dim, borderRight: `1px solid ${PAC}40` }}>
+          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${PAC}28` : 'transparent', color: version === 'complete' ? PAC_LIGHT : T.dim, borderRight: `1px solid ${PAC}40` }}>
             VERSION COMPLÈTE
           </button>
-          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${PAC}28` : 'transparent', color: version === 'resume' ? PAC_LIGHT : T.dim }}>
+          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${PAC}28` : 'transparent', color: version === 'resume' ? PAC_LIGHT : T.dim }}>
             VERSION RÉSUMÉE
           </button>
         </div>
@@ -2425,7 +2425,7 @@ function PharmacieAntidouleurDocument() {
                 <div key={p.nom} style={{ background: T.card, border: `1px solid ${p.col}40`, borderLeft: `3px solid ${p.col}`, padding: '12px 16px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 15, color: p.col, marginBottom: 8 }}>{p.nom}</div>
                   <RegList items={p.usage as unknown as string[]} />
-                  {pAny.note && <div style={{ fontFamily: BODY, fontSize: 12, color: T.dim, fontStyle: 'italic', marginTop: 6 }}>{pAny.note}</div>}
+                  {pAny.note && <div style={{ fontFamily: BODY, fontSize: 14, color: T.dim, fontStyle: 'italic', marginTop: 6 }}>{pAny.note}</div>}
                 </div>
               );
             })}
@@ -2437,9 +2437,9 @@ function PharmacieAntidouleurDocument() {
             {CATAPLASMES_AD.map(c => (
               <div key={c.nom} style={{ background: T.card, border: `1px solid ${c.col}40`, borderLeft: `3px solid ${c.col}`, padding: '14px 16px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 15, color: c.col, marginBottom: 8 }}>{c.nom}</div>
-                <div style={{ fontFamily: MONO, fontSize: 10, color: c.col, letterSpacing: '0.14em', marginBottom: 4 }}>COMPOSITION</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: c.col, letterSpacing: '0.14em', marginBottom: 4 }}>COMPOSITION</div>
                 <RegList items={c.ingredients as unknown as string[]} />
-                <div style={{ fontFamily: MONO, fontSize: 10, color: c.col, letterSpacing: '0.14em', margin: '8px 0 4px' }}>USAGE</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: c.col, letterSpacing: '0.14em', margin: '8px 0 4px' }}>USAGE</div>
                 <RegList items={c.usages as unknown as string[]} />
               </div>
             ))}
@@ -2453,8 +2453,8 @@ function PharmacieAntidouleurDocument() {
               return (
                 <div key={p.nom} style={{ background: T.card, border: `1px solid ${p.col}40`, borderLeft: `3px solid ${p.col}`, padding: '14px 16px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: p.col, marginBottom: 8 }}>{p.nom}</div>
-                  {pAny.ingredients && <><div style={{ fontFamily: MONO, fontSize: 10, color: p.col, letterSpacing: '0.14em', marginBottom: 4 }}>COMPOSITION</div><RegList items={pAny.ingredients} /></>}
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: p.col, letterSpacing: '0.14em', margin: '8px 0 4px' }}>USAGE</div>
+                  {pAny.ingredients && <><div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.14em', marginBottom: 4 }}>COMPOSITION</div><RegList items={pAny.ingredients} /></>}
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.14em', margin: '8px 0 4px' }}>USAGE</div>
                   <RegList items={p.usages as unknown as string[]} />
                 </div>
               );
@@ -2468,7 +2468,7 @@ function PharmacieAntidouleurDocument() {
               <div key={p.nom} style={{ background: T.card, border: `1px solid ${p.col}40`, borderLeft: `3px solid ${p.col}`, padding: '12px 16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 15, color: p.col }}>{p.nom}</div>
-                  {p.prescription && <span style={{ fontFamily: MONO, fontSize: 9, color: '#A04848', background: 'rgba(160,72,72,0.15)', border: '1px solid rgba(160,72,72,0.4)', padding: '2px 6px', letterSpacing: '0.08em' }}>PRESCRIPTION</span>}
+                  {p.prescription && <span style={{ fontFamily: MONO, fontSize: 14, color: '#A04848', background: 'rgba(160,72,72,0.15)', border: '1px solid rgba(160,72,72,0.4)', padding: '2px 6px', letterSpacing: '0.08em' }}>PRESCRIPTION</span>}
                 </div>
                 <RegList items={p.usages as unknown as string[]} />
               </div>
@@ -2482,7 +2482,7 @@ function PharmacieAntidouleurDocument() {
           </div>
 
           <div style={{ background: `${PAC}06`, border: `1px solid ${PAC}35`, padding: '16px 22px' }}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PAC_LIGHT, letterSpacing: '0.18em', marginBottom: 8 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PAC_LIGHT, letterSpacing: '0.18em', marginBottom: 8 }}>À RETENIR</div>
             <div style={{ fontFamily: BODY, fontSize: 15, color: T.sepia, fontStyle: 'italic', lineHeight: 1.8 }}>Le médecin de 1890 doit associer les remèdes naturels aux progrès récents de la pharmacie. Le bon praticien ne cherche pas à faire disparaître la douleur à tout prix, mais à soulager le malade tout en traitant la cause véritable de sa souffrance.</div>
           </div>
         </div>
@@ -2493,9 +2493,9 @@ function PharmacieAntidouleurDocument() {
         <div>
           {/* Sommaire */}
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36, padding: '14px 18px', background: `${PAC}08`, border: `1px solid ${PAC}30` }}>
-            <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SECTIONS</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em', marginRight: 8, alignSelf: 'center' }}>SECTIONS</span>
             {['Prémb','I','II','III','IV','V','VI','Concl'].map(n => (
-              <a key={n} href={`#pad-${n}`} style={{ fontFamily: MONO, fontSize: 11, color: PAC_LIGHT, background: `${PAC}15`, border: `1px solid ${PAC}40`, padding: '3px 8px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>{n}</a>
+              <a key={n} href={`#pad-${n}`} style={{ fontFamily: MONO, fontSize: 14, color: PAC_LIGHT, background: `${PAC}15`, border: `1px solid ${PAC}40`, padding: '3px 8px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '0.07em' }}>{n}</a>
             ))}
           </div>
 
@@ -2535,19 +2535,19 @@ function PharmacieAntidouleurDocument() {
                     <div style={{ fontFamily: DISPLAY, fontSize: 19, color: p.col, marginBottom: 10 }}>{p.nom}</div>
                     <div style={{ display: 'grid', gridTemplateColumns: pAny.application ? '1fr 1fr 1fr' : '1fr 1fr', gap: 14 }}>
                       <div>
-                        <div style={{ fontFamily: MONO, fontSize: 10, color: p.col, letterSpacing: '0.16em', marginBottom: 5 }}>USAGE</div>
+                        <div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.16em', marginBottom: 5 }}>USAGE</div>
                         <RegList items={p.usage as unknown as string[]} />
                       </div>
                       {pAny.application && (
                         <div>
-                          <div style={{ fontFamily: MONO, fontSize: 10, color: p.col, letterSpacing: '0.16em', marginBottom: 5 }}>APPLICATION</div>
+                          <div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.16em', marginBottom: 5 }}>APPLICATION</div>
                           <RegList items={pAny.application} />
                         </div>
                       )}
                       {pAny.note && (
                         <div style={{ background: `${p.col}10`, border: `1px solid ${p.col}30`, padding: '10px 14px', alignSelf: 'start' }}>
-                          <div style={{ fontFamily: MONO, fontSize: 10, color: p.col, letterSpacing: '0.14em', marginBottom: 4 }}>NOTE</div>
-                          <div style={{ fontFamily: BODY, fontSize: 13, color: T.muted, fontStyle: 'italic' }}>{pAny.note}</div>
+                          <div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.14em', marginBottom: 4 }}>NOTE</div>
+                          <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted, fontStyle: 'italic' }}>{pAny.note}</div>
                         </div>
                       )}
                     </div>
@@ -2564,9 +2564,9 @@ function PharmacieAntidouleurDocument() {
               {CATAPLASMES_AD.map(c => (
                 <div key={c.nom} style={{ background: T.card, border: `1px solid ${c.col}40`, borderTop: `3px solid ${c.col}`, padding: '18px 20px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 17, color: c.col, marginBottom: 12 }}>{c.nom}</div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: c.col, letterSpacing: '0.14em', marginBottom: 5 }}>COMPOSITION</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: c.col, letterSpacing: '0.14em', marginBottom: 5 }}>COMPOSITION</div>
                   <RegList items={c.ingredients as unknown as string[]} />
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: c.col, letterSpacing: '0.14em', margin: '10px 0 5px' }}>UTILISÉ POUR</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: c.col, letterSpacing: '0.14em', margin: '10px 0 5px' }}>UTILISÉ POUR</div>
                   <RegList items={c.usages as unknown as string[]} />
                 </div>
               ))}
@@ -2582,8 +2582,8 @@ function PharmacieAntidouleurDocument() {
                 return (
                   <div key={p.nom} style={{ background: T.card, border: `1px solid ${p.col}40`, borderTop: `3px solid ${p.col}`, padding: '18px 20px' }}>
                     <div style={{ fontFamily: DISPLAY, fontSize: 16, color: p.col, marginBottom: 12 }}>{p.nom}</div>
-                    {pAny.ingredients && <><div style={{ fontFamily: MONO, fontSize: 10, color: p.col, letterSpacing: '0.14em', marginBottom: 5 }}>COMPOSITION</div><RegList items={pAny.ingredients} /></>}
-                    <div style={{ fontFamily: MONO, fontSize: 10, color: p.col, letterSpacing: '0.14em', margin: '10px 0 5px' }}>UTILISÉE POUR</div>
+                    {pAny.ingredients && <><div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.14em', marginBottom: 5 }}>COMPOSITION</div><RegList items={pAny.ingredients} /></>}
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.14em', margin: '10px 0 5px' }}>UTILISÉE POUR</div>
                     <RegList items={p.usages as unknown as string[]} />
                   </div>
                 );
@@ -2606,20 +2606,20 @@ function PharmacieAntidouleurDocument() {
                 <div key={p.nom} style={{ background: T.card, border: `1px solid ${p.col}40`, borderLeft: `4px solid ${p.col}`, padding: '18px 22px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
                     <div style={{ fontFamily: DISPLAY, fontSize: 19, color: p.col }}>{p.nom}</div>
-                    {p.prescription && <span style={{ fontFamily: MONO, fontSize: 10, color: '#A04848', background: 'rgba(160,72,72,0.15)', border: '1px solid rgba(160,72,72,0.45)', padding: '3px 10px', letterSpacing: '0.1em' }}>PRESCRIPTION MÉDICALE OBLIGATOIRE</span>}
+                    {p.prescription && <span style={{ fontFamily: MONO, fontSize: 14, color: '#A04848', background: 'rgba(160,72,72,0.15)', border: '1px solid rgba(160,72,72,0.45)', padding: '3px 10px', letterSpacing: '0.1em' }}>PRESCRIPTION MÉDICALE OBLIGATOIRE</span>}
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: p.precautions.length ? '1fr 1fr 1fr' : '1fr 1fr', gap: 14 }}>
                     <div>
-                      <div style={{ fontFamily: MONO, fontSize: 10, color: p.col, letterSpacing: '0.16em', marginBottom: 5 }}>USAGE</div>
+                      <div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.16em', marginBottom: 5 }}>USAGE</div>
                       <RegList items={p.usages as unknown as string[]} />
                     </div>
                     <div>
-                      <div style={{ fontFamily: MONO, fontSize: 10, color: p.col, letterSpacing: '0.16em', marginBottom: 5 }}>ADMINISTRATION</div>
+                      <div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.16em', marginBottom: 5 }}>ADMINISTRATION</div>
                       <RegList items={p.admin as unknown as string[]} />
                     </div>
                     {p.precautions.length > 0 && (
                       <div style={{ background: `${p.col}08`, border: `1px solid ${p.col}30`, padding: '10px 14px' }}>
-                        <div style={{ fontFamily: MONO, fontSize: 10, color: p.col, letterSpacing: '0.14em', marginBottom: 5 }}>PRÉCAUTIONS</div>
+                        <div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.14em', marginBottom: 5 }}>PRÉCAUTIONS</div>
                         <RegList items={p.precautions as unknown as string[]} />
                       </div>
                     )}
@@ -2781,16 +2781,16 @@ function PharmacieSedartifsDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${SC}60` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${SC}60` : 'none', borderLeft: pos.includes('left') ? `2px solid ${SC}60` : 'none', borderRight: pos.includes('right') ? `2px solid ${SC}60` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: SC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE PHARMACIE MÉDICALE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: SC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE PHARMACIE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: SC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>💤 Doctrine des Sédatifs</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Naturels et Pharmaceutiques</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${SC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${SC}50` }}>
-          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${SC}28` : 'transparent', color: version === 'complete' ? SC_LIGHT : T.dim, borderRight: `1px solid ${SC}40` }}>
+          <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${SC}28` : 'transparent', color: version === 'complete' ? SC_LIGHT : T.dim, borderRight: `1px solid ${SC}40` }}>
             VERSION COMPLÈTE
           </button>
-          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${SC}28` : 'transparent', color: version === 'resume' ? SC_LIGHT : T.dim }}>
+          <button onClick={() => setVersion('resume')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'resume' ? `${SC}28` : 'transparent', color: version === 'resume' ? SC_LIGHT : T.dim }}>
             VERSION RÉSUMÉE
           </button>
         </div>
@@ -2818,8 +2818,8 @@ function PharmacieSedartifsDocument() {
               {list.map(s => (
                 <div key={s.nom} style={{ marginBottom: 4, display: 'flex', gap: 10, alignItems: 'baseline', flexWrap: 'wrap' }}>
                   <span style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, minWidth: 160 }}>{s.nom}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.05em' }}>{s.surnom}</span>
-                  {s.prescription && <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', letterSpacing: '0.1em' }}>PRESCRIPTION</span>}
+                  <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.05em' }}>{s.surnom}</span>
+                  {s.prescription && <span style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.1em' }}>PRESCRIPTION</span>}
                 </div>
               ))}
             </div>
@@ -2830,8 +2830,8 @@ function PharmacieSedartifsDocument() {
             {ANESTHESIQUES_SED.map(a => (
               <div key={a.nom} style={{ marginBottom: 4, display: 'flex', gap: 10, alignItems: 'baseline', flexWrap: 'wrap' }}>
                 <span style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, minWidth: 160 }}>{a.nom}</span>
-                <span style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.05em' }}>{a.surnom}</span>
-                <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', letterSpacing: '0.1em' }}>PRESCRIPTION</span>
+                <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.05em' }}>{a.surnom}</span>
+                <span style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.1em' }}>PRESCRIPTION</span>
               </div>
             ))}
           </div>
@@ -2852,7 +2852,7 @@ function PharmacieSedartifsDocument() {
               <thead>
                 <tr>
                   {['Niveau', 'Durée', 'Conscience', 'Indications'].map(h => (
-                    <th key={h} style={{ padding: '8px 12px', fontFamily: MONO, fontSize: 11, letterSpacing: '0.12em', color: SC_LIGHT, background: `${SC}20`, borderBottom: `1px solid ${SC}40`, textAlign: 'left' }}>{h}</th>
+                    <th key={h} style={{ padding: '8px 12px', fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', color: SC_LIGHT, background: `${SC}20`, borderBottom: `1px solid ${SC}40`, textAlign: 'left' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -2860,9 +2860,9 @@ function PharmacieSedartifsDocument() {
                 {(ECHELLE_SED as unknown as string[][]).map(row => (
                   <tr key={row[0]}>
                     <td style={{ padding: '8px 12px', fontFamily: DISPLAY, fontSize: 14, color: SC_LIGHT, borderBottom: `1px solid ${SC}20` }}>{row[0]}</td>
-                    <td style={{ padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: '#EADCB9', borderBottom: `1px solid ${SC}20` }}>{row[2]}</td>
-                    <td style={{ padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: '#EADCB9', borderBottom: `1px solid ${SC}20` }}>{row[3]}</td>
-                    <td style={{ padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: T.sepia, borderBottom: `1px solid ${SC}20` }}>{row[4]}</td>
+                    <td style={{ padding: '8px 12px', fontFamily: BODY, fontSize: 14, color: '#EADCB9', borderBottom: `1px solid ${SC}20` }}>{row[2]}</td>
+                    <td style={{ padding: '8px 12px', fontFamily: BODY, fontSize: 14, color: '#EADCB9', borderBottom: `1px solid ${SC}20` }}>{row[3]}</td>
+                    <td style={{ padding: '8px 12px', fontFamily: BODY, fontSize: 14, color: T.sepia, borderBottom: `1px solid ${SC}20` }}>{row[4]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -2901,26 +2901,26 @@ function PharmacieSedartifsDocument() {
 
           {/* Légers */}
           <div style={{ marginBottom: 8, padding: '8px 14px', background: 'rgba(72,104,128,0.12)', border: '1px solid rgba(72,104,128,0.40)', borderLeft: '3px solid #486880' }}>
-            <span style={{ fontFamily: MONO, fontSize: 11, color: '#7898B0', letterSpacing: '0.22em' }}>✦ SÉDATIFS LÉGERS ✦</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: '#7898B0', letterSpacing: '0.22em' }}>✦ SÉDATIFS LÉGERS ✦</span>
           </div>
           {SEDATIFS_LEGERS.map(s => (
             <div key={s.nom} style={{ marginBottom: 14, background: T.paper, border: `1px solid ${s.col}30`, borderLeft: `4px solid ${s.col}` }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px 10px', flexWrap: 'wrap' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}>{s.nom}</div>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.1em' }}>{s.surnom}</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em' }}>{s.surnom}</div>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, padding: '0 18px 14px' }}>
                 <div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>VERTUS</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>VERTUS</div>
                   {s.vertus.map((v, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.sepia, marginBottom: 3 }}>• {v}</div>)}
                 </div>
                 <div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>ADMINISTRATION</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>ADMINISTRATION</div>
                   {s.admin.map((a, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.sepia, marginBottom: 3 }}>• {a}</div>)}
                   {s.precautions && s.precautions.length > 0 && (
                     <div style={{ marginTop: 6 }}>
-                      <div style={{ fontFamily: MONO, fontSize: 10, color: '#A06050', letterSpacing: '0.2em', marginBottom: 4 }}>PRÉCAUTIONS</div>
-                      {s.precautions.map((p, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 13, color: '#A07060', marginBottom: 2 }}>⚠ {p}</div>)}
+                      <div style={{ fontFamily: MONO, fontSize: 14, color: '#A06050', letterSpacing: '0.2em', marginBottom: 4 }}>PRÉCAUTIONS</div>
+                      {s.precautions.map((p, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 14, color: '#A07060', marginBottom: 2 }}>⚠ {p}</div>)}
                     </div>
                   )}
                 </div>
@@ -2930,27 +2930,27 @@ function PharmacieSedartifsDocument() {
 
           {/* Modérés */}
           <div style={{ marginBottom: 8, marginTop: 22, padding: '8px 14px', background: 'rgba(112,96,48,0.12)', border: '1px solid rgba(112,96,48,0.40)', borderLeft: '3px solid #706030' }}>
-            <span style={{ fontFamily: MONO, fontSize: 11, color: '#9A8050', letterSpacing: '0.22em' }}>✦ SÉDATIFS MODÉRÉS ✦</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: '#9A8050', letterSpacing: '0.22em' }}>✦ SÉDATIFS MODÉRÉS ✦</span>
           </div>
           {SEDATIFS_MODERES.map(s => (
             <div key={s.nom} style={{ marginBottom: 14, background: T.paper, border: `1px solid ${s.col}30`, borderLeft: `4px solid ${s.col}` }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px 10px', flexWrap: 'wrap' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}>{s.nom}</div>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.1em' }}>{s.surnom}</div>
-                {s.prescription && <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION REQUISE</span>}
+                <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em' }}>{s.surnom}</div>
+                {s.prescription && <span style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION REQUISE</span>}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, padding: '0 18px 14px' }}>
                 <div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>VERTUS</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>VERTUS</div>
                   {s.vertus.map((v, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.sepia, marginBottom: 3 }}>• {v}</div>)}
                 </div>
                 <div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>ADMINISTRATION</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>ADMINISTRATION</div>
                   {s.admin.map((a, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.sepia, marginBottom: 3 }}>• {a}</div>)}
                   {s.precautions && s.precautions.length > 0 && (
                     <div style={{ marginTop: 6 }}>
-                      <div style={{ fontFamily: MONO, fontSize: 10, color: '#A06050', letterSpacing: '0.2em', marginBottom: 4 }}>PRÉCAUTIONS</div>
-                      {s.precautions.map((p, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 13, color: '#A07060', marginBottom: 2 }}>⚠ {p}</div>)}
+                      <div style={{ fontFamily: MONO, fontSize: 14, color: '#A06050', letterSpacing: '0.2em', marginBottom: 4 }}>PRÉCAUTIONS</div>
+                      {s.precautions.map((p, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 14, color: '#A07060', marginBottom: 2 }}>⚠ {p}</div>)}
                     </div>
                   )}
                 </div>
@@ -2960,33 +2960,33 @@ function PharmacieSedartifsDocument() {
 
           {/* Forts */}
           <div style={{ marginBottom: 8, marginTop: 22, padding: '8px 14px', background: 'rgba(122,48,48,0.12)', border: '1px solid rgba(122,48,48,0.40)', borderLeft: '3px solid #7A3030' }}>
-            <span style={{ fontFamily: MONO, fontSize: 11, color: '#A05050', letterSpacing: '0.22em' }}>✦ SÉDATIFS FORTS ✦</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: '#A05050', letterSpacing: '0.22em' }}>✦ SÉDATIFS FORTS ✦</span>
           </div>
           {SEDATIFS_FORTS.map(s => (
             <div key={s.nom} style={{ marginBottom: 14, background: T.paper, border: `1px solid ${s.col}30`, borderLeft: `4px solid ${s.col}` }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px 10px', flexWrap: 'wrap' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}>{s.nom}</div>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.1em' }}>{s.surnom}</div>
-                {s.prescription && <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION OBLIGATOIRE</span>}
+                <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em' }}>{s.surnom}</div>
+                {s.prescription && <span style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION OBLIGATOIRE</span>}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, padding: '0 18px 14px' }}>
                 <div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>VERTUS</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>VERTUS</div>
                   {s.vertus.map((v, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.sepia, marginBottom: 3 }}>• {v}</div>)}
                 </div>
                 <div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>ADMINISTRATION</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>ADMINISTRATION</div>
                   {s.admin.map((a, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.sepia, marginBottom: 3 }}>• {a}</div>)}
                   {s.precautions && s.precautions.length > 0 && (
                     <div style={{ marginTop: 6 }}>
-                      <div style={{ fontFamily: MONO, fontSize: 10, color: '#A06050', letterSpacing: '0.2em', marginBottom: 4 }}>PRÉCAUTIONS</div>
-                      {s.precautions.map((p, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 13, color: '#A07060', marginBottom: 2 }}>⚠ {p}</div>)}
+                      <div style={{ fontFamily: MONO, fontSize: 14, color: '#A06050', letterSpacing: '0.2em', marginBottom: 4 }}>PRÉCAUTIONS</div>
+                      {s.precautions.map((p, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 14, color: '#A07060', marginBottom: 2 }}>⚠ {p}</div>)}
                     </div>
                   )}
                   {s.danger && (
                     <div style={{ marginTop: 8, padding: '8px 12px', background: 'rgba(192,48,48,0.08)', border: '1px solid rgba(192,48,48,0.30)', borderLeft: '3px solid #EADCB9' }}>
-                      <div style={{ fontFamily: MONO, fontSize: 10, color: '#EADCB9', letterSpacing: '0.2em', marginBottom: 4 }}>⚠ DANGER</div>
-                      <div style={{ fontFamily: BODY, fontSize: 13, color: '#C07070' }}>{s.danger}</div>
+                      <div style={{ fontFamily: MONO, fontSize: 14, color: '#EADCB9', letterSpacing: '0.2em', marginBottom: 4 }}>⚠ DANGER</div>
+                      <div style={{ fontFamily: BODY, fontSize: 14, color: '#C07070' }}>{s.danger}</div>
                     </div>
                   )}
                 </div>
@@ -2996,24 +2996,24 @@ function PharmacieSedartifsDocument() {
 
           {/* Anesthésiques */}
           <div style={{ marginBottom: 8, marginTop: 22, padding: '8px 14px', background: 'rgba(48,64,96,0.15)', border: '1px solid rgba(48,64,96,0.50)', borderLeft: '3px solid #304060' }}>
-            <span style={{ fontFamily: MONO, fontSize: 11, color: '#6878A0', letterSpacing: '0.22em' }}>✦ ANESTHÉSIQUES — CHIRURGIE UNIQUEMENT ✦</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: '#6878A0', letterSpacing: '0.22em' }}>✦ ANESTHÉSIQUES — CHIRURGIE UNIQUEMENT ✦</span>
           </div>
           {ANESTHESIQUES_SED.map(a => (
             <div key={a.nom} style={{ marginBottom: 14, background: T.paper, border: `1px solid ${a.col}40`, borderLeft: `4px solid ${a.col}` }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px 10px', flexWrap: 'wrap' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}>{a.nom}</div>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.1em' }}>{a.surnom}</div>
-                <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION OBLIGATOIRE</span>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em' }}>{a.surnom}</div>
+                <span style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.15em', padding: '3px 8px', border: '1px solid #C0505060', background: 'rgba(192,80,80,0.08)' }}>PRESCRIPTION OBLIGATOIRE</span>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, padding: '0 18px 14px' }}>
                 <div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>USAGE</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: SC_LIGHT, letterSpacing: '0.2em', marginBottom: 6 }}>USAGE</div>
                   {a.usage.map((u, i) => <div key={i} style={{ fontFamily: BODY, fontSize: 14, color: T.sepia, marginBottom: 3 }}>• {u}</div>)}
                 </div>
                 <div>
                   <div style={{ padding: '8px 12px', background: 'rgba(192,48,48,0.08)', border: '1px solid rgba(192,48,48,0.30)', borderLeft: '3px solid #EADCB9' }}>
-                    <div style={{ fontFamily: MONO, fontSize: 10, color: '#EADCB9', letterSpacing: '0.2em', marginBottom: 4 }}>⚠ DANGER</div>
-                    <div style={{ fontFamily: BODY, fontSize: 13, color: '#C07070' }}>{a.danger}</div>
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: '#EADCB9', letterSpacing: '0.2em', marginBottom: 4 }}>⚠ DANGER</div>
+                    <div style={{ fontFamily: BODY, fontSize: 14, color: '#C07070' }}>{a.danger}</div>
                   </div>
                 </div>
               </div>
@@ -3026,7 +3026,7 @@ function PharmacieSedartifsDocument() {
               <thead>
                 <tr>
                   {['Niveau', 'Agents principaux', 'Durée', 'Conscience', 'Indications'].map(h => (
-                    <th key={h} style={{ padding: '9px 14px', fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em', color: SC_LIGHT, background: `${SC}20`, borderBottom: `1px solid ${SC}40`, textAlign: 'left' }}>{h}</th>
+                    <th key={h} style={{ padding: '9px 14px', fontFamily: MONO, fontSize: 14, letterSpacing: '0.14em', color: SC_LIGHT, background: `${SC}20`, borderBottom: `1px solid ${SC}40`, textAlign: 'left' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -3052,16 +3052,16 @@ function PharmacieSedartifsDocument() {
             {CATAPLASMES_SED.map((c, i) => (
               <div key={c.nom} style={{ marginBottom: 14, background: T.paper, border: `1px solid ${SC}25`, borderLeft: `4px solid ${SC}` }}>
                 <div style={{ padding: '10px 18px 6px' }}>
-                  <span style={{ fontFamily: MONO, fontSize: 10, color: SC_LIGHT, letterSpacing: '0.2em' }}>PRÉPARATION {i + 1} — </span>
+                  <span style={{ fontFamily: MONO, fontSize: 14, color: SC_LIGHT, letterSpacing: '0.2em' }}>PRÉPARATION {i + 1} — </span>
                   <span style={{ fontFamily: DISPLAY, fontSize: 18, color: T.gold }}>{c.nom}</span>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', padding: '6px 18px 14px', gap: 14 }}>
                   <div>
-                    <div style={{ fontFamily: MONO, fontSize: 10, color: SC_LIGHT, letterSpacing: '0.18em', marginBottom: 5 }}>APPLICATION</div>
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: SC_LIGHT, letterSpacing: '0.18em', marginBottom: 5 }}>APPLICATION</div>
                     <div style={{ fontFamily: BODY, fontSize: 14, color: T.sepia }}>{c.application}</div>
                   </div>
                   <div>
-                    <div style={{ fontFamily: MONO, fontSize: 10, color: SC_LIGHT, letterSpacing: '0.18em', marginBottom: 5 }}>EFFET THÉRAPEUTIQUE</div>
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: SC_LIGHT, letterSpacing: '0.18em', marginBottom: 5 }}>EFFET THÉRAPEUTIQUE</div>
                     <div style={{ fontFamily: BODY, fontSize: 14, color: T.sepia }}>{c.effet}</div>
                   </div>
                 </div>
@@ -3098,7 +3098,7 @@ function ChirurgieDocument() {
   );
   const secTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: CHC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: CHC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
@@ -3110,14 +3110,14 @@ function ChirurgieDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${CHC}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${CHC}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${CHC}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${CHC}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: CHC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE CHIRURGIE MÉDICALE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: CHC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE CHIRURGIE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: CHC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🔪 Doctrine des Points de Suture</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Antisepsie et Cicatrisation</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${CHC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? CHC_LIGHT : T.border}`, background: version === v ? `${CHC}30` : 'transparent', color: version === v ? CHC_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? CHC_LIGHT : T.border}`, background: version === v ? `${CHC}30` : 'transparent', color: version === v ? CHC_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -3128,7 +3128,7 @@ function ChirurgieDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${CHC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: CHC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: CHC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Savoir refermer une plaie, c'est comprendre le langage du corps.</RegPara>
             <RegPara>Une plaie mal préparée se corrompt ; une plaie proprement traitée retrouve peu à peu son intégrité. Chaque point de suture représente un engagement entre le savoir du chirurgien, la résistance du malade et les lois de la nature.</RegPara>
             <RegPara>Les progrès récents de la chirurgie, notamment les enseignements de <strong>Joseph Lister</strong>, ont démontré que la propreté des mains, des instruments et des pansements est aussi importante que l'habileté du praticien. Une chirurgie propre sauve davantage de vies qu'une chirurgie rapide.</RegPara>
@@ -3149,7 +3149,7 @@ function ChirurgieDocument() {
                 { label: 'Chirurgie majeure', items: ['Anesthésie à l\'Éther', 'ou au Chloroforme (médecin expérimenté uniquement)'] },
               ].map(g => (
                 <div key={g.label} style={{ background: `${CHC}10`, border: `1px solid ${CHC}30`, padding: '14px 16px' }}>
-                  <div style={{ fontFamily: MONO, fontSize: 11, color: CHC_LIGHT, letterSpacing: '0.12em', marginBottom: 8 }}>{g.label.toUpperCase()}</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: CHC_LIGHT, letterSpacing: '0.12em', marginBottom: 8 }}>{g.label.toUpperCase()}</div>
                   <RegList items={g.items} />
                 </div>
               ))}
@@ -3179,11 +3179,11 @@ function ChirurgieDocument() {
               ].map(p => (
                 <div key={p.label} style={{ background: T.card, border: `1px solid ${CHC}35`, borderTop: `2px solid ${CHC}`, padding: '16px 18px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 17, color: CHC_LIGHT, marginBottom: 8 }}>{p.label}</div>
-                  <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.1em', marginBottom: 6 }}>INDICATIONS</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginBottom: 6 }}>INDICATIONS</div>
                   <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.7, margin: '0 0 10px' }}>{p.indic}</p>
-                  <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.1em', marginBottom: 6 }}>TECHNIQUE</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginBottom: 6 }}>TECHNIQUE</div>
                   <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.7, margin: '0 0 10px' }}>{p.tech}</p>
-                  {p.note && <p style={{ fontFamily: BODY, fontSize: 13, color: T.muted, fontStyle: 'italic', margin: 0 }}>{p.note}</p>}
+                  {p.note && <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, fontStyle: 'italic', margin: 0 }}>{p.note}</p>}
                 </div>
               ))}
             </div>
@@ -3232,7 +3232,7 @@ function ChirurgieDocument() {
               ].map(r => (
                 <div key={r.zone} style={{ background: `${CHC}10`, border: `1px solid ${CHC}35`, padding: '14px 16px', textAlign: 'center' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 18, color: CHC_LIGHT, marginBottom: 6 }}>{r.zone}</div>
-                  <div style={{ fontFamily: MONO, fontSize: 13, color: T.text }}>{r.delai}</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: T.text }}>{r.delai}</div>
                 </div>
               ))}
             </div>
@@ -3265,7 +3265,7 @@ function ChirurgieDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${CHC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: CHC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: CHC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Le véritable chirurgien ne se contente pas de fermer une plaie. Il prépare soigneusement son intervention, applique les règles de l'antisepsie, choisit le point de suture adapté, surveille quotidiennement son malade et accompagne la guérison par les ressources de la médecine comme de la nature.</RegPara>
             <RegCitation text="Le fil rapproche les chairs. La science prévient la corruption. Les plantes soutiennent la guérison. Ainsi, le chirurgien de 1890 unit le savoir moderne aux traditions éprouvées." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
@@ -3317,7 +3317,7 @@ function ChirurgieDocument() {
               {[{ zone: 'Visage', delai: '4 – 6 jours' }, { zone: 'Bras', delai: '7 – 10 jours' }, { zone: 'Tronc', delai: '8 – 10 jours' }, { zone: 'Jambes', delai: '10 – 14 jours' }].map(r => (
                 <div key={r.zone} style={{ background: `${CHC}10`, border: `1px solid ${CHC}30`, padding: '10px 12px', textAlign: 'center' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 15, color: CHC_LIGHT, marginBottom: 4 }}>{r.zone}</div>
-                  <div style={{ fontFamily: MONO, fontSize: 12, color: T.text }}>{r.delai}</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: T.text }}>{r.delai}</div>
                 </div>
               ))}
             </div>
@@ -3334,7 +3334,7 @@ function ChirurgieDocument() {
           </>)}
 
           <RegBlock col={`${CHC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: CHC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: CHC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['La propreté sauve plus de vies que la rapidité.', 'Toujours désinfecter avant de suturer.', 'Adapter le point de suture à la blessure.', 'Surveiller quotidiennement la cicatrisation.', 'Associer chirurgie moderne, antisepsie et médecine végétale.']} />
           </RegBlock>
         </div>
@@ -3358,7 +3358,7 @@ function ObstetriqueiDocument() {
   );
   const obTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: OBC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: OBC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
@@ -3370,14 +3370,14 @@ function ObstetriqueiDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${OBC}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${OBC}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${OBC}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${OBC}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: OBC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE I ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: OBC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE I ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: OBC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>👶 Reconnaissance de la Grossesse</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Suivi de la mère · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${OBC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? OBC_LIGHT : T.border}`, background: version === v ? `${OBC}30` : 'transparent', color: version === v ? OBC_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? OBC_LIGHT : T.border}`, background: version === v ? `${OBC}30` : 'transparent', color: version === v ? OBC_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -3388,7 +3388,7 @@ function ObstetriqueiDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${OBC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: OBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: OBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>L'obstétrique est l'art de veiller sur deux vies à la fois.</RegPara>
             <RegPara>Le médecin ne doit point seulement reconnaître l'état de grossesse ; il lui appartient également d'accompagner la mère tout au long de cette période, d'observer l'évolution de l'enfant et de prévenir les dangers pouvant menacer l'un comme l'autre.</RegPara>
             <RegPara>En cette année 1890, aucun procédé chimique ni appareil ne permet de confirmer précocement une grossesse. Le diagnostic repose donc sur l'observation, l'expérience et l'examen clinique.</RegPara>
@@ -3498,7 +3498,7 @@ function ObstetriqueiDocument() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8, marginTop: 12 }}>
               {['Température', 'Pouls', 'État général', 'Poids', 'Œdèmes', 'Évolution de l\'utérus', 'Mouvements du fœtus', 'Position de l\'enfant'].map(item => (
                 <div key={item} style={{ background: `${OBC}08`, border: `1px solid ${OBC}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: OBC_LIGHT, fontSize: 10 }}>◆</span>{item}
+                  <span style={{ color: OBC_LIGHT, fontSize: 14 }}>◆</span>{item}
                 </div>
               ))}
             </div>
@@ -3540,7 +3540,7 @@ function ObstetriqueiDocument() {
           {obBlock(<>
             {obTitle('CHAPITRE IX', 'Les Signes Devant Alerter')}
             <RegBlock col="rgba(180,70,70,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#C87060', letterSpacing: '0.16em', marginBottom: 10 }}>URGENCE MÉDICALE</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: '#C87060', letterSpacing: '0.16em', marginBottom: 10 }}>URGENCE MÉDICALE</div>
               <RegPara>Toute femme enceinte présentant l'un de ces signes doit être examinée immédiatement :</RegPara>
               <RegList items={['Saignements abondants.', 'Douleurs violentes.', 'Fièvre persistante.', 'Perte des mouvements du fœtus.', 'Écoulement anormal.', 'Convulsions.', 'Faiblesse extrême.']} />
             </RegBlock>
@@ -3556,7 +3556,7 @@ function ObstetriqueiDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${OBC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: OBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: OBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Reconnaître une grossesse constitue la première mission de l'obstétricien, mais certainement pas la dernière. Son devoir est d'accompagner la future mère tout au long de sa grossesse, d'observer avec rigueur chaque évolution, de prévenir les complications et de préparer les meilleures conditions possibles pour la naissance de l'enfant.</RegPara>
             <RegPara>En cette année 1890, la science progresse rapidement grâce aux travaux de Pasteur, Lister et des grands médecins européens. Pourtant, aucun instrument ne remplacera jamais le regard attentif, la main expérimentée et le jugement éclairé du praticien.</RegPara>
             <RegCitation text="La véritable obstétrique est avant tout l'alliance de la science, de l'observation et de l'humanité." author="Doctrine du Dispensaire, 1890" />
@@ -3643,7 +3643,7 @@ function ObstetriqueiDocument() {
           </>)}
 
           <RegBlock col={`${OBC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: OBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: OBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['La grossesse repose sur trois catégories de signes : présomptifs, probables et certains.', 'Aucun test ne permet de confirmer une grossesse : seul l\'examen clinique fait foi.', 'Le suivi mensuel permet de prévenir les complications.', 'L\'obstétricien protège à la fois la mère et l\'enfant.', 'L\'observation, la prudence et l\'hygiène demeurent les principaux outils du médecin.']} />
           </RegBlock>
         </div>
@@ -3667,7 +3667,7 @@ function ObstetriqueIIDocument() {
   );
   const ob2Title = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: OBC2_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: OBC2_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
@@ -3679,14 +3679,14 @@ function ObstetriqueIIDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${OBC2}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${OBC2}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${OBC2}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${OBC2}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: OBC2_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE II ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: OBC2_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE II ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: OBC2_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🤱 De l'Accouchement</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Complications obstétricales · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${OBC2_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? OBC2_LIGHT : T.border}`, background: version === v ? `${OBC2}30` : 'transparent', color: version === v ? OBC2_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? OBC2_LIGHT : T.border}`, background: version === v ? `${OBC2}30` : 'transparent', color: version === v ? OBC2_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -3697,7 +3697,7 @@ function ObstetriqueIIDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${OBC2}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: OBC2_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: OBC2_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>L'accouchement est l'aboutissement naturel de la grossesse. Bien qu'il soit un phénomène physiologique, il peut à tout instant devenir une urgence mettant en péril la vie de la mère, de l'enfant ou des deux.</RegPara>
             <RegPara>Le rôle du médecin n'est pas de précipiter la naissance, mais de l'accompagner avec discernement, d'intervenir lorsque la nature ne suffit plus et d'assurer les meilleures conditions d'hygiène possibles.</RegPara>
             <RegCitation text="Depuis les travaux de Pasteur et de Lister, la propreté des mains, des instruments et du linge est devenue une règle fondamentale de toute pratique obstétricale." author="Doctrine du Dispensaire, 1890" />
@@ -3747,7 +3747,7 @@ function ObstetriqueIIDocument() {
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: DISPLAY, fontSize: 18, color: OBC2_LIGHT, marginBottom: 6 }}>{p.label}</div>
                     <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, margin: '0 0 8px', lineHeight: 1.6 }}>{p.desc}</p>
-                    <div style={{ fontFamily: MONO, fontSize: 11, color: OBC2_LIGHT, letterSpacing: '0.12em', marginBottom: 6 }}>{p.prefix}</div>
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: OBC2_LIGHT, letterSpacing: '0.12em', marginBottom: 6 }}>{p.prefix}</div>
                     <RegList items={p.items} />
                   </div>
                 </div>
@@ -3771,7 +3771,7 @@ function ObstetriqueIIDocument() {
                     <span style={{ color: p.col, fontSize: 16 }}>{p.icon}</span>
                     <div style={{ fontFamily: DISPLAY, fontSize: 16, color: p.col }}>{p.label}</div>
                   </div>
-                  <div style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65 }}>{p.desc}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.65 }}>{p.desc}</div>
                 </div>
               ))}
             </div>
@@ -3815,7 +3815,7 @@ function ObstetriqueIIDocument() {
               ].map(c => (
                 <div key={c.label} style={{ background: c.urgent ? 'rgba(180,160,113,0.06)' : `${OBC2}06`, border: `1px solid ${c.urgent ? 'rgba(180,60,60,0.40)' : OBC2 + '30'}`, borderLeft: `4px solid ${c.urgent ? '#B83030' : OBC2}`, padding: '16px 20px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                    {c.urgent && <span style={{ fontFamily: MONO, fontSize: 10, color: '#DF9A88', background: 'rgba(180,60,60,0.12)', padding: '2px 7px', letterSpacing: '0.12em' }}>URGENCE</span>}
+                    {c.urgent && <span style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', background: 'rgba(180,60,60,0.12)', padding: '2px 7px', letterSpacing: '0.12em' }}>URGENCE</span>}
                     <div style={{ fontFamily: DISPLAY, fontSize: 17, color: c.urgent ? '#DF9A88' : OBC2_LIGHT }}>{c.label}</div>
                   </div>
                   <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, margin: '0 0 8px', lineHeight: 1.65 }}>{c.desc}</p>
@@ -3868,7 +3868,7 @@ function ObstetriqueIIDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${OBC2}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: OBC2_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: OBC2_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>L'accouchement demeure l'un des actes les plus exigeants de la médecine. Le praticien doit connaître les mécanismes naturels de la naissance, reconnaître rapidement les complications et intervenir avec discernement.</RegPara>
             <RegPara>En cette année 1890, les progrès de l'antisepsie, de l'observation clinique et de la chirurgie permettent de sauver un nombre croissant de mères et d'enfants.</RegPara>
             <RegCitation text="Le véritable obstétricien unit la science, l'expérience et l'humanité afin d'assurer la venue au monde de chaque enfant dans les meilleures conditions possibles." author="Doctrine du Dispensaire, 1890" />
@@ -3919,7 +3919,7 @@ function ObstetriqueIIDocument() {
               ].map(p => (
                 <div key={p.label} style={{ background: T.card, border: `1px solid ${p.col}40`, borderLeft: `3px solid ${p.col}`, padding: '10px 12px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: p.col, marginBottom: 4 }}>{p.label}</div>
-                  <div style={{ fontFamily: BODY, fontSize: 13, color: T.muted }}>{p.note}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted }}>{p.note}</div>
                 </div>
               ))}
             </div>
@@ -3963,7 +3963,7 @@ function ObstetriqueIIDocument() {
           </>)}
 
           <RegBlock col={`${OBC2}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: OBC2_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: OBC2_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['Respecter une antisepsie rigoureuse avant tout accouchement.', 'Connaître les trois phases du travail.', 'Identifier les différentes présentations du fœtus.', 'Reconnaître rapidement les complications obstétricales.', 'Employer les médicaments avec prudence.', 'Les plantes complètent les soins mais ne remplacent jamais une intervention nécessaire.', 'L\'objectif premier est de protéger simultanément la mère et l\'enfant.']} />
           </RegBlock>
         </div>
@@ -3987,7 +3987,7 @@ function ObstetriqueIIIDocument() {
   );
   const ob3Title = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: OBC3_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: OBC3_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
@@ -3999,14 +3999,14 @@ function ObstetriqueIIIDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${OBC3}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${OBC3}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${OBC3}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${OBC3}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: OBC3_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE III ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: OBC3_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D'OBSTÉTRIQUE III ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: OBC3_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🍼 Soins de la Mère et du Nouveau-né</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Post-partum · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${OBC3_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? OBC3_LIGHT : T.border}`, background: version === v ? `${OBC3}30` : 'transparent', color: version === v ? OBC3_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? OBC3_LIGHT : T.border}`, background: version === v ? `${OBC3}30` : 'transparent', color: version === v ? OBC3_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -4017,7 +4017,7 @@ function ObstetriqueIIIDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${OBC3}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: OBC3_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: OBC3_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>La naissance ne marque point la fin des devoirs du médecin, mais le commencement d'une nouvelle surveillance.</RegPara>
             <RegPara>Les heures et les jours qui suivent l'accouchement sont parmi les plus dangereux pour la mère comme pour l'enfant. Une hémorragie, une infection ou une faiblesse du nouveau-né peuvent rapidement compromettre des vies que l'accouchement avait pourtant préservées.</RegPara>
             <RegCitation text="Le praticien doit poursuivre ses soins avec la même vigilance qu'au cours de la grossesse et de la naissance." author="Doctrine du Dispensaire, 1890" />
@@ -4030,7 +4030,7 @@ function ObstetriqueIIIDocument() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8, marginTop: 12 }}>
               {['L\'importance des saignements.', 'La bonne contraction de l\'utérus.', 'L\'absence de déchirures importantes.', 'Le pouls.', 'La température.', 'L\'état général.'].map(item => (
                 <div key={item} style={{ background: `${OBC3}08`, border: `1px solid ${OBC3}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text, display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                  <span style={{ color: OBC3_LIGHT, fontSize: 10, marginTop: 3, flexShrink: 0 }}>◆</span>{item}
+                  <span style={{ color: OBC3_LIGHT, fontSize: 14, marginTop: 3, flexShrink: 0 }}>◆</span>{item}
                 </div>
               ))}
             </div>
@@ -4135,7 +4135,7 @@ function ObstetriqueIIIDocument() {
             <RegPara>Les progrès récents de la médecine imposent des règles strictes. Le médecin veille à :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8, marginTop: 12 }}>
               {['Se laver soigneusement les mains avant chaque soin.', 'Désinfecter les instruments.', 'Utiliser du linge propre.', 'Faire bouillir l\'eau destinée aux soins.', 'Renouveler régulièrement les pansements.'].map(item => (
-                <div key={item} style={{ background: `${OBC3}08`, border: `1px solid ${OBC3}30`, padding: '12px 14px', fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65 }}>{item}</div>
+                <div key={item} style={{ background: `${OBC3}08`, border: `1px solid ${OBC3}30`, padding: '12px 14px', fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.65 }}>{item}</div>
               ))}
             </div>
             <RegBlock col={`${OBC3}40`}>
@@ -4175,7 +4175,7 @@ function ObstetriqueIIIDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${OBC3}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: OBC3_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: OBC3_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Le succès d'un accouchement ne se mesure pas uniquement à la naissance de l'enfant. Il se juge également à la bonne santé de la mère durant les suites de couches et au développement harmonieux du nouveau-né.</RegPara>
             <RegPara>En cette année 1890, les progrès de l'antisepsie et de l'observation clinique permettent de réduire considérablement les complications du post-partum, à condition que le médecin demeure attentif, méthodique et rigoureux.</RegPara>
             <RegCitation text="Prendre soin de la mère, c'est protéger la famille. Prendre soin de l'enfant, c'est préparer l'avenir." author="Doctrine du Dispensaire, 1890" />
@@ -4263,7 +4263,7 @@ function ObstetriqueIIIDocument() {
           </>)}
 
           <RegBlock col={`${OBC3}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: OBC3_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: OBC3_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['La surveillance se poursuit après la naissance.', 'La mère et le nouveau-né doivent être examinés quotidiennement.', 'L\'allaitement est privilégié lorsqu\'il est possible.', 'Une hygiène rigoureuse prévient la majorité des infections.', 'Toute complication doit être prise en charge rapidement.', 'Le rôle de l\'obstétricien est d\'assurer la santé de la mère comme celle de l\'enfant jusqu\'à leur complet rétablissement.']} />
           </RegBlock>
         </div>
@@ -4287,7 +4287,7 @@ function TraitementPhysioDocument() {
   );
   const tpTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: TPC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: TPC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
@@ -4299,14 +4299,14 @@ function TraitementPhysioDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${TPC}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${TPC}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${TPC}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${TPC}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: TPC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE TRAITEMENT PHYSIOLOGIQUE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: TPC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE TRAITEMENT PHYSIOLOGIQUE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: TPC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🦴 Soins des Fractures et Convalescence</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Chirurgie osseuse · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${TPC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? TPC_LIGHT : T.border}`, background: version === v ? `${TPC}30` : 'transparent', color: version === v ? TPC_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? TPC_LIGHT : T.border}`, background: version === v ? `${TPC}30` : 'transparent', color: version === v ? TPC_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -4317,7 +4317,7 @@ function TraitementPhysioDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${TPC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TPC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TPC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Une fracture ne brise pas seulement un os ; elle éprouve la force du corps tout entier.</RegPara>
             <RegPara>Le devoir du médecin est de rétablir l'alignement des os, prévenir l'infection, soulager la douleur et accompagner le malade jusqu'à sa complète guérison.</RegPara>
             <RegPara>Les progrès récents de la chirurgie et de l'antisepsie, enseignés par les travaux de Lister et de Pasteur, ont considérablement réduit les complications des fractures. Cependant, les plantes médicinales demeurent de précieuses alliées durant la consolidation et la convalescence.</RegPara>
@@ -4337,16 +4337,16 @@ function TraitementPhysioDocument() {
               ].map(f => (
                 <div key={f.label} style={{ background: T.card, border: `1px solid ${f.col}50`, borderTop: `3px solid ${f.col}`, padding: '14px 16px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 16, color: f.col, marginBottom: 6 }}>{f.label}</div>
-                  <div style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65 }}>{f.desc}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.65 }}>{f.desc}</div>
                 </div>
               ))}
             </div>
             <div style={{ marginTop: 20 }}>
-              <div style={{ fontFamily: MONO, fontSize: 11, color: TPC_LIGHT, letterSpacing: '0.16em', marginBottom: 10 }}>SIGNES CLINIQUES RECHERCHÉS</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: TPC_LIGHT, letterSpacing: '0.16em', marginBottom: 10 }}>SIGNES CLINIQUES RECHERCHÉS</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8 }}>
                 {['Douleur vive.', 'Impotence fonctionnelle.', 'Gonflement.', 'Déformation visible.', 'Mobilité anormale.', 'Crépitement osseux à la palpation.'].map(s => (
-                  <div key={s} style={{ background: `${TPC}08`, border: `1px solid ${TPC}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                    <span style={{ color: TPC_LIGHT, fontSize: 10, marginTop: 3, flexShrink: 0 }}>◆</span>{s}
+                  <div key={s} style={{ background: `${TPC}08`, border: `1px solid ${TPC}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text, display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                    <span style={{ color: TPC_LIGHT, fontSize: 14, marginTop: 3, flexShrink: 0 }}>◆</span>{s}
                   </div>
                 ))}
               </div>
@@ -4367,7 +4367,7 @@ function TraitementPhysioDocument() {
                     { label: 'Chirurgie / Réduction', items: ['Éther.', 'Chloroforme.'] },
                   ].map(g => (
                     <div key={g.label} style={{ background: T.paper, border: `1px solid ${TPC}25`, padding: '12px 14px' }}>
-                      <div style={{ fontFamily: DISPLAY, fontSize: 13, color: TPC_LIGHT, marginBottom: 6 }}>{g.label}</div>
+                      <div style={{ fontFamily: DISPLAY, fontSize: 14, color: TPC_LIGHT, marginBottom: 6 }}>{g.label}</div>
                       <RegList items={g.items} />
                     </div>
                   ))}
@@ -4379,7 +4379,7 @@ function TraitementPhysioDocument() {
                 <RegPara>Avant toute manipulation :</RegPara>
                 <RegList items={['Lavage soigneux des mains.', 'Instruments désinfectés à l\'eau bouillante ou à l\'acide phénique.', 'Nettoyage de la peau.', 'Irrigation de la plaie avec de l\'eau bouillie.']} />
                 <div style={{ marginTop: 12 }}>
-                  <div style={{ fontFamily: MONO, fontSize: 11, color: '#C87060', letterSpacing: '0.14em', marginBottom: 6 }}>EN CAS DE FRACTURE OUVERTE</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: '#C87060', letterSpacing: '0.14em', marginBottom: 6 }}>EN CAS DE FRACTURE OUVERTE</div>
                   <RegList items={['Eau Vulnéraire.', 'Acide phénique dilué.', 'Teinture d\'iode lorsque nécessaire.']} />
                 </div>
               </div>
@@ -4442,8 +4442,8 @@ function TraitementPhysioDocument() {
             <RegPara>Chaque jour, le médecin contrôle :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8, marginTop: 12 }}>
               {['Température.', 'Pouls.', 'Douleur.', 'Coloration du membre.', 'Chaleur locale.', 'Sensibilité.', 'Mobilité des doigts ou des orteils.'].map(item => (
-                <div key={item} style={{ background: `${TPC}08`, border: `1px solid ${TPC}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: TPC_LIGHT, fontSize: 10 }}>◆</span>{item}
+                <div key={item} style={{ background: `${TPC}08`, border: `1px solid ${TPC}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: TPC_LIGHT, fontSize: 14 }}>◆</span>{item}
                 </div>
               ))}
             </div>
@@ -4458,8 +4458,8 @@ function TraitementPhysioDocument() {
             <RegPara>Le praticien doit reconnaître rapidement :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8, marginTop: 12 }}>
               {['Infection.', 'Suppuration.', 'Gangrène.', 'Hémorragie.', 'Retard de consolidation.', 'Mauvaise position de l\'os.'].map(c => (
-                <div key={c} style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.35)', padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: '#DF9A88', fontSize: 10 }}>◆</span>{c}
+                <div key={c} style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.35)', padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: '#DF9A88', fontSize: 14 }}>◆</span>{c}
                 </div>
               ))}
             </div>
@@ -4514,7 +4514,7 @@ function TraitementPhysioDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${TPC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TPC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TPC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Le traitement d'une fracture repose sur quatre principes fondamentaux : reconnaître correctement la blessure, réduire l'os avec précision, immobiliser solidement le membre, prévenir toute infection.</RegPara>
             <RegPara>En cette année 1890, l'association de l'antisepsie moderne, des techniques chirurgicales et de la médecine végétale permet d'obtenir une consolidation plus sûre et une convalescence plus rapide.</RegPara>
             <RegCitation text="Le véritable médecin ne cherche pas seulement à réparer un os : il accompagne le malade jusqu'à ce qu'il retrouve pleinement sa force et son autonomie." author="Doctrine du Dispensaire, 1890" />
@@ -4535,12 +4535,12 @@ function TraitementPhysioDocument() {
               ].map(f => (
                 <div key={f.label} style={{ background: T.card, border: `1px solid ${f.col}40`, borderLeft: `3px solid ${f.col}`, padding: '10px 12px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: f.col, marginBottom: 4 }}>{f.label}</div>
-                  <div style={{ fontFamily: BODY, fontSize: 12, color: T.muted }}>{f.note}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted }}>{f.note}</div>
                 </div>
               ))}
             </div>
             <div style={{ marginTop: 14 }}>
-              <div style={{ fontFamily: MONO, fontSize: 11, color: TPC_LIGHT, letterSpacing: '0.12em', marginBottom: 8 }}>SIGNES PRINCIPAUX</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: TPC_LIGHT, letterSpacing: '0.12em', marginBottom: 8 }}>SIGNES PRINCIPAUX</div>
               <RegList items={['Douleur vive.', 'Déformation du membre.', 'Gonflement.', 'Impossibilité de mouvement.', 'Crépitement osseux.']} />
             </div>
           </>)}
@@ -4621,7 +4621,7 @@ function TraitementPhysioDocument() {
           </>)}
 
           <RegBlock col={`${TPC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TPC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TPC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['Identifier correctement le type de fracture avant toute intervention.', 'Soulager la douleur selon sa gravité.', 'Désinfecter avant toute manipulation.', 'Réduire puis immobiliser correctement le membre.', 'Surveiller quotidiennement l\'évolution.', 'Associer chirurgie, antisepsie et médecine végétale pour favoriser une consolidation durable.']} />
           </RegBlock>
         </div>
@@ -4645,7 +4645,7 @@ function TraumatologieDocument() {
   );
   const truTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: TRU_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: TRU_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
@@ -4657,14 +4657,14 @@ function TraumatologieDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${TRU}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${TRU}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${TRU}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${TRU}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: TRU_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE TRAUMATOLOGIE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: TRU_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE TRAUMATOLOGIE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: TRU_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩹 Traumatismes des Membres</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Foulures, entorses, luxations · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${TRU_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? TRU_LIGHT : T.border}`, background: version === v ? `${TRU}30` : 'transparent', color: version === v ? TRU_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? TRU_LIGHT : T.border}`, background: version === v ? `${TRU}30` : 'transparent', color: version === v ? TRU_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -4675,7 +4675,7 @@ function TraumatologieDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${TRU}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TRU_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TRU_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Les membres de l'homme sont les premiers instruments de son travail, de sa défense et de sa subsistance. Ils sont également les plus exposés aux blessures causées par les chutes, les chevaux, les armes, les outils ou les efforts excessifs.</RegPara>
             <RegPara>Le médecin doit reconnaître rapidement la nature du traumatisme, soulager la douleur, prévenir les complications et favoriser une récupération complète.</RegPara>
             <RegCitation text="Les progrès récents de la chirurgie, de l'antisepsie et de la pharmacologie permettent désormais d'obtenir une guérison plus rapide, à condition de respecter les règles de la médecine moderne sans négliger les bienfaits de la médecine végétale." author="Doctrine du Dispensaire, 1890" />
@@ -4693,15 +4693,15 @@ function TraumatologieDocument() {
               ].map(t => (
                 <div key={t.label} style={{ background: T.card, border: `1px solid ${t.col}50`, borderTop: `3px solid ${t.col}`, padding: '14px 16px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 16, color: t.col, marginBottom: 6 }}>{t.label}</div>
-                  <div style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65 }}>{t.desc}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.65 }}>{t.desc}</div>
                 </div>
               ))}
             </div>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TRU_LIGHT, letterSpacing: '0.16em', marginBottom: 10 }}>SIGNES CLINIQUES RECHERCHÉS</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TRU_LIGHT, letterSpacing: '0.16em', marginBottom: 10 }}>SIGNES CLINIQUES RECHERCHÉS</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8 }}>
               {['Douleur.', 'Gonflement.', 'Chaleur locale.', 'Déformation.', 'Impotence fonctionnelle.', 'Perte de mobilité.', 'Coloration anormale.', 'Diminution de la sensibilité.'].map(s => (
-                <div key={s} style={{ background: `${TRU}08`, border: `1px solid ${TRU}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: TRU_LIGHT, fontSize: 10, flexShrink: 0 }}>◆</span>{s}
+                <div key={s} style={{ background: `${TRU}08`, border: `1px solid ${TRU}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: TRU_LIGHT, fontSize: 14, flexShrink: 0 }}>◆</span>{s}
                 </div>
               ))}
             </div>
@@ -4721,7 +4721,7 @@ function TraumatologieDocument() {
                     { label: 'Réduction difficile', items: ['Éther.', 'Chloroforme.'] },
                   ].map(g => (
                     <div key={g.label} style={{ background: T.paper, border: `1px solid ${TRU}25`, padding: '12px 14px' }}>
-                      <div style={{ fontFamily: DISPLAY, fontSize: 13, color: TRU_LIGHT, marginBottom: 6 }}>{g.label}</div>
+                      <div style={{ fontFamily: DISPLAY, fontSize: 14, color: TRU_LIGHT, marginBottom: 6 }}>{g.label}</div>
                       <RegList items={g.items} />
                     </div>
                   ))}
@@ -4745,9 +4745,9 @@ function TraumatologieDocument() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
               <div style={{ background: 'rgba(40,80,160,0.08)', border: '1px solid rgba(40,80,160,0.35)', borderTop: '3px solid rgba(40,80,160,0.70)', padding: '16px 20px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 16, color: '#6080C0', marginBottom: 10 }}>Premières 24 heures</div>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: '#6080C0', letterSpacing: '0.12em', marginBottom: 8 }}>APPLIQUER</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: '#6080C0', letterSpacing: '0.12em', marginBottom: 8 }}>APPLIQUER</div>
                 <RegList items={['Compresses froides.', 'Eau fraîche.', 'Linges humides.']} />
-                <div style={{ fontFamily: MONO, fontSize: 11, color: '#6080C0', letterSpacing: '0.12em', margin: '10px 0 8px' }}>LE FROID LIMITE</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: '#6080C0', letterSpacing: '0.12em', margin: '10px 0 8px' }}>LE FROID LIMITE</div>
                 <RegList items={['La douleur.', 'L\'œdème.', 'L\'inflammation.']} />
               </div>
               <div style={{ background: 'rgba(160,80,40,0.08)', border: '1px solid rgba(160,80,40,0.35)', borderTop: '3px solid rgba(160,80,40,0.70)', padding: '16px 20px' }}>
@@ -4796,7 +4796,7 @@ function TraumatologieDocument() {
                   {t.note && <RegBlock col={`${TRU}40`}><RegPara>{t.note}</RegPara></RegBlock>}
                   {t.plantes && (
                     <div style={{ marginTop: 10 }}>
-                      <div style={{ fontFamily: MONO, fontSize: 11, color: '#A8B991', letterSpacing: '0.12em', marginBottom: 6 }}>PRÉPARATIONS VÉGÉTALES</div>
+                      <div style={{ fontFamily: MONO, fontSize: 14, color: '#A8B991', letterSpacing: '0.12em', marginBottom: 6 }}>PRÉPARATIONS VÉGÉTALES</div>
                       <RegList items={t.plantes} />
                     </div>
                   )}
@@ -4811,8 +4811,8 @@ function TraumatologieDocument() {
             <RegPara>Le médecin contrôle quotidiennement :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8, marginTop: 12 }}>
               {['Douleur.', 'Gonflement.', 'Chaleur.', 'Coloration.', 'Mobilité.', 'Sensibilité.', 'Pouls périphérique.'].map(item => (
-                <div key={item} style={{ background: `${TRU}08`, border: `1px solid ${TRU}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: TRU_LIGHT, fontSize: 10 }}>◆</span>{item}
+                <div key={item} style={{ background: `${TRU}08`, border: `1px solid ${TRU}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: TRU_LIGHT, fontSize: 14 }}>◆</span>{item}
                 </div>
               ))}
             </div>
@@ -4826,8 +4826,8 @@ function TraumatologieDocument() {
             {truTitle('CHAPITRE VI', 'Complications')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
               {['Compression nerveuse.', 'Mauvaise circulation.', 'Infection.', 'Suppuration.', 'Gangrène.', 'Ankylose.', 'Instabilité articulaire persistante.'].map(c => (
-                <div key={c} style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.35)', padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: '#DF9A88', fontSize: 10 }}>◆</span>{c}
+                <div key={c} style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.35)', padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: '#DF9A88', fontSize: 14 }}>◆</span>{c}
                 </div>
               ))}
             </div>
@@ -4881,7 +4881,7 @@ function TraumatologieDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${TRU}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TRU_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TRU_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Le traitement des traumatismes des membres repose sur cinq principes essentiels : reconnaître correctement la blessure, soulager la douleur avec discernement, réduire sans brutalité, immobiliser efficacement, accompagner la rééducation jusqu'au retour complet des fonctions.</RegPara>
             <RegCitation text="L'expérience, la patience et l'observation demeurent les premières qualités d'un bon traumatologue." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
@@ -4901,11 +4901,11 @@ function TraumatologieDocument() {
               ].map(t => (
                 <div key={t.label} style={{ background: T.card, border: `1px solid ${t.col}40`, borderLeft: `3px solid ${t.col}`, padding: '10px 12px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: t.col, marginBottom: 4 }}>{t.label}</div>
-                  <div style={{ fontFamily: BODY, fontSize: 12, color: T.muted }}>{t.note}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted }}>{t.note}</div>
                 </div>
               ))}
             </div>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TRU_LIGHT, letterSpacing: '0.12em', marginBottom: 8 }}>SIGNES PRINCIPAUX</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TRU_LIGHT, letterSpacing: '0.12em', marginBottom: 8 }}>SIGNES PRINCIPAUX</div>
             <RegList items={['Douleur.', 'Gonflement.', 'Chaleur locale.', 'Déformation.', 'Perte de mobilité.', 'Diminution de la sensibilité.', 'Coloration anormale.']} />
           </>)}
 
@@ -4995,7 +4995,7 @@ function TraumatologieDocument() {
           </>)}
 
           <RegBlock col={`${TRU}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TRU_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TRU_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['Identifier précisément le type de traumatisme.', 'Soulager la douleur selon sa gravité.', 'Respecter une antisepsie rigoureuse.', 'Immobiliser correctement le membre.', 'Surveiller quotidiennement la circulation, la sensibilité et la mobilité.', 'Associer médecine moderne et médecine végétale pour favoriser une récupération complète.']} />
           </RegBlock>
         </div>
@@ -5019,7 +5019,7 @@ function ZoonosesDocument() {
   );
   const zonTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: ZON_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
@@ -5037,14 +5037,14 @@ function ZoonosesDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${ZON}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${ZON}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${ZON}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${ZON}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: ZON_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ GUIDE DES ZOONOSES ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ GUIDE DES ZOONOSES ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: ZON_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🐾 Maladies de l'Animal à l'Homme</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Médecine rurale · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${ZON_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? ZON_LIGHT : T.border}`, background: version === v ? `${ZON}30` : 'transparent', color: version === v ? ZON_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? ZON_LIGHT : T.border}`, background: version === v ? `${ZON}30` : 'transparent', color: version === v ? ZON_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -5055,7 +5055,7 @@ function ZoonosesDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${ZON}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: ZON_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Les habitants des campagnes vivent quotidiennement au contact des animaux domestiques et sauvages. Cette proximité favorise la transmission de certaines maladies appelées zoonoses, pouvant atteindre aussi bien les éleveurs que les chasseurs, les bouchers, les vétérinaires ou les simples habitants.</RegPara>
             <RegPara>Le médecin rural doit savoir reconnaître ces affections, protéger la population, limiter leur propagation et appliquer les règles modernes d'hygiène désormais enseignées par la médecine.</RegPara>
             <RegCitation text="La prévention demeure le meilleur traitement." author="Doctrine du Dispensaire, 1890" />
@@ -5066,21 +5066,21 @@ function ZoonosesDocument() {
             {zonTitle('CHAPITRE I', 'De la Rage')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14, marginBottom: 16 }}>
               <div style={{ background: `${ZON}08`, border: `1px solid ${ZON}30`, padding: '14px 16px' }}>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: ZON_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>ORIGINE</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>ORIGINE</div>
                 <RegPara>Transmise par morsure ou griffure d'un animal infecté :</RegPara>
                 <RegList items={['Chien.', 'Renard.', 'Loup.', 'Chat.', 'Chauve-souris ou animaux sauvages.']} />
               </div>
               <div style={{ background: 'rgba(160,80,40,0.06)', border: '1px solid rgba(160,80,40,0.30)', padding: '14px 16px' }}>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: '#C07050', letterSpacing: '0.14em', marginBottom: 8 }}>CHEZ L'ANIMAL</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: '#C07050', letterSpacing: '0.14em', marginBottom: 8 }}>CHEZ L'ANIMAL</div>
                 <RegList items={['Agressivité inhabituelle.', 'Salivation abondante.', 'Difficultés à avaler.', 'Agitation ou errance.', 'Attaques sans provocation.']} />
               </div>
               <div style={{ background: 'rgba(180,160,113,0.06)', border: '1px solid rgba(180,60,60,0.30)', padding: '14px 16px' }}>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>CHEZ L'HOMME</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>CHEZ L'HOMME</div>
                 <RegList items={['Douleur autour de la morsure.', 'Fièvre.', 'Anxiété.', 'Difficultés à avaler.', 'Spasmes de la gorge.', 'Agitation croissante.']} />
               </div>
             </div>
             <RegBlock col="rgba(180,60,60,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>URGENCE — CONDUITE À TENIR</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>URGENCE — CONDUITE À TENIR</div>
               <RegList items={['Laver immédiatement la plaie à l\'eau bouillie et au savon.', 'Désinfecter avec Eau Vulnéraire ou Acide phénique.', 'Appliquer une Teinture d\'iode si nécessaire.', 'Surveiller l\'animal lorsqu\'il peut être capturé.', 'Déclarer le cas aux autorités locales.', 'Orienter vers la méthode préventive de Pasteur lorsque possible.']} />
             </RegBlock>
             <RegBlock col={`${ZON}40`}>
@@ -5093,15 +5093,15 @@ function ZoonosesDocument() {
             {zonTitle('CHAPITRE II', 'Du Charbon')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginBottom: 16 }}>
               <div style={{ background: `${ZON}08`, border: `1px solid ${ZON}30`, padding: '14px 16px' }}>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: ZON_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>ORIGINE</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>ORIGINE</div>
                 <RegList items={['Bovins, moutons, chèvres.', 'Peaux contaminées.', 'Sols infectés.']} />
               </div>
               <div style={{ background: `${ZON}08`, border: `1px solid ${ZON}30`, padding: '14px 16px' }}>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: ZON_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>SIGNES</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>SIGNES</div>
                 <RegList items={['Bouton noir central.', 'Rougeur importante.', 'Fièvre.', 'Douleur.', 'Ganglions.']} />
               </div>
               <div style={{ background: `${ZON}08`, border: `1px solid ${ZON}30`, padding: '14px 16px' }}>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: ZON_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>TRAITEMENT</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>TRAITEMENT</div>
                 <RegList items={['Désinfection immédiate.', 'Eau Vulnéraire.', 'Acide phénique.', 'Pansement propre.', 'Surveillance quotidienne.']} />
               </div>
             </div>
@@ -5117,22 +5117,22 @@ function ZoonosesDocument() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
               <div style={{ background: `${ZON}08`, border: `1px solid ${ZON}35`, borderTop: `2px solid ${ZON}`, padding: '16px 20px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 17, color: ZON_LIGHT, marginBottom: 12 }}>Gale</div>
-                <div style={{ fontFamily: MONO, fontSize: 10, color: ZON_LIGHT, letterSpacing: '0.12em', marginBottom: 6 }}>SIGNES</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.12em', marginBottom: 6 }}>SIGNES</div>
                 <RegList items={['Démangeaisons importantes.', 'Sillons cutanés.', 'Rougeurs.', 'Lésions de grattage.']} />
-                <div style={{ fontFamily: MONO, fontSize: 10, color: ZON_LIGHT, letterSpacing: '0.12em', margin: '10px 0 6px' }}>TRAITEMENT</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.12em', margin: '10px 0 6px' }}>TRAITEMENT</div>
                 <RegList items={['Bain chaud.', 'Pommade au soufre.', 'Lavage vêtements à l\'eau bouillante.', 'Désinfection literie et habitation.']} />
-                <div style={{ fontFamily: MONO, fontSize: 10, color: '#A8B991', letterSpacing: '0.12em', margin: '10px 0 6px' }}>PLANTES</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: '#A8B991', letterSpacing: '0.12em', margin: '10px 0 6px' }}>PLANTES</div>
                 <RegList items={['Lavande.', 'Noyer.', 'Thym.']} />
               </div>
               <div style={{ background: `${ZON}08`, border: `1px solid ${ZON}35`, borderTop: `2px solid ${ZON}`, padding: '16px 20px' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 17, color: ZON_LIGHT, marginBottom: 12 }}>Teigne</div>
-                <div style={{ fontFamily: MONO, fontSize: 10, color: ZON_LIGHT, letterSpacing: '0.12em', marginBottom: 6 }}>ORIGINE</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.12em', marginBottom: 6 }}>ORIGINE</div>
                 <RegPara>Transmise par chats, chiens, chevaux ou objets contaminés.</RegPara>
-                <div style={{ fontFamily: MONO, fontSize: 10, color: ZON_LIGHT, letterSpacing: '0.12em', margin: '10px 0 6px' }}>SIGNES</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.12em', margin: '10px 0 6px' }}>SIGNES</div>
                 <RegList items={['Plaques dépilées.', 'Cheveux cassés.', 'Démangeaisons.', 'Pellicules épaisses.']} />
-                <div style={{ fontFamily: MONO, fontSize: 10, color: ZON_LIGHT, letterSpacing: '0.12em', margin: '10px 0 6px' }}>TRAITEMENT</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.12em', margin: '10px 0 6px' }}>TRAITEMENT</div>
                 <RegList items={['Raser la zone atteinte.', 'Nettoyer avec Eau Vulnéraire.', 'Désinfecter les objets de toilette.', 'Ne jamais partager peignes ou brosses.']} />
-                <div style={{ fontFamily: MONO, fontSize: 10, color: '#A8B991', letterSpacing: '0.12em', margin: '10px 0 6px' }}>PLANTES</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: '#A8B991', letterSpacing: '0.12em', margin: '10px 0 6px' }}>PLANTES</div>
                 <RegList items={['Thym.', 'Ortie.', 'Huile de ricin.']} />
               </div>
             </div>
@@ -5151,12 +5151,12 @@ function ZoonosesDocument() {
               ].map(z => (
                 <div key={z.label} style={{ background: T.card, border: `1px solid ${z.col}35`, borderLeft: `3px solid ${z.col}`, padding: '14px 16px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 15, color: z.col, marginBottom: 6 }}>{z.label}</div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: ZON_LIGHT, letterSpacing: '0.10em', marginBottom: 4 }}>TRANSMISSION</div>
-                  <div style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginBottom: 8, lineHeight: 1.6 }}>{z.transmission}</div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: ZON_LIGHT, letterSpacing: '0.10em', marginBottom: 4 }}>SIGNES</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.10em', marginBottom: 4 }}>TRANSMISSION</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginBottom: 8, lineHeight: 1.6 }}>{z.transmission}</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.10em', marginBottom: 4 }}>SIGNES</div>
                   <RegList items={z.signes} />
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: ZON_LIGHT, letterSpacing: '0.10em', margin: '6px 0 4px' }}>PRÉVENTION</div>
-                  <div style={{ fontFamily: BODY, fontSize: 12, color: T.text, lineHeight: 1.6 }}>{z.traitement}</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.10em', margin: '6px 0 4px' }}>PRÉVENTION</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.6 }}>{z.traitement}</div>
                 </div>
               ))}
             </div>
@@ -5168,8 +5168,8 @@ function ZoonosesDocument() {
             <RegPara>Le médecin recommande :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8, marginTop: 12 }}>
               {['Lavage soigneux des mains.', 'Désinfection immédiate des plaies.', 'Cuisson complète des viandes.', 'Faire bouillir le lait.', 'Entretien régulier des étables.', 'Isolement des animaux malades.', 'Destruction sécurisée des carcasses contaminées.'].map(item => (
-                <div key={item} style={{ background: `${ZON}08`, border: `1px solid ${ZON}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: ZON_LIGHT, fontSize: 10, flexShrink: 0 }}>◆</span>{item}
+                <div key={item} style={{ background: `${ZON}08`, border: `1px solid ${ZON}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: ZON_LIGHT, fontSize: 14, flexShrink: 0 }}>◆</span>{item}
                 </div>
               ))}
             </div>
@@ -5206,7 +5206,7 @@ function ZoonosesDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${ZON}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: ZON_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>La médecine de 1890 ne sépare plus les progrès scientifiques des ressources de la nature. L'observation clinique, l'antisepsie, la pharmacologie moderne et les plantes médicinales constituent les quatre piliers de la lutte contre les zoonoses.</RegPara>
             <RegCitation text="Le médecin éclairé sait que prévenir une maladie vaut toujours mieux que tenter de la guérir. Par la vigilance, l'hygiène et le savoir, il protège les hommes comme les animaux dont dépend la vie des campagnes." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
@@ -5230,8 +5230,8 @@ function ZoonosesDocument() {
                 { label: 'Échinococcose', col: '#206040', note: 'Chiens infestés.' },
               ].map(z => (
                 <div key={z.label} style={{ background: T.card, border: `1px solid ${z.col}35`, borderLeft: `3px solid ${z.col}`, padding: '10px 12px' }}>
-                  <div style={{ fontFamily: DISPLAY, fontSize: 13, color: z.col, marginBottom: 4 }}>{z.label}</div>
-                  <div style={{ fontFamily: BODY, fontSize: 11, color: T.muted }}>{z.note}</div>
+                  <div style={{ fontFamily: DISPLAY, fontSize: 14, color: z.col, marginBottom: 4 }}>{z.label}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted }}>{z.note}</div>
                 </div>
               ))}
             </div>
@@ -5296,8 +5296,8 @@ function ZoonosesDocument() {
                 { label: 'Échinococcose', col: '#206040', note: 'Chiens. Hygiène des mains.' },
               ].map(z => (
                 <div key={z.label} style={{ background: T.card, border: `1px solid ${z.col}35`, borderLeft: `3px solid ${z.col}`, padding: '10px 12px' }}>
-                  <div style={{ fontFamily: DISPLAY, fontSize: 13, color: z.col, marginBottom: 4 }}>{z.label}</div>
-                  <div style={{ fontFamily: BODY, fontSize: 12, color: T.muted, lineHeight: 1.6 }}>{z.note}</div>
+                  <div style={{ fontFamily: DISPLAY, fontSize: 14, color: z.col, marginBottom: 4 }}>{z.label}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted, lineHeight: 1.6 }}>{z.note}</div>
                 </div>
               ))}
             </div>
@@ -5325,7 +5325,7 @@ function ZoonosesDocument() {
           </>)}
 
           <RegBlock col={`${ZON}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: ZON_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: ZON_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['Les zoonoses sont des maladies transmissibles de l\'animal à l\'homme.', 'L\'hygiène et l\'antisepsie sont les meilleures protections.', 'La rage nécessite une prise en charge immédiate.', 'Le lait doit être bouilli et les viandes correctement cuites.', 'Les animaux malades doivent être isolés et signalés.', 'Le médecin associe médecine moderne, antisepsie et médecine végétale pour protéger les populations rurales.']} />
           </RegBlock>
         </div>
@@ -5349,7 +5349,7 @@ function ChirurgieTraumaDocument() {
   );
   const ctrTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: CTR_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: CTR_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
@@ -5366,14 +5366,14 @@ function ChirurgieTraumaDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${CTR_LIGHT}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${CTR_LIGHT}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${CTR_LIGHT}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${CTR_LIGHT}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: CTR_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE CHIRURGIE TRAUMATOLOGIQUE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: CTR_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE CHIRURGIE TRAUMATOLOGIQUE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: CTR_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🩻 Chirurgie Traumatologique</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Plaies Graves · Blessures par Balle · Infections Chirurgicales</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${CTR_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? CTR_LIGHT : T.border}`, background: version === v ? `${CTR}50` : 'transparent', color: version === v ? CTR_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? CTR_LIGHT : T.border}`, background: version === v ? `${CTR}50` : 'transparent', color: version === v ? CTR_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -5384,7 +5384,7 @@ function ChirurgieTraumaDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${CTR_LIGHT}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: CTR_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: CTR_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>La chirurgie traumatique est sans doute l'épreuve la plus exigeante de l'art médical. Dans les territoires de East Wellster's et de West Elizabeth, les blessures sont nombreuses : accidents agricoles, chutes de cheval, morsures, coups de couteau, tirs d'armes à feu ou explosions minières.</RegPara>
             <RegPara>Le chirurgien ne doit jamais se laisser guider par la précipitation. Une plaie mal observée, mal nettoyée ou refermée trop tôt devient rapidement le siège de la corruption des chairs, de la gangrène ou de la septicémie.</RegPara>
             <RegCitation text="Grâce aux enseignements de Pasteur et de Lister, le devoir du médecin est d'empêcher la pénétration des germes, de détruire ceux déjà présents et d'accompagner les forces naturelles de guérison." author="Doctrine du Dispensaire, 1890" />
@@ -5402,7 +5402,7 @@ function ChirurgieTraumaDocument() {
                 { num: 'V', label: 'Respecter les tissus', col: '#907030', items: ['Retirer les corps étrangers.', 'Retirer les tissus manifestement morts.', 'Conserver tout tissu vivant.'] },
               ].map(p => (
                 <div key={p.num} style={{ background: T.card, border: `1px solid ${p.col}35`, borderTop: `3px solid ${p.col}`, padding: '14px 16px' }}>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: p.col, letterSpacing: '0.14em', marginBottom: 4 }}>RÈGLE {p.num}</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: p.col, letterSpacing: '0.14em', marginBottom: 4 }}>RÈGLE {p.num}</div>
                   <div style={{ fontFamily: DISPLAY, fontSize: 15, color: p.col, marginBottom: 10 }}>{p.label}</div>
                   <RegList items={p.items} />
                 </div>
@@ -5461,7 +5461,7 @@ function ChirurgieTraumaDocument() {
               ].map(c => (
                 <div key={c.label} style={{ background: `${c.col}10`, border: `1px solid ${c.col}35`, borderTop: `3px solid ${c.col}`, padding: '10px 12px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: c.col, marginBottom: 4 }}>{c.label}</div>
-                  <div style={{ fontFamily: BODY, fontSize: 12, color: T.muted }}>{c.note}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted }}>{c.note}</div>
                 </div>
               ))}
             </div>
@@ -5516,9 +5516,9 @@ function ChirurgieTraumaDocument() {
               ].map(b => (
                 <div key={b.label} style={{ background: T.card, border: `1px solid ${b.col}35`, borderLeft: `4px solid ${b.col}`, padding: '14px 16px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 16, color: b.col, marginBottom: 10 }}>{b.label}</div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: b.col, letterSpacing: '0.12em', marginBottom: 5 }}>CARACTÉRISTIQUES</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: b.col, letterSpacing: '0.12em', marginBottom: 5 }}>CARACTÉRISTIQUES</div>
                   <RegList items={b.caract} />
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: b.col, letterSpacing: '0.12em', margin: '8px 0 5px' }}>TRAITEMENT</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: b.col, letterSpacing: '0.12em', margin: '8px 0 5px' }}>TRAITEMENT</div>
                   <RegList items={b.traite} />
                 </div>
               ))}
@@ -5541,7 +5541,7 @@ function ChirurgieTraumaDocument() {
                 <div style={{ background: `${CTR}08`, border: `1px solid ${CTR_LIGHT}30`, padding: '12px 14px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 15, color: CTR_LIGHT, marginBottom: 8 }}>Drainage</div>
                   <RegPara>Toute collection de pus doit être évacuée. Une plaie infectée ne doit jamais être refermée avant disparition complète de la suppuration.</RegPara>
-                  <div style={{ fontFamily: DISPLAY, fontSize: 13, color: T.gold, fontStyle: 'italic', marginTop: 8, padding: '6px 10px', background: 'rgba(209,183,124,0.08)', border: '1px solid rgba(209,183,124,0.25)' }}>« Là où le pus s'accumule, il faut lui ouvrir un chemin. »</div>
+                  <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, fontStyle: 'italic', marginTop: 8, padding: '6px 10px', background: 'rgba(209,183,124,0.08)', border: '1px solid rgba(209,183,124,0.25)' }}>« Là où le pus s'accumule, il faut lui ouvrir un chemin. »</div>
                 </div>
               </div>
             </div>
@@ -5563,7 +5563,7 @@ function ChirurgieTraumaDocument() {
               ].map(p => (
                 <div key={p.plant} style={{ background: `${p.col}10`, border: `1px solid ${p.col}35`, padding: '10px 12px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 14, color: p.col, marginBottom: 4 }}>{p.plant}</div>
-                  <div style={{ fontFamily: BODY, fontSize: 12, color: T.muted }}>{p.usage}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted }}>{p.usage}</div>
                 </div>
               ))}
             </div>
@@ -5703,7 +5703,7 @@ function ChirurgieTraumaDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${CTR_LIGHT}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: CTR_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: CTR_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>La chirurgie traumatique de l'année 1890 ne repose plus uniquement sur l'habileté du bistouri. Les découvertes de Pasteur et de Lister ont démontré que la propreté, l'antisepsie et la prévention des infections sont les fondements de toute intervention réussie.</RegPara>
             <RegPara>Le praticien doit associer la chirurgie moderne aux ressources de la pharmacologie et de la médecine végétale : ils se complètent pour offrir au malade les meilleures chances de guérison.</RegPara>
             <RegCitation text="Le véritable chirurgien ne se contente pas de refermer une plaie : il préserve la vie, restaure la fonction du membre et accompagne le malade jusqu'à son complet rétablissement." author="Doctrine du Dispensaire, 1890" />
@@ -5724,7 +5724,7 @@ function ChirurgieTraumaDocument() {
                 { label: 'IV — Prévenir l\'infection', col: '#40806A' },
                 { label: 'V — Respecter les tissus', col: '#907030' },
               ].map(p => (
-                <div key={p.label} style={{ background: `${p.col}10`, border: `1px solid ${p.col}35`, borderLeft: `3px solid ${p.col}`, padding: '10px 14px', fontFamily: BODY, fontSize: 13, color: p.col }}>
+                <div key={p.label} style={{ background: `${p.col}10`, border: `1px solid ${p.col}35`, borderLeft: `3px solid ${p.col}`, padding: '10px 14px', fontFamily: BODY, fontSize: 14, color: p.col }}>
                   {p.label}
                 </div>
               ))}
@@ -5764,7 +5764,7 @@ function ChirurgieTraumaDocument() {
                     { label: 'Infectées', col: '#DF9A88' },
                     { label: 'Gangreneuses', col: '#8A1010' },
                   ].map(c => (
-                    <div key={c.label} style={{ background: `${c.col}10`, border: `1px solid ${c.col}30`, padding: '5px 10px', fontFamily: BODY, fontSize: 13, color: c.col }}>
+                    <div key={c.label} style={{ background: `${c.col}10`, border: `1px solid ${c.col}30`, padding: '5px 10px', fontFamily: BODY, fontSize: 14, color: c.col }}>
                       {c.label}
                     </div>
                   ))}
@@ -5798,7 +5798,7 @@ function ChirurgieTraumaDocument() {
                 {ctrTitle('PLAIES INFECTÉES')}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
                   {['Rougeur', 'Gonflement', 'Chaleur', 'Douleur', 'Pus', 'Odeur', 'Fièvre'].map(s => (
-                    <div key={s} style={{ background: 'rgba(180,160,113,0.08)', border: '1px solid rgba(180,160,113,0.30)', padding: '4px 10px', fontFamily: MONO, fontSize: 11, color: '#DF9A88' }}>⚠ {s}</div>
+                    <div key={s} style={{ background: 'rgba(180,160,113,0.08)', border: '1px solid rgba(180,160,113,0.30)', padding: '4px 10px', fontFamily: MONO, fontSize: 14, color: '#DF9A88' }}>⚠ {s}</div>
                   ))}
                 </div>
                 <RegList items={['Débridement.', 'Drainage.', 'Lavages répétés.', 'Désinfection.', 'Surveillance rapprochée.']} />
@@ -5836,9 +5836,9 @@ function ChirurgieTraumaDocument() {
               </div>
               <div>
                 {ctrTitle('AMPUTATION')}
-                <div style={{ fontFamily: DISPLAY, fontSize: 13, color: CTR_LIGHT, marginBottom: 4 }}>Indications</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: CTR_LIGHT, marginBottom: 4 }}>Indications</div>
                 <RegList items={['Gangrène.', 'Fracture irréparable.', 'Écrasement majeur.', 'Hémorragie incontrôlable.', 'Septicémie.']} />
-                <div style={{ fontFamily: DISPLAY, fontSize: 13, color: CTR_LIGHT, marginBottom: 4, marginTop: 8 }}>Principes</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 14, color: CTR_LIGHT, marginBottom: 4, marginTop: 8 }}>Principes</div>
                 <RegList items={['Anesthésie (Éther, Chloroforme).', 'Ligature des vaisseaux.', 'Section dans les tissus sains.', 'Drainage si nécessaire.']} />
               </div>
             </div>
@@ -5859,7 +5859,7 @@ function ChirurgieTraumaDocument() {
                   { label: 'Infection', col: '#B05030' },
                   { label: 'Septicémie', col: '#8A1020' },
                 ].map(c => (
-                  <div key={c.label} style={{ background: `${c.col}08`, border: `1px solid ${c.col}30`, padding: '7px 10px', marginBottom: 6, fontFamily: BODY, fontSize: 13, color: c.col }}>
+                  <div key={c.label} style={{ background: `${c.col}08`, border: `1px solid ${c.col}30`, padding: '7px 10px', marginBottom: 6, fontFamily: BODY, fontSize: 14, color: c.col }}>
                     ⚠ {c.label}
                   </div>
                 ))}
@@ -5886,7 +5886,7 @@ function ChirurgieTraumaDocument() {
           </>)}
 
           <RegBlock col={`${CTR_LIGHT}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: CTR_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: CTR_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['Toute plaie doit être examinée avant d\'être traitée.', 'L\'antisepsie est indispensable avant, pendant et après toute intervention.', 'Une plaie infectée ne doit jamais être refermée sans drainage.', 'Les blessures par balle nécessitent une exploration prudente et une surveillance prolongée.', 'L\'amputation reste un dernier recours destiné à sauver la vie du patient.', 'Le chirurgien associe chirurgie moderne, antisepsie, pharmacologie et médecine végétale pour optimiser la guérison.']} />
           </RegBlock>
         </div>
@@ -5910,7 +5910,7 @@ function DesinfectionDocument() {
   );
   const dsiTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: DSI_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: DSI_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
@@ -5928,14 +5928,14 @@ function DesinfectionDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${DSI_LIGHT}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${DSI_LIGHT}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${DSI_LIGHT}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${DSI_LIGHT}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: DSI_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ MANUEL DE DÉSINFECTION ET DE STÉRILISATION ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: DSI_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ MANUEL DE DÉSINFECTION ET DE STÉRILISATION ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: DSI_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🔬 Désinfection et Stérilisation</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Selon les principes de Pasteur, Lister et de l'Antisepsie Moderne</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${DSI_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? DSI_LIGHT : T.border}`, background: version === v ? `${DSI}60` : 'transparent', color: version === v ? DSI_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? DSI_LIGHT : T.border}`, background: version === v ? `${DSI}60` : 'transparent', color: version === v ? DSI_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -5946,7 +5946,7 @@ function DesinfectionDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${DSI_LIGHT}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: DSI_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: DSI_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Les progrès de la médecine ont démontré que la plupart des infections chirurgicales ne proviennent ni du mauvais air, ni d'une faiblesse du malade, mais de micro-organismes invisibles introduits dans les plaies.</RegPara>
             <RegPara>Les travaux de Louis Pasteur ont établi la théorie des germes, tandis que Joseph Lister a démontré qu'une antisepsie rigoureuse réduit considérablement les infections et la mortalité opératoire.</RegPara>
             <RegCitation text="Le médecin de 1890 doit désormais faire de la propreté une véritable méthode scientifique." author="Doctrine du Dispensaire, 1890" />
@@ -5980,8 +5980,8 @@ function DesinfectionDocument() {
                 <div>
                   <RegPara>Utilisé pour instruments, pansements et irrigation des plaies.</RegPara>
                   <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
-                    <div style={{ flex: 1, background: `rgba(128,128,176,0.10)`, border: `1px solid rgba(128,128,176,0.30)`, padding: '6px 10px', fontFamily: MONO, fontSize: 12, color: '#8080B0' }}>5 % — instruments</div>
-                    <div style={{ flex: 1, background: `rgba(128,128,176,0.10)`, border: `1px solid rgba(128,128,176,0.30)`, padding: '6px 10px', fontFamily: MONO, fontSize: 12, color: '#8080B0' }}>2 % — plaies</div>
+                    <div style={{ flex: 1, background: `rgba(128,128,176,0.10)`, border: `1px solid rgba(128,128,176,0.30)`, padding: '6px 10px', fontFamily: MONO, fontSize: 14, color: '#8080B0' }}>5 % — instruments</div>
+                    <div style={{ flex: 1, background: `rgba(128,128,176,0.10)`, border: `1px solid rgba(128,128,176,0.30)`, padding: '6px 10px', fontFamily: MONO, fontSize: 14, color: '#8080B0' }}>2 % — plaies</div>
                   </div>
                 </div>
               ))}
@@ -5993,7 +5993,7 @@ function DesinfectionDocument() {
               ))}
             </div>
             <RegBlock col={`${DSI_LIGHT}40`}>
-              <div style={{ fontFamily: MONO, fontSize: 11, color: DSI_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>CONSERVATION APRÈS STÉRILISATION</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: DSI_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>CONSERVATION APRÈS STÉRILISATION</div>
               <RegList items={['Sécher les instruments.', 'Ranger dans une boîte propre et fermée.', 'Manipuler avec des mains désinfectées.']} />
             </RegBlock>
           </>)}
@@ -6005,13 +6005,13 @@ function DesinfectionDocument() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8, marginTop: 12 }}>
               {['Lavage au savon.', 'Brossage des ongles.', 'Rinçage à l\'eau propre.', 'Désinfection à l\'alcool ou à l\'acide phénique dilué.'].map((item, i) => (
                 <div key={item} style={{ background: `${DSI}10`, border: `1px solid ${DSI_LIGHT}30`, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ fontFamily: MONO, fontSize: 13, color: DSI_LIGHT, flexShrink: 0 }}>{i + 1}</span>
-                  <span style={{ fontFamily: BODY, fontSize: 13, color: T.text }}>{item}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 14, color: DSI_LIGHT, flexShrink: 0 }}>{i + 1}</span>
+                  <span style={{ fontFamily: BODY, fontSize: 14, color: T.text }}>{item}</span>
                 </div>
               ))}
             </div>
             <div style={{ marginTop: 12, padding: '10px 14px', background: `rgba(180,60,40,0.08)`, border: `1px solid rgba(180,60,40,0.30)` }}>
-              <span style={{ fontFamily: BODY, fontSize: 13, color: '#DF9A88' }}>Les mains ne doivent plus toucher de surface souillée avant l'intervention.</span>
+              <span style={{ fontFamily: BODY, fontSize: 14, color: '#DF9A88' }}>Les mains ne doivent plus toucher de surface souillée avant l'intervention.</span>
             </div>
           </>)}
 
@@ -6022,8 +6022,8 @@ function DesinfectionDocument() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 8, marginTop: 10 }}>
               {['Laver soigneusement la peau.', 'Retirer les salissures.', 'Raser si nécessaire la zone opératoire.', 'Appliquer de l\'alcool.', 'Terminer par une désinfection à la Teinture d\'iode ou à l\'Acide phénique.'].map((item, i) => (
                 <div key={item} style={{ background: `${DSI}10`, border: `1px solid ${DSI_LIGHT}30`, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ fontFamily: MONO, fontSize: 13, color: DSI_LIGHT, flexShrink: 0 }}>{i + 1}</span>
-                  <span style={{ fontFamily: BODY, fontSize: 13, color: T.text }}>{item}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 14, color: DSI_LIGHT, flexShrink: 0 }}>{i + 1}</span>
+                  <span style={{ fontFamily: BODY, fontSize: 14, color: T.text }}>{item}</span>
                 </div>
               ))}
             </div>
@@ -6043,7 +6043,7 @@ function DesinfectionDocument() {
               </div>
             </div>
             <RegBlock col={`${DSI_LIGHT}40`}>
-              <div style={{ fontFamily: MONO, fontSize: 11, color: DSI_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>LES PANSEMENTS DOIVENT TOUJOURS RESTER</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: DSI_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>LES PANSEMENTS DOIVENT TOUJOURS RESTER</div>
               <RegList items={['Propres.', 'Secs.', 'Régulièrement renouvelés.']} />
             </RegBlock>
           </>)}
@@ -6111,13 +6111,13 @@ function DesinfectionDocument() {
                 { signe: 'Fièvre.', col: '#EADCB9' },
                 { signe: 'Retard de cicatrisation.', col: '#506080' },
               ].map(s => (
-                <div key={s.signe} style={{ background: `${s.col}10`, border: `1px solid ${s.col}35`, padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: s.col }}>
+                <div key={s.signe} style={{ background: `${s.col}10`, border: `1px solid ${s.col}35`, padding: '8px 12px', fontFamily: BODY, fontSize: 14, color: s.col }}>
                   ⚠ {s.signe}
                 </div>
               ))}
             </div>
             <div style={{ marginTop: 12, padding: '10px 14px', background: `rgba(180,60,40,0.08)`, border: `1px solid rgba(180,60,40,0.30)` }}>
-              <span style={{ fontFamily: BODY, fontSize: 13, color: '#DF9A88' }}>Toute aggravation impose une nouvelle désinfection et un examen complet.</span>
+              <span style={{ fontFamily: BODY, fontSize: 14, color: '#DF9A88' }}>Toute aggravation impose une nouvelle désinfection et un examen complet.</span>
             </div>
           </>)}
 
@@ -6130,7 +6130,7 @@ function DesinfectionDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${DSI_LIGHT}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: DSI_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: DSI_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>L'antisepsie constitue l'un des plus grands progrès de la médecine moderne. En appliquant rigoureusement les principes de Pasteur et de Lister, le médecin de 1890 réduit considérablement les infections, améliore la cicatrisation et augmente les chances de survie de ses malades.</RegPara>
             <RegCitation text="La propreté, la discipline et la méthode demeurent les premiers instruments du praticien, avant même le bistouri." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
@@ -6182,8 +6182,8 @@ function DesinfectionDocument() {
                 {dsiTitle('DÉSINFECTION DES MAINS')}
                 {['Lavage au savon.', 'Brossage des ongles.', 'Rinçage à l\'eau propre.', 'Désinfection alcool ou acide phénique dilué.'].map((item, i) => (
                   <div key={item} style={{ background: `${DSI}10`, border: `1px solid ${DSI_LIGHT}25`, padding: '7px 12px', marginBottom: 6, display: 'flex', gap: 10, alignItems: 'center' }}>
-                    <span style={{ fontFamily: MONO, fontSize: 12, color: DSI_LIGHT, flexShrink: 0 }}>{i + 1}</span>
-                    <span style={{ fontFamily: BODY, fontSize: 13, color: T.text }}>{item}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 14, color: DSI_LIGHT, flexShrink: 0 }}>{i + 1}</span>
+                    <span style={{ fontFamily: BODY, fontSize: 14, color: T.text }}>{item}</span>
                   </div>
                 ))}
               </div>
@@ -6191,8 +6191,8 @@ function DesinfectionDocument() {
                 {dsiTitle('PRÉPARATION DU PATIENT')}
                 {['Laver la peau.', 'Raser la zone opératoire si nécessaire.', 'Désinfecter avec de l\'alcool.', 'Appliquer Teinture d\'iode ou Acide phénique.'].map((item, i) => (
                   <div key={item} style={{ background: `${DSI}10`, border: `1px solid ${DSI_LIGHT}25`, padding: '7px 12px', marginBottom: 6, display: 'flex', gap: 10, alignItems: 'center' }}>
-                    <span style={{ fontFamily: MONO, fontSize: 12, color: DSI_LIGHT, flexShrink: 0 }}>{i + 1}</span>
-                    <span style={{ fontFamily: BODY, fontSize: 13, color: T.text }}>{item}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 14, color: DSI_LIGHT, flexShrink: 0 }}>{i + 1}</span>
+                    <span style={{ fontFamily: BODY, fontSize: 14, color: T.text }}>{item}</span>
                   </div>
                 ))}
               </div>
@@ -6261,7 +6261,7 @@ function DesinfectionDocument() {
                 { signe: 'Fièvre', col: '#EADCB9' },
                 { signe: 'Retard cicatrisation', col: '#506080' },
               ].map(s => (
-                <div key={s.signe} style={{ background: `${s.col}10`, border: `1px solid ${s.col}35`, padding: '8px 12px', fontFamily: BODY, fontSize: 13, color: s.col }}>
+                <div key={s.signe} style={{ background: `${s.col}10`, border: `1px solid ${s.col}35`, padding: '8px 12px', fontFamily: BODY, fontSize: 14, color: s.col }}>
                   ⚠ {s.signe}
                 </div>
               ))}
@@ -6269,7 +6269,7 @@ function DesinfectionDocument() {
           </>)}
 
           <RegBlock col={`${DSI_LIGHT}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: DSI_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: DSI_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['Une antisepsie rigoureuse réduit fortement les infections.', 'Toujours stériliser les instruments avant chaque intervention.', 'Désinfecter les mains, la peau et les plaies.', 'Maintenir des locaux propres, aérés et désinfectés.', 'Les préparations du dispensaire complètent les antiseptiques modernes.', 'La propreté, la méthode et la discipline sont les premières qualités d\'un bon praticien.']} />
           </RegBlock>
         </div>
@@ -6293,7 +6293,7 @@ function FievresDocument() {
   );
   const fieTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: FIE_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: FIE_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
@@ -6303,7 +6303,7 @@ function FievresDocument() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 12 }}>
         {sections.map(s => (
           <div key={s.title} style={{ background: `${FIE}06`, border: `1px solid ${FIE}20`, padding: '12px 14px' }}>
-            <div style={{ fontFamily: MONO, fontSize: 10, color: col, letterSpacing: '0.12em', marginBottom: 6 }}>{s.title}</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: col, letterSpacing: '0.12em', marginBottom: 6 }}>{s.title}</div>
             {s.content}
           </div>
         ))}
@@ -6318,14 +6318,14 @@ function FievresDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${FIE}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${FIE}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${FIE}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${FIE}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: FIE_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ TRAITÉ DES FIÈVRES COMMUNES ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: FIE_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ TRAITÉ DES FIÈVRES COMMUNES ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: FIE_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🌡️ Fièvres Communes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Diagnostic, Traitement et Prévention · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${FIE_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? FIE_LIGHT : T.border}`, background: version === v ? `${FIE}30` : 'transparent', color: version === v ? FIE_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? FIE_LIGHT : T.border}`, background: version === v ? `${FIE}30` : 'transparent', color: version === v ? FIE_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -6336,7 +6336,7 @@ function FievresDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${FIE}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: FIE_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: FIE_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Les fièvres demeurent l'une des principales causes de consultation dans les campagnes. Elles peuvent résulter d'infections, d'eaux souillées, d'aliments contaminés, d'épidémies saisonnières ou de maladies propres aux régions marécageuses.</RegPara>
             <RegPara>Depuis les travaux de Pasteur et de Koch, le médecin sait désormais que de nombreuses fièvres sont provoquées par des micro-organismes invisibles. L'hygiène, la désinfection et l'observation clinique sont devenues les premiers moyens de lutte contre ces maladies.</RegPara>
             <RegCitation text="Le praticien doit reconnaître rapidement l'origine de la fièvre, prévenir les complications et soutenir les forces du malade jusqu'à sa guérison." author="Doctrine du Dispensaire, 1890" />
@@ -6351,7 +6351,7 @@ function FievresDocument() {
                 content: (
                   <div>
                     <RegList items={['Eau contaminée.', 'Aliments souillés.', 'Mauvaise évacuation des eaux usées.', 'Hygiène insuffisante.']} />
-                    <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Les villages utilisant des puits proches des latrines sont particulièrement exposés.</p>
+                    <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Les villages utilisant des puits proches des latrines sont particulièrement exposés.</p>
                   </div>
                 ),
               },
@@ -6360,7 +6360,7 @@ function FievresDocument() {
               { title: 'PLANTES', content: <RegList items={['Achillée millefeuille.', 'Menthe.', 'Sauge.', 'Camomille.', 'Guimauve.']} /> },
             ])}
             <RegBlock col="rgba(180,60,40,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#D05050', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS À SURVEILLER</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: '#D05050', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS À SURVEILLER</div>
               <RegList items={['Hémorragie intestinale.', 'Perforation digestive.', 'Déshydratation.', 'Affaiblissement général.']} />
             </RegBlock>
           </>)}
@@ -6375,7 +6375,7 @@ function FievresDocument() {
               { title: 'PLANTES', content: <RegList items={['Thym.', 'Menthe.', 'Guimauve.', 'Camomille.', 'Mauve.']} /> },
             ])}
             <RegBlock col="rgba(180,60,40,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#D05050', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: '#D05050', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
               <RegList items={['Déshydratation.', 'Épuisement.', 'Infection généralisée.']} />
             </RegBlock>
           </>)}
@@ -6389,7 +6389,7 @@ function FievresDocument() {
                 content: (
                   <div>
                     <RegList items={['Régions marécageuses.', 'Forte présence de moustiques.']} />
-                    <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Les observations médicales montrent qu'elle survient principalement dans les zones où abondent les moustiques.</p>
+                    <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Les observations médicales montrent qu'elle survient principalement dans les zones où abondent les moustiques.</p>
                   </div>
                 ),
               },
@@ -6397,9 +6397,9 @@ function FievresDocument() {
                 title: 'SIGNES',
                 content: (
                   <div>
-                    <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginBottom: 4 }}>Par accès :</p>
+                    <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginBottom: 4 }}>Par accès :</p>
                     <RegList items={['Frissons.', 'Forte chaleur.', 'Sueurs abondantes.']} />
-                    <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, margin: '6px 0 4px' }}>S'y associent :</p>
+                    <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, margin: '6px 0 4px' }}>S'y associent :</p>
                     <RegList items={['Fatigue importante.', 'Pâleur.', 'Amaigrissement.', 'Augmentation du volume de la rate.']} />
                   </div>
                 ),
@@ -6407,15 +6407,15 @@ function FievresDocument() {
               { title: 'PLANTES', content: <RegList items={['Quinquina.', 'Gentiane.', 'Saule blanc.', 'Romarin.', 'Lavande.']} /> },
             ])}
             <div style={{ background: `rgba(32,96,72,0.10)`, border: `1px solid rgba(32,96,72,0.35)`, borderLeft: `4px solid #206048`, padding: '14px 18px', marginBottom: 12 }}>
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#40A080', letterSpacing: '0.14em', marginBottom: 8 }}>TRAITEMENT</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: '#40A080', letterSpacing: '0.14em', marginBottom: 8 }}>TRAITEMENT</div>
               <RegList items={['Repos.', 'Hydratation.', 'Éloignement temporaire des zones marécageuses.', 'Protection contre les moustiques lorsque cela est possible.']} />
               <div style={{ marginTop: 12, padding: '10px 14px', background: `rgba(32,96,72,0.12)`, border: `1px solid rgba(32,96,72,0.40)` }}>
                 <span style={{ fontFamily: DISPLAY, fontSize: 15, color: '#40A080' }}>La Quinine</span>
-                <span style={{ fontFamily: BODY, fontSize: 13, color: T.text }}> demeure le traitement de référence contre la fièvre palustre.</span>
+                <span style={{ fontFamily: BODY, fontSize: 14, color: T.text }}> demeure le traitement de référence contre la fièvre palustre.</span>
               </div>
             </div>
             <RegBlock col="rgba(180,60,40,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#D05050', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: '#D05050', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
               <RegList items={['Accès répétés.', 'Anémie.', 'Épuisement.', 'Atteinte de la rate.']} />
             </RegBlock>
           </>)}
@@ -6443,9 +6443,9 @@ function FievresDocument() {
               ].map(m => (
                 <div key={m.label} style={{ background: T.card, border: `1px solid ${m.col}40`, borderTop: `3px solid ${m.col}`, padding: '14px 16px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 17, color: m.col, marginBottom: 10 }}>{m.label}</div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: FIE_LIGHT, letterSpacing: '0.12em', marginBottom: 5 }}>SIGNES</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: FIE_LIGHT, letterSpacing: '0.12em', marginBottom: 5 }}>SIGNES</div>
                   <RegList items={m.signes} />
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: FIE_LIGHT, letterSpacing: '0.12em', margin: '8px 0 5px' }}>TRAITEMENT</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: FIE_LIGHT, letterSpacing: '0.12em', margin: '8px 0 5px' }}>TRAITEMENT</div>
                   <RegList items={m.traitement} />
                 </div>
               ))}
@@ -6458,8 +6458,8 @@ function FievresDocument() {
             <RegPara>Le médecin recommande :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 8, marginTop: 12 }}>
               {['Eau systématiquement bouillie lorsque sa qualité est douteuse.', 'Lavage des mains.', 'Désinfection des plaies.', 'Nettoyage des logements.', 'Entretien des puits.', 'Éloignement des eaux stagnantes.', 'Cuisson complète des aliments.'].map(item => (
-                <div key={item} style={{ background: `${FIE}08`, border: `1px solid ${FIE}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: FIE_LIGHT, fontSize: 10, flexShrink: 0 }}>◆</span>{item}
+                <div key={item} style={{ background: `${FIE}08`, border: `1px solid ${FIE}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: FIE_LIGHT, fontSize: 14, flexShrink: 0 }}>◆</span>{item}
                 </div>
               ))}
             </div>
@@ -6487,8 +6487,8 @@ function FievresDocument() {
               <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8 }}>Préparations végétales</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 4 }}>
                 {['Camomille.', 'Menthe.', 'Sauge.', 'Guimauve.', 'Thym.', 'Achillée.', 'Romarin.', 'Lavande.', 'Gentiane.', 'Saule blanc.'].map(p => (
-                  <div key={p} style={{ fontFamily: BODY, fontSize: 13, color: T.text, padding: '3px 0', display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ color: '#A8B991', fontSize: 9 }}>◆</span>{p}
+                  <div key={p} style={{ fontFamily: BODY, fontSize: 14, color: T.text, padding: '3px 0', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ color: '#A8B991', fontSize: 14 }}>◆</span>{p}
                   </div>
                 ))}
               </div>
@@ -6504,7 +6504,7 @@ function FievresDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${FIE}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: FIE_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: FIE_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Les fièvres communes demeurent parmi les maladies les plus fréquentes des campagnes. Grâce aux progrès de l'antisepsie, à une meilleure compréhension des maladies infectieuses, à la Quinine contre le paludisme et aux ressources de la médecine végétale, le médecin de 1890 dispose désormais de moyens plus efficaces pour soulager ses malades.</RegPara>
             <RegCitation text="Le véritable praticien associe toujours l'hygiène, l'observation clinique, la pharmacologie moderne et les plantes médicinales afin d'offrir les meilleurs soins possibles." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
@@ -6525,8 +6525,8 @@ function FievresDocument() {
                 { label: 'Fièvres éruptives', col: '#8A4010', note: 'Rougeole, scarlatine, varicelle.' },
               ].map(m => (
                 <div key={m.label} style={{ background: T.card, border: `1px solid ${m.col}35`, borderLeft: `3px solid ${m.col}`, padding: '10px 12px' }}>
-                  <div style={{ fontFamily: DISPLAY, fontSize: 13, color: m.col, marginBottom: 4 }}>{m.label}</div>
-                  <div style={{ fontFamily: BODY, fontSize: 11, color: T.muted }}>{m.note}</div>
+                  <div style={{ fontFamily: DISPLAY, fontSize: 14, color: m.col, marginBottom: 4 }}>{m.label}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted }}>{m.note}</div>
                 </div>
               ))}
             </div>
@@ -6586,8 +6586,8 @@ function FievresDocument() {
                 <div style={{ fontFamily: DISPLAY, fontSize: 14, color: FIE_LIGHT, marginBottom: 8 }}>Traitement</div>
                 <RegList items={['Repos.', 'Hydratation.', 'Éloignement des marais.']} />
                 <div style={{ marginTop: 10, padding: '8px 10px', background: `rgba(32,96,72,0.12)`, border: `1px solid rgba(32,96,72,0.35)` }}>
-                  <span style={{ fontFamily: DISPLAY, fontSize: 13, color: '#40A080' }}>Quinine</span>
-                  <span style={{ fontFamily: BODY, fontSize: 12, color: T.muted }}> — traitement de référence.</span>
+                  <span style={{ fontFamily: DISPLAY, fontSize: 14, color: '#40A080' }}>Quinine</span>
+                  <span style={{ fontFamily: BODY, fontSize: 14, color: T.muted }}> — traitement de référence.</span>
                 </div>
               </div>
               <div>
@@ -6639,7 +6639,7 @@ function FievresDocument() {
           </>)}
 
           <RegBlock col={`${FIE}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: FIE_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: FIE_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['Identifier rapidement l\'origine de la fièvre.', 'Maintenir une bonne hydratation et le repos du malade.', 'Appliquer une hygiène et une antisepsie rigoureuses.', 'La Quinine est le traitement de référence contre la fièvre palustre.', 'Les préparations végétales complètent les soins mais ne remplacent pas les traitements médicaux.', 'La prévention, l\'observation clinique et la surveillance quotidienne restent les meilleurs moyens de lutter contre les fièvres communes.']} />
           </RegBlock>
         </div>
@@ -6663,7 +6663,7 @@ function MaladiesInfantilesDocument() {
   );
   const micTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: MIC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: MIC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
@@ -6673,7 +6673,7 @@ function MaladiesInfantilesDocument() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
         {sections.map(s => (
           <div key={s.title} style={{ background: `${MIC}06`, border: `1px solid ${MIC}20`, padding: '12px 14px' }}>
-            <div style={{ fontFamily: MONO, fontSize: 10, color: col, letterSpacing: '0.12em', marginBottom: 6 }}>{s.title}</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: col, letterSpacing: '0.12em', marginBottom: 6 }}>{s.title}</div>
             {s.content}
           </div>
         ))}
@@ -6688,14 +6688,14 @@ function MaladiesInfantilesDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${MIC}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${MIC}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${MIC}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${MIC}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: MIC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DES MALADIES INFANTILES ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: MIC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DES MALADIES INFANTILES ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: MIC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🧒 Maladies Infantiles Courantes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Diagnostic, Traitement et Prévention · À l'usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${MIC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? MIC_LIGHT : T.border}`, background: version === v ? `${MIC}30` : 'transparent', color: version === v ? MIC_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? MIC_LIGHT : T.border}`, background: version === v ? `${MIC}30` : 'transparent', color: version === v ? MIC_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -6706,7 +6706,7 @@ function MaladiesInfantilesDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${MIC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: MIC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: MIC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Les enfants constituent les patients les plus fragiles du dispensaire. Leur jeune âge, leur faible résistance aux maladies contagieuses et les conditions de vie parfois précaires des campagnes rendent indispensable une surveillance médicale attentive.</RegPara>
             <RegPara>Le médecin doit reconnaître rapidement les maladies infantiles, limiter leur propagation, soulager les symptômes et prévenir les complications qui demeurent, en cette année 1890, une cause fréquente de mortalité.</RegPara>
             <RegCitation text="L'hygiène, l'antisepsie, une alimentation adaptée et l'observation clinique demeurent les meilleurs alliés du praticien." author="Doctrine du Dispensaire, 1890" />
@@ -6718,7 +6718,7 @@ function MaladiesInfantilesDocument() {
             {micDisease('Rougeole', '#DF9A88', [
               {
                 title: 'ORIGINE',
-                content: <p style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65, margin: 0 }}>Maladie virale très contagieuse, transmise par l'air et les sécrétions respiratoires. Touche particulièrement écoles et logements mal ventilés.</p>,
+                content: <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.65, margin: 0 }}>Maladie virale très contagieuse, transmise par l'air et les sécrétions respiratoires. Touche particulièrement écoles et logements mal ventilés.</p>,
               },
               {
                 title: 'SIGNES',
@@ -6734,7 +6734,7 @@ function MaladiesInfantilesDocument() {
               },
             ])}
             <RegBlock col="rgba(180,60,60,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS À SURVEILLER</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS À SURVEILLER</div>
               <RegList items={['Bronchite.', 'Pneumonie.', 'Otite.', 'Déshydratation.']} />
             </RegBlock>
           </>)}
@@ -6745,7 +6745,7 @@ function MaladiesInfantilesDocument() {
             {micDisease('Diphtérie', '#8A2020', [
               {
                 title: 'ORIGINE',
-                content: <p style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65, margin: 0 }}>Maladie bactérienne extrêmement contagieuse atteignant principalement la gorge. Une membrane blanchâtre peut obstruer progressivement les voies respiratoires.</p>,
+                content: <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.65, margin: 0 }}>Maladie bactérienne extrêmement contagieuse atteignant principalement la gorge. Une membrane blanchâtre peut obstruer progressivement les voies respiratoires.</p>,
               },
               {
                 title: 'SIGNES',
@@ -6764,7 +6764,7 @@ function MaladiesInfantilesDocument() {
               <RegPara>Depuis les récentes découvertes médicales, le sérum antidiphtérique commence à être employé dans certains grands établissements médicaux, bien qu'il demeure encore peu disponible dans les dispensaires ruraux.</RegPara>
             </RegBlock>
             <RegBlock col="rgba(180,60,60,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
               <RegList items={['Asphyxie.', 'Pneumonie.', 'Paralysie.', 'Épuisement général.']} />
               <RegPara>Toute aggravation impose une surveillance médicale constante.</RegPara>
             </RegBlock>
@@ -6776,7 +6776,7 @@ function MaladiesInfantilesDocument() {
             {micDisease('Coqueluche', '#5A3080', [
               {
                 title: 'ORIGINE',
-                content: <p style={{ fontFamily: BODY, fontSize: 13, color: T.text, lineHeight: 1.65, margin: 0 }}>Maladie très contagieuse des voies respiratoires touchant principalement les jeunes enfants.</p>,
+                content: <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, lineHeight: 1.65, margin: 0 }}>Maladie très contagieuse des voies respiratoires touchant principalement les jeunes enfants.</p>,
               },
               {
                 title: 'SIGNES',
@@ -6792,7 +6792,7 @@ function MaladiesInfantilesDocument() {
               },
             ])}
             <RegBlock col="rgba(180,60,60,0.50)">
-              <div style={{ fontFamily: MONO, fontSize: 11, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 8 }}>COMPLICATIONS</div>
               <RegList items={['Bronchite.', 'Pneumonie.', 'Convulsions.', 'Amaigrissement.']} />
             </RegBlock>
           </>)}
@@ -6820,7 +6820,7 @@ function MaladiesInfantilesDocument() {
               ].map(m => (
                 <div key={m.label} style={{ background: T.card, border: `1px solid ${m.col}40`, borderTop: `3px solid ${m.col}`, padding: '14px 16px' }}>
                   <div style={{ fontFamily: DISPLAY, fontSize: 17, color: m.col, marginBottom: 10 }}>{m.label}</div>
-                  <div style={{ fontFamily: MONO, fontSize: 10, color: MIC_LIGHT, letterSpacing: '0.12em', marginBottom: 6 }}>SIGNES</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: MIC_LIGHT, letterSpacing: '0.12em', marginBottom: 6 }}>SIGNES</div>
                   <RegList items={m.signes} />
                   <RegBlock col={`${MIC}30`}><RegPara>{m.note}</RegPara></RegBlock>
                 </div>
@@ -6834,8 +6834,8 @@ function MaladiesInfantilesDocument() {
             <RegPara>Le médecin recommande :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8, marginTop: 12 }}>
               {['Isolement des enfants contagieux.', 'Lavage fréquent des mains.', 'Aération quotidienne des habitations.', 'Linge propre.', 'Désinfection des objets utilisés par le malade.', 'Alimentation suffisante.', 'Surveillance des épidémies.'].map(item => (
-                <div key={item} style={{ background: `${MIC}08`, border: `1px solid ${MIC}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 13, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: MIC_LIGHT, fontSize: 10, flexShrink: 0 }}>◆</span>{item}
+                <div key={item} style={{ background: `${MIC}08`, border: `1px solid ${MIC}25`, padding: '10px 12px', fontFamily: BODY, fontSize: 14, color: T.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: MIC_LIGHT, fontSize: 14, flexShrink: 0 }}>◆</span>{item}
                 </div>
               ))}
             </div>
@@ -6859,8 +6859,8 @@ function MaladiesInfantilesDocument() {
                 <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#A8B991', marginBottom: 8 }}>Préparations végétales</div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 4 }}>
                   {['Camomille.', 'Tilleul.', 'Mauve.', 'Guimauve.', 'Sauge.', 'Thym.', 'Menthe.', 'Lavande.', 'Romarin.', 'Violette.', 'Primevère.'].map(p => (
-                    <div key={p} style={{ fontFamily: BODY, fontSize: 13, color: T.text, padding: '3px 0', display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ color: '#A8B991', fontSize: 9 }}>◆</span>{p}
+                    <div key={p} style={{ fontFamily: BODY, fontSize: 14, color: T.text, padding: '3px 0', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span style={{ color: '#A8B991', fontSize: 14 }}>◆</span>{p}
                     </div>
                   ))}
                 </div>
@@ -6877,7 +6877,7 @@ function MaladiesInfantilesDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${MIC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: MIC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: MIC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Les maladies infantiles demeurent parmi les principales causes de mortalité en cette année 1890. Le médecin ne peut empêcher toutes les épidémies, mais il peut en limiter les conséquences grâce à une reconnaissance précoce, une hygiène rigoureuse, l'antisepsie moderne et des soins adaptés.</RegPara>
             <RegCitation text="Protéger l'enfant, c'est préserver l'avenir de la famille et de la communauté." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
@@ -6898,8 +6898,8 @@ function MaladiesInfantilesDocument() {
                 { label: 'Varicelle', col: '#206040', note: 'Vésicules, démangeaisons, bénigne.' },
               ].map(m => (
                 <div key={m.label} style={{ background: T.card, border: `1px solid ${m.col}35`, borderLeft: `3px solid ${m.col}`, padding: '10px 12px' }}>
-                  <div style={{ fontFamily: DISPLAY, fontSize: 13, color: m.col, marginBottom: 4 }}>{m.label}</div>
-                  <div style={{ fontFamily: BODY, fontSize: 11, color: T.muted }}>{m.note}</div>
+                  <div style={{ fontFamily: DISPLAY, fontSize: 14, color: m.col, marginBottom: 4 }}>{m.label}</div>
+                  <div style={{ fontFamily: BODY, fontSize: 14, color: T.muted }}>{m.note}</div>
                 </div>
               ))}
             </div>
@@ -7006,7 +7006,7 @@ function MaladiesInfantilesDocument() {
           </>)}
 
           <RegBlock col={`${MIC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: MIC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: MIC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['Les maladies infantiles sont très contagieuses et nécessitent un diagnostic précoce.', 'L\'isolement des malades limite la propagation des épidémies.', 'Une bonne hygiène, l\'antisepsie et une alimentation adaptée favorisent la guérison.', 'Les préparations végétales soulagent les symptômes mais ne remplacent pas les soins médicaux.', 'Le médecin doit surveiller attentivement les complications respiratoires, neurologiques et infectieuses jusqu\'au rétablissement complet de l\'enfant.']} />
           </RegBlock>
         </div>
@@ -7028,13 +7028,13 @@ function TuberculoseDocument() {
   );
   const tbcTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
   const tbcSection = (label: string, content: React.ReactNode) => (
     <div style={{ background: T.card, border: `1px solid ${TBC}30`, borderLeft: `4px solid ${TBC_LIGHT}`, padding: '16px 20px', marginBottom: 14 }}>
-      <div style={{ fontFamily: MONO, fontSize: 10, color: TBC_LIGHT, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
       {content}
     </div>
   );
@@ -7046,14 +7046,14 @@ function TuberculoseDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${TBC}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${TBC}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${TBC}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${TBC}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: TBC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE PATHOLOGIE MÉDICALE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE PATHOLOGIE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: TBC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🫁 La Tuberculose</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Diagnostic, Traitement et Prévention · À l&apos;usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${TBC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? TBC_LIGHT : T.border}`, background: version === v ? `${TBC}30` : 'transparent', color: version === v ? TBC_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? TBC_LIGHT : T.border}`, background: version === v ? `${TBC}30` : 'transparent', color: version === v ? TBC_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -7064,7 +7064,7 @@ function TuberculoseDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${TBC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>La tuberculose, autrefois appelée <strong>phtisie pulmonaire</strong>, demeure l&apos;une des maladies les plus meurtrières de notre époque.</RegPara>
             <RegPara>Les travaux du docteur <strong>Robert Koch</strong>, publiés en 1882, ont démontré que cette affection est provoquée par un bacille microscopique transmissible d&apos;un individu à l&apos;autre.</RegPara>
             <RegPara>Le médecin de 1890 ne peut encore guérir cette maladie, mais il possède désormais les connaissances nécessaires pour ralentir son évolution, soulager les malades et limiter sa propagation.</RegPara>
@@ -7096,7 +7096,7 @@ function TuberculoseDocument() {
             <RegPara>Le praticien procède à :</RegPara>
             <RegList items={["l'interrogatoire du malade ;", "l'auscultation des poumons ;", 'la percussion thoracique ;', "l'observation des crachats ;", 'la surveillance du poids ;', 'le contrôle quotidien de la température.']} />
             <RegBlock col={`${TBC}50`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Une toux persistante de plusieurs semaines doit toujours faire suspecter une tuberculose.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Une toux persistante de plusieurs semaines doit toujours faire suspecter une tuberculose.</p>
             </RegBlock>
           </>)}
 
@@ -7114,7 +7114,7 @@ function TuberculoseDocument() {
           {tbcBlock(<>
             {tbcTitle('CHAPITRE V', 'Traitement')}
             <RegBlock col={`rgba(180,160,113,0.40)`}>
-              <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>AVERTISSEMENT</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.14em', marginBottom: 8 }}>AVERTISSEMENT</div>
               <RegPara>Aucun remède connu ne permet encore d&apos;éliminer définitivement le bacille tuberculeux. Le traitement consiste à soutenir les forces naturelles de l&apos;organisme.</RegPara>
             </RegBlock>
             <RegPara>Le médecin recommande :</RegPara>
@@ -7122,23 +7122,23 @@ function TuberculoseDocument() {
             <div style={{ height: 16 }} />
             {tbcSection('MÉDICAMENTS', <RegList items={["Élixir Parégorique contre la toux douloureuse.", "Laudanum uniquement en cas de douleurs importantes.", "Eau Vulnéraire pour les soins locaux lorsque nécessaire."]} />)}
             <div style={{ height: 8 }} />
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.18em', marginBottom: 12 }}>PRÉPARATIONS VÉGÉTALES</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.18em', marginBottom: 12 }}>PRÉPARATIONS VÉGÉTALES</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
               {tbcSection('INFUSION DU SOUFFLE', <>
                 <RegList items={['Thym.', 'Guimauve.', 'Plantain.', 'Réglisse.']} />
-                <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Apaise la toux et facilite l&apos;expectoration.</p>
+                <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Apaise la toux et facilite l&apos;expectoration.</p>
               </>)}
               {tbcSection('INFUSION FORTIFIANTE', <>
                 <RegList items={['Ortie.', 'Romarin.', 'Échinacée.']} />
-                <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Soutient les forces du malade.</p>
+                <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Soutient les forces du malade.</p>
               </>)}
               {tbcSection('SIROP PECTORAL', <>
                 <RegList items={['Miel.', 'Guimauve.', 'Sauge.', 'Thym.']} />
-                <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Calme l&apos;irritation des voies respiratoires.</p>
+                <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Calme l&apos;irritation des voies respiratoires.</p>
               </>)}
               {tbcSection('FUMIGATIONS', <>
                 <RegList items={['Thym.', 'Eucalyptus.', 'Lavande.']} />
-                <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Améliorent le confort respiratoire.</p>
+                <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Améliorent le confort respiratoire.</p>
               </>)}
             </div>
           </>)}
@@ -7156,7 +7156,7 @@ function TuberculoseDocument() {
             <RegPara>Le praticien surveille attentivement l&apos;apparition des complications suivantes :</RegPara>
             <RegList items={['hémoptysie (crachats de sang) ;', 'pneumonie ;', 'insuffisance respiratoire ;', 'amaigrissement extrême ;', "extension de la maladie vers les os, les reins, les intestins ou les méninges."]} />
             <RegBlock col={`${TBC}50`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Toute aggravation nécessite une surveillance médicale renforcée.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Toute aggravation nécessite une surveillance médicale renforcée.</p>
             </RegBlock>
           </>)}
 
@@ -7170,7 +7170,7 @@ function TuberculoseDocument() {
             {tbcSection('CONDUITE MÉDICALE', <>
               <RegList items={['Maintenir le repos absolu.', "Installer le malade en position demi-assise afin de faciliter la respiration.", "Poursuivre l'aération quotidienne de la chambre sans exposer le malade au froid.", 'Maintenir une hygiène irréprochable du linge, des ustensiles et de la chambre.', 'Proposer une alimentation légère mais riche en bouillons, lait, œufs et miel.', "Administrer les traitements destinés à calmer la toux, la douleur et l'agitation.", 'Contrôler chaque jour la température, le pouls, la respiration et l\'état général.']} />
               <RegBlock col={`${TBC}50`}>
-                <p style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>En cas d&apos;hémoptysie importante, le malade doit rester parfaitement immobile, éviter tout effort ou toute parole inutile et être surveillé sans interruption.</p>
+                <p style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>En cas d&apos;hémoptysie importante, le malade doit rester parfaitement immobile, éviter tout effort ou toute parole inutile et être surveillé sans interruption.</p>
               </RegBlock>
             </>)}
             <div style={{ height: 10 }} />
@@ -7193,7 +7193,7 @@ function TuberculoseDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${TBC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>La tuberculose demeure l&apos;un des plus grands défis médicaux de notre temps. Si la science ne permet pas encore d&apos;en obtenir la guérison complète, les découvertes de Robert Koch ont profondément transformé la compréhension de cette maladie.</RegPara>
             <RegPara>Par l&apos;observation clinique, l&apos;isolement des malades, l&apos;antisepsie, une alimentation fortifiante et les soins du dispensaire, le médecin peut ralentir son évolution, limiter les contaminations et améliorer les conditions de vie des patients.</RegPara>
             <RegCitation text="Lorsqu'il ne peut plus vaincre la maladie, son devoir reste inchangé : soulager la souffrance, préserver la dignité du malade et protéger ceux qui l'entourent." author="Doctrine du Dispensaire, 1890" />
@@ -7205,7 +7205,7 @@ function TuberculoseDocument() {
         <div>
           {/* Nature */}
           <RegBlock col={`${TBC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>NATURE DE LA MALADIE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>NATURE DE LA MALADIE</div>
             <RegPara>La tuberculose (ou phtisie pulmonaire) est une maladie infectieuse provoquée par le bacille découvert par <strong>Robert Koch</strong> en 1882.</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginTop: 12 }}>
               {tbcSection('ORGANES TOUCHÉS', <RegList items={['Poumons (principal).', 'Os.', 'Ganglions.', 'Reins.', 'Intestins.', 'Méninges.', 'Peau.']} />)}
@@ -7216,13 +7216,13 @@ function TuberculoseDocument() {
 
           {/* Signes */}
           <RegBlock col={`${TBC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>SIGNES CLINIQUES</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>SIGNES CLINIQUES</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
               {tbcSection('SIGNES HABITUELS', <RegList items={['Toux persistante.', 'Crachats fréquents.', 'Présence de sang.', 'Amaigrissement.', 'Fatigue.', 'Fièvre légère prolongée.', 'Sueurs nocturnes.', 'Douleurs thoraciques.', 'Essoufflement.']} />)}
               {tbcSection('FORMES AVANCÉES', <RegList items={['Grande faiblesse.', 'Difficultés respiratoires.', 'Expectoration abondante.', 'Cachexie.']} />)}
             </div>
             <RegBlock col={`${TBC}50`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Une toux persistante de plusieurs semaines doit toujours faire suspecter une tuberculose.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Une toux persistante de plusieurs semaines doit toujours faire suspecter une tuberculose.</p>
             </RegBlock>
           </RegBlock>
 
@@ -7234,7 +7234,7 @@ function TuberculoseDocument() {
 
           {/* Conduite & Traitement */}
           <RegBlock col={`${TBC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONDUITE À TENIR ET TRAITEMENT</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONDUITE À TENIR ET TRAITEMENT</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {tbcSection('CHAMBRE DU MALADE', <RegList items={['Propre.', 'Sèche.', 'Bien ventilée.', 'Exposée à la lumière.']} />)}
               {tbcSection("MESURES D'HYGIÈNE", <RegList items={['Repos prolongé.', 'Limitation des efforts.', 'Désinfection des crachats.', 'Linge bouilli.', 'Ustensiles réservés au malade.']} />)}
@@ -7252,7 +7252,7 @@ function TuberculoseDocument() {
 
           {/* Prévention & Complications */}
           <RegBlock col={`${TBC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉVENTION ET COMPLICATIONS</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉVENTION ET COMPLICATIONS</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {tbcSection('PRÉVENTION', <RegList items={['Aérer quotidiennement.', 'Éviter les logements humides.', 'Ne jamais cracher au sol.', 'Faire bouillir le linge souillé.', 'Désinfecter les crachats.', 'Éviter les contacts prolongés.', 'Alimentation suffisante.']} />)}
               {tbcSection('COMPLICATIONS À SURVEILLER', <RegList items={['Hémoptysie.', 'Pneumonie.', 'Insuffisance respiratoire.', 'Amaigrissement extrême.', 'Atteinte des autres organes.']} />)}
@@ -7261,12 +7261,12 @@ function TuberculoseDocument() {
 
           {/* Aggravation */}
           <RegBlock col={`rgba(180,160,113,0.40)`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>AGGRAVATION DE LA MALADIE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>AGGRAVATION DE LA MALADIE</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
               {tbcSection("SIGNES D'ALERTE", <RegList items={['Toux incessante.', 'Crachats sanglants abondants.', 'Fièvre élevée persistante.', 'Essoufflement au repos.', 'Amaigrissement rapide.', "Perte d'appétit.", 'Faiblesse extrême.', 'Altération de la conscience.']} />)}
               {tbcSection('CONDUITE MÉDICALE', <>
                 <RegList items={['Repos absolu.', 'Position demi-assise.', 'Aération quotidienne.', 'Hygiène rigoureuse.', 'Alimentation légère.', 'Traitements antitussifs et antidouleurs.', 'Surveillance quotidienne.']} />
-                <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>En cas d&apos;hémoptysie importante : immobilité totale, surveillance constante.</p>
+                <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>En cas d&apos;hémoptysie importante : immobilité totale, surveillance constante.</p>
               </>)}
               {tbcSection('SOINS DE CONFORT', <RegList items={['Soulager les douleurs.', 'Calmer la toux.', 'Respiration confortable.', 'Hydratation.', 'Chambre calme et propre.', 'Soutien moral.']} />)}
               {tbcSection("PROTECTION DE L'ENTOURAGE", <RegList items={['Désinfecter les crachats.', 'Faire bouillir le linge.', 'Ne pas partager les ustensiles.', 'Éviter les contacts avec les personnes fragiles.', 'Aérer la chambre plusieurs fois par jour.']} />)}
@@ -7275,7 +7275,7 @@ function TuberculoseDocument() {
 
           {/* À retenir */}
           <RegBlock col={`${TBC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TBC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['La tuberculose est une maladie contagieuse transmise principalement par la toux et les crachats.', "Le diagnostic repose sur l'observation clinique et l'auscultation.", "Aucun traitement curatif n'existe en 1890.", "L'isolement, l'hygiène et une alimentation fortifiante constituent les principales armes contre la maladie.", 'Les préparations du dispensaire soulagent les symptômes mais ne remplacent pas le repos et les mesures sanitaires.', 'En phase terminale, le devoir du médecin est de soulager le malade tout en protégeant son entourage contre la contagion.']} />
           </RegBlock>
         </div>
@@ -7297,19 +7297,19 @@ function ProtocoleEpidemieDocument() {
   );
   const pecTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
   const pecSection = (label: string, content: React.ReactNode) => (
     <div style={{ background: T.card, border: `1px solid ${PEC}30`, borderLeft: `4px solid ${PEC_LIGHT}`, padding: '16px 20px', marginBottom: 14 }}>
-      <div style={{ fontFamily: MONO, fontSize: 10, color: PEC_LIGHT, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
       {content}
     </div>
   );
   const pecTriage = (col: string, label: string, items: string[]) => (
     <div style={{ background: T.card, border: `1px solid ${col}40`, borderTop: `3px solid ${col}`, padding: '16px 20px', marginBottom: 12 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: col, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: col, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
       <RegList items={items} />
     </div>
   );
@@ -7321,14 +7321,14 @@ function ProtocoleEpidemieDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${PEC}80` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${PEC}80` : 'none', borderLeft: pos.includes('left') ? `2px solid ${PEC}80` : 'none', borderRight: pos.includes('right') ? `2px solid ${PEC}80` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: PEC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ PROTOCOLE SANITAIRE — URGENCE MAXIMALE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ PROTOCOLE SANITAIRE — URGENCE MAXIMALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: PEC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>⚠️ Gestion d&apos;une Épidémie</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>À l&apos;usage du personnel médical du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${PEC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? PEC_LIGHT : T.border}`, background: version === v ? `${PEC}40` : 'transparent', color: version === v ? PEC_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? PEC_LIGHT : T.border}`, background: version === v ? `${PEC}40` : 'transparent', color: version === v ? PEC_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -7339,11 +7339,11 @@ function ProtocoleEpidemieDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${PEC}60`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Une épidémie est déclarée lorsqu&apos;une maladie contagieuse dépasse le stade du simple Risque Sanitaire et menace directement une partie importante de la population.</RegPara>
             <RegPara>La mission de l&apos;ORDRES DES MÉDECINS n&apos;est plus uniquement de soigner les malades, mais également de limiter la propagation de la maladie, protéger les populations saines et maintenir l&apos;organisation des soins.</RegPara>
             <RegBlock col={`${PEC}60`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Chaque membre de l&apos;ORDRES DES MÉDECINS est tenu d&apos;appliquer strictement le présent protocole jusqu&apos;à la levée officielle de l&apos;Épidémie.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Chaque membre de l&apos;ORDRES DES MÉDECINS est tenu d&apos;appliquer strictement le présent protocole jusqu&apos;à la levée officielle de l&apos;Épidémie.</p>
             </RegBlock>
           </RegBlock>
 
@@ -7353,7 +7353,7 @@ function ProtocoleEpidemieDocument() {
             <RegPara>L&apos;Épidémie est déclarée uniquement par le Directeur Médical ou son représentant. Elle peut être prononcée lorsque plusieurs des critères suivants sont réunis :</RegPara>
             <RegList items={['multiplication rapide des cas ;', 'propagation dans plusieurs villes ;', 'apparition de nombreux décès ;', 'maladie hautement contagieuse confirmée ;', "incapacité des dispensaires à absorber normalement les nouveaux malades ;", 'risque majeur pour la population.']} />
             <RegBlock col={`${PEC}60`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>La déclaration d&apos;Épidémie entraîne immédiatement l&apos;application des mesures exceptionnelles.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>La déclaration d&apos;Épidémie entraîne immédiatement l&apos;application des mesures exceptionnelles.</p>
             </RegBlock>
           </>)}
 
@@ -7364,7 +7364,7 @@ function ProtocoleEpidemieDocument() {
             <RegPara>Le Directeur Médical peut :</RegPara>
             <RegList items={["rappeler l'ensemble du personnel disponible ;", 'suspendre les consultations non urgentes ;', 'ouvrir des salles supplémentaires ;', 'répartir les médecins selon les besoins ;', 'organiser des permanences prolongées.']} />
             <RegBlock col={`${PEC}60`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Les urgences vitales demeurent prioritaires.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Les urgences vitales demeurent prioritaires.</p>
             </RegBlock>
           </>)}
 
@@ -7396,10 +7396,10 @@ function ProtocoleEpidemieDocument() {
             <div style={{ height: 12 }} />
             <RegPara>Les préparations utilisées comprennent notamment :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 10 }}>
-              {pecSection('EAU VULNÉRAIRE', <p style={{ fontFamily: BODY, fontSize: 12, color: T.text, margin: 0 }}>Nettoyage des blessures et des surfaces.</p>)}
-              {pecSection('ACIDE PHÉNIQUE', <p style={{ fontFamily: BODY, fontSize: 12, color: T.text, margin: 0 }}>Instruments, pansements, certaines plaies.</p>)}
-              {pecSection("TEINTURE D'IODE", <p style={{ fontFamily: BODY, fontSize: 12, color: T.text, margin: 0 }}>Désinfection de la peau et des petites plaies.</p>)}
-              {pecSection('SOLUTIONS VINAIGRÉES', <p style={{ fontFamily: BODY, fontSize: 12, color: T.text, margin: 0 }}>Assainissement antiseptique des locaux.</p>)}
+              {pecSection('EAU VULNÉRAIRE', <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, margin: 0 }}>Nettoyage des blessures et des surfaces.</p>)}
+              {pecSection('ACIDE PHÉNIQUE', <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, margin: 0 }}>Instruments, pansements, certaines plaies.</p>)}
+              {pecSection("TEINTURE D'IODE", <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, margin: 0 }}>Désinfection de la peau et des petites plaies.</p>)}
+              {pecSection('SOLUTIONS VINAIGRÉES', <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, margin: 0 }}>Assainissement antiseptique des locaux.</p>)}
             </div>
           </>)}
 
@@ -7409,7 +7409,7 @@ function ProtocoleEpidemieDocument() {
             <RegPara>Le Directeur Médical informe régulièrement les autorités civiles. La population est invitée à :</RegPara>
             <RegList items={['éviter les rassemblements ;', 'limiter les déplacements inutiles ;', "faire bouillir l'eau ;", 'signaler rapidement tout malade ;', 'respecter les consignes médicales.']} />
             <RegBlock col={`${PEC}60`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Les habitants présentant des symptômes doivent consulter immédiatement un dispensaire.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Les habitants présentant des symptômes doivent consulter immédiatement un dispensaire.</p>
             </RegBlock>
           </>)}
 
@@ -7419,7 +7419,7 @@ function ProtocoleEpidemieDocument() {
             <RegPara>Chaque dispensaire transmet quotidiennement :</RegPara>
             <RegList items={['nombre de nouveaux cas ;', 'nombre de patients hospitalisés ;', 'nombre de guérisons ;', 'nombre de décès ;', "évolution des symptômes observés."]} />
             <RegBlock col={`${PEC}60`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Ces informations permettent de suivre la progression de l&apos;Épidémie.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Ces informations permettent de suivre la progression de l&apos;Épidémie.</p>
             </RegBlock>
           </>)}
 
@@ -7429,7 +7429,7 @@ function ProtocoleEpidemieDocument() {
             <RegPara>Lorsqu&apos;un malade succombe :</RegPara>
             <RegList items={['le corps est manipulé avec précaution ;', 'le linge est détruit ou désinfecté ;', 'la chambre est entièrement nettoyée ;', 'les personnes ayant été en contact sont surveillées.']} />
             <RegBlock col={`${PEC}60`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Le respect de ces mesures limite les nouvelles contaminations.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Le respect de ces mesures limite les nouvelles contaminations.</p>
             </RegBlock>
           </>)}
 
@@ -7451,7 +7451,7 @@ function ProtocoleEpidemieDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${PEC}60`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Une épidémie constitue l&apos;une des plus grandes épreuves que puisse connaître une communauté. La discipline, l&apos;organisation, l&apos;antisepsie, l&apos;isolement des malades et la coopération entre les dispensaires permettent souvent de sauver davantage de vies que les traitements eux-mêmes.</RegPara>
             <RegCitation text="La vigilance, la science et l'humanité demeurent les premières armes contre la contagion." author="Doctrine du Dispensaire, 1890" />
           </RegBlock>
@@ -7462,21 +7462,21 @@ function ProtocoleEpidemieDocument() {
         <div>
           {/* Déclaration */}
           <RegBlock col={`${PEC}60`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>DÉCLARATION DE L&apos;ÉPIDÉMIE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>DÉCLARATION DE L&apos;ÉPIDÉMIE</div>
             <RegPara>Une <strong>Épidémie</strong> est déclarée par le <strong>Directeur Médical</strong> lorsque :</RegPara>
             <RegList items={['les cas augmentent rapidement ;', 'plusieurs villes sont touchées ;', 'la maladie est fortement contagieuse ;', 'les décès se multiplient ;', 'les dispensaires sont fortement sollicités.']} />
             <RegBlock col={`${PEC}60`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Des mesures exceptionnelles sont immédiatement appliquées.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Des mesures exceptionnelles sont immédiatement appliquées.</p>
             </RegBlock>
           </RegBlock>
 
           {/* Organisation & Triage */}
           <RegBlock col={`${PEC}60`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>ORGANISATION ET TRIAGE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>ORGANISATION ET TRIAGE</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {pecSection('FONCTIONNEMENT D\'URGENCE', <>
                 <RegList items={["Rappel de tout le personnel disponible.", "Suspension des consultations non urgentes.", "Ouverture de salles supplémentaires.", "Répartition des médecins selon les besoins.", "Permanences prolongées."]} />
-                <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Les urgences vitales restent prioritaires.</p>
+                <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Les urgences vitales restent prioritaires.</p>
               </>)}
               <div>
                 {pecTriage('#3A7A3A', '🟢 CAS LÉGERS', ['Soins ambulatoires.', 'Retour au domicile avec surveillance.'])}
@@ -7488,7 +7488,7 @@ function ProtocoleEpidemieDocument() {
 
           {/* Isolement & Hygiène */}
           <RegBlock col={`${PEC}60`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>ISOLEMENT ET HYGIÈNE RENFORCÉE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>ISOLEMENT ET HYGIÈNE RENFORCÉE</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {pecSection('ISOLEMENT DES CONTAGIEUX', <RegList items={['Salle dédiée.', 'Lit individuel.', 'Linge réservé.', 'Ustensiles personnels.', 'Visites limitées.']} />)}
               {pecSection('HYGIÈNE OBLIGATOIRE', <RegList items={['Lavage des mains avant et après chaque soin.', 'Désinfection après chaque patient.', 'Stérilisation des instruments.', 'Ébullition du linge contaminé.', 'Nettoyage quotidien des locaux.', 'Aération régulière.']} />)}
@@ -7498,7 +7498,7 @@ function ProtocoleEpidemieDocument() {
 
           {/* Population & Surveillance */}
           <RegBlock col={`${PEC}60`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>PROTECTION ET SURVEILLANCE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>PROTECTION ET SURVEILLANCE</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {pecSection('RECOMMANDATIONS POPULATION', <RegList items={['Éviter les rassemblements.', 'Limiter les déplacements inutiles.', "Faire bouillir l'eau.", 'Consulter rapidement en cas de symptômes.', 'Respecter les mesures sanitaires.']} />)}
               {pecSection('RAPPORT QUOTIDIEN DISPENSAIRE', <RegList items={['Nouveaux cas.', 'Hospitalisations.', 'Guérisons.', 'Décès.', 'Évolution de la maladie.']} />)}
@@ -7510,12 +7510,12 @@ function ProtocoleEpidemieDocument() {
           {pecBlock(<>
             {pecTitle("FIN DE L'ÉPIDÉMIE")}
             <RegList items={["Aucun nouveau cas depuis plusieurs jours.", "Les derniers malades sont guéris ou stabilisés.", "Aucun nouveau foyer n'est découvert.", "La propagation est maîtrisée."]} />
-            <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 8, lineHeight: 1.5 }}>Les dispensaires reprennent progressivement leur fonctionnement habituel.</p>
+            <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 8, lineHeight: 1.5 }}>Les dispensaires reprennent progressivement leur fonctionnement habituel.</p>
           </>)}
 
           {/* À retenir */}
           <RegBlock col={`${PEC}60`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={["Une Épidémie constitue une urgence sanitaire majeure.", "Le triage, l'isolement et l'organisation des dispensaires sont prioritaires.", "L'antisepsie, la désinfection et l'hygiène limitent la propagation.", 'Le personnel médical protège autant la population que les malades.', "Une surveillance quotidienne permet de suivre l'évolution de la crise.", "L'Épidémie n'est levée que lorsque la propagation est totalement maîtrisée."]} />
           </RegBlock>
         </div>
@@ -7537,19 +7537,19 @@ function ProtocoleSanitaireDocument() {
   );
   const pscTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
   const pscSection = (label: string, content: React.ReactNode, accent?: string) => (
     <div style={{ background: T.card, border: `1px solid ${accent ?? PSC}30`, borderLeft: `4px solid ${accent ?? PSC_LIGHT}`, padding: '16px 20px', marginBottom: 14 }}>
-      <div style={{ fontFamily: MONO, fontSize: 10, color: accent ?? PSC_LIGHT, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: accent ?? PSC_LIGHT, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
       {content}
     </div>
   );
   const pscAlert = (col: string, label: string, items: string[]) => (
     <div style={{ background: T.card, border: `1px solid ${col}40`, borderTop: `3px solid ${col}`, padding: '16px 20px', marginBottom: 12 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: col, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: col, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
       <RegList items={items} />
     </div>
   );
@@ -7561,14 +7561,14 @@ function ProtocoleSanitaireDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${PSC}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${PSC}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${PSC}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${PSC}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: PSC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ PROTOCOLE SANITAIRE OFFICIEL ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ PROTOCOLE SANITAIRE OFFICIEL ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: PSC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🛡️ Gestion d&apos;un Risque Sanitaire</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>À l&apos;usage du personnel médical du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${PSC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? PSC_LIGHT : T.border}`, background: version === v ? `${PSC}30` : 'transparent', color: version === v ? PSC_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? PSC_LIGHT : T.border}`, background: version === v ? `${PSC}30` : 'transparent', color: version === v ? PSC_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -7579,7 +7579,7 @@ function ProtocoleSanitaireDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${PSC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Toute maladie inhabituelle ou augmentation soudaine de cas similaires doit être considérée avec la plus grande prudence. Avant qu&apos;une véritable épidémie ne s&apos;installe, il existe une période durant laquelle une intervention rapide peut encore empêcher la propagation de la maladie.</RegPara>
             <RegPara>Le présent protocole établit les mesures que doivent appliquer les membres de l&apos;ORDRES DES MÉDECINS lorsqu&apos;un <strong>Risque Sanitaire</strong> est déclaré. Son objectif est de protéger la population, préserver le personnel soignant et contenir la maladie avant qu&apos;elle ne devienne une menace pour l&apos;ensemble des comtés.</RegPara>
           </RegBlock>
@@ -7590,7 +7590,7 @@ function ProtocoleSanitaireDocument() {
             <RegPara>Un Risque Sanitaire peut être déclaré par le Directeur Médical ou son représentant lorsqu&apos;au moins l&apos;une des situations suivantes est constatée :</RegPara>
             <RegList items={['apparition de plusieurs patients présentant les mêmes symptômes dans une courte période ;', "découverte d'une maladie inhabituelle ou inconnue ;", "suspicion de contamination d'un puits, d'une rivière ou d'une réserve d'eau ;", 'augmentation anormale des cas de fièvre, diarrhée, toux ou infections respiratoires ;', "présence d'une maladie transmissible chez les animaux pouvant atteindre l'homme ;", "suspicion d'intoxication alimentaire touchant plusieurs personnes."]} />
             <RegBlock col={`${PSC}50`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>La déclaration d&apos;un Risque Sanitaire ne signifie pas qu&apos;une épidémie est installée, mais qu&apos;une surveillance renforcée devient nécessaire.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>La déclaration d&apos;un Risque Sanitaire ne signifie pas qu&apos;une épidémie est installée, mais qu&apos;une surveillance renforcée devient nécessaire.</p>
             </RegBlock>
           </>)}
 
@@ -7609,7 +7609,7 @@ function ProtocoleSanitaireDocument() {
             <RegPara>Chaque malade fait l&apos;objet d&apos;un suivi régulier comprenant :</RegPara>
             <RegList items={['prise de température ;', 'contrôle du pouls ;', 'observation de la respiration ;', 'évolution des symptômes ;', "recherche d'autres cas dans son entourage."]} />
             <RegBlock col={`${PSC}50`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Tout aggravement doit être signalé immédiatement.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Tout aggravement doit être signalé immédiatement.</p>
             </RegBlock>
           </>)}
 
@@ -7621,10 +7621,10 @@ function ProtocoleSanitaireDocument() {
             <div style={{ height: 12 }} />
             <RegPara>Les préparations antiseptiques du dispensaire sont utilisées selon les besoins :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 10 }}>
-              {pscSection('EAU VULNÉRAIRE', <p style={{ fontFamily: BODY, fontSize: 12, color: T.text, margin: 0 }}>Nettoyage des blessures et des surfaces.</p>)}
-              {pscSection('ACIDE PHÉNIQUE', <p style={{ fontFamily: BODY, fontSize: 12, color: T.text, margin: 0 }}>Instruments, pansements, certaines plaies.</p>)}
-              {pscSection("TEINTURE D'IODE", <p style={{ fontFamily: BODY, fontSize: 12, color: T.text, margin: 0 }}>Désinfection de la peau et des petites plaies.</p>)}
-              {pscSection('SOLUTIONS VINAIGRÉES', <p style={{ fontFamily: BODY, fontSize: 12, color: T.text, margin: 0 }}>Assainissement antiseptique des locaux.</p>)}
+              {pscSection('EAU VULNÉRAIRE', <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, margin: 0 }}>Nettoyage des blessures et des surfaces.</p>)}
+              {pscSection('ACIDE PHÉNIQUE', <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, margin: 0 }}>Instruments, pansements, certaines plaies.</p>)}
+              {pscSection("TEINTURE D'IODE", <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, margin: 0 }}>Désinfection de la peau et des petites plaies.</p>)}
+              {pscSection('SOLUTIONS VINAIGRÉES', <p style={{ fontFamily: BODY, fontSize: 14, color: T.text, margin: 0 }}>Assainissement antiseptique des locaux.</p>)}
             </div>
           </>)}
 
@@ -7642,7 +7642,7 @@ function ProtocoleSanitaireDocument() {
             <RegPara>Les dispensaires restent ouverts mais adaptent leur fonctionnement. Le Directeur Médical peut décider :</RegPara>
             <RegList items={["d'augmenter les permanences ;", 'de répartir les médecins entre plusieurs établissements ;', 'de reporter les consultations non urgentes ;', "de réserver une salle aux patients suspects."]} />
             <RegBlock col={`${PSC}50`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Les soins urgents demeurent prioritaires.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Les soins urgents demeurent prioritaires.</p>
             </RegBlock>
           </>)}
 
@@ -7675,7 +7675,7 @@ function ProtocoleSanitaireDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${PSC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>Le Risque Sanitaire constitue la première ligne de défense de la santé publique. Une réaction rapide, une surveillance attentive, une hygiène irréprochable et une bonne coordination entre les dispensaires permettent bien souvent d&apos;interrompre la propagation d&apos;une maladie avant qu&apos;elle ne menace l&apos;ensemble de la population.</RegPara>
           </RegBlock>
         </div>
@@ -7685,30 +7685,30 @@ function ProtocoleSanitaireDocument() {
         <div>
           {/* Déclenchement */}
           <RegBlock col={`${PSC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>DÉCLENCHEMENT</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>DÉCLENCHEMENT</div>
             <RegPara>Un <strong>Risque Sanitaire</strong> peut être déclaré lorsqu&apos;apparaissent :</RegPara>
             <RegList items={['plusieurs malades présentant les mêmes symptômes ;', "une maladie inhabituelle ou inconnue ;", "une suspicion de contamination de l'eau ou des aliments ;", 'une hausse importante des cas de fièvre, diarrhée ou toux ;', "une maladie animale transmissible à l'Homme ;", 'une intoxication alimentaire touchant plusieurs personnes.']} />
             <RegBlock col={`${PSC}50`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Le Risque Sanitaire n&apos;est pas encore une épidémie, mais une période de surveillance renforcée.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Le Risque Sanitaire n&apos;est pas encore une épidémie, mais une période de surveillance renforcée.</p>
             </RegBlock>
           </RegBlock>
 
           {/* Mesures & Surveillance */}
           <RegBlock col={`${PSC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>MESURES IMMÉDIATES ET SURVEILLANCE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>MESURES IMMÉDIATES ET SURVEILLANCE</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {pscSection('LES DISPENSAIRES DOIVENT', <RegList items={["Ouvrir un registre sanitaire.", "Recenser chaque nouveau cas.", "Examiner systématiquement les malades suspects.", "Renforcer la désinfection des locaux.", "Stériliser les instruments après chaque utilisation.", "Renouveler plus fréquemment le linge médical."]} />)}
               {pscSection('SUIVI DE CHAQUE MALADE', <>
                 <RegList items={['Température.', 'Pouls.', 'Respiration.', 'Évolution des symptômes.', "Recherche de nouveaux cas dans son entourage."]} />
-                <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Tout aggravement est signalé immédiatement.</p>
+                <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Tout aggravement est signalé immédiatement.</p>
               </>)}
             </div>
-            <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 8, lineHeight: 1.5 }}>La Direction Médicale est informée quotidiennement.</p>
+            <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 8, lineHeight: 1.5 }}>La Direction Médicale est informée quotidiennement.</p>
           </RegBlock>
 
           {/* Hygiène */}
           <RegBlock col={`${PSC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>HYGIÈNE OBLIGATOIRE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>HYGIÈNE OBLIGATOIRE</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {pscSection('MESURES DU PERSONNEL', <RegList items={['Lavage des mains avant et après chaque soin.', 'Linge propre pour chaque patient.', 'Désinfection des surfaces et instruments.', 'Ébullition ou destruction du linge contaminé.', 'Aération régulière des locaux.']} />)}
               {pscSection('PRÉPARATIONS UTILISÉES', <RegList items={['Eau Vulnéraire.', 'Acide phénique.', "Teinture d'iode.", 'Solutions vinaigrées antiseptiques.']} />)}
@@ -7717,17 +7717,17 @@ function ProtocoleSanitaireDocument() {
 
           {/* Population & Organisation */}
           <RegBlock col={`${PSC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>POPULATION ET ORGANISATION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>POPULATION ET ORGANISATION</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {pscSection('LES HABITANTS SONT INVITÉS À', <RegList items={["Faire bouillir l'eau.", 'Maintenir leurs habitations propres.', 'Éviter les contacts avec les personnes malades.', 'Signaler rapidement tout nouveau cas.', 'Ne pas partager les ustensiles.', 'Limiter les rassemblements si nécessaire.']} />)}
               {pscSection('LE DIRECTEUR MÉDICAL PEUT', <RegList items={["Augmenter les permanences.", "Répartir les médecins entre les dispensaires.", "Reporter les consultations non urgentes.", "Ouvrir une salle réservée aux cas suspects."]} />)}
             </div>
-            <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 8, lineHeight: 1.5 }}>Les urgences restent toujours prioritaires.</p>
+            <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 8, lineHeight: 1.5 }}>Les urgences restent toujours prioritaires.</p>
           </RegBlock>
 
           {/* Évolution */}
           <div style={{ marginBottom: 28 }}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>ÉVOLUTION DU RISQUE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>ÉVOLUTION DU RISQUE</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 12 }}>
               {pscAlert('#3A7A3A', '🟢 AMÉLIORATION', ['Baisse du nombre de cas.', 'Absence de propagation.', 'Retour progressif au fonctionnement normal.'])}
               {pscAlert('#8A7A10', '🟡 STABILISATION', ['Nombre de cas stable.', 'Maintien de la surveillance.', 'Poursuite des investigations.'])}
@@ -7739,12 +7739,12 @@ function ProtocoleSanitaireDocument() {
           {pscBlock(<>
             {pscTitle('LEVÉE DU RISQUE SANITAIRE')}
             <RegList items={["Aucun nouveau cas depuis plusieurs jours.", "La source de contamination est maîtrisée.", "Les malades évoluent favorablement.", "Aucun nouveau foyer n'apparaît."]} />
-            <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 8, lineHeight: 1.5 }}>Les registres sont ensuite archivés.</p>
+            <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 8, lineHeight: 1.5 }}>Les registres sont ensuite archivés.</p>
           </>)}
 
           {/* À retenir */}
           <RegBlock col={`${PSC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={["Le Risque Sanitaire est une phase de vigilance, pas encore une épidémie.", 'Tous les cas suspects doivent être signalés et surveillés.', "L'hygiène, la désinfection et l'aération sont les premières protections.", 'Les dispensaires restent ouverts mais renforcent leur organisation.', "Si la maladie continue de se propager, le Risque Sanitaire Critique peut être déclaré avant le passage au Protocole Épidémique."]} />
           </RegBlock>
         </div>
@@ -7766,13 +7766,13 @@ function TheorieGermesDocument() {
   );
   const tgcTitle = (label: string, sub?: string) => (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 4 }}>✦ {label} ✦</div>
       {sub && <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.sepia, letterSpacing: '0.05em' }}>{sub}</div>}
     </div>
   );
   const tgcSection = (label: string, content: React.ReactNode) => (
     <div style={{ background: T.card, border: `1px solid ${TGC}30`, borderLeft: `4px solid ${TGC_LIGHT}`, padding: '16px 20px', marginBottom: 14 }}>
-      <div style={{ fontFamily: MONO, fontSize: 10, color: TGC_LIGHT, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
+      <div style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.18em', marginBottom: 10 }}>{label}</div>
       {content}
     </div>
   );
@@ -7790,14 +7790,14 @@ function TheorieGermesDocument() {
         {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const).map(pos => (
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${TGC}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${TGC}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${TGC}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${TGC}70` : 'none' }} />
         ))}
-        <div style={{ fontFamily: MONO, fontSize: 12, color: TGC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D&apos;INSTRUCTION SCIENTIFIQUE ✦</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS D&apos;INSTRUCTION SCIENTIFIQUE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: TGC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🔬 La Théorie des Germes</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>et ses Applications · À l&apos;usage des praticiens du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${TGC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
           {(['complete', 'resume'] as const).map(v => (
-            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? TGC_LIGHT : T.border}`, background: version === v ? `${TGC}30` : 'transparent', color: version === v ? TGC_LIGHT : T.muted }}>
+            <button key={v} onClick={() => setVersion(v)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '7px 18px', cursor: 'pointer', border: `1px solid ${version === v ? TGC_LIGHT : T.border}`, background: version === v ? `${TGC}30` : 'transparent', color: version === v ? TGC_LIGHT : T.muted }}>
               {v === 'complete' ? 'VERSION COMPLÈTE' : 'VERSION RÉSUMÉE'}
             </button>
           ))}
@@ -7808,7 +7808,7 @@ function TheorieGermesDocument() {
         <div>
           {/* Préambule */}
           <RegBlock col={`${TGC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>PRÉAMBULE</div>
             <RegPara>Pendant des siècles, les médecins attribuèrent les épidémies, les fièvres et les infections aux miasmes, aux déséquilibres des humeurs ou aux influences du climat. Si ces théories expliquaient imparfaitement certains phénomènes, elles ne permettaient ni de comprendre véritablement la contagion, ni de la prévenir efficacement.</RegPara>
             <RegPara>Les découvertes de <strong>Louis Pasteur</strong>, de <strong>Robert Koch</strong>, de <strong>Joseph Lister</strong> et de nombreux savants de cette fin de siècle ont profondément transformé la médecine. Il est désormais établi que de nombreuses maladies sont provoquées par des organismes microscopiques, appelés <strong>germes</strong>, capables de se multiplier et de se transmettre d&apos;un individu à un autre.</RegPara>
             <RegPara>Cette théorie fonde désormais l&apos;hygiène moderne, l&apos;antisepsie chirurgicale et les mesures de santé publique appliquées dans les dispensaires.</RegPara>
@@ -7834,11 +7834,11 @@ function TheorieGermesDocument() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {tgcSection('PAR L\'AIR', <>
                 <RegPara>Lorsqu&apos;un malade tousse, éternue ou parle, de fines gouttelettes contenant des germes sont dispersées dans l&apos;atmosphère.</RegPara>
-                <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, margin: 0, lineHeight: 1.5 }}>Les maladies respiratoires comme la tuberculose utilisent principalement cette voie.</p>
+                <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, margin: 0, lineHeight: 1.5 }}>Les maladies respiratoires comme la tuberculose utilisent principalement cette voie.</p>
               </>)}
               {tgcSection('PAR L\'EAU', <>
                 <RegPara>Une eau contaminée peut transmettre : la fièvre typhoïde, le choléra, diverses infections intestinales.</RegPara>
-                <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, margin: 0, lineHeight: 1.5 }}>Toute eau suspecte doit être bouillie avant consommation.</p>
+                <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, margin: 0, lineHeight: 1.5 }}>Toute eau suspecte doit être bouillie avant consommation.</p>
               </>)}
               {tgcSection('PAR LES ALIMENTS', <>
                 <RegPara>Les aliments mal conservés ou souillés favorisent le développement de nombreux microbes.</RegPara>
@@ -7846,7 +7846,7 @@ function TheorieGermesDocument() {
               </>)}
               {tgcSection('PAR LE CONTACT', <>
                 <RegPara>Les mains sales, les vêtements contaminés, les instruments non désinfectés ou les pansements souillés transmettent facilement les germes.</RegPara>
-                <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, margin: 0, lineHeight: 1.5 }}>Le lavage des mains constitue l&apos;une des mesures les plus importantes de la médecine moderne.</p>
+                <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, margin: 0, lineHeight: 1.5 }}>Le lavage des mains constitue l&apos;une des mesures les plus importantes de la médecine moderne.</p>
               </>)}
               {tgcSection('PAR LES PLAIES', <>
                 <RegPara>Une blessure ouverte représente une porte d&apos;entrée privilégiée pour les microbes.</RegPara>
@@ -7881,7 +7881,7 @@ function TheorieGermesDocument() {
             <RegPara>Lorsqu&apos;une maladie infectieuse est suspectée, le médecin doit :</RegPara>
             <RegList items={['isoler immédiatement le malade ;', 'limiter les visites ;', 'désinfecter les objets utilisés ;', 'réserver les ustensiles au patient ;', 'faire bouillir le linge ;', 'recueillir et désinfecter les crachats ;', 'renforcer la surveillance des autres malades.']} />
             <RegBlock col={`${TGC}50`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Le respect de ces mesures protège la population autant que le personnel soignant.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Le respect de ces mesures protège la population autant que le personnel soignant.</p>
             </RegBlock>
           </>)}
 
@@ -7895,7 +7895,7 @@ function TheorieGermesDocument() {
                 <RegList items={['Nettoyer les blessures.', 'Favoriser une cicatrisation propre.']} />
               </>)}
               {tgcSection('ONGUENT VULNÉRAIRE', <>
-                <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, margin: 0, lineHeight: 1.5 }}>Appliqué après désinfection afin de protéger les tissus en cours de réparation.</p>
+                <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, margin: 0, lineHeight: 1.5 }}>Appliqué après désinfection afin de protéger les tissus en cours de réparation.</p>
               </>)}
             </div>
           </>)}
@@ -7904,13 +7904,13 @@ function TheorieGermesDocument() {
           {tgcBlock(<>
             {tgcTitle('CHAPITRE VII', 'Les Plantes Antiseptiques')}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 12 }}>
-              {tgcSection('THYM', <><p style={{ fontFamily: BODY, fontSize: 12, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Antiseptique · purifiant.</p></>)}
-              {tgcSection('LAVANDE', <><p style={{ fontFamily: BODY, fontSize: 12, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Calme l&apos;inflammation · assainit les plaies.</p></>)}
-              {tgcSection('ROMARIN', <><p style={{ fontFamily: BODY, fontSize: 12, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Stimule la circulation · assainit les locaux.</p></>)}
-              {tgcSection('SAUGE', <><p style={{ fontFamily: BODY, fontSize: 12, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Désinfecte la bouche · facilite les gargarismes.</p></>)}
-              {tgcSection('EUCALYPTUS', <><p style={{ fontFamily: BODY, fontSize: 12, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Améliore le confort respiratoire · utilisé en fumigation.</p></>)}
-              {tgcSection('AIL', <><p style={{ fontFamily: BODY, fontSize: 12, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Antiseptique naturel.</p></>)}
-              {tgcSection('ÉCHINACÉE', <><p style={{ fontFamily: BODY, fontSize: 12, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Soutient les défenses naturelles de l&apos;organisme.</p></>)}
+              {tgcSection('THYM', <><p style={{ fontFamily: BODY, fontSize: 14, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Antiseptique · purifiant.</p></>)}
+              {tgcSection('LAVANDE', <><p style={{ fontFamily: BODY, fontSize: 14, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Calme l&apos;inflammation · assainit les plaies.</p></>)}
+              {tgcSection('ROMARIN', <><p style={{ fontFamily: BODY, fontSize: 14, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Stimule la circulation · assainit les locaux.</p></>)}
+              {tgcSection('SAUGE', <><p style={{ fontFamily: BODY, fontSize: 14, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Désinfecte la bouche · facilite les gargarismes.</p></>)}
+              {tgcSection('EUCALYPTUS', <><p style={{ fontFamily: BODY, fontSize: 14, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Améliore le confort respiratoire · utilisé en fumigation.</p></>)}
+              {tgcSection('AIL', <><p style={{ fontFamily: BODY, fontSize: 14, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Antiseptique naturel.</p></>)}
+              {tgcSection('ÉCHINACÉE', <><p style={{ fontFamily: BODY, fontSize: 14, color: T.text, marginBottom: 4, lineHeight: 1.5 }}>Soutient les défenses naturelles de l&apos;organisme.</p></>)}
             </div>
             <div style={{ height: 10 }} />
             <RegPara>Ces plantes sont utilisées sous forme d&apos;infusions, de décoctions, de fumigations, de cataplasmes ou de solutions vinaigrées.</RegPara>
@@ -7922,7 +7922,7 @@ function TheorieGermesDocument() {
             <RegPara>Lorsqu&apos;une contamination est suspectée, le praticien doit immédiatement :</RegPara>
             <RegList items={['isoler le malade ;', 'identifier la source probable de contamination ;', 'désinfecter les instruments et les locaux ;', 'remplacer ou faire bouillir le linge ;', "renforcer l'hygiène des mains ;", 'surveiller les autres personnes ayant été en contact avec le malade.']} />
             <RegBlock col={`${TGC}50`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Toute apparition de fièvre, de suppuration ou d&apos;épidémie doit être signalée au responsable médical.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Toute apparition de fièvre, de suppuration ou d&apos;épidémie doit être signalée au responsable médical.</p>
             </RegBlock>
           </>)}
 
@@ -7937,7 +7937,7 @@ function TheorieGermesDocument() {
 
           {/* Conclusion */}
           <RegBlock col={`${TGC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>CONCLUSION</div>
             <RegPara>La théorie des germes représente l&apos;une des plus grandes avancées scientifiques du siècle. Grâce aux découvertes de Pasteur, Koch et Lister, la médecine comprend désormais que les maladies infectieuses ne sont ni des fatalités ni des châtiments, mais les conséquences de micro-organismes pouvant être combattus par la science, l&apos;hygiène et la discipline.</RegPara>
             <RegPara>Les antiseptiques modernes, les préparations du dispensaire et les plantes médicinales agissent de manière complémentaire. Ensemble, ils permettent de limiter les infections, de protéger les malades et d&apos;améliorer les chances de guérison.</RegPara>
             <RegCitation text="Un lieu propre, une eau saine, un air renouvelé et des mains soigneusement lavées demeurent les plus puissants remèdes contre les maladies contagieuses." author="Doctrine du Dispensaire, 1890" />
@@ -7949,7 +7949,7 @@ function TheorieGermesDocument() {
         <div>
           {/* Nature */}
           <RegBlock col={`${TGC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>LA THÉORIE DES GERMES</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>LA THÉORIE DES GERMES</div>
             <RegPara>Les travaux de <strong>Louis Pasteur</strong>, <strong>Robert Koch</strong> et de leurs contemporains ont démontré que de nombreuses maladies sont provoquées par des micro-organismes invisibles appelés <strong>germes</strong>.</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 12, marginTop: 12 }}>
               {tgcSection('ILS VIVENT DANS', <RegList items={["l'air ;", "l'eau ;", 'le sol ;', 'les aliments ;', 'le linge ;', 'les instruments ;', 'le corps humain.']} />)}
@@ -7960,10 +7960,10 @@ function TheorieGermesDocument() {
 
           {/* Transmission */}
           <RegBlock col={`${TGC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>TRANSMISSION DES MALADIES</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>TRANSMISSION DES MALADIES</div>
             <RegList items={['Toux et gouttelettes respiratoires.', 'Crachats.', "Eau contaminée.", 'Aliments souillés.', 'Mains sales.', 'Instruments mal désinfectés.', 'Linge contaminé.']} />
             <RegBlock col={`${TGC}50`}>
-              <p style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Toute personne malade peut devenir une source de contagion si les règles d&apos;hygiène ne sont pas respectées.</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.12em', margin: 0 }}>Toute personne malade peut devenir une source de contagion si les règles d&apos;hygiène ne sont pas respectées.</p>
             </RegBlock>
           </RegBlock>
 
@@ -7971,12 +7971,12 @@ function TheorieGermesDocument() {
           {tgcBlock(<>
             {tgcTitle('LES DÉCOUVERTES DE PASTEUR')}
             <RegList items={["Les germes ne naissent pas spontanément.", "La chaleur détruit les micro-organismes.", "La stérilisation empêche les infections.", "Certaines maladies peuvent être prévenues grâce à la vaccination."]} />
-            <p style={{ fontFamily: BODY, fontSize: 12, color: T.muted, marginTop: 8, lineHeight: 1.5 }}>Ses travaux constituent le fondement de l&apos;antisepsie moderne.</p>
+            <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 8, lineHeight: 1.5 }}>Ses travaux constituent le fondement de l&apos;antisepsie moderne.</p>
           </>)}
 
           {/* Applications */}
           <RegBlock col={`${TGC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>APPLICATIONS AU DISPENSAIRE</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>APPLICATIONS AU DISPENSAIRE</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
               {tgcSection('AIR', <RegList items={['Aération quotidienne des salles.', 'Isolement des malades contagieux.']} />)}
               {tgcSection('EAU', <RegList items={['Eau bouillie avant consommation.', 'Nettoyage régulier des récipients.']} />)}
@@ -7988,7 +7988,7 @@ function TheorieGermesDocument() {
 
           {/* Antiseptiques & Plantes */}
           <RegBlock col={`${TGC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>ANTISEPTIQUES ET PLANTES</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>ANTISEPTIQUES ET PLANTES</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {tgcSection('PRÉPARATIONS DU DISPENSAIRE', <RegList items={['Eau Vulnéraire.', 'Onguent Vulnéraire.', 'Acide phénique.', "Teinture d'iode."]} />)}
               {tgcSection('PLANTES ANTISEPTIQUES', <RegList items={['Thym : antiseptique et purifiant.', 'Lavande : antiseptique et apaisante.', 'Romarin : assainissant.', 'Sauge : désinfectante.', 'Eucalyptus : respiratoire.', 'Ail : antiseptique naturel.', 'Échinacée : défenses naturelles.']} />)}
@@ -8003,7 +8003,7 @@ function TheorieGermesDocument() {
 
           {/* À retenir */}
           <RegBlock col={`${TGC}50`}>
-            <div style={{ fontFamily: MONO, fontSize: 11, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: TGC_LIGHT, letterSpacing: '0.22em', marginBottom: 10 }}>À RETENIR</div>
             <RegList items={['Les germes sont responsables de nombreuses maladies infectieuses.', "La transmission s'effectue principalement par l'air, l'eau, les aliments et le contact.", "L'antisepsie repose sur la stérilisation, la désinfection et une hygiène rigoureuse.", 'Les préparations du dispensaire et les plantes médicinales complètent efficacement les mesures sanitaires.', 'Un lieu propre, une eau saine, un air renouvelé et des mains lavées demeurent les meilleurs moyens de prévenir les infections.', 'Le médecin de 1890 doit unir les découvertes scientifiques de Pasteur et Koch aux ressources de la médecine végétale afin de protéger le malade et la communauté.']} />
           </RegBlock>
         </div>
@@ -8101,9 +8101,9 @@ function Book({ icon, t1, t2, col, selected, onClick }: { icon: string; t1: stri
         <div style={{ position: 'absolute', top: 3,    right: 3, width: 5, height: 5, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%,#c09020,#6a4208)', boxShadow: '0 1px 2px rgba(74,62,32,0.14)' }} />
         <div style={{ position: 'absolute', bottom: 3, left:  3, width: 5, height: 5, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%,#c09020,#6a4208)', boxShadow: '0 1px 2px rgba(74,62,32,0.14)' }} />
         <div style={{ position: 'absolute', bottom: 3, right: 3, width: 5, height: 5, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%,#c09020,#6a4208)', boxShadow: '0 1px 2px rgba(74,62,32,0.14)' }} />
-        <span style={{ display: 'block', fontSize: 12, color: '#9a7828', marginBottom: 3, position: 'relative', zIndex: 1 }}>{icon}</span>
-        <span style={{ display: 'block', fontFamily: DISPLAY, fontSize: 11, color: '#D1B77C', lineHeight: 1.55, textShadow: '0 1px 2px rgba(0,0,0,0.8)', position: 'relative', zIndex: 1 }}>{t1}</span>
-        {t2 && <span style={{ display: 'block', fontFamily: DISPLAY, fontSize: 11, color: '#D1B77C', lineHeight: 1.55, textShadow: '0 1px 2px rgba(0,0,0,0.8)', position: 'relative', zIndex: 1 }}>{t2}</span>}
+        <span style={{ display: 'block', fontSize: 14, color: '#9a7828', marginBottom: 3, position: 'relative', zIndex: 1 }}>{icon}</span>
+        <span style={{ display: 'block', fontFamily: DISPLAY, fontSize: 14, color: '#D1B77C', lineHeight: 1.55, textShadow: '0 1px 2px rgba(0,0,0,0.8)', position: 'relative', zIndex: 1 }}>{t1}</span>
+        {t2 && <span style={{ display: 'block', fontFamily: DISPLAY, fontSize: 14, color: '#D1B77C', lineHeight: 1.55, textShadow: '0 1px 2px rgba(0,0,0,0.8)', position: 'relative', zIndex: 1 }}>{t2}</span>}
       </div>
     </div>
   );
@@ -8114,7 +8114,7 @@ function ShelfRow({ label, children }: { label: string; children: React.ReactNod
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 0 4px' }}>
         <div style={{ flex: 1, height: 2, background: 'linear-gradient(to right, transparent, rgba(20,50,110,0.6))' }} />
-        <span style={{ fontFamily: MONO, fontSize: 10, color: '#D1B77C', fontStyle: 'italic', letterSpacing: '0.2em', border: '1px solid rgba(20,50,110,0.6)', background: 'linear-gradient(135deg, #04080e, #02050a)', padding: '3px 16px 4px', whiteSpace: 'nowrap', flexShrink: 0, boxShadow: 'inset 0 1px 0 rgba(209,183,124,0.06)' }}>✦ {label} ✦</span>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: '#D1B77C', fontStyle: 'italic', letterSpacing: '0.2em', border: '1px solid rgba(20,50,110,0.6)', background: 'linear-gradient(135deg, #04080e, #02050a)', padding: '3px 16px 4px', whiteSpace: 'nowrap', flexShrink: 0, boxShadow: 'inset 0 1px 0 rgba(209,183,124,0.06)' }}>✦ {label} ✦</span>
         <div style={{ flex: 1, height: 2, background: 'linear-gradient(to left, transparent, rgba(20,50,110,0.6))' }} />
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, padding: '2px 0 6px' }}>
@@ -8299,7 +8299,7 @@ export default function BibliothequePage() {
         >
           ← RETOUR
         </button>
-        <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.16em' }}>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em' }}>
           DISPENSAIRE · BIBLIOTHÈQUE{openCat ? ` · ${openCat.nom.toUpperCase()}` : ''}
         </span>
       </div>
@@ -8503,7 +8503,7 @@ export default function BibliothequePage() {
                   >
                     <div>
                       <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.text }}>{doc.titre}</div>
-                      <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 4, letterSpacing: '0.08em' }}>AJOUTÉ LE {doc.date}</div>
+                      <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 4, letterSpacing: '0.08em' }}>AJOUTÉ LE {doc.date}</div>
                     </div>
                     <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold }}>{openDocId === doc.id ? '▲' : '▼'}</span>
                   </button>

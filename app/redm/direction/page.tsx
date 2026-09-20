@@ -61,9 +61,9 @@ export default function DirectionPage() {
               <div style={{ fontSize: 42, marginBottom: 14 }}>{m.icon}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                 <span style={{ fontFamily: DISPLAY, fontSize: 23, color: '#EADCB9' }}>{m.label}</span>
-                <span style={{ fontFamily: MONO, fontSize: 12, padding: '3px 7px', background: m.color + '22', color: m.color, border: `1px solid ${m.color + '55'}`, letterSpacing: '0.1em', flexShrink: 0 }}>{m.badge}</span>
+                <span style={{ fontFamily: MONO, fontSize: 14, padding: '3px 7px', background: m.color + '22', color: m.color, border: `1px solid ${m.color + '55'}`, letterSpacing: '0.1em', flexShrink: 0 }}>{m.badge}</span>
               </div>
-              <div style={{ fontFamily: MONO, fontSize: 12, color: m.color, letterSpacing: '0.12em', marginBottom: 10 }}>{m.sub}</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: m.color, letterSpacing: '0.12em', marginBottom: 10 }}>{m.sub}</div>
               <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 16, color: '#C8BEA5', lineHeight: 1.55 }}>{m.desc}</div>
               <div style={{ fontFamily: MONO, fontSize: 14, color: h ? '#EADCB9' : '#D1B77C', marginTop: 14, letterSpacing: '0.1em', transition: 'color 0.15s' }}>→ ACCÉDER</div>
             </div>

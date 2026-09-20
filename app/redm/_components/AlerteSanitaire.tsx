@@ -132,7 +132,7 @@ export default function AlerteSanitaire() {
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
               <span style={{ fontSize: 20, lineHeight: 1.4 }}>⚠</span>
               <div>
-                <div style={{ fontFamily: MONO, fontSize: 12, color: sevColor, letterSpacing: '0.14em', marginBottom: 6, textTransform: 'uppercase' }}>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: sevColor, letterSpacing: '0.14em', marginBottom: 6, textTransform: 'uppercase' }}>
                   {TITLES[key]}{critique ? ' — CRITIQUE' : ''}
                 </div>
                 <div style={{ fontFamily: BODY, fontSize: 15, color: '#EADCB9', lineHeight: 1.55 }}>

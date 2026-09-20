@@ -93,30 +93,30 @@ function RegistreLine({ f, tarifs }: { f: Facture; tarifs: Record<string, TarifC
       <div style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 16px' }}>
         <div style={{ textAlign:'center', minWidth:46, flexShrink:0 }}>
           <div style={{ fontFamily:DISPLAY, fontSize: 16, color:T.gold }}>{f.dateSeance.slice(0,5)}</div>
-          <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim }}>{f.dateSeance.slice(6)}</div>
+          <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>{f.dateSeance.slice(6)}</div>
         </div>
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4, flexWrap:'wrap' }}>
             <span style={{ fontFamily:DISPLAY, fontSize: 17, color:T.text }}>{f.patientNom}</span>
-            <span style={{ fontFamily:MONO, fontSize: 12, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
+            <span style={{ fontFamily:MONO, fontSize: 14, color:'#BAAAC6', background:'rgba(155,106,200,0.10)', padding:'1px 7px' }}>👤 {f.medecin || '— Non assigné —'}</span>
           </div>
           <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
-            {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 12, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
+            {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
             {pres.map((p,i) => {
               const cat = tarifs[p.id];
               const nom = p.nom ?? cat?.nom ?? p.id;
               const isAchat = p.prix != null || cat?.type === 'achat';
               return (
-                <span key={i} style={{ fontFamily:MONO, fontSize: 12, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
+                <span key={i} style={{ fontFamily:MONO, fontSize: 14, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
                   {isAchat ? '🛒 ' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''}
                 </span>
               );
             })}
-            <span style={{ fontFamily:MONO, fontSize: 12, color:T.muted, background:'rgba(255,255,255,0.04)', padding:'1px 7px' }}>{f.payeur}</span>
+            <span style={{ fontFamily:MONO, fontSize: 14, color:T.muted, background:'rgba(255,255,255,0.04)', padding:'1px 7px' }}>{f.payeur}</span>
           </div>
         </div>
         <div style={{ fontFamily:DISPLAY, fontSize: 19, color:col, flexShrink:0, minWidth:65, textAlign:'right' }}>{fmt$(f.montant)}</div>
-        <div style={{ fontFamily:MONO, fontSize: 12, padding:'4px 8px', background:col+'18', color:col, border:`1px solid ${col}50`, flexShrink:0 }}>
+        <div style={{ fontFamily:MONO, fontSize: 14, padding:'4px 8px', background:col+'18', color:col, border:`1px solid ${col}50`, flexShrink:0 }}>
           {STATUT_ICON[f.statut]} {f.statut}
         </div>
       </div>
@@ -212,14 +212,14 @@ export default function DirectionComptabiliteArchivesPage() {
               <div style={{ marginLeft:'auto', display:'flex', gap:8 }}>
                 {delConfirm === openArc.id
                   ? <>
-                      <button onClick={()=>removeArchive(openArc.id)} style={{ fontFamily:MONO, fontSize:13, padding:'8px 16px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>SUPPRIMER CETTE SEMAINE ?</button>
-                      <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize:13, padding:'8px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
+                      <button onClick={()=>removeArchive(openArc.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'8px 16px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>SUPPRIMER CETTE SEMAINE ?</button>
+                      <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize: 14, padding:'8px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
                     </>
-                  : <button onClick={()=>setDelConfirm(openArc.id)} style={{ fontFamily:MONO, fontSize:13, padding:'8px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕ SUPPRIMER</button>}
+                  : <button onClick={()=>setDelConfirm(openArc.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'8px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕ SUPPRIMER</button>}
               </div>
             )}
           </div>
-          <div style={{ fontFamily:MONO, fontSize:13, color:T.dim, letterSpacing:'0.14em', marginBottom:6 }}>ARCHIVES · DÉTAIL SEMAINE</div>
+          <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.14em', marginBottom:6 }}>ARCHIVES · DÉTAIL SEMAINE</div>
           <h1 style={{ fontFamily:DISPLAY, fontSize:30, color:T.gold, margin:0 }}>📅 {openArc.weekLabel}</h1>
         </div>
 
@@ -233,7 +233,7 @@ export default function DirectionComptabiliteArchivesPage() {
           ].map(s => (
             <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
               <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
-              <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
+              <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
             </div>
           ))}
         </div>
@@ -249,16 +249,16 @@ export default function DirectionComptabiliteArchivesPage() {
                 <div key={s.medecin} style={{ background:T.card, border:`1px solid rgba(155,106,200,0.35)`, borderLeft:`4px solid #BAAAC6`, padding:'12px 18px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>
                   <div>
                     <div style={{ fontFamily:DISPLAY, fontSize: 19, color:T.text }}>{s.medecin}</div>
-                    <div style={{ fontFamily:MONO, fontSize: 12, color:T.dim, marginTop:3 }}>{s.actes} acte{s.actes>1?'s':''}</div>
+                    <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3 }}>{s.actes} acte{s.actes>1?'s':''}</div>
                   </div>
                   <div style={{ display:'flex', gap:24, alignItems:'center' }}>
                     <div style={{ textAlign:'right' }}>
                       <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.gold }}>{fmt$(s.ca)}</div>
-                      <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim, letterSpacing:'0.1em' }}>CHIFFRE D&apos;AFFAIRES</div>
+                      <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>CHIFFRE D&apos;AFFAIRES</div>
                     </div>
                     <div style={{ textAlign:'right' }}>
                       <div style={{ fontFamily:DISPLAY, fontSize: 28, color:'#BAAAC6' }}>{fmt$(s.salaire)}</div>
-                      <div style={{ fontFamily:MONO, fontSize: 11, color:T.dim, letterSpacing:'0.1em' }}>SALAIRE (APRÈS %)</div>
+                      <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>SALAIRE (APRÈS %)</div>
                     </div>
                   </div>
                 </div>
@@ -271,20 +271,20 @@ export default function DirectionComptabiliteArchivesPage() {
         <div style={{ marginBottom:24 }}>
           <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}>💵 Registre des caisses</div>
           {caissesLoading ? (
-            <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Chargement…</div>
+            <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Chargement…</div>
           ) : caissesStaff.length === 0 ? (
-            <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucune caisse enregistrée cette semaine-là.</div>
+            <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucune caisse enregistrée cette semaine-là.</div>
           ) : (
             <div style={{ overflowX:'auto' }}>
               <table style={{ width:'100%', borderCollapse:'collapse', border:`1px solid ${T.border}` }}>
                 <thead>
                   <tr>
-                    <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 16px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.14em', textAlign:'left' }}>MEMBRE</th>
+                    <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 16px', fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.14em', textAlign:'left' }}>MEMBRE</th>
                     {JOURS_CAISSE.map((j, i) => (
-                      <th key={i} style={{ background:'rgba(209,183,124,0.06)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 8px', fontFamily:MONO, fontSize:11, color:T.gold, textAlign:'center', minWidth:34 }}>{j}</th>
+                      <th key={i} style={{ background:'rgba(209,183,124,0.06)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 8px', fontFamily:MONO, fontSize: 14, color:T.gold, textAlign:'center', minWidth:34 }}>{j}</th>
                     ))}
-                    <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'center' }}>NB</th>
-                    <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize:11, color:T.gold, letterSpacing:'0.1em', textAlign:'right' }}>SALAIRE</th>
+                    <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, borderRight:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.1em', textAlign:'center' }}>NB</th>
+                    <th style={{ background:'rgba(209,183,124,0.10)', borderBottom:`1px solid ${T.border}`, padding:'10px 14px', fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.1em', textAlign:'right' }}>SALAIRE</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -295,7 +295,7 @@ export default function DirectionComptabiliteArchivesPage() {
                       <tr key={s.discord_id} style={{ borderBottom: idx < caissesStaff.length-1 ? `1px solid rgba(139,90,43,0.12)` : 'none' }}>
                         <td style={{ padding:'10px 16px', borderRight:`1px solid ${T.border}`, background:T.card }}>
                           <div style={{ fontFamily:DISPLAY, fontSize:15, color:T.text }}>{s.nom}</div>
-                          <div style={{ fontFamily:MONO, fontSize:10, color:T.dim, marginTop:2 }}>{fmt$(s.rate)} / caisse</div>
+                          <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:2 }}>{fmt$(s.rate)} / caisse</div>
                         </td>
                         {days.map((d, i) => {
                           const iso  = fmtISODate(d);
@@ -338,10 +338,10 @@ export default function DirectionComptabiliteArchivesPage() {
       <div style={{ marginBottom: 24 }}>
         <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14 }}>
           <button onClick={()=>router.push('/redm/direction/comptabilite')} style={{ fontFamily:MONO, fontSize:15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR</button>
-          <span style={{ fontFamily:MONO, fontSize:13, color:T.gold, letterSpacing:'0.16em' }}>DIRECTION · COMPTABILITÉ · ARCHIVES</span>
+          <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.16em' }}>DIRECTION · COMPTABILITÉ · ARCHIVES</span>
         </div>
         <h1 style={{ fontFamily:DISPLAY, fontSize:35, color:T.gold, margin:0 }}>📦 Registres archivés</h1>
-        <p style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
+        <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
           HISTORIQUE DES SEMAINES CLOSES & SALAIRES VERSÉS
         </p>
       </div>
@@ -356,7 +356,7 @@ export default function DirectionComptabiliteArchivesPage() {
         ].map(s => (
           <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
             <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
-            <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
+            <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
           </div>
         ))}
       </div>
@@ -396,12 +396,12 @@ export default function DirectionComptabiliteArchivesPage() {
                       <span style={{ fontFamily:DISPLAY, fontSize:19, color: allDone ? '#6A9A68' : T.gold }}>
                         {allDone ? '✔' : '📅'} {arc.weekLabel}
                       </span>
-                      {allDone && <span style={{ fontFamily:MONO, fontSize:11, color:'#A8B991', background:'rgba(74,96,72,0.20)', padding:'2px 8px', border:'1px solid rgba(74,96,72,0.40)' }}>SOLDÉ</span>}
+                      {allDone && <span style={{ fontFamily:MONO, fontSize: 14, color:'#A8B991', background:'rgba(74,96,72,0.20)', padding:'2px 8px', border:'1px solid rgba(74,96,72,0.40)' }}>SOLDÉ</span>}
                     </div>
                     <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'center' }}>
-                      <span style={{ fontFamily:MONO, fontSize:13, color:T.dim }}>{arc.factures.length} acte(s)</span>
+                      <span style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>{arc.factures.length} acte(s)</span>
                       {salaires.map(s => (
-                        <span key={s.medecin} style={{ fontFamily:MONO, fontSize:12, color:'#BAAAC6', background:'rgba(155,106,200,0.12)', padding:'1px 7px', border:'1px solid rgba(155,106,200,0.35)' }}>👤 {s.medecin} · {fmt$(s.salaire)}</span>
+                        <span key={s.medecin} style={{ fontFamily:MONO, fontSize: 14, color:'#BAAAC6', background:'rgba(155,106,200,0.12)', padding:'1px 7px', border:'1px solid rgba(155,106,200,0.35)' }}>👤 {s.medecin} · {fmt$(s.salaire)}</span>
                       ))}
                     </div>
                   </div>
@@ -412,20 +412,20 @@ export default function DirectionComptabiliteArchivesPage() {
                       <div onClick={e => e.stopPropagation()}>
                         {delConfirm === arc.id
                           ? <span style={{ display:'flex', gap:6 }}>
-                              <button onClick={()=>removeArchive(arc.id)} style={{ fontFamily:MONO, fontSize:11, padding:'4px 9px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>SUPPRIMER ?</button>
-                              <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize:11, padding:'4px 7px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
+                              <button onClick={()=>removeArchive(arc.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 9px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>SUPPRIMER ?</button>
+                              <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
                             </span>
-                          : <button onClick={()=>setDelConfirm(arc.id)} style={{ fontFamily:MONO, fontSize:11, padding:'4px 9px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕ SUPPRIMER</button>}
+                          : <button onClick={()=>setDelConfirm(arc.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 9px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕ SUPPRIMER</button>}
                       </div>
                     )}
                     <div style={{ fontFamily:DISPLAY, fontSize:26, color: allDone ? '#6A9A68' : T.gold }}>
                       {fmt$(arc.totalPercu + arc.totalAttente)}
                     </div>
-                    <div style={{ fontFamily:MONO, fontSize:12, color:T.dim, display:'flex', gap:10 }}>
+                    <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, display:'flex', gap:10 }}>
                       {arc.totalPercu > 0 && <span style={{color:'#A8B991'}}>✔ {fmt$(arc.totalPercu)}</span>}
                       {arc.totalAttente > 0 && <span style={{color:'#D1B77C'}}>⏳ {fmt$(arc.totalAttente)}</span>}
                     </div>
-                    <div style={{ fontFamily:MONO, fontSize:12, color:'rgba(209,183,124,0.5)', marginTop:2 }}>
+                    <div style={{ fontFamily:MONO, fontSize: 14, color:'rgba(209,183,124,0.5)', marginTop:2 }}>
                       VOIR LE DÉTAIL →
                     </div>
                   </div>
@@ -436,7 +436,7 @@ export default function DirectionComptabiliteArchivesPage() {
         </div>
       )}
 
-      <div style={{ marginTop:24, fontFamily:MONO, fontSize:12, color:T.dim, textAlign:'center', padding:'12px', borderTop:`1px solid ${T.border}` }}>
+      <div style={{ marginTop:24, fontFamily:MONO, fontSize: 14, color:T.dim, textAlign:'center', padding:'12px', borderTop:`1px solid ${T.border}` }}>
         ↻ Les semaines passées s&apos;archivent automatiquement dès leur clôture
       </div>
     </div>

@@ -64,8 +64,8 @@ function uid() {
 }
 
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 14, background: 'rgba(0,0,0,0.25)', border: `1px solid ${T.border}`, color: T.text, padding: '8px 12px', outline: 'none', boxSizing: 'border-box' };
-const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
-const btn: React.CSSProperties = { fontFamily: MONO, fontSize: 12, letterSpacing: '0.10em', padding: '8px 14px', cursor: 'pointer', border: `1px solid ${T.border}`, background: 'rgba(0,0,0,0.25)', color: T.muted };
+const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
+const btn: React.CSSProperties = { fontFamily: MONO, fontSize: 14, letterSpacing: '0.10em', padding: '8px 14px', cursor: 'pointer', border: `1px solid ${T.border}`, background: 'rgba(0,0,0,0.25)', color: T.muted };
 const btnGold: React.CSSProperties = { ...btn, border: `1px solid ${T.gold}`, color: T.gold, background: 'rgba(209,183,124,0.08)' };
 const btnRed: React.CSSProperties = { ...btn, border: '1px solid rgba(180,70,70,0.5)', color: '#C87060', background: 'rgba(180,70,70,0.08)' };
 const stepBtn: React.CSSProperties = { fontFamily: MONO, fontSize: 14, width: 28, height: 28, cursor: 'pointer', border: `1px solid ${T.border}`, background: 'rgba(0,0,0,0.25)', color: T.muted, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, padding: 0 };
@@ -164,11 +164,11 @@ export default function StockagePage() {
         {toasts.map(t => (
           <div key={t.id} style={{ background: T.card, border: '1px solid rgba(168,32,32,0.5)', borderLeft: '4px solid #EADCB9', padding: '14px 18px', boxShadow: '0 6px 24px rgba(74,62,32,0.14)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <span style={{ fontFamily: MONO, fontSize: 11, color: '#C87060', letterSpacing: '0.16em' }}>⚠ STOCK FAIBLE</span>
+              <span style={{ fontFamily: MONO, fontSize: 14, color: '#C87060', letterSpacing: '0.16em' }}>⚠ STOCK FAIBLE</span>
               <button onClick={() => setToasts(prev => prev.filter(x => x.id !== t.id))} style={{ background: 'none', border: 'none', color: T.muted, cursor: 'pointer', fontFamily: MONO, fontSize: 14, padding: 0 }}>✕</button>
             </div>
             <div style={{ fontFamily: BODY, fontSize: 15, color: T.text }}>{t.titre}</div>
-            <div style={{ fontFamily: MONO, fontSize: 12, color: '#C87060', marginTop: 4, letterSpacing: '0.06em' }}>RESTE {t.quantite} — PENSEZ À COMMANDER</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: '#C87060', marginTop: 4, letterSpacing: '0.06em' }}>RESTE {t.quantite} — PENSEZ À COMMANDER</div>
           </div>
         ))}
       </div>
@@ -179,14 +179,14 @@ export default function StockagePage() {
           style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
           ← RETOUR
         </button>
-        <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.16em' }}>DISPENSAIRE · DIRECTION · GESTIONNAIRE DE STOCKAGE</span>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em' }}>DISPENSAIRE · DIRECTION · GESTIONNAIRE DE STOCKAGE</span>
       </div>
 
       {/* Bandeau */}
       <div style={{ marginBottom: 30 }}>
         <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.gold, margin: '0 0 6px' }}>📦 Gestionnaire de Stockage</h1>
         <div style={{ fontFamily: BODY, fontSize: 16, color: T.muted }}>Inventaire et réapprovisionnement du dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
           ⚠ UNE ALERTE EST ENVOYÉE DÈS QU'UN ARTICLE DESCEND SOUS {SEUIL_ALERTE} UNITÉS
         </div>
       </div>
@@ -208,12 +208,12 @@ export default function StockagePage() {
               ) : (
                 <h2 style={{ fontFamily: DISPLAY, fontSize: 19, color: T.gold, margin: 0, flex: 1 }}>{cat.nom}</h2>
               )}
-              <span style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.1em', flexShrink: 0 }}>{cat.items.length} ART.</span>
+              <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', flexShrink: 0 }}>{cat.items.length} ART.</span>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {cat.items.length === 0 && (
-                <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.08em', padding: '8px 0' }}>AUCUN ARTICLE</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.08em', padding: '8px 0' }}>AUCUN ARTICLE</div>
               )}
               {cat.items.map(item => {
                 const low = item.quantite < SEUIL_ALERTE;
@@ -293,7 +293,7 @@ export default function StockagePage() {
         ) : (
           <button
             onClick={() => setCreatingCat(true)}
-            style={{ background: 'transparent', border: `1px dashed ${T.border}`, color: T.muted, fontFamily: MONO, fontSize: 13, letterSpacing: '0.12em', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 110 }}
+            style={{ background: 'transparent', border: `1px dashed ${T.border}`, color: T.muted, fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 110 }}
           >
             + NOUVELLE CATÉGORIE
           </button>

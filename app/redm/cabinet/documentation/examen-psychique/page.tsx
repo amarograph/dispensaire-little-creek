@@ -114,7 +114,7 @@ function ScaleInput({ id, scale, value, onChange }: { id: string; scale: Scale; 
     <div style={{ marginBottom: 22, paddingBottom: 22, borderBottom: `1px solid ${T.border}` }}>
       <div style={{ fontFamily: BODY, fontSize: 17, color: T.text, marginBottom: 14, lineHeight: 1.5 }}>{scale.question}</div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-        <span style={{ fontFamily: MONO, fontSize: 13, color: '#DF9A88', minWidth: 150, textAlign: 'right', lineHeight: 1.4 }}>{scale.left}</span>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', minWidth: 150, textAlign: 'right', lineHeight: 1.4 }}>{scale.left}</span>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {[1, 2, 3, 4, 5].map(v => (
             <button key={v} type="button" onClick={() => onChange(v)}
@@ -123,7 +123,7 @@ function ScaleInput({ id, scale, value, onChange }: { id: string; scale: Scale; 
             </button>
           ))}
         </div>
-        <span style={{ fontFamily: MONO, fontSize: 13, color: '#4A8048', minWidth: 150, lineHeight: 1.4 }}>{scale.right}</span>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: '#4A8048', minWidth: 150, lineHeight: 1.4 }}>{scale.right}</span>
       </div>
     </div>
   );
@@ -239,7 +239,7 @@ export default function ExamenPsychiquePage() {
 
         {/* Fiche résultat */}
         <div style={{ background: T.card, border: `2px solid ${vc}55`, borderTop: `6px solid ${vc}`, padding: '40px 44px', marginBottom: 24 }}>
-          <div style={{ fontFamily: MONO, fontSize: 13, color: COL, letterSpacing: '0.18em', marginBottom: 16, textAlign: 'center' }}>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: COL, letterSpacing: '0.18em', marginBottom: 16, textAlign: 'center' }}>
             CABINET THÉRAPEUTIQUE · EXAMEN PSYCHIQUE & MORAL
           </div>
           <div style={{ textAlign: 'center', marginBottom: 28 }}>
@@ -247,7 +247,7 @@ export default function ExamenPsychiquePage() {
             <div style={{ fontFamily: MONO, fontSize: 15, color: T.muted, marginBottom: 16 }}>{current.fonction}{current.county ? ` — Comté de ${current.county}` : ''} · {current.date}</div>
             <div style={{ display: 'inline-block', background: vc + '22', border: `2px solid ${vc}`, padding: '14px 40px', textAlign: 'center' }}>
               <div style={{ fontFamily: DISPLAY, fontSize: 50, color: vc, lineHeight: 1 }}>{current.score}</div>
-              <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.1em', marginTop: 4 }}>POINTS / {MAX_SCORE}</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 4 }}>POINTS / {MAX_SCORE}</div>
             </div>
           </div>
 
@@ -260,14 +260,14 @@ export default function ExamenPsychiquePage() {
           {/* Détails conclusion */}
           {current.conclusion && (
             <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 18, marginTop: 4 }}>
-              <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.1em', marginBottom: 8 }}>CONCLUSION DU MÉDECIN</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginBottom: 8 }}>CONCLUSION DU MÉDECIN</div>
               <div style={{ fontFamily: BODY, fontSize: 16, color: T.text, lineHeight: 1.65, fontStyle: 'italic' }}>{current.conclusion}</div>
             </div>
           )}
 
           <div style={{ marginTop: 24, paddingTop: 18, borderTop: `1px solid ${T.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim }}>✔ Dossier patient créé automatiquement</div>
-            <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim }}>Signé : {current.docteur}</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>✔ Dossier patient créé automatiquement</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>Signé : {current.docteur}</div>
           </div>
         </div>
 
@@ -336,7 +336,7 @@ export default function ExamenPsychiquePage() {
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <div style={{ fontSize: 20, letterSpacing: '0.12em', marginBottom: 4, fontWeight: 'bold' }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
             <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
-            <div style={{ fontSize: 13, color: '#6A5030', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 1.7 }}>
               Sous la direction du Docteur François De Millet<br />
               Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales
             </div>
@@ -380,7 +380,7 @@ export default function ExamenPsychiquePage() {
                 <div style={{ width: 18, height: 18, border: '2px solid #102B3B', background: current.verdict === v ? '#102B3B' : 'transparent', flexShrink: 0, marginTop: 4 }} />
                 <div style={{ lineHeight: 1.7 }}>
                   <strong>{v === 'INAPTE' ? 'POTENTIELLEMENT DANGEREUX / INAPTE' : v} :</strong>{' '}
-                  <span style={{ fontStyle: 'italic', fontSize: 13 }}>{VERDICT_DESC[v]}</span>
+                  <span style={{ fontStyle: 'italic', fontSize: 14 }}>{VERDICT_DESC[v]}</span>
                 </div>
               </div>
             ))}
@@ -414,7 +414,7 @@ export default function ExamenPsychiquePage() {
       <div style={{ marginBottom: 28, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
         <button onClick={() => setView('form')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
         <span style={{ fontFamily: DISPLAY, fontSize: 26, color: T.gold }}>📁 Archives — Examens Psychiques</span>
-        <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginLeft: 'auto' }}>{archives.length} examen{archives.length !== 1 ? 's' : ''}</span>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginLeft: 'auto' }}>{archives.length} examen{archives.length !== 1 ? 's' : ''}</span>
       </div>
       {archives.length === 0
         ? <div style={{ fontFamily: MONO, fontSize: 15, color: T.dim, padding: 40, textAlign: 'center', border: `1px dashed ${T.border}` }}>Aucun examen archivé</div>
@@ -425,18 +425,18 @@ export default function ExamenPsychiquePage() {
                 <div key={ex.id} style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `5px solid ${vc}`, padding: '20px 26px', display: 'flex', alignItems: 'center', gap: 22 }}>
                   <div style={{ textAlign: 'center', minWidth: 80, flexShrink: 0 }}>
                     <div style={{ fontFamily: DISPLAY, fontSize: 32, color: vc }}>{ex.score}</div>
-                    <div style={{ fontFamily: MONO, fontSize: 10, color: vc, letterSpacing: '0.08em' }}>/ {MAX_SCORE}</div>
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: vc, letterSpacing: '0.08em' }}>/ {MAX_SCORE}</div>
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.text, marginBottom: 4 }}>{ex.prenom} {ex.nom}</div>
-                    <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginBottom: 6 }}>{ex.fonction}{ex.county ? ` — Comté de ${ex.county}` : ''} · {ex.date} · {ex.docteur}</div>
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginBottom: 6 }}>{ex.fonction}{ex.county ? ` — Comté de ${ex.county}` : ''} · {ex.date} · {ex.docteur}</div>
                     {ex.conclusion && <div style={{ fontFamily: BODY, fontSize: 15, color: T.muted, fontStyle: 'italic', lineHeight: 1.5 }}>{ex.conclusion}</div>}
                   </div>
                   <div style={{ textAlign: 'center', flexShrink: 0 }}>
-                    <div style={{ fontFamily: MONO, fontSize: 13, color: vc, background: vc + '18', border: `1px solid ${vc}40`, padding: '6px 14px', letterSpacing: '0.1em' }}>{ex.verdict}</div>
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: vc, background: vc + '18', border: `1px solid ${vc}40`, padding: '6px 14px', letterSpacing: '0.1em' }}>{ex.verdict}</div>
                   </div>
                   <button onClick={() => { setCurrent(ex); setView('letter'); }}
-                    style={{ fontFamily: MONO, fontSize: 13, background: `${COL}18`, border: `1px solid ${COL}40`, color: COL, padding: '8px 14px', cursor: 'pointer', flexShrink: 0, letterSpacing: '0.08em' }}>
+                    style={{ fontFamily: MONO, fontSize: 14, background: `${COL}18`, border: `1px solid ${COL}40`, color: COL, padding: '8px 14px', cursor: 'pointer', flexShrink: 0, letterSpacing: '0.08em' }}>
                     📄 CERTIFICAT
                   </button>
                 </div>
@@ -448,7 +448,7 @@ export default function ExamenPsychiquePage() {
 
   /* ══════════════════════ VUE FORMULAIRE ══════════════════════ */
   const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '11px 16px', outline: 'none', boxSizing: 'border-box', width: '100%' };
-  const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.12em', marginBottom: 8, display: 'block' };
+  const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 8, display: 'block' };
   const canSubmit = nom.trim() && answered === TOTAL_QUESTIONS;
 
   return (
@@ -462,16 +462,16 @@ export default function ExamenPsychiquePage() {
             style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>
             ← RETOUR
           </button>
-          <span style={{ fontFamily: MONO, fontSize: 13, color: COL, letterSpacing: '0.16em' }}>CABINET · DOCUMENTATION · EXAMEN PSYCHIQUE</span>
-          <button onClick={() => setView('archives')} style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 13, background: 'rgba(209,183,124,0.10)', border: `1px solid rgba(209,183,124,0.3)`, color: T.gold, padding: '8px 16px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: COL, letterSpacing: '0.16em' }}>CABINET · DOCUMENTATION · EXAMEN PSYCHIQUE</span>
+          <button onClick={() => setView('archives')} style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 14, background: 'rgba(209,183,124,0.10)', border: `1px solid rgba(209,183,124,0.3)`, color: T.gold, padding: '8px 16px', cursor: 'pointer', letterSpacing: '0.1em' }}>
             📁 ARCHIVES ({archives.length})
           </button>
         </div>
         <div style={{ background: T.card, border: `1px solid ${T.border}`, borderTop: `4px solid ${COL}`, padding: '28px 32px', textAlign: 'center' }}>
-          <div style={{ fontFamily: MONO, fontSize: 13, color: COL, letterSpacing: '0.2em', marginBottom: 8 }}>DISPENSAIRE MÉDICAL · 1890</div>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: COL, letterSpacing: '0.2em', marginBottom: 8 }}>DISPENSAIRE MÉDICAL · 1890</div>
           <h1 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 6px' }}>Examen Psychique & Moral</h1>
           <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 4 }}>FORMULAIRE OFFICIEL — AGENTS DE L'ORDRE (SHERIF)</div>
-          <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim }}>Score max : {MAX_SCORE} pts · APTE ≥ 76 · À SURVEILLER 41–75 · INAPTE ≤ 40</div>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>Score max : {MAX_SCORE} pts · APTE ≥ 76 · À SURVEILLER 41–75 · INAPTE ≤ 40</div>
         </div>
       </div>
 
@@ -512,7 +512,7 @@ export default function ExamenPsychiquePage() {
       {answered > 0 && (
         <div style={{ background: T.card, border: `1px solid ${verdictCol}40`, borderLeft: `4px solid ${verdictCol}`, padding: '16px 24px', marginBottom: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.1em', marginBottom: 4 }}>{answered}/{TOTAL_QUESTIONS} questions · {score}/{MAX_SCORE} points</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginBottom: 4 }}>{answered}/{TOTAL_QUESTIONS} questions · {score}/{MAX_SCORE} points</div>
             <div style={{ fontFamily: MONO, fontSize: 16, color: verdictCol, letterSpacing: '0.08em' }}>{verdict}</div>
           </div>
           <div style={{ fontFamily: DISPLAY, fontSize: 44, color: verdictCol }}>{score}</div>
@@ -552,7 +552,7 @@ export default function ExamenPsychiquePage() {
 
       {/* Bouton soumettre */}
       {!canSubmit && answered < TOTAL_QUESTIONS && answered > 0 && (
-        <div style={{ fontFamily: MONO, fontSize: 13, color: '#D1B77C', marginBottom: 12, textAlign: 'center' }}>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: '#D1B77C', marginBottom: 12, textAlign: 'center' }}>
           {TOTAL_QUESTIONS - answered} question{TOTAL_QUESTIONS - answered > 1 ? 's' : ''} restante{TOTAL_QUESTIONS - answered > 1 ? 's' : ''}
         </div>
       )}

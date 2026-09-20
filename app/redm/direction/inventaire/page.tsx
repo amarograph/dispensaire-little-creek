@@ -50,11 +50,11 @@ export default function InventairePage() {
         {toasts.map(t => (
           <div key={t.id} style={{ background: T.card, border: '1px solid rgba(168,32,32,0.5)', borderLeft: '4px solid #EADCB9', padding: '14px 18px', boxShadow: '0 6px 24px rgba(74,62,32,0.14)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <span style={{ fontFamily: MONO, fontSize: 11, color: '#C87060', letterSpacing: '0.16em' }}>⚠ STOCK FAIBLE</span>
+              <span style={{ fontFamily: MONO, fontSize: 14, color: '#C87060', letterSpacing: '0.16em' }}>⚠ STOCK FAIBLE</span>
               <button onClick={() => setToasts(prev => prev.filter(x => x.id !== t.id))} style={{ background: 'none', border: 'none', color: T.muted, cursor: 'pointer', fontFamily: MONO, fontSize: 14, padding: 0 }}>✕</button>
             </div>
             <div style={{ fontFamily: BODY, fontSize: 15, color: T.text }}>{t.titre}</div>
-            <div style={{ fontFamily: MONO, fontSize: 12, color: '#C87060', marginTop: 4, letterSpacing: '0.06em' }}>RESTE {t.quantite} — PENSEZ À COMMANDER</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: '#C87060', marginTop: 4, letterSpacing: '0.06em' }}>RESTE {t.quantite} — PENSEZ À COMMANDER</div>
           </div>
         ))}
       </div>
@@ -65,14 +65,14 @@ export default function InventairePage() {
           style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
           ← RETOUR
         </button>
-        <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.16em' }}>DISPENSAIRE · DIRECTION · INVENTAIRE</span>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.16em' }}>DISPENSAIRE · DIRECTION · INVENTAIRE</span>
       </div>
 
       {/* Bandeau */}
       <div style={{ marginBottom: 30 }}>
         <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.gold, margin: '0 0 6px' }}>🔒 Inventaire</h1>
         <div style={{ fontFamily: BODY, fontSize: 16, color: T.muted }}>Consultation en lecture seule — modifications via le Gestionnaire de Stockage</div>
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
+        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
           ⚠ UNE ALERTE EST ENVOYÉE DÈS QU'UN ARTICLE DESCEND SOUS {SEUIL_ALERTE} UNITÉS
         </div>
       </div>
@@ -91,7 +91,7 @@ export default function InventairePage() {
             ].map(s => (
               <div key={s.l} style={{ background: T.card, border: `1px solid ${T.border}`, padding: '14px 16px', textAlign: 'center' }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 24, color: s.c }}>{s.v}</div>
-                <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, marginTop: 3, letterSpacing: '0.1em' }}>{s.l}</div>
+                <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 3, letterSpacing: '0.1em' }}>{s.l}</div>
               </div>
             ))}
           </div>
@@ -102,12 +102,12 @@ export default function InventairePage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   <div style={{ width: 40, height: 40, background: 'rgba(209,183,124,0.08)', border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 19, flexShrink: 0 }}>{cat.icon}</div>
                   <h2 style={{ fontFamily: DISPLAY, fontSize: 19, color: T.gold, margin: 0, flex: 1 }}>{cat.nom}</h2>
-                  <span style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.1em', flexShrink: 0 }}>{cat.items.length} ART.</span>
+                  <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', flexShrink: 0 }}>{cat.items.length} ART.</span>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {cat.items.length === 0 && (
-                    <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.08em', padding: '8px 0' }}>AUCUN ARTICLE</div>
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.08em', padding: '8px 0' }}>AUCUN ARTICLE</div>
                   )}
                   {cat.items.map(item => {
                     const low = item.quantite < SEUIL_ALERTE;

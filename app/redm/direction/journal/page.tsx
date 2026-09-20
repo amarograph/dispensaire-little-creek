@@ -81,11 +81,11 @@ export default function JournalPage() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
         <button onClick={() => router.push('/redm/direction')} style={{
-          fontFamily: MONO, fontSize: 12, background: 'transparent',
+          fontFamily: MONO, fontSize: 14, background: 'transparent',
           border: `1px solid ${T.border}`, color: T.muted,
           padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em',
         }}>← RETOUR</button>
-        <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, letterSpacing: '0.18em' }}>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>
           DIRECTION · JOURNAL D'ACTIVITÉ
         </span>
       </div>
@@ -93,7 +93,7 @@ export default function JournalPage() {
       <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.text, margin: '0 0 6px' }}>
         📜 Journal d'activité
       </h1>
-      <p style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.14em', marginBottom: 28 }}>
+      <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.14em', marginBottom: 28 }}>
         HISTORIQUE DES ACTIONS DE LA DIRECTION — DISPENSAIRE
       </p>
 
@@ -103,7 +103,7 @@ export default function JournalPage() {
           const active = category === c.id;
           return (
             <button key={c.id} onClick={() => setCategory(c.id)} style={{
-              fontFamily: MONO, fontSize: 11, letterSpacing: '0.08em',
+              fontFamily: MONO, fontSize: 14, letterSpacing: '0.08em',
               background: active ? `${c.color}28` : 'transparent',
               border: `1px solid ${active ? c.color : 'rgba(209,183,124,0.25)'}`,
               color: active ? c.color : T.muted,
@@ -119,10 +119,10 @@ export default function JournalPage() {
       {/* Alerte table manquante */}
       {noTable && (
         <div style={{ background: 'rgba(200,100,40,0.10)', border: '1px solid rgba(200,100,40,0.35)', borderRadius: 8, padding: '20px 24px', marginBottom: 24 }}>
-          <p style={{ fontFamily: MONO, fontSize: 12, color: '#D48040', letterSpacing: '0.1em', margin: 0 }}>
+          <p style={{ fontFamily: MONO, fontSize: 14, color: '#D48040', letterSpacing: '0.1em', margin: 0 }}>
             ⚠ TABLE MANQUANTE — Exécuter la migration SQL dans Supabase :
           </p>
-          <pre style={{ fontFamily: MONO, fontSize: 11, color: '#A87050', marginTop: 12, overflowX: 'auto', lineHeight: 1.7 }}>{`CREATE TABLE IF NOT EXISTS public.redm_logs (
+          <pre style={{ fontFamily: MONO, fontSize: 14, color: '#A87050', marginTop: 12, overflowX: 'auto', lineHeight: 1.7 }}>{`CREATE TABLE IF NOT EXISTS public.redm_logs (
   id               UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at       TIMESTAMPTZ DEFAULT NOW(),
   actor_discord_id TEXT NOT NULL,
@@ -139,19 +139,19 @@ CREATE POLICY "service role full access" ON public.redm_logs USING (true) WITH C
       )}
 
       {loading && (
-        <p style={{ fontFamily: MONO, fontSize: 13, color: T.muted, letterSpacing: '0.1em' }}>
+        <p style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.1em' }}>
           Chargement…
         </p>
       )}
 
       {error && !noTable && (
-        <p style={{ fontFamily: MONO, fontSize: 12, color: '#C84040', letterSpacing: '0.08em' }}>
+        <p style={{ fontFamily: MONO, fontSize: 14, color: '#C84040', letterSpacing: '0.08em' }}>
           ✕ {error}
         </p>
       )}
 
       {!loading && !error && !noTable && logs.length === 0 && (
-        <p style={{ fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.1em' }}>
+        <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em' }}>
           Aucune entrée pour le moment.
         </p>
       )}
@@ -165,7 +165,7 @@ CREATE POLICY "service role full access" ON public.redm_logs USING (true) WITH C
             padding: '10px 16px',
           }}>
             {['DATE', 'AUTEUR', 'SECTION', 'ACTION'].map(h => (
-              <span key={h} style={{ fontFamily: MONO, fontSize: 10, color: T.gold, letterSpacing: '0.15em' }}>{h}</span>
+              <span key={h} style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.15em' }}>{h}</span>
             ))}
           </div>
 
@@ -180,7 +180,7 @@ CREATE POLICY "service role full access" ON public.redm_logs USING (true) WITH C
                 background: 'transparent', transition: 'background 0.12s',
               }}>
                 {/* Date */}
-                <span style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.06em' }}>
+                <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.06em' }}>
                   {fmtDate(log.created_at)}
                 </span>
 
@@ -194,18 +194,18 @@ CREATE POLICY "service role full access" ON public.redm_logs USING (true) WITH C
                       onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
                     />
                   ) : (
-                    <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(209,183,124,0.15)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: T.gold }}>
+                    <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(209,183,124,0.15)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, color: T.gold }}>
                       {log.actor_name?.[0]?.toUpperCase() ?? '?'}
                     </div>
                   )}
-                  <span style={{ fontFamily: BODY, fontSize: 13, color: T.text, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 130 }}>
+                  <span style={{ fontFamily: BODY, fontSize: 14, color: T.text, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 130 }}>
                     {log.actor_name}
                   </span>
                 </div>
 
                 {/* Catégorie */}
                 <span style={{
-                  fontFamily: MONO, fontSize: 10, letterSpacing: '0.1em',
+                  fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em',
                   background: `${cat.color}18`, border: `1px solid ${cat.color}50`,
                   color: cat.color, padding: '3px 8px', borderRadius: 3,
                   whiteSpace: 'nowrap', display: 'inline-block',
@@ -224,7 +224,7 @@ CREATE POLICY "service role full access" ON public.redm_logs USING (true) WITH C
       )}
 
       {!loading && !noTable && (
-        <p style={{ fontFamily: MONO, fontSize: 10, color: T.dim, letterSpacing: '0.1em', marginTop: 16, textAlign: 'right' }}>
+        <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 16, textAlign: 'right' }}>
           {logs.length} entrée{logs.length !== 1 ? 's' : ''} — 300 dernières au maximum
         </p>
       )}

@@ -17,7 +17,7 @@ const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.25)', border: `1px solid ${T.border}`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%', cursor: 'pointer' };
-const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
+const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
 
 export default function AlerteSanitairePage() {
   const router = useRouter();
@@ -92,7 +92,7 @@ export default function AlerteSanitairePage() {
           {canEdit && (
             <button onClick={() => toggleCritique(keyName)} disabled={saving || !entry.nom}
               style={{
-                fontFamily: MONO, fontSize: 13, letterSpacing: '0.12em', padding: '10px 20px',
+                fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '10px 20px',
                 cursor: (saving || !entry.nom) ? 'default' : 'pointer',
                 opacity: !entry.nom ? 0.4 : 1,
                 background: entry.critique ? 'rgba(200,48,48,0.18)' : 'rgba(209,183,124,0.10)',
@@ -117,31 +117,31 @@ export default function AlerteSanitairePage() {
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>DIRECTION · ALERTE SANITAIRE</span>
         </div>
         <h1 style={{ fontFamily: DISPLAY, fontSize: 35, color: T.gold, margin: 0 }}>🚨 Alerte Sanitaire</h1>
-        <p style={{ fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
+        <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
           ÉPIDÉMIES & RISQUES SANITAIRES — ACCÈS DIRECTION UNIQUEMENT
         </p>
       </div>
 
       {!canAccess ? (
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 24, fontFamily: MONO, fontSize: 13, color: '#E88060' }}>
+        <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 24, fontFamily: MONO, fontSize: 14, color: '#E88060' }}>
           ⚠ Accès refusé.
-          <div style={{ marginTop: 8, color: T.muted, fontSize: 12 }}>Seuls la direction et la co-direction peuvent consulter et modifier ces paramètres.</div>
+          <div style={{ marginTop: 8, color: T.muted, fontSize: 14 }}>Seuls la direction et la co-direction peuvent consulter et modifier ces paramètres.</div>
         </div>
       ) : loading ? (
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 48, textAlign: 'center', fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.12em' }}>⟳ CHARGEMENT...</div>
+        <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 48, textAlign: 'center', fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em' }}>⟳ CHARGEMENT...</div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {error && (
-            <div style={{ background: 'rgba(139,64,64,0.12)', border: '1px solid rgba(139,64,64,0.35)', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, fontFamily: MONO, fontSize: 13, color: '#E88060' }}>
+            <div style={{ background: 'rgba(139,64,64,0.12)', border: '1px solid rgba(139,64,64,0.35)', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, fontFamily: MONO, fontSize: 14, color: '#E88060' }}>
               <span>⚠ {error}</span>
-              <button onClick={() => setError('')} style={{ fontFamily: MONO, fontSize: 13, background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button>
+              <button onClick={() => setError('')} style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button>
             </div>
           )}
 
           <Row keyName="epidemie" icon="🦠" title="Épidémie en cours"  options={EPIDEMIES} />
           <Row keyName="risque"   icon="☣"  title="Risque sanitaire"   options={RISQUES_SANITAIRES} />
 
-          <div style={{ fontSize: 13, color: T.muted, lineHeight: 1.6, fontFamily: MONO, letterSpacing: '0.02em' }}>
+          <div style={{ fontSize: 14, color: T.muted, lineHeight: 1.6, fontFamily: MONO, letterSpacing: '0.02em' }}>
             ℹ « Aucune » = statut sain (vert) sur l'accueil. Sélectionner une cause affiche son nom en jaune.
             « MARQUER CRITIQUE » fait passer le statut en rouge et affiche immédiatement à tous les joueurs
             l'alerte sanitaire (en haut à gauche), pour mettre en place des protocoles stricts.

@@ -105,3 +105,26 @@ body { background-color:var(--lc-paper); color:var(--lc-ink); }
 .redm-root .text-gray-400,.redm-root .text-gray-500,.redm-root .text-gray-600 { color:#c8bea5; }
 .redm-root .text-gray-300,.redm-root .text-gray-200,.redm-root .text-white { color:#eadcb9; }
 .redm-topbar { color-scheme:light; }
+
+/* Reflow at the available content width, including the user's S/M/L zoom. */
+.redm-main { container-type:inline-size; }
+.redm-main input,.redm-main select,.redm-main textarea { font-size: max(16px, 1em); }
+@container (max-width: 1100px) {
+  .redm-dashboard-columns { grid-template-columns:minmax(0,1fr) !important; }
+  .redm-main [style*="repeat(3,"] { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+}
+@container (max-width: 600px) {
+  .redm-main [style*="grid-template-columns"] { grid-template-columns:minmax(0,1fr) !important; }
+  .library-main { grid-template-columns:minmax(0,1fr); }
+  .redm-main h1,.redm-main [style*="font-size: 52px"],.redm-main [style*="font-size: 50px"],.redm-main [style*="font-size: 48px"],.redm-main [style*="font-size: 40px"] { font-size:28px !important; overflow-wrap:anywhere; }
+  .redm-dashboard-columns [style*="display: flex"] { flex-wrap:wrap; }
+  .redm-main [style*="white-space: nowrap"] { white-space:normal !important; }
+}
+@media (max-width: 900px) {
+  .redm-root .redm-topbar { height:auto; min-height:90px; padding:16px 20px; flex-wrap:wrap; gap:16px; }
+  .redm-root .redm-topbar > div { flex-wrap:wrap; }
+  .redm-root .redm-navrow { padding:8px 16px; gap:10px; }
+  .redm-root .redm-main { padding:24px 20px 90px; }
+  .redm-root .redm-footer { padding:8px 16px; flex-wrap:wrap; gap:6px; }
+  .redm-root .redm-status-badge { white-space:normal; font-size:14px; }
+}

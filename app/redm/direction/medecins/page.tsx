@@ -43,8 +43,8 @@ interface Medecin {
   grade: string; dispensaire: string; specialite: string; statut: string;
 }
 
-const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 13, background: 'rgba(0,0,0,0.30)', border: `1px solid rgba(139,90,43,0.35)`, color: T.text, padding: '9px 13px', outline: 'none', boxSizing: 'border-box', width: '100%', borderRadius: 4 };
-const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 10, color: T.dim, letterSpacing: '0.14em', marginBottom: 5, display: 'block', textTransform: 'uppercase' };
+const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 14, background: 'rgba(0,0,0,0.30)', border: `1px solid rgba(139,90,43,0.35)`, color: T.text, padding: '9px 13px', outline: 'none', boxSizing: 'border-box', width: '100%', borderRadius: 4 };
+const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.14em', marginBottom: 5, display: 'block', textTransform: 'uppercase' };
 
 function FichePanel({ medecin, onClose, onSave, saving }: {
   medecin: Medecin; onClose: () => void;
@@ -73,9 +73,9 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
 
         {/* Header */}
         <div style={{ padding: '20px 26px 16px', borderBottom: `1px solid ${T.border}`, background: gc + '0A' }}>
-          <div style={{ fontFamily: MONO, fontSize: 10, color: gc, letterSpacing: '0.18em', marginBottom: 6 }}>◈ FICHE MÉDECIN</div>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: gc, letterSpacing: '0.18em', marginBottom: 6 }}>◈ FICHE MÉDECIN</div>
           <div style={{ fontFamily: DISPLAY, fontSize: 24, color: T.text }}>{fullName}</div>
-          <div style={{ fontFamily: MONO, fontSize: 11, color: T.muted, marginTop: 3 }}>@{medecin.username}</div>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: T.muted, marginTop: 3 }}>@{medecin.username}</div>
         </div>
 
         <div style={{ padding: '20px 26px', flex: 1, display: 'flex', flexDirection: 'column', gap: 22 }}>
@@ -91,13 +91,13 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
               <label style={lbl}>Portrait (URL)</label>
               <input style={inp} value={form.portrait_url} onChange={e => set('portrait_url', e.target.value)} placeholder="https://…" />
               <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                <span style={{ fontFamily: MONO, fontSize: 10, padding: '3px 9px', border: `1px solid ${rc}60`, background: rc + '18', color: rc, borderRadius: 3 }}>
+                <span style={{ fontFamily: MONO, fontSize: 14, padding: '3px 9px', border: `1px solid ${rc}60`, background: rc + '18', color: rc, borderRadius: 3 }}>
                   {ROLE_LABEL[topRole(medecin.roles)] ?? '—'}
                 </span>
-                <span style={{ fontFamily: MONO, fontSize: 10, padding: '3px 9px', border: `1px solid ${gc}60`, background: gc + '18', color: gc, borderRadius: 3 }}>
+                <span style={{ fontFamily: MONO, fontSize: 14, padding: '3px 9px', border: `1px solid ${gc}60`, background: gc + '18', color: gc, borderRadius: 3 }}>
                   ◆ {form.grade}
                 </span>
-                <span style={{ fontFamily: MONO, fontSize: 10, padding: '3px 9px', border: `1px solid ${sc}60`, background: sc + '18', color: sc, borderRadius: 3 }}>
+                <span style={{ fontFamily: MONO, fontSize: 14, padding: '3px 9px', border: `1px solid ${sc}60`, background: sc + '18', color: sc, borderRadius: 3 }}>
                   ● {form.statut}
                 </span>
               </div>
@@ -106,7 +106,7 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
 
           {/* Identité */}
           <div>
-            <div style={{ fontFamily: DISPLAY, fontSize: 12, color: T.gold, letterSpacing: '0.18em', borderBottom: `1px solid rgba(209,183,124,0.18)`, paddingBottom: 8, marginBottom: 14 }}>IDENTITÉ</div>
+            <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, letterSpacing: '0.18em', borderBottom: `1px solid rgba(209,183,124,0.18)`, paddingBottom: 8, marginBottom: 14 }}>IDENTITÉ</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div><label style={lbl}>Prénom RP</label><input style={inp} value={form.rp_prenom} onChange={e => set('rp_prenom', e.target.value)} placeholder="François" /></div>
               <div><label style={lbl}>Nom RP</label><input style={inp} value={form.rp_nom} onChange={e => set('rp_nom', e.target.value)} placeholder="De Millet" /></div>
@@ -117,9 +117,9 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
 
           {/* Fonction médicale */}
           <div>
-            <div style={{ fontFamily: DISPLAY, fontSize: 12, color: '#DF9A88', letterSpacing: '0.18em', borderBottom: '1px solid rgba(200,48,48,0.22)', paddingBottom: 8, marginBottom: 14 }}>
+            <div style={{ fontFamily: DISPLAY, fontSize: 14, color: '#DF9A88', letterSpacing: '0.18em', borderBottom: '1px solid rgba(200,48,48,0.22)', paddingBottom: 8, marginBottom: 14 }}>
               FONCTION MÉDICALE
-              <span style={{ fontFamily: MONO, fontSize: 9, marginLeft: 12, color: '#DF9A88', opacity: 0.7, letterSpacing: '0.12em' }}>DIRECTION UNIQUEMENT</span>
+              <span style={{ fontFamily: MONO, fontSize: 14, marginLeft: 12, color: '#DF9A88', opacity: 0.7, letterSpacing: '0.12em' }}>DIRECTION UNIQUEMENT</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -149,14 +149,14 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
                     const active = specList.includes(s);
                     return (
                       <button key={s} onClick={() => toggleSpec(s)} style={{
-                        padding: '4px 10px', fontFamily: BODY, fontSize: 12,
+                        padding: '4px 10px', fontFamily: BODY, fontSize: 14,
                         border: `1px solid ${active ? 'rgba(209,183,124,0.60)' : 'rgba(139,90,43,0.25)'}`,
                         borderRadius: 3,
                         background: active ? 'rgba(209,183,124,0.16)' : 'rgba(0,0,0,0.15)',
                         color: active ? T.gold : T.dim,
                         cursor: 'pointer', outline: 'none', transition: 'all 0.12s',
                       }}>
-                        {active && <span style={{ marginRight: 5, fontSize: 9, color: T.gold }}>✔</span>}{s}
+                        {active && <span style={{ marginRight: 5, fontSize: 14, color: T.gold }}>✔</span>}{s}
                       </button>
                     );
                   })}
@@ -167,7 +167,7 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
 
           {/* Fiche administrative */}
           <div>
-            <div style={{ fontFamily: DISPLAY, fontSize: 12, color: T.gold, letterSpacing: '0.18em', borderBottom: `1px solid rgba(209,183,124,0.18)`, paddingBottom: 8, marginBottom: 14 }}>FICHE ADMINISTRATIVE</div>
+            <div style={{ fontFamily: DISPLAY, fontSize: 14, color: T.gold, letterSpacing: '0.18em', borderBottom: `1px solid rgba(209,183,124,0.18)`, paddingBottom: 8, marginBottom: 14 }}>FICHE ADMINISTRATIVE</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div><label style={lbl}>N° de compte</label><input style={inp} value={form.numero_compte} onChange={e => set('numero_compte', e.target.value)} placeholder="00482" /></div>
@@ -191,11 +191,11 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
               numero_compte: form.numero_compte, date_naissance: form.date_naissance, parcours_universitaire: form.parcours_universitaire,
             })}
             disabled={saving}
-            style={{ flex: 1, fontFamily: MONO, fontSize: 13, letterSpacing: '0.12em', padding: '11px 0', cursor: 'pointer', background: gc + '28', color: gc, border: `1px solid ${gc}60`, borderRadius: 4 }}>
+            style={{ flex: 1, fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '11px 0', cursor: 'pointer', background: gc + '28', color: gc, border: `1px solid ${gc}60`, borderRadius: 4 }}>
             {saving ? '⟳ ENREGISTREMENT…' : '✔ ENREGISTRER'}
           </button>
           <button onClick={onClose}
-            style={{ fontFamily: MONO, fontSize: 13, padding: '11px 18px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, borderRadius: 4 }}>
+            style={{ fontFamily: MONO, fontSize: 14, padding: '11px 18px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, borderRadius: 4 }}>
             ANNULER
           </button>
         </div>
@@ -273,13 +273,13 @@ export default function MedecinsPage() {
       <div style={{ marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
           <button onClick={() => router.push('/redm/direction')}
-            style={{ fontFamily: MONO, fontSize: 13, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+            style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
             ← RETOUR
           </button>
-          <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, letterSpacing: '0.18em' }}>DIRECTION · LISTE DES MÉDECINS</span>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>DIRECTION · LISTE DES MÉDECINS</span>
         </div>
         <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.text, margin: 0 }}>Liste des Médecins</h1>
-        <p style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginTop: 8 }}>
+        <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginTop: 8 }}>
           PERSONNEL DU DISPENSAIRE — {medecins.length} MEMBRE{medecins.length !== 1 ? 'S' : ''}
         </p>
       </div>
@@ -287,21 +287,21 @@ export default function MedecinsPage() {
       {/* Barre recherche */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Rechercher un médecin…"
-          style={{ ...inp, flex: 1, maxWidth: 320, fontSize: 13 }} />
+          style={{ ...inp, flex: 1, maxWidth: 320, fontSize: 14 }} />
         <button onClick={fetchMedecins} disabled={loading}
-          style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.12em', padding: '9px 20px', cursor: 'pointer', background: T.gold + '20', color: T.gold, border: `1px solid ${T.gold}60`, borderRadius: 4 }}>
+          style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '9px 20px', cursor: 'pointer', background: T.gold + '20', color: T.gold, border: `1px solid ${T.gold}60`, borderRadius: 4 }}>
           {loading ? '⟳' : '↻ ACTUALISER'}
         </button>
       </div>
 
       {error ? (
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 24, fontFamily: MONO, fontSize: 13, color: '#E88060', borderRadius: 6 }}>
+        <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 24, fontFamily: MONO, fontSize: 14, color: '#E88060', borderRadius: 6 }}>
           ⚠ {error}
         </div>
       ) : loading ? (
-        <div style={{ padding: 60, textAlign: 'center', fontFamily: MONO, fontSize: 13, color: T.dim }}>⟳ CHARGEMENT…</div>
+        <div style={{ padding: 60, textAlign: 'center', fontFamily: MONO, fontSize: 14, color: T.dim }}>⟳ CHARGEMENT…</div>
       ) : filtered.length === 0 ? (
-        <div style={{ padding: 60, textAlign: 'center', fontFamily: MONO, fontSize: 13, color: T.dim }}>Aucun médecin trouvé.</div>
+        <div style={{ padding: 60, textAlign: 'center', fontFamily: MONO, fontSize: 14, color: T.dim }}>Aucun médecin trouvé.</div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {filtered.map((m, i) => {
@@ -318,7 +318,7 @@ export default function MedecinsPage() {
               <div key={m.discord_id}>
                 {showSep && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: i > 0 ? 18 : 0, marginBottom: 6 }}>
-                    <span style={{ fontFamily: MONO, fontSize: 10, color: gc, letterSpacing: '0.18em', flexShrink: 0 }}>
+                    <span style={{ fontFamily: MONO, fontSize: 14, color: gc, letterSpacing: '0.18em', flexShrink: 0 }}>
                       ◆ {m.grade.toUpperCase()}
                     </span>
                     <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, ${gc}50, transparent)` }} />
@@ -346,31 +346,31 @@ export default function MedecinsPage() {
                     <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.text, lineHeight: 1.1 }}>
                       {(m.rp_prenom || m.rp_nom) ? `${m.rp_prenom} ${m.rp_nom}`.trim() : '— Non renseigné —'}
                     </div>
-                    <div style={{ fontFamily: MONO, fontSize: 10, color: T.muted, marginTop: 2 }}>@{m.username}</div>
+                    <div style={{ fontFamily: MONO, fontSize: 14, color: T.muted, marginTop: 2 }}>@{m.username}</div>
                   </div>
 
                   {/* Grade + statut */}
                   <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                    <span style={{ fontFamily: MONO, fontSize: 9, padding: '3px 9px', border: `1px solid ${gc}55`, background: gc + '14', color: gc, borderRadius: 3, letterSpacing: '0.08em' }}>
+                    <span style={{ fontFamily: MONO, fontSize: 14, padding: '3px 9px', border: `1px solid ${gc}55`, background: gc + '14', color: gc, borderRadius: 3, letterSpacing: '0.08em' }}>
                       ◆ {m.grade}
                     </span>
-                    <span style={{ fontFamily: MONO, fontSize: 9, padding: '3px 9px', border: `1px solid ${sc}55`, background: sc + '14', color: sc, borderRadius: 3, letterSpacing: '0.08em' }}>
+                    <span style={{ fontFamily: MONO, fontSize: 14, padding: '3px 9px', border: `1px solid ${sc}55`, background: sc + '14', color: sc, borderRadius: 3, letterSpacing: '0.08em' }}>
                       ● {m.statut}
                     </span>
                   </div>
 
                   {/* Dispensaire */}
-                  <div style={{ minWidth: 100, flex: '0 0 100px', fontFamily: BODY, fontSize: 13, color: T.muted }}>
+                  <div style={{ minWidth: 100, flex: '0 0 100px', fontFamily: BODY, fontSize: 14, color: T.muted }}>
                     {m.dispensaire || '—'}
                   </div>
 
                   {/* Spécialités */}
-                  <div style={{ flex: 1, fontFamily: BODY, fontSize: 12, color: T.dim, fontStyle: specList.length ? 'italic' : 'normal' }}>
+                  <div style={{ flex: 1, fontFamily: BODY, fontSize: 14, color: T.dim, fontStyle: specList.length ? 'italic' : 'normal' }}>
                     {specList.length > 0 ? specList.join(', ') : <span style={{ color: T.dim + '80' }}>—</span>}
                   </div>
 
                   {canEdit && (
-                    <span style={{ fontFamily: MONO, fontSize: 10, color: T.gold, letterSpacing: '0.1em', flexShrink: 0, opacity: 0.65 }}>
+                    <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.1em', flexShrink: 0, opacity: 0.65 }}>
                       ✎ MODIFIER
                     </span>
                   )}

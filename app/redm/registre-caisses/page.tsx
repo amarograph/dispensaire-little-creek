@@ -116,17 +116,17 @@ export default function RegistreCaissesPage() {
       {/* En-tête */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
         <button onClick={() => router.push('/redm')} style={{
-          fontFamily: MONO, fontSize: 13, background: 'transparent',
+          fontFamily: MONO, fontSize: 14, background: 'transparent',
           border: `1px solid ${T.border}`, color: T.muted,
           padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em',
         }}>← RETOUR</button>
-        <span style={{ fontFamily: MONO, fontSize: 13, color: T.gold, letterSpacing: '0.18em' }}>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>
           DISPENSAIRE · REGISTRE DES CAISSES
         </span>
       </div>
 
       <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.text, margin: '0 0 6px' }}>💰 Registre des Caisses</h1>
-      <p style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 28 }}>
+      <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 28 }}>
         SUIVI HEBDOMADAIRE DE VOS CAISSES QUOTIDIENNES
       </p>
 
@@ -136,7 +136,7 @@ export default function RegistreCaissesPage() {
 
       {notEligible && !loading && (
         <div style={{ background: 'rgba(139,64,64,0.06)', border: `1px solid rgba(139,64,64,0.30)`, borderRadius: 8, padding: '24px 28px' }}>
-          <p style={{ fontFamily: MONO, fontSize: 13, color: T.red, letterSpacing: '0.08em', margin: 0 }}>
+          <p style={{ fontFamily: MONO, fontSize: 14, color: T.red, letterSpacing: '0.08em', margin: 0 }}>
             Le registre des caisses ne s'applique pas à votre grade actuel.
           </p>
         </div>
@@ -165,22 +165,22 @@ export default function RegistreCaissesPage() {
               {dejaFaitAujourdhui ? '✔ Caisse faite aujourd\'hui' : marking ? 'Enregistrement…' : '✚ Faire ma caisse'}
             </button>
             {rate != null && (
-              <p style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.1em', marginTop: 14 }}>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 14 }}>
                 TARIF DE VOTRE GRADE : {fmt$(rate)} / CAISSE
               </p>
             )}
             {error && (
-              <p style={{ fontFamily: MONO, fontSize: 12, color: T.red, letterSpacing: '0.08em', marginTop: 10 }}>✕ {error}</p>
+              <p style={{ fontFamily: MONO, fontSize: 14, color: T.red, letterSpacing: '0.08em', marginTop: 10 }}>✕ {error}</p>
             )}
           </div>
 
           {/* Navigation semaine */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-            <button onClick={prevWeek} style={{ fontFamily: MONO, fontSize: 13, background: T.card, border: `1px solid ${T.border}`, color: T.gold, padding: '8px 14px', cursor: 'pointer' }}>◀ Semaine précédente</button>
+            <button onClick={prevWeek} style={{ fontFamily: MONO, fontSize: 14, background: T.card, border: `1px solid ${T.border}`, color: T.gold, padding: '8px 14px', cursor: 'pointer' }}>◀ Semaine précédente</button>
             <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.gold, minWidth: 200, textAlign: 'center' }}>{fmtWeekRange(monday)}</div>
-            <button onClick={nextWeek} style={{ fontFamily: MONO, fontSize: 13, background: T.card, border: `1px solid ${T.border}`, color: T.gold, padding: '8px 14px', cursor: 'pointer' }}>Semaine suivante ▶</button>
+            <button onClick={nextWeek} style={{ fontFamily: MONO, fontSize: 14, background: T.card, border: `1px solid ${T.border}`, color: T.gold, padding: '8px 14px', cursor: 'pointer' }}>Semaine suivante ▶</button>
             {!isThisWeek && (
-              <button onClick={thisWeek} style={{ fontFamily: MONO, fontSize: 11, background: 'rgba(209,183,124,0.08)', border: `1px solid rgba(209,183,124,0.35)`, color: T.gold, padding: '8px 14px', cursor: 'pointer', letterSpacing: '0.08em' }}>
+              <button onClick={thisWeek} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(209,183,124,0.08)', border: `1px solid rgba(209,183,124,0.35)`, color: T.gold, padding: '8px 14px', cursor: 'pointer', letterSpacing: '0.08em' }}>
                 AUJOURD'HUI
               </button>
             )}
@@ -201,12 +201,12 @@ export default function RegistreCaissesPage() {
                   borderLeft: `4px solid ${done ? T.green : missed ? T.red : 'rgba(139,90,43,0.25)'}`,
                 }}>
                   <span style={{ fontFamily: DISPLAY, fontSize: 16, color: T.text, minWidth: 110 }}>{JOURS[i]}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, minWidth: 60 }}>{fmtDay(d)}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, minWidth: 60 }}>{fmtDay(d)}</span>
                   <span style={{ flex: 1 }} />
-                  {done && <span style={{ fontFamily: MONO, fontSize: 12, color: T.green, letterSpacing: '0.08em' }}>✔ CAISSE FAITE</span>}
-                  {missed && <span style={{ fontFamily: MONO, fontSize: 12, color: T.red, letterSpacing: '0.08em' }}>✕ NON FAITE LE {fmtDay(d).toUpperCase()}</span>}
-                  {isToday && !done && <span style={{ fontFamily: MONO, fontSize: 12, color: T.gold, letterSpacing: '0.08em' }}>● AUJOURD'HUI</span>}
-                  {isFuture && <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.08em' }}>— À VENIR</span>}
+                  {done && <span style={{ fontFamily: MONO, fontSize: 14, color: T.green, letterSpacing: '0.08em' }}>✔ CAISSE FAITE</span>}
+                  {missed && <span style={{ fontFamily: MONO, fontSize: 14, color: T.red, letterSpacing: '0.08em' }}>✕ NON FAITE LE {fmtDay(d).toUpperCase()}</span>}
+                  {isToday && !done && <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.08em' }}>● AUJOURD'HUI</span>}
+                  {isFuture && <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.08em' }}>— À VENIR</span>}
                 </div>
               );
             })}
@@ -216,11 +216,11 @@ export default function RegistreCaissesPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
             <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '18px 20px', textAlign: 'center' }}>
               <div style={{ fontFamily: DISPLAY, fontSize: 30, color: T.gold }}>{count}</div>
-              <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 4, letterSpacing: '0.1em' }}>CAISSES CETTE SEMAINE</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 4, letterSpacing: '0.1em' }}>CAISSES CETTE SEMAINE</div>
             </div>
             <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '18px 20px', textAlign: 'center' }}>
               <div style={{ fontFamily: DISPLAY, fontSize: 30, color: '#A8B991' }}>{fmt$(salaire)}</div>
-              <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 4, letterSpacing: '0.1em' }}>SALAIRE DE LA SEMAINE</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 4, letterSpacing: '0.1em' }}>SALAIRE DE LA SEMAINE</div>
             </div>
           </div>
         </>

@@ -144,7 +144,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
 
   return (
     <div style={{ fontFamily: BODY }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 420px', gap: 20, alignItems: 'start' }}>
+      <div className="redm-dashboard-columns" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 420px', gap: 20, alignItems: 'start' }}>
 
         {/* ═══ COLONNE GAUCHE ═══ */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -189,7 +189,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
               <div style={{ fontFamily: DISPLAY, fontSize: 19, color: '#D1B77C', lineHeight: 1.3 }}>Règlement Interne du Dispensaire</div>
               <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#C8BEA5' }}>Préambule et 10 chapitres — conduite, hygiène, soins, discipline</div>
             </div>
-            <span style={{ fontFamily: MONO, fontSize: 13, color: '#D1B77C', letterSpacing: '0.1em', flexShrink: 0 }}>CONSULTER →</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: '#D1B77C', letterSpacing: '0.1em', flexShrink: 0 }}>CONSULTER →</span>
           </div>
 
           {/* ── SERMENT D'HIPPOCRATE ── */}
@@ -204,7 +204,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
               <div style={{ fontFamily: DISPLAY, fontSize: 19, color: '#D1B77C', lineHeight: 1.3 }}>Serment d'Hippocrate</div>
               <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#C8BEA5' }}>Prêté par Apollon, Esculape, Hygie et Panacée</div>
             </div>
-            <span style={{ fontFamily: MONO, fontSize: 13, color: '#D1B77C', letterSpacing: '0.1em', flexShrink: 0 }}>CONSULTER →</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: '#D1B77C', letterSpacing: '0.1em', flexShrink: 0 }}>CONSULTER →</span>
           </div>
 
           {/* ── CIRCUIT DE CUEILLETTE ── */}
@@ -219,7 +219,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
               <div style={{ fontFamily: DISPLAY, fontSize: 19, color: '#B7C3A4', lineHeight: 1.3 }}>Circuit de Cueillette</div>
               <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#C8BEA5' }}>Parcours de récolte des plantes médicinales du comté</div>
             </div>
-            <span style={{ fontFamily: MONO, fontSize: 13, color: '#B7C3A4', letterSpacing: '0.1em', flexShrink: 0 }}>CONSULTER →</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: '#B7C3A4', letterSpacing: '0.1em', flexShrink: 0 }}>CONSULTER →</span>
           </div>
 
           {/* ── PROCHAINS RENDEZ-VOUS ── */}
@@ -227,15 +227,15 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
             <div style={{ ...PANEL_HEAD, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span>📅 Prochains Rendez-vous</span>
               <button onClick={() => router.push('/redm/agenda')}
-                style={{ fontFamily: MONO, fontSize: 12, padding: '5px 12px', cursor: 'pointer', background: 'rgba(209,183,124,0.12)', color: '#D1B77C', border: '1px solid rgba(209,183,124,0.35)', letterSpacing: '0.08em' }}>
+                style={{ fontFamily: MONO, fontSize: 14, padding: '5px 12px', cursor: 'pointer', background: 'rgba(209,183,124,0.12)', color: '#D1B77C', border: '1px solid rgba(209,183,124,0.35)', letterSpacing: '0.08em' }}>
                 + AGENDA
               </button>
             </div>
             {rdvs.length === 0 ? (
               <div style={{ padding: '22px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontFamily: MONO, fontSize: 13, color: '#C8BEA5', letterSpacing: '0.08em' }}>Aucun rendez-vous à venir</span>
+                <span style={{ fontFamily: MONO, fontSize: 14, color: '#C8BEA5', letterSpacing: '0.08em' }}>Aucun rendez-vous à venir</span>
                 <button onClick={() => router.push('/redm/agenda')}
-                  style={{ fontFamily: MONO, fontSize: 12, padding: '5px 12px', cursor: 'pointer', background: 'transparent', color: '#C8BEA5', border: '1px solid rgba(139,90,43,0.30)', letterSpacing: '0.06em' }}>
+                  style={{ fontFamily: MONO, fontSize: 14, padding: '5px 12px', cursor: 'pointer', background: 'transparent', color: '#C8BEA5', border: '1px solid rgba(139,90,43,0.30)', letterSpacing: '0.06em' }}>
                   Planifier un RDV →
                 </button>
               </div>
@@ -254,20 +254,20 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
                       onMouseLeave={e => (e.currentTarget.style.background = isFirst ? 'rgba(209,183,124,0.04)' : 'transparent')}>
                       <div style={{ textAlign: 'center', minWidth: 54, flexShrink: 0 }}>
                         <div style={{ fontFamily: MONO, fontSize: 18, color: isFirst && !isCabinet ? '#D1B77C' : '#C8BEA5', lineHeight: 1 }}>{r.heure || '—'}</div>
-                        <div style={{ fontFamily: MONO, fontSize: 11, color: '#C8BEA5', marginTop: 2, letterSpacing: '0.06em' }}>{r.date}</div>
+                        <div style={{ fontFamily: MONO, fontSize: 14, color: '#C8BEA5', marginTop: 2, letterSpacing: '0.06em' }}>{r.date}</div>
                       </div>
                       <div style={{ width: 2, height: 32, background: `${col}60`, flexShrink: 0 }} />
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontFamily: BODY, fontWeight: 600, fontSize: 16, color: isCabinet ? '#C8BEA5' : '#EADCB9', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontStyle: isCabinet ? 'italic' : 'normal' }}>{r.patientNom}</div>
-                        <div style={{ fontFamily: MONO, fontSize: 12, color: '#C8BEA5', letterSpacing: '0.06em' }}>{isCabinet ? 'Cabinet Thérapeutique' : r.type}</div>
+                        <div style={{ fontFamily: MONO, fontSize: 14, color: '#C8BEA5', letterSpacing: '0.06em' }}>{isCabinet ? 'Cabinet Thérapeutique' : r.type}</div>
                       </div>
-                      {!isCabinet && <span style={{ fontFamily: MONO, fontSize: 11, color: col, background: col + '18', padding: '3px 8px', border: `1px solid ${col}35`, letterSpacing: '0.06em', flexShrink: 0 }}>{r.statut}</span>}
-                      {isCabinet && <span style={{ fontFamily: MONO, fontSize: 11, color: '#C8BEA5', background: 'rgba(90,74,53,0.15)', padding: '3px 8px', border: '1px solid rgba(90,74,53,0.25)', letterSpacing: '0.06em', flexShrink: 0 }}>🔒</span>}
+                      {!isCabinet && <span style={{ fontFamily: MONO, fontSize: 14, color: col, background: col + '18', padding: '3px 8px', border: `1px solid ${col}35`, letterSpacing: '0.06em', flexShrink: 0 }}>{r.statut}</span>}
+                      {isCabinet && <span style={{ fontFamily: MONO, fontSize: 14, color: '#C8BEA5', background: 'rgba(90,74,53,0.15)', padding: '3px 8px', border: '1px solid rgba(90,74,53,0.25)', letterSpacing: '0.06em', flexShrink: 0 }}>🔒</span>}
                     </div>
                   );
                 })}
                 {rdvs.length > 5 && (
-                  <div style={{ padding: '10px 22px', fontFamily: MONO, fontSize: 12, color: '#C8BEA5', letterSpacing: '0.08em' }}>
+                  <div style={{ padding: '10px 22px', fontFamily: MONO, fontSize: 14, color: '#C8BEA5', letterSpacing: '0.08em' }}>
                     +{rdvs.length - 5} autre{rdvs.length - 5 > 1 ? 's' : ''} rendez-vous →
                   </div>
                 )}
@@ -356,7 +356,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
                   </span>
                   {canAccessDirection && (
                     <button onClick={() => router.push('/redm/direction/alerte-sanitaire')}
-                      style={{ fontFamily: MONO, fontSize: 11, padding: '4px 10px', cursor: 'pointer', background: 'rgba(209,183,124,0.12)', color: '#D1B77C', border: '1px solid rgba(209,183,124,0.35)', letterSpacing: '0.08em' }}>
+                      style={{ fontFamily: MONO, fontSize: 14, padding: '4px 10px', cursor: 'pointer', background: 'rgba(209,183,124,0.12)', color: '#D1B77C', border: '1px solid rgba(209,183,124,0.35)', letterSpacing: '0.08em' }}>
                       GÉRER
                     </button>
                   )}
@@ -371,7 +371,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
                   </span>
                   {canAccessDirection && (
                     <button onClick={() => router.push('/redm/direction/alerte-sanitaire')}
-                      style={{ fontFamily: MONO, fontSize: 11, padding: '4px 10px', cursor: 'pointer', background: 'rgba(209,183,124,0.12)', color: '#D1B77C', border: '1px solid rgba(209,183,124,0.35)', letterSpacing: '0.08em' }}>
+                      style={{ fontFamily: MONO, fontSize: 14, padding: '4px 10px', cursor: 'pointer', background: 'rgba(209,183,124,0.12)', color: '#D1B77C', border: '1px solid rgba(209,183,124,0.35)', letterSpacing: '0.08em' }}>
                       GÉRER
                     </button>
                   )}

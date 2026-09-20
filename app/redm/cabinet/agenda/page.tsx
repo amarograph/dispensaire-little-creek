@@ -19,7 +19,7 @@ function uid() { return Date.now().toString(36) + Math.random().toString(36).sli
 const STATUT_COL:  Record<StatutRDV, string> = { 'CONFIRMÉ': '#A8B991', 'EN ATTENTE': '#D1B77C', 'ANNULÉ': '#8B4040', 'PASSÉ': '#C8BEA5' };
 const STATUT_ICON: Record<StatutRDV, string> = { 'CONFIRMÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕', 'PASSÉ': '◉' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
-const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
+const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
 const EMPTY = { patientNom: '', date: '', heure: '', type: 'Consultation', statut: 'EN ATTENTE' as StatutRDV, notes: '' };
 const STATUTS: StatutRDV[] = ['EN ATTENTE', 'CONFIRMÉ', 'PASSÉ', 'ANNULÉ'];
 
@@ -199,8 +199,8 @@ export default function AgendaPage() {
           </button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.16em' }}>CABINET · AGENDA</span>
           <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
-            {saving && <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim }}>⟳ sync...</span>}
-            <span style={{ fontFamily: MONO, fontSize: 13, color: notifStatus === 'ok' ? '#A8B991' : '#C8BEA5', display: 'flex', alignItems: 'center', gap: 5, animation: notifStatus === 'ok' ? 'pulse 1s ease 2' : 'none' }}>
+            {saving && <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>⟳ sync...</span>}
+            <span style={{ fontFamily: MONO, fontSize: 14, color: notifStatus === 'ok' ? '#A8B991' : '#C8BEA5', display: 'flex', alignItems: 'center', gap: 5, animation: notifStatus === 'ok' ? 'pulse 1s ease 2' : 'none' }}>
               <span style={{ width: 7, height: 7, borderRadius: '50%', background: notifStatus === 'ok' ? '#4A8048' : '#3A3028', display: 'inline-block' }} />
               {notifStatus === 'ok' ? 'NOTIF ENVOYÉE' : 'DISCORD ACTIF'}
             </span>
@@ -210,7 +210,7 @@ export default function AgendaPage() {
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div>
             <h1 style={{ fontFamily: DISPLAY, fontSize: 33, color: T.gold, margin: 0, lineHeight: 1 }}>Agenda des Rendez-vous</h1>
-            <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginTop: 6, letterSpacing: '0.08em' }}>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 6, letterSpacing: '0.08em' }}>
               🔔 Notification Discord automatique 4h avant chaque rendez-vous · données sauvegardées sur le serveur
             </div>
           </div>
@@ -252,7 +252,7 @@ export default function AgendaPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: `1px solid ${T.border}` }}>
           {DAYS_FR.map((d, i) => (
             <div key={d} style={{
-              fontFamily: MONO, fontSize: 13, letterSpacing: '0.14em', color: i >= 5 ? T.gold : T.muted,
+              fontFamily: MONO, fontSize: 14, letterSpacing: '0.14em', color: i >= 5 ? T.gold : T.muted,
               textAlign: 'center', padding: '8px 4px', borderRight: i < 6 ? `1px solid ${T.border}` : 'none'
             }}>
               {d}
@@ -336,16 +336,16 @@ export default function AgendaPage() {
                               overflow: 'hidden',
                             }}
                           >
-                            <span style={{ fontFamily: MONO, fontSize: 12, color: STATUT_COL[r.statut], flexShrink: 0, letterSpacing: '0.04em' }}>
+                            <span style={{ fontFamily: MONO, fontSize: 14, color: STATUT_COL[r.statut], flexShrink: 0, letterSpacing: '0.04em' }}>
                               {r.heure || '—'}
                             </span>
-                            <span style={{ fontFamily: BODY, fontSize: 13, color: T.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>
+                            <span style={{ fontFamily: BODY, fontSize: 14, color: T.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>
                               {r.patientNom}
                             </span>
                           </div>
                         ))}
                         {dayRdvs.length > 3 && (
-                          <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, paddingLeft: 7 }}>
+                          <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, paddingLeft: 7 }}>
                             +{dayRdvs.length - 3} autre{dayRdvs.length - 3 > 1 ? 's' : ''}
                           </div>
                         )}
@@ -362,10 +362,10 @@ export default function AgendaPage() {
         {STATUTS.map(s => (
           <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <span style={{ display: 'inline-block', width: 3, height: 12, background: STATUT_COL[s] }} />
-            <span style={{ fontFamily: MONO, fontSize: 12, color: T.muted, letterSpacing: '0.1em' }}>{s}</span>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.1em' }}>{s}</span>
           </div>
         ))}
-        <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim, marginLeft: 'auto' }}>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginLeft: 'auto' }}>
           {rdvs.length} RDV total · cliquer un jour pour ajouter · cliquer un badge pour modifier
         </span>
       </div>
@@ -381,7 +381,7 @@ export default function AgendaPage() {
               <div>
                 <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.gold }}>{editing ? '✎ Modifier le RDV' : '✚ Nouveau RDV'}</div>
                 {form.date && (
-                  <div style={{ fontFamily: MONO, fontSize: 13, color: T.muted, marginTop: 4, letterSpacing: '0.1em' }}>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: T.muted, marginTop: 4, letterSpacing: '0.1em' }}>
                     {form.date}
                   </div>
                 )}
@@ -420,7 +420,7 @@ export default function AgendaPage() {
                 <textarea style={{ ...inp, resize: 'vertical', minHeight: 70 }} value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Remarques, rappels…" />
               </div>
 
-              <div style={{ background: 'rgba(88,120,88,0.12)', border: '1px solid rgba(88,120,88,0.3)', padding: '10px 14px', fontFamily: MONO, fontSize: 13, color: '#6A9A6A', letterSpacing: '0.08em' }}>
+              <div style={{ background: 'rgba(88,120,88,0.12)', border: '1px solid rgba(88,120,88,0.3)', padding: '10px 14px', fontFamily: MONO, fontSize: 14, color: '#6A9A6A', letterSpacing: '0.08em' }}>
                 🔔 Une notification Discord sera envoyée automatiquement 4h avant ce rendez-vous, même si le site est fermé
               </div>
 
@@ -438,12 +438,12 @@ export default function AgendaPage() {
                 <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
                   <button
                     onClick={e => cycleStatut(editing.id, e)}
-                    style={{ flex: 1, fontFamily: MONO, fontSize: 13, padding: '8px', cursor: 'pointer', background: `${STATUT_COL[editing.statut]}18`, color: STATUT_COL[editing.statut], border: `1px solid ${STATUT_COL[editing.statut]}50`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                    style={{ flex: 1, fontFamily: MONO, fontSize: 14, padding: '8px', cursor: 'pointer', background: `${STATUT_COL[editing.statut]}18`, color: STATUT_COL[editing.statut], border: `1px solid ${STATUT_COL[editing.statut]}50`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                     {STATUT_ICON[editing.statut]} Changer statut → {STATUTS[(STATUTS.indexOf(editing.statut) + 1) % STATUTS.length]}
                   </button>
                   {delConfirm === editing.id
-                    ? <button onClick={e => deleteRdv(editing.id, e)} style={{ fontFamily: MONO, fontSize: 13, padding: '8px 12px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060', whiteSpace: 'nowrap' }}>Confirmer ✕</button>
-                    : <button onClick={() => setDelConfirm(editing.id)} style={{ fontFamily: MONO, fontSize: 13, padding: '8px 12px', cursor: 'pointer', background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)', whiteSpace: 'nowrap' }}>Supprimer ✕</button>}
+                    ? <button onClick={e => deleteRdv(editing.id, e)} style={{ fontFamily: MONO, fontSize: 14, padding: '8px 12px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060', whiteSpace: 'nowrap' }}>Confirmer ✕</button>
+                    : <button onClick={() => setDelConfirm(editing.id)} style={{ fontFamily: MONO, fontSize: 14, padding: '8px 12px', cursor: 'pointer', background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)', whiteSpace: 'nowrap' }}>Supprimer ✕</button>}
                 </div>
               )}
             </div>

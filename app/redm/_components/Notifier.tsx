@@ -188,7 +188,7 @@ export default function Notifier() {
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom: 8 }}>
                 <div style={{ display:'flex', alignItems:'center', gap: 8 }}>
                   <span style={{ fontSize: 16 }}>{s.icon}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 10, color: s.acc, letterSpacing: '0.16em' }}>
+                  <span style={{ fontFamily: MONO, fontSize: 14, color: s.acc, letterSpacing: '0.16em' }}>
                     {s.label}
                   </span>
                 </div>
@@ -226,7 +226,7 @@ export default function Notifier() {
                     {t.rdv.type && (
                       <> pour une séance de <span style={{ fontStyle: 'italic' }}>{t.rdv.type}</span></>
                     )}.
-                    <div style={{ marginTop: 6, fontFamily: MONO, fontSize: 11, color: `${s.acc}80`, letterSpacing: '0.1em' }}>
+                    <div style={{ marginTop: 6, fontFamily: MONO, fontSize: 14, color: `${s.acc}80`, letterSpacing: '0.1em' }}>
                       {t.rdv.urgence ? 'Dans moins de 2 heures' : 'Dans environ 4 heures'} · {t.rdv.date}
                     </div>
                   </>

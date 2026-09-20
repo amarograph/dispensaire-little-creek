@@ -17,7 +17,7 @@ interface TarifCategory { id: string; nom: string; type: TypeCategorie; prix: nu
 const TYPE_ICON: Record<TypeCategorie, string> = { vente: '🩺', achat: '🛒' };
 
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid ${T.border}`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
-const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
+const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
 
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 
@@ -116,24 +116,24 @@ export default function DirectionTarifsPage() {
           <span style={{ fontFamily:MONO, fontSize:14, color:T.gold, letterSpacing:'0.18em' }}>DIRECTION · TARIFS & RÉPARTITION</span>
         </div>
         <h1 style={{ fontFamily:DISPLAY, fontSize:35, color:T.gold, margin:0 }}>🏷 Tarifs & Répartition</h1>
-        <p style={{ fontFamily:MONO, fontSize:13, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
+        <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
           CATÉGORIES, PRIX ET PARTAGE DES HONORAIRES — ACCÈS DIRECTION UNIQUEMENT
         </p>
       </div>
 
       {error ? (
-        <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:24, fontFamily:MONO, fontSize:13, color:'#E88060' }}>
+        <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:24, fontFamily:MONO, fontSize: 14, color:'#E88060' }}>
           ⚠ {error}
-          <div style={{ marginTop:8, color:T.muted, fontSize:12 }}>Seuls la direction et la co-direction peuvent consulter et modifier ces paramètres.</div>
+          <div style={{ marginTop:8, color:T.muted, fontSize: 14 }}>Seuls la direction et la co-direction peuvent consulter et modifier ces paramètres.</div>
         </div>
       ) : loading ? (
-        <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:48, textAlign:'center', fontFamily:MONO, fontSize:13, color:T.dim, letterSpacing:'0.12em' }}>⟳ CHARGEMENT...</div>
+        <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:48, textAlign:'center', fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.12em' }}>⟳ CHARGEMENT...</div>
       ) : (
         <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
           {actionError && (
-            <div style={{ background:'rgba(139,64,64,0.12)', border:'1px solid rgba(139,64,64,0.35)', padding:'12px 16px', display:'flex', justifyContent:'space-between', alignItems:'center', gap:12, fontFamily:MONO, fontSize:13, color:'#E88060' }}>
+            <div style={{ background:'rgba(139,64,64,0.12)', border:'1px solid rgba(139,64,64,0.35)', padding:'12px 16px', display:'flex', justifyContent:'space-between', alignItems:'center', gap:12, fontFamily:MONO, fontSize: 14, color:'#E88060' }}>
               <span>⚠ {actionError}</span>
-              <button onClick={()=>setActionError('')} style={{ fontFamily:MONO, fontSize:13, background:'transparent', border:'none', color:T.muted, cursor:'pointer' }}>✕</button>
+              <button onClick={()=>setActionError('')} style={{ fontFamily:MONO, fontSize: 14, background:'transparent', border:'none', color:T.muted, cursor:'pointer' }}>✕</button>
             </div>
           )}
           {tarifs.map(t => {
@@ -155,7 +155,7 @@ export default function DirectionTarifsPage() {
                   ) : (
                     <>
                       <span style={{ flex:'1 1 220px', fontFamily:DISPLAY, fontSize:20, color:T.text }}>{t.nom}</span>
-                      <span style={{ fontFamily:MONO, fontSize:13, color:T.muted, letterSpacing:'0.08em' }}>{isVente ? '💰 Vente' : '🛒 Achat'}</span>
+                      <span style={{ fontFamily:MONO, fontSize: 14, color:T.muted, letterSpacing:'0.08em' }}>{isVente ? '💰 Vente' : '🛒 Achat'}</span>
                     </>
                   )}
                 </div>
@@ -201,7 +201,7 @@ export default function DirectionTarifsPage() {
                 )}
 
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>
-                  <div style={{ fontFamily:MONO, fontSize:13, color:T.dim, letterSpacing:'0.05em' }}>
+                  <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.05em' }}>
                     {isVente
                       ? <>Pour {fmt$(t.prix)} → <span style={{color:T.gold}}>Dispensaire {fmt$(partDispensaire)}</span> · <span style={{color:'#BAAAC6'}}>Médecin {fmt$(partMedecin)}</span></>
                       : <>Dépense du dispensaire — <span style={{color:'#C8845A'}}>{fmt$(t.prix)}</span> par achat</>}
@@ -210,12 +210,12 @@ export default function DirectionTarifsPage() {
                     <div style={{ display:'flex', gap:8 }}>
                       {delConfirm===t.id
                         ? <>
-                            <button onClick={()=>remove(t.id)} style={{ fontFamily:MONO, fontSize:13, padding:'9px 16px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>SUPPRIMER ?</button>
-                            <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize:13, padding:'9px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
+                            <button onClick={()=>remove(t.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'9px 16px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>SUPPRIMER ?</button>
+                            <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize: 14, padding:'9px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
                           </>
-                        : <button onClick={()=>setDelConfirm(t.id)} style={{ fontFamily:MONO, fontSize:13, padding:'9px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕ SUPPRIMER</button>}
+                        : <button onClick={()=>setDelConfirm(t.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'9px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕ SUPPRIMER</button>}
                       <button onClick={()=>save(t)} disabled={saving===t.id}
-                        style={{ fontFamily:MONO, fontSize:13, letterSpacing:'0.12em', padding:'9px 22px', cursor:'pointer', background: saved===t.id ? 'rgba(74,96,72,0.25)' : 'rgba(120,96,48,0.30)', color: saved===t.id ? '#6A9A68' : T.gold, border:`1px solid ${saved===t.id ? 'rgba(74,96,72,0.5)' : 'rgba(120,96,48,0.55)'}` }}>
+                        style={{ fontFamily:MONO, fontSize: 14, letterSpacing:'0.12em', padding:'9px 22px', cursor:'pointer', background: saved===t.id ? 'rgba(74,96,72,0.25)' : 'rgba(120,96,48,0.30)', color: saved===t.id ? '#6A9A68' : T.gold, border:`1px solid ${saved===t.id ? 'rgba(74,96,72,0.5)' : 'rgba(120,96,48,0.55)'}` }}>
                         {saving===t.id ? '⟳ ENREGISTREMENT...' : saved===t.id ? '✔ ENREGISTRÉ' : '✔ ENREGISTRER'}
                       </button>
                     </div>

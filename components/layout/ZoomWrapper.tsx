@@ -11,15 +11,15 @@ interface Props {
 }
 
 export default function ZoomWrapper({ children, className, style, as: Tag = 'main' }: Props) {
-  const [zoom, setZoom] = useState<number>(1.0);
+  const [zoom, setZoom] = useState<number>(ZOOMS.M);
 
   useEffect(() => {
     const stored = (localStorage.getItem(ZOOM_KEY) ?? 'M') as ZoomKey;
-    setZoom(ZOOMS[stored] ?? 1.0);
+    setZoom(ZOOMS[stored] ?? ZOOMS.M);
 
     function handle(e: Event) {
       const key = (e as CustomEvent<ZoomKey>).detail;
-      setZoom(ZOOMS[key] ?? 1.0);
+      setZoom(ZOOMS[key] ?? ZOOMS.M);
     }
     window.addEventListener('ui:zoom', handle);
     return () => window.removeEventListener('ui:zoom', handle);

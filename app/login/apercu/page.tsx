@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import RedMDashboardClient from '@/app/redm/RedMDashboardClient';
+import ZoomPicker from '@/components/layout/ZoomPicker';
+import ZoomWrapper from '@/components/layout/ZoomWrapper';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,7 +15,6 @@ export default function HomePreview() {
   const navigation = ['⌂ Accueil', '📋 Registre Patient', '💰 Caisse et Comptabilité', '📚 Bibliothèque', '🗄 Archives', '📅 Agenda', '🛋 Cabinet Thérapeutique', '🏛 Direction'];
   return <>
     <style dangerouslySetInnerHTML={{ __html: css }} />
-    <style>{`@media(max-width:900px){.redm-root{zoom:0.5;width:100%}}`}</style>
     <div className="redm-root">
       <div className="redm-bg-image" /><div className="redm-bg-overlay" />
       <header className="redm-header">
@@ -24,9 +25,9 @@ export default function HomePreview() {
           </div>
           <span className="redm-status-badge">Aperçu visuel · sans données privées</span>
         </div>
-        <div className="redm-navrow"><nav className="redm-nav">{navigation.map(label=><a key={label} href="#accueil">{label}</a>)}</nav></div>
+        <div className="redm-navrow"><ZoomWrapper as="nav" className="redm-nav">{navigation.map(label=><a key={label} href="#accueil">{label}</a>)}</ZoomWrapper><ZoomPicker accentRgb="180,160,113" activeColor="#EADCB9" mutedColor="#C8BEA5" /></div>
       </header>
-      <main id="accueil" className="redm-main"><RedMDashboardClient roles={['redm_directeur']} preview /></main>
+      <div id="accueil"><ZoomWrapper className="redm-main"><RedMDashboardClient roles={['redm_directeur']} preview /></ZoomWrapper></div>
       <footer className="redm-footer"><span>Dispensaire de Little Creek</span><span>Aperçu local — les rubriques complètes nécessitent une connexion.</span></footer>
     </div>
   </>;
