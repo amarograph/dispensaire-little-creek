@@ -244,7 +244,7 @@ export default function CaisseComptabilitePage() {
     const col  = STATUT_COL[f.statut];
     const pres = normPrestations(f.prestations);
     return (
-      <div style={{ background: isCurrent ? '#221810' : T.card, border: `1px solid ${isCurrent ? 'rgba(209,183,124,0.22)' : T.border}`, borderLeft: `3px solid ${col}` }}>
+      <div style={{ background: isCurrent ? '#16303F' : T.card, border: `1px solid ${isCurrent ? 'rgba(209,183,124,0.22)' : T.border}`, borderLeft: `3px solid ${col}` }}>
         <div style={{ display:'flex', alignItems:'center', gap:12, padding:'11px 16px' }}>
           <div style={{ textAlign:'center', minWidth:46, flexShrink:0 }}>
             <div style={{ fontFamily:DISPLAY, fontSize: 17, color:T.gold }}>{f.dateSeance.slice(0,5)}</div>
