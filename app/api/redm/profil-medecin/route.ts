@@ -30,10 +30,11 @@ export async function GET() {
 
   const supabase = await createServiceClient();
 
-  const [{ data: rpBase }, { data: profil }] = await Promise.all([
+  const [{ data: rpBase }, { data: profil }, { data: meta }] = await Promise.all([
     supabase.from('user_rp_profiles').select('nom_rp, prenom_rp')
       .eq('discord_id', ctx.discordId).eq('universe', 'redm').single(),
     supabase.from('redm_profils').select('*').eq('discord_id', ctx.discordId).single(),
+    supabase.from('redm_medecins_meta').select('numero_compte').eq('discord_id', ctx.discordId).single(),
   ]);
 
   const since7  = new Date(Date.now() -  7 * 86400000).toISOString();
@@ -52,6 +53,7 @@ export async function GET() {
   return NextResponse.json({
     nom_rp:       rpBase?.nom_rp       ?? '',
     prenom_rp:    rpBase?.prenom_rp    ?? '',
+    numero_compte: meta?.numero_compte ?? '',
     age_rp:       profil?.age_rp       ?? '',
     origine:      profil?.origine      ?? '',
     portrait_url: profil?.portrait_url ?? '',
@@ -96,5 +98,12 @@ export async function POST(req: NextRequest) {
   );
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  const { error: metaError } = await supabase.from('redm_medecins_meta').upsert(
+    { discord_id: ctx.discordId, numero_compte: body.numero_compte ?? '', updated_at: new Date().toISOString() },
+    { onConflict: 'discord_id' },
+  );
+  if (metaError) return NextResponse.json({ error: metaError.message }, { status: 500 });
+
   return NextResponse.json({ ok: true });
 }

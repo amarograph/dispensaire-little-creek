@@ -31,12 +31,13 @@ const STATUT_COL: Record<string, string> = {
 interface Profile {
   nom_rp: string; prenom_rp: string; age_rp: string; origine: string;
   portrait_url: string; grade: string; dispensaire: string;
-  specialites: string[]; statut: string;
+  specialites: string[]; statut: string; numero_compte: string;
 }
 
 const EMPTY: Profile = {
   nom_rp: '', prenom_rp: '', age_rp: '', origine: '', portrait_url: '',
   grade: 'Apprenti', dispensaire: 'Little Creek', specialites: [], statut: 'En service',
+  numero_compte: '',
 };
 
 
@@ -225,6 +226,7 @@ export default function ProfilMedecinPage() {
           dispensaire:  p.dispensaire  ?? 'Little Creek',
           specialites:  (p.specialite ?? '').split(',').map((s: string) => s.trim()).filter(Boolean),
           statut:       p.statut       ?? 'En service',
+          numero_compte: p.numero_compte ?? '',
         });
       }
     }).finally(() => setLoading(false));
@@ -269,6 +271,7 @@ export default function ProfilMedecinPage() {
       const payload: Record<string, any> = {
         nom_rp: profile.nom_rp, prenom_rp: profile.prenom_rp,
         age_rp: profile.age_rp, origine: profile.origine, portrait_url: profile.portrait_url,
+        numero_compte: profile.numero_compte,
       };
       if (isDirection) {
         payload.grade       = profile.grade;
@@ -320,7 +323,7 @@ export default function ProfilMedecinPage() {
   const sc = STATUT_COL[profile.statut] ?? '#888';
 
   return (
-    <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 22 }}>
+    <div style={{ maxWidth: 1440, width: '94%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 22, boxSizing: 'border-box' }}>
 
       {/* Modal recadrage */}
       {cropFile && (
@@ -435,7 +438,7 @@ export default function ProfilMedecinPage() {
       </div>
 
       {/* ══════════════════════ IDENTITÉ + FONCTION ══════════════════════ */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: 20 }}>
 
         {/* Identité */}
         <div style={card}>
@@ -467,6 +470,15 @@ export default function ProfilMedecinPage() {
                 <input style={inp} value={profile.origine}
                   onChange={e => setProfile(p => ({ ...p, origine: e.target.value }))}
                   placeholder="Ex : Louisiane" />
+              </div>
+            </div>
+            <div>
+              <label style={lbl}>Numéro de compte</label>
+              <input style={inp} value={profile.numero_compte}
+                onChange={e => setProfile(p => ({ ...p, numero_compte: e.target.value }))}
+                placeholder="Ex : 4821" />
+              <div style={{ fontFamily: BODY, fontSize: 11, color: '#8A9A9E', fontStyle: 'italic', marginTop: 5 }}>
+                Reporté automatiquement dans Direction · Liste des Médecins.
               </div>
             </div>
 
