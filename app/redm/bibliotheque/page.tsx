@@ -8074,7 +8074,7 @@ function defaultGroups(categories: BiblioCategorie[]): LayoutGroup[] {
   const userCats = categories.filter(c => !BUILTIN_IDS.has(c.id));
   return [
     ...BUILTIN_SHELVES.map(s => ({ label: s.label, items: s.items.map(b => ({ id: b.id, title: categories.find(c => c.id === b.id)?.nom ?? [b.t1, b.t2].filter(Boolean).join(' ') })) })),
-    { label: 'Vos documents', items: userCats.map(c => ({ id: c.id, title: c.nom })) },
+    ...userCats.map(c => ({ label: c.nom, items: [{ id: c.id, title: c.nom }] })),
   ];
 }
 
@@ -8084,11 +8084,7 @@ function effectiveGroups(categories: BiblioCategorie[], override: LayoutOverride
   const knownIds = new Set(base.flatMap(g => g.items.map(i => i.id)));
   const missing = categories.filter(c => !knownIds.has(c.id));
   if (!missing.length) return base;
-  const extraItems = missing.map(c => ({ id: c.id, title: c.nom }));
-  const hasVosDocs = base.some(g => g.label === 'Vos documents');
-  return hasVosDocs
-    ? base.map(g => g.label === 'Vos documents' ? { ...g, items: [...g.items, ...extraItems] } : g)
-    : [...base, { label: 'Vos documents', items: extraItems }];
+  return [...base, ...missing.map(c => ({ label: c.nom, items: [{ id: c.id, title: c.nom }] }))];
 }
 
 const BOOK_COLS: Record<string, { bg: string; spine: string; border: string }> = {
@@ -8197,7 +8193,12 @@ function BiblioEtageres({
     if (!editingId) return;
     const val = editingVal.trim();
     if (val) {
-      const next = groups.map(g => ({ ...g, items: g.items.map(it => it.id === editingId ? { ...it, title: val } : it) }));
+      const next = groups.map(g => {
+        const items = g.items.map(it => it.id === editingId ? { ...it, title: val } : it);
+        // Étagère à livre unique portant le même nom que le livre (catégorie créée par un dev) : on renomme aussi l'étagère.
+        const soloRename = g.items.length === 1 && g.items[0].id === editingId && g.label === g.items[0].title;
+        return { ...g, label: soloRename ? val : g.label, items };
+      });
       onSaveLayout(next);
     }
     setEditingId(null);
@@ -8248,40 +8249,44 @@ function BiblioEtageres({
               onDrop={e => { e.preventDefault(); handleDrop(g.label, null); }}
             >
               {g.items.map(b => (
-                <div
-                  key={b.id}
-                  draggable={devMode && editingId !== b.id}
-                  onDragStart={() => { dragRef.current = { fromLabel: g.label, id: b.id }; }}
-                  onDragOver={e => devMode && e.preventDefault()}
-                  onDrop={e => { e.preventDefault(); e.stopPropagation(); handleDrop(g.label, b.id); }}
-                  style={{ position: 'relative', cursor: devMode ? 'grab' : undefined }}
-                >
-                  {devMode && editingId === b.id ? (
-                    <div className="library-volume" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
-                      <input
-                        autoFocus
-                        value={editingVal}
-                        onChange={e => setEditingVal(e.target.value)}
-                        onBlur={commitRename}
-                        onKeyDown={e => { if (e.key === 'Enter') commitRename(); if (e.key === 'Escape') setEditingId(null); }}
-                        style={{ width: '100%', fontFamily: MONO, fontSize: 12, background: 'rgba(0,0,0,0.4)', border: `1px solid ${T.gold}`, color: T.text, padding: '6px 8px', outline: 'none' }}
-                      />
-                    </div>
-                  ) : (
-                    <button className="library-volume" title={b.title} aria-label={b.title} onClick={() => !devMode && setOpenCatId(b.id)}>
-                      <span className="library-volume-label">DISPENSAIRE DE LITTLE CREEK</span>
-                      <h3>{b.title}</h3>
-                      <span className="library-volume-bottom"><span>LC</span><span aria-hidden="true">→</span></span>
-                    </button>
-                  )}
-                  {devMode && editingId !== b.id && (
-                    <button
-                      onClick={() => startRename(b.id, b.title)}
-                      title="Renommer"
-                      style={{ position: 'absolute', top: 4, right: 4, width: 22, height: 22, fontSize: 12, background: 'rgba(0,0,0,0.55)', border: `1px solid ${T.gold}`, color: T.gold, cursor: 'pointer', borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}
-                    >✎</button>
-                  )}
-                </div>
+                devMode && editingId === b.id ? (
+                  <div key={b.id} className="library-volume" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
+                    <input
+                      autoFocus
+                      value={editingVal}
+                      onChange={e => setEditingVal(e.target.value)}
+                      onBlur={commitRename}
+                      onKeyDown={e => { if (e.key === 'Enter') commitRename(); if (e.key === 'Escape') setEditingId(null); }}
+                      style={{ width: '100%', fontFamily: MONO, fontSize: 12, background: 'rgba(0,0,0,0.4)', border: `1px solid ${T.gold}`, color: T.text, padding: '6px 8px', outline: 'none' }}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    key={b.id}
+                    className="library-volume"
+                    role="button"
+                    tabIndex={0}
+                    title={b.title}
+                    aria-label={b.title}
+                    draggable={devMode}
+                    onDragStart={() => { dragRef.current = { fromLabel: g.label, id: b.id }; }}
+                    onDragOver={e => devMode && e.preventDefault()}
+                    onDrop={e => { e.preventDefault(); e.stopPropagation(); handleDrop(g.label, b.id); }}
+                    onClick={() => !devMode && setOpenCatId(b.id)}
+                    style={{ cursor: devMode ? 'grab' : 'pointer' }}
+                  >
+                    <span className="library-volume-label">DISPENSAIRE DE LITTLE CREEK</span>
+                    <h3>{b.title}</h3>
+                    <span className="library-volume-bottom"><span>LC</span><span aria-hidden="true">→</span></span>
+                    {devMode && (
+                      <button
+                        onClick={e => { e.stopPropagation(); startRename(b.id, b.title); }}
+                        title="Renommer"
+                        style={{ position: 'absolute', top: 4, right: 4, width: 20, height: 20, fontSize: 11, background: 'rgba(0,0,0,0.55)', border: `1px solid ${T.gold}`, color: T.gold, cursor: 'pointer', borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}
+                      >✎</button>
+                    )}
+                  </div>
+                )
               ))}
             </div>
           </section>
