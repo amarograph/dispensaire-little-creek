@@ -12,12 +12,6 @@ const COLOR   = '#8B4040';
 const MOIS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin',
   'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
-function rpDateFromIso(iso: string | null): string {
-  if (!iso) return '—';
-  const d = new Date(iso);
-  return `${d.getDate()} ${MOIS_FR[d.getMonth()]} ${d.getFullYear() - 136}`;
-}
-
 const GRADES       = ['Directeur', 'Co-Directeur', 'Médecin Chef', 'Médecin', 'Apprenti', 'Infirmier', 'Préparateur de Caisse', 'Thérapeute'];
 const SPECIALITES  = [
   'Médecine générale', 'Chirurgie', 'Aliénisme', 'Plantes médicinales',
@@ -39,7 +33,6 @@ interface Profile {
   portrait_url: string; grade: string; dispensaire: string;
   specialites: string[]; statut: string;
 }
-interface Presence { jours_semaine: number; derniere_prise: string | null; moyenne: string; }
 
 const EMPTY: Profile = {
   nom_rp: '', prenom_rp: '', age_rp: '', origine: '', portrait_url: '',
@@ -210,7 +203,6 @@ export default function ProfilMedecinPage() {
   const isDirection = checkIsAdmin(sessionRoles) || sessionRoles.some((r: string) => ['redm_directeur', 'redm_co_directeur'].includes(r));
 
   const [profile,  setProfile]  = useState<Profile>(EMPTY);
-  const [presence, setPresence] = useState<Presence>({ jours_semaine: 0, derniere_prise: null, moyenne: '0' });
   const [loading,  setLoading]  = useState(true);
   const [saving,   setSaving]   = useState(false);
   const [savedMsg, setSavedMsg] = useState('');
@@ -234,7 +226,6 @@ export default function ProfilMedecinPage() {
           specialites:  (p.specialite ?? '').split(',').map((s: string) => s.trim()).filter(Boolean),
           statut:       p.statut       ?? 'En service',
         });
-        if (p.presence) setPresence(p.presence);
       }
     }).finally(() => setLoading(false));
   }, []);
@@ -614,36 +605,6 @@ export default function ProfilMedecinPage() {
             {savedMsg}
           </div>
         )}
-      </div>
-
-      {/* ══════════════════════ PRÉSENCE ══════════════════════ */}
-      <div style={card}>
-        <div style={secTitle}>⏱ Présence</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
-          {[
-            { value: String(presence.jours_semaine), label: 'JOURS DE SERVICE (7 JOURS)', big: true },
-            { value: rpDateFromIso(presence.derniere_prise), label: 'DERNIÈRE PRISE DE SERVICE', big: false },
-            { value: presence.moyenne, label: 'JOURS / SEMAINE (MOY. 4 SEM.)', big: true },
-          ].map((item, i) => (
-            <div key={i} style={{
-              textAlign: 'center',
-              borderLeft:  i > 0 ? '1px solid rgba(180,160,113,0.18)' : undefined,
-              paddingLeft: i > 0 ? 20 : undefined,
-            }}>
-              <div style={{
-                fontFamily: item.big ? DISPLAY : BODY,
-                fontSize: item.big ? 38 : 18,
-                color: '#EADCB9', lineHeight: 1.2,
-              }}>{item.value}</div>
-              <div style={{ fontFamily: MONO, fontSize: 9, color: '#C8BEA5', letterSpacing: '0.12em', marginTop: 7 }}>
-                {item.label}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div style={{ fontFamily: BODY, fontSize: 11, color: '#C8BEA5', marginTop: 16, fontStyle: 'italic' }}>
-          * Calculé automatiquement à partir des certificats médicaux rédigés.
-        </div>
       </div>
 
     </div>
