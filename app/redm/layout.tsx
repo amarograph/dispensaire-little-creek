@@ -299,7 +299,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
                 </Link>
               ))}
             </ZoomWrapper>
-            <ZoomPicker accentRgb="120,20,20" activeColor="#EADCB9" mutedColor="#C8BEA5" font="'Libre Baskerville', monospace" />
+            <ZoomPicker accentRgb="209,183,124" activeColor="#EADCB9" mutedColor="#C8BEA5" font="'Libre Baskerville', monospace" />
           </div>
 
         </header>
