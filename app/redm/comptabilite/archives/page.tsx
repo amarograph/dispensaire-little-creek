@@ -127,7 +127,7 @@ export default function ArchivesCaisseComptabilitePage() {
         <div style={{ marginBottom: 24 }}>
           <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14, flexWrap:'wrap' }}>
             <button onClick={()=>setOpenId(null)} style={{ fontFamily:MONO, fontSize:15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR AUX ARCHIVES</button>
-            <button onClick={()=>router.push('/redm/comptabilite')} style={{ fontFamily:MONO, fontSize:14, background:'transparent', border:'none', color:T.dim, padding:'8px 12px', cursor:'pointer', letterSpacing:'0.08em' }}>CAISSE ET COMPTABILITÉ</button>
+            <button onClick={()=>router.push('/redm/comptabilite')} style={{ fontFamily:MONO, fontSize:14, background:'transparent', border:'none', color:T.dim, padding:'8px 12px', cursor:'pointer', letterSpacing:'0.08em' }}>COMPTABILITÉ</button>
           </div>
           <div style={{ fontFamily:MONO, fontSize:13, color:T.dim, letterSpacing:'0.14em', marginBottom:6 }}>ARCHIVES · DÉTAIL SEMAINE</div>
           <h1 style={{ fontFamily:DISPLAY, fontSize:30, color:T.gold, margin:0 }}>📅 {openArc.weekLabel}</h1>
@@ -269,7 +269,7 @@ export default function ArchivesCaisseComptabilitePage() {
       <div style={{ marginBottom: 24 }}>
         <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14 }}>
           <button onClick={()=>router.push('/redm/comptabilite')} style={{ fontFamily:MONO, fontSize:15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR</button>
-          <span style={{ fontFamily:MONO, fontSize:13, color:T.gold, letterSpacing:'0.16em' }}>CAISSE ET COMPTABILITÉ · ARCHIVES</span>
+          <span style={{ fontFamily:MONO, fontSize:13, color:T.gold, letterSpacing:'0.16em' }}>COMPTABILITÉ · ARCHIVES</span>
         </div>
         <h1 style={{ fontFamily:DISPLAY, fontSize:35, color:T.gold, margin:0 }}>📦 Archives des comptes</h1>
       </div>

@@ -311,7 +311,7 @@ export default function DirectionComptabilitePage() {
         </div>
         <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 }}>📊 Comptabilité</h1>
         <p style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
-          REGISTRE HEBDOMADAIRE & SALAIRES DES MÉDECINS — D&apos;APRÈS « CAISSE ET COMPTABILITÉ »
+          REGISTRE HEBDOMADAIRE & SALAIRES DES MÉDECINS — D&apos;APRÈS « COMPTABILITÉ »
         </p>
       </div>
 

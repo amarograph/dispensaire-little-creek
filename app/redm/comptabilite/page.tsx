@@ -105,6 +105,7 @@ export default function CaisseComptabilitePage() {
   const [medecins,       setMedecins]       = useState<string[]>([]);
   const [editing,        setEditing]        = useState<Facture | null>(null);
   const [delConfirm,     setDelConfirm]     = useState<string | null>(null);
+  const [typeFiltre,     setTypeFiltre]     = useState<TypeCategorie>('vente');
   const [tarifs,         setTarifs]         = useState<Record<string, TarifCategory>>(() => categoriesToMap(DEFAULT_CATEGORIES));
   const autoArchiveDone  = useRef(false);
 
@@ -191,7 +192,8 @@ export default function CaisseComptabilitePage() {
   }
   function addPrestation() {
     if (form.prestations.length >= 10) return;
-    const first = categoriesSorted[0]?.id ?? 'Consultation';
+    const list = typeFiltre === 'vente' ? categoriesVente : categoriesAchat;
+    const first = list[0]?.id ?? 'Consultation';
     setForm(f => ({ ...f, prestations: [...f.prestations, { id: first, qty: 1 }] }));
   }
   function removePrestation(idx: number) {
@@ -200,9 +202,11 @@ export default function CaisseComptabilitePage() {
 
   function startEdit(f: Facture) {
     setEditing(f);
-    setForm({ medecin:f.medecin??defaultMedecin, patientNom:f.patientNom, dateSeance:f.dateSeance, prestations:normPrestations(f.prestations), payeur:f.payeur??'Civil', statut:f.statut, notes:f.notes });
+    const pres = normPrestations(f.prestations);
+    setTypeFiltre(tarifs[pres[0]?.id]?.type ?? 'vente');
+    setForm({ medecin:f.medecin??defaultMedecin, patientNom:f.patientNom, dateSeance:f.dateSeance, prestations:pres, payeur:f.payeur??'Civil', statut:f.statut, notes:f.notes });
   }
-  function resetForm() { setForm({ ...EMPTY_FORM, medecin:defaultMedecin, dateSeance:rpDate() }); }
+  function resetForm() { setForm({ ...EMPTY_FORM, medecin:defaultMedecin, dateSeance:rpDate() }); setTypeFiltre('vente'); }
   function cancelEdit() { setEditing(null); resetForm(); }
 
   function submit() {
@@ -270,7 +274,7 @@ export default function CaisseComptabilitePage() {
       <div style={{ marginBottom: 20 }}>
         <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14, flexWrap:'wrap' }}>
           <button onClick={()=>router.push('/redm')} style={{ fontFamily:MONO, fontSize: 15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR</button>
-          <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.16em' }}>DISPENSAIRE · CAISSE ET COMPTABILITÉ</span>
+          <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.16em' }}>DISPENSAIRE · COMPTABILITÉ</span>
         </div>
         <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 }}>💰 Caisse et Comptabilité</h1>
         <p style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
@@ -280,7 +284,7 @@ export default function CaisseComptabilitePage() {
 
       {/* Grille : formulaire gauche + contenu droite */}
       {(
-        <div style={{ display:'grid', gridTemplateColumns:'300px 1fr', gap:20, alignItems:'start' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'440px 1fr', gap:20, alignItems:'start' }}>
 
           {/* ── Formulaire sticky ── */}
           <div style={{ background:T.card, border:`2px solid ${editing ? T.gold : T.border}`, padding:'18px 18px 16px', position:'sticky', top:20 }}>
@@ -299,19 +303,28 @@ export default function CaisseComptabilitePage() {
               <div><label style={lbl}>DATE</label><div style={{...inp, display:'flex', alignItems:'center', justifyContent:'space-between', color:T.muted, cursor:'default'}}><span>{form.dateSeance}</span><span style={{ fontFamily:MONO, fontSize:11, color:T.dim, letterSpacing:'0.1em' }}>AUTO</span></div></div>
 
               <div>
+                <label style={lbl}>TYPE</label>
+                <div style={{ display:'flex', gap:6, marginBottom:10 }}>
+                  <button
+                    onClick={()=>{ setTypeFiltre('vente'); setForm(f=>({...f, prestations:[{ id: categoriesVente[0]?.id ?? 'Consultation', qty:1 }]})); }}
+                    style={{ flex:1, fontFamily:MONO, fontSize:13, letterSpacing:'0.08em', padding:'9px', cursor:'pointer', background: typeFiltre==='vente' ? 'rgba(90,152,88,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='vente' ? '#5A9858' : T.border}`, color: typeFiltre==='vente' ? '#A8B991' : T.dim }}>
+                    💰 VENTE
+                  </button>
+                  <button
+                    onClick={()=>{ setTypeFiltre('achat'); setForm(f=>({...f, prestations:[{ id: categoriesAchat[0]?.id ?? '', qty:1 }]})); }}
+                    style={{ flex:1, fontFamily:MONO, fontSize:13, letterSpacing:'0.08em', padding:'9px', cursor:'pointer', background: typeFiltre==='achat' ? 'rgba(200,132,90,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='achat' ? '#C8845A' : T.border}`, color: typeFiltre==='achat' ? '#C8845A' : T.dim }}>
+                    🛒 ACHAT
+                  </button>
+                </div>
+                <p style={{ fontFamily:MONO, fontSize:11, color:T.dim, letterSpacing:'0.04em', margin:'-6px 0 10px' }}>
+                  {typeFiltre==='vente' ? 'AJOUTÉ À LA CAISSE ET AU COMPTE DU DISPENSAIRE' : 'RETIRÉ DE LA CAISSE ET DU COMPTE DU DISPENSAIRE'}
+                </p>
                 <label style={lbl}>ÉLÉMENT(S)</label>
                 <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
                   {form.prestations.map((p,idx) => (
                     <div key={idx} style={{ display:'flex', gap:5 }}>
                       <select style={{...inp,flex:1,cursor:'pointer'}} value={p.id} onChange={e=>setPrestation(idx,e.target.value)}>
-                        <optgroup label="Prestations">
-                          {categoriesVente.map(c=><option key={c.id} value={c.id}>{c.nom} — {fmt$(c.prix)}</option>)}
-                        </optgroup>
-                        {categoriesAchat.length > 0 && (
-                          <optgroup label="Achats">
-                            {categoriesAchat.map(c=><option key={c.id} value={c.id}>{c.nom} — {fmt$(c.prix)}</option>)}
-                          </optgroup>
-                        )}
+                        {(typeFiltre==='vente' ? categoriesVente : categoriesAchat).map(c=><option key={c.id} value={c.id}>{c.nom} — {fmt$(c.prix)}</option>)}
                       </select>
                       <input type="number" min={1} max={99} value={p.qty} onChange={e=>setPrestationQty(idx,Number(e.target.value))}
                         style={{...inp, width:56, flexShrink:0, textAlign:'center', padding:'9px 6px'}} title="Quantité" />
