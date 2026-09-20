@@ -10,6 +10,8 @@ const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
+const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(139,90,43,0.30)', color: T.text, padding: '8px 12px', outline: 'none', boxSizing: 'border-box', width: '100%' };
+const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.1em', marginBottom: 4, display: 'block' };
 
 /** Prix de vente d'une caisse au client ; la différence avec le tarif du grade (5$/5.50$/6$) revient au dispensaire. */
 const PRIX_CAISSE = 7.5;
@@ -118,6 +120,8 @@ function salairesByMedecin(factures: Facture[], tarifs: Record<string, TarifCate
   return Object.values(map).sort((a,b) => b.ca - a.ca);
 }
 
+interface Ajustement { id: string; montant: number; motif: string; auteur: string; date: string; createdAt: string; }
+
 interface Tresorerie { ventes: number; achats: number; solde: number; }
 function tresorerie(factures: Facture[], tarifs: Record<string, TarifCategory>): Tresorerie {
   let ventes = 0, achats = 0, solde = 0;
@@ -149,7 +153,6 @@ export default function DirectionComptabilitePage() {
   const [archives, setArchives] = useState<SemaineArchivee[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [tarifs,   setTarifs]   = useState<Record<string, TarifCategory>>({});
-  const [resetConfirm, setResetConfirm] = useState(false);
   const autoArchiveDone = useRef(false);
 
   interface CaisseStaff { discord_id: string; nom: string; rate: number; dates: string[]; count: number; salaire: number; }
@@ -169,6 +172,52 @@ export default function DirectionComptabilitePage() {
   /* ── Marge dispensaire des caisses (prix client 7.50$ − tarif versé au grade) ── */
   const [margeCaissesSemaine, setMargeCaissesSemaine] = useState(0);
   const [margeCaissesTotal,   setMargeCaissesTotal]   = useState(0);
+
+  /* ── Ajustements manuels du compte du dispensaire (ajout / retrait libre) ── */
+  const [ajustements,      setAjustements]      = useState<Ajustement[]>([]);
+  const [ajustPanelOpen,   setAjustPanelOpen]   = useState(false);
+  const [ajustSens,        setAjustSens]        = useState<'ajout'|'retrait'>('ajout');
+  const [ajustMontant,     setAjustMontant]     = useState('');
+  const [ajustMotif,       setAjustMotif]       = useState('');
+  const [ajustBusy,        setAjustBusy]        = useState(false);
+  const [ajustError,       setAjustError]       = useState('');
+
+  const loadAjustements = useCallback(() => {
+    fetch('/api/admin/redm-compta-ajustements')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d?.ajustements) setAjustements(d.ajustements); })
+      .catch(() => {});
+  }, []);
+  useEffect(() => { loadAjustements(); }, [loadAjustements]);
+
+  async function submitAjustement() {
+    const val = Number(ajustMontant.replace(',', '.'));
+    if (!Number.isFinite(val) || val <= 0) { setAjustError('Montant invalide.'); return; }
+    if (!ajustMotif.trim()) { setAjustError('Motif requis.'); return; }
+    setAjustBusy(true); setAjustError('');
+    try {
+      const res = await fetch('/api/admin/redm-compta-ajustements', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ montant: ajustSens === 'ajout' ? val : -val, motif: ajustMotif.trim() }),
+      });
+      const d = await res.json();
+      if (!res.ok) { setAjustError(d.error ?? 'Erreur serveur.'); return; }
+      setAjustements(prev => [d.ajustement, ...prev]);
+      setAjustMontant(''); setAjustMotif(''); setAjustPanelOpen(false);
+    } catch {
+      setAjustError('Erreur réseau.');
+    } finally {
+      setAjustBusy(false);
+    }
+  }
+
+  async function annulerAjustement(id: string) {
+    setAjustements(prev => prev.filter(a => a.id !== id));
+    try { await fetch(`/api/admin/redm-compta-ajustements?id=${id}`, { method: 'DELETE' }); } catch {}
+  }
+
+  const totalAjustements = ajustements.reduce((s, a) => s + a.montant, 0);
 
   function margeCaisses(staff: { count: number; rate: number }[]): number {
     return Math.round(staff.reduce((s, x) => s + x.count * (PRIX_CAISSE - x.rate), 0) * 100) / 100;
@@ -272,11 +321,6 @@ export default function DirectionComptabilitePage() {
   useEffect(() => { if (hydrated) save(items); },      [items, hydrated]);
   useEffect(() => { if (hydrated) saveArc(archives); }, [archives, hydrated]);
 
-  function resetTout() {
-    setItems([]);
-    setArchives([]);
-    setResetConfirm(false);
-  }
 
   const allByWeek = groupByWeek(items);
   const semaineActuelle = allByWeek[currentKey]?.factures ?? [];
@@ -291,7 +335,7 @@ export default function DirectionComptabilitePage() {
     ventes: Math.round((tresorerieSemaineBrute.ventes + margeCaissesSemaine) * 100) / 100,
     solde:  Math.round((tresorerieSemaineBrute.solde  + margeCaissesSemaine) * 100) / 100,
   };
-  const soldeDispensaire = Math.round((tresorerie([...items, ...archives.flatMap(a => a.factures)], tarifs).solde + margeCaissesTotal) * 100) / 100;
+  const soldeDispensaire = Math.round((tresorerie([...items, ...archives.flatMap(a => a.factures)], tarifs).solde + margeCaissesTotal + totalAjustements) * 100) / 100;
 
   /* ── Ligne de registre (lecture seule) ── */
   function RegistreLine({ f }: { f: Facture }) {
@@ -378,7 +422,63 @@ export default function DirectionComptabilitePage() {
             <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`5px solid ${soldeDispensaire>=0 ? '#A8B991' : '#8B4040'}`, padding:'22px 24px', textAlign:'center', marginBottom:10 }}>
               <div style={{ fontFamily:DISPLAY, fontSize:42, color: soldeDispensaire>=0 ? '#6A9A68' : '#DF9A88' }}>{fmt$(soldeDispensaire)}</div>
               <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:4, letterSpacing:'0.14em' }}>SOLDE DU COMPTE DU DISPENSAIRE</div>
+
+              {canEdit && (
+                <div style={{ display:'flex', gap:8, justifyContent:'center', marginTop:16 }}>
+                  <button onClick={()=>{ setAjustError(''); setAjustPanelOpen(open => open && ajustSens==='ajout' ? false : true); setAjustSens('ajout'); }}
+                    style={{ fontFamily:MONO, fontSize: 14, letterSpacing:'0.08em', padding:'8px 16px', cursor:'pointer', background:'rgba(90,152,88,0.15)', color:'#A8B991', border:'1px solid rgba(90,152,88,0.45)' }}>
+                    + AJOUT
+                  </button>
+                  <button onClick={()=>{ setAjustError(''); setAjustPanelOpen(open => open && ajustSens==='retrait' ? false : true); setAjustSens('retrait'); }}
+                    style={{ fontFamily:MONO, fontSize: 14, letterSpacing:'0.08em', padding:'8px 16px', cursor:'pointer', background:'rgba(139,64,64,0.15)', color:'#DF9A88', border:'1px solid rgba(139,64,64,0.45)' }}>
+                    − RETRAIT
+                  </button>
+                </div>
+              )}
+
+              {ajustPanelOpen && (
+                <div style={{ marginTop:16, textAlign:'left', background:'rgba(0,0,0,0.18)', border:`1px solid ${T.border}`, padding:'14px 16px' }}>
+                  <div style={{ fontFamily:DISPLAY, fontSize:17, color: ajustSens==='ajout' ? '#A8B991' : '#DF9A88', marginBottom:10 }}>
+                    {ajustSens==='ajout' ? '+ Ajouter au compte' : '− Retirer du compte'}
+                  </div>
+                  <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:10 }}>
+                    <div>
+                      <label style={lbl}>MONTANT ($)</label>
+                      <input style={inp} value={ajustMontant} onChange={e=>setAjustMontant(e.target.value)} placeholder="0.00" inputMode="decimal" />
+                    </div>
+                    <div>
+                      <label style={lbl}>MOTIF</label>
+                      <input style={inp} value={ajustMotif} onChange={e=>setAjustMotif(e.target.value)} placeholder="Don, réparation, vol…" />
+                    </div>
+                  </div>
+                  {ajustError && <div style={{ fontFamily:MONO, fontSize: 14, color:'#DF9A88', marginBottom:10 }}>✕ {ajustError}</div>}
+                  <div style={{ display:'flex', gap:8 }}>
+                    <button onClick={submitAjustement} disabled={ajustBusy}
+                      style={{ flex:1, fontFamily:MONO, fontSize: 14, letterSpacing:'0.08em', padding:'9px', cursor: ajustBusy?'default':'pointer', opacity: ajustBusy?0.6:1, background: ajustSens==='ajout' ? 'rgba(90,152,88,0.22)' : 'rgba(139,64,64,0.22)', color: ajustSens==='ajout' ? '#A8B991' : '#DF9A88', border: `1px solid ${ajustSens==='ajout' ? 'rgba(90,152,88,0.5)' : 'rgba(139,64,64,0.5)'}` }}>
+                      ✔ CONFIRMER
+                    </button>
+                    <button onClick={()=>{ setAjustPanelOpen(false); setAjustError(''); }} style={{ fontFamily:MONO, fontSize: 14, padding:'9px 14px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>ANNULER</button>
+                  </div>
+                </div>
+              )}
             </div>
+
+            {ajustements.length > 0 && (
+              <div style={{ marginBottom:10 }}>
+                <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.1em', marginBottom:6 }}>HISTORIQUE DES AJUSTEMENTS MANUELS</div>
+                <div style={{ display:'flex', flexDirection:'column', gap:5, maxHeight:220, overflowY:'auto' }}>
+                  {ajustements.map(a => (
+                    <div key={a.id} style={{ display:'flex', alignItems:'center', gap:10, background:T.card, border:`1px solid ${T.border}`, borderLeft:`3px solid ${a.montant>=0?'#A8B991':'#8B4040'}`, padding:'8px 12px' }}>
+                      <span style={{ fontFamily:MONO, fontSize: 13, color:T.dim, minWidth:70, flexShrink:0 }}>{a.date}</span>
+                      <span style={{ fontFamily:BODY, fontSize: 15, color:T.text, flex:1, minWidth:0 }}>{a.motif}</span>
+                      <span style={{ fontFamily:MONO, fontSize: 13, color:'#BAAAC6', flexShrink:0 }}>{a.auteur}</span>
+                      <span style={{ fontFamily:DISPLAY, fontSize:16, color: a.montant>=0?'#A8B991':'#DF9A88', minWidth:70, textAlign:'right', flexShrink:0 }}>{a.montant>=0?'+':''}{fmt$(a.montant)}</span>
+                      {canEdit && <button onClick={()=>annulerAjustement(a.id)} style={{ fontFamily:MONO, fontSize: 13, padding:'3px 7px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)', flexShrink:0 }}>✕</button>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
               <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
@@ -554,21 +654,6 @@ export default function DirectionComptabilitePage() {
           <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, textAlign:'center', padding:'12px', borderTop:`1px solid ${T.border}` }}>
             ↻ Ce registre reflète automatiquement la « Comptabilité » · les semaines passées sont archivées dès leur clôture
           </div>
-
-          {/* Zone de réinitialisation */}
-          {canEdit && (
-            <div style={{ padding:'14px 18px', background:'rgba(139,64,64,0.06)', border:`1px solid rgba(139,64,64,0.30)`, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:10 }}>
-              <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.06em' }}>
-                ⚠ Efface définitivement le registre en cours et toutes les semaines archivées (Comptabilité + Trésorerie).
-              </div>
-              {resetConfirm
-                ? <div style={{ display:'flex', gap:8, flexShrink:0 }}>
-                    <button onClick={resetTout} style={{ fontFamily:MONO, fontSize: 14, padding:'9px 16px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>CONFIRMER LA SUPPRESSION ?</button>
-                    <button onClick={()=>setResetConfirm(false)} style={{ fontFamily:MONO, fontSize: 14, padding:'9px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>ANNULER</button>
-                  </div>
-                : <button onClick={()=>setResetConfirm(true)} style={{ fontFamily:MONO, fontSize: 14, letterSpacing:'0.1em', padding:'9px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)', flexShrink:0 }}>🗑 RÉINITIALISER TOUS LES COMPTES</button>}
-            </div>
-          )}
         </div>
       )}
     </div>

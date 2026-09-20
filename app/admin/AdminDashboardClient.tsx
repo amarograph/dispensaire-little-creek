@@ -124,8 +124,52 @@ function LogsPanel() {
   );
 }
 
+const COMPTA_LS     = 'redm_cabinet_compta_v1';
+const COMPTA_LS_ARC = 'redm_cabinet_compta_archives_v1';
+
+function MaintenancePanel() {
+  const [confirm, setConfirm] = useState(false);
+  const [done,    setDone]    = useState(false);
+
+  function reset() {
+    try {
+      localStorage.removeItem(COMPTA_LS);
+      localStorage.removeItem(COMPTA_LS_ARC);
+    } catch {}
+    setConfirm(false);
+    setDone(true);
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="bg-red-950/20 border border-red-900/40 rounded-xl p-5">
+        <div className="text-sm font-medium text-red-400 mb-1">🗑 Réinitialiser la Comptabilité</div>
+        <p className="text-xs text-gray-400 mb-4">
+          Efface définitivement le registre de « Comptabilité » (factures en cours et semaines archivées) sur cet appareil.
+          Cette action est irréversible.
+        </p>
+        {done && <p className="text-xs text-green-400 mb-3">✔ Comptabilité réinitialisée sur cet appareil.</p>}
+        {confirm ? (
+          <div className="flex gap-2">
+            <button onClick={reset} className="text-xs bg-red-900/30 border border-red-800 text-red-300 px-4 py-2 rounded-lg hover:bg-red-900/50 transition">
+              CONFIRMER LA SUPPRESSION
+            </button>
+            <button onClick={() => setConfirm(false)} className="text-xs bg-gray-900 border border-gray-800 text-gray-400 px-4 py-2 rounded-lg hover:border-gray-600 transition">
+              ANNULER
+            </button>
+          </div>
+        ) : (
+          <button onClick={() => { setConfirm(true); setDone(false); }} className="text-xs bg-gray-900 border border-red-900/50 text-red-400 px-4 py-2 rounded-lg hover:bg-red-950/30 transition">
+            RÉINITIALISER TOUS LES COMPTES
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function AdminDashboardClient({ members }: { members: Member[] }) {
-  const [tab, setTab] = useState<'utilisateurs' | 'logs'>('utilisateurs');
+  const [tab, setTab] = useState<'utilisateurs' | 'logs' | 'maintenance'>('utilisateurs');
 
   const pending  = members.filter(m => m.status === 'pending');
   const approved = members.filter(m => m.status === 'approved');
@@ -169,7 +213,7 @@ export default function AdminDashboardClient({ members }: { members: Member[] })
 
       {/* Onglets */}
       <div className="flex gap-2 mb-6 border-b border-gray-800">
-        {([['utilisateurs', 'Utilisateurs'], ['logs', 'Logs']] as const).map(([id, label]) => (
+        {([['utilisateurs', 'Utilisateurs'], ['logs', 'Logs'], ['maintenance', 'Maintenance']] as const).map(([id, label]) => (
           <button
             key={id}
             onClick={() => setTab(id)}
@@ -213,6 +257,7 @@ export default function AdminDashboardClient({ members }: { members: Member[] })
       )}
 
       {tab === 'logs' && <LogsPanel />}
+      {tab === 'maintenance' && <MaintenancePanel />}
     </div>
   );
 }
