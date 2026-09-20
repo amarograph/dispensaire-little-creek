@@ -455,13 +455,9 @@ export default function DocumentationPage() {
           </p>
           <p style={{ margin: '24px 0 8px', fontWeight: 'bold', textDecoration: 'underline', textUnderlineOffset: 4 }}>CONTENU</p>
           <div style={{ margin: '0 0 32px', whiteSpace: 'pre-wrap', lineHeight: 2.1 }}>{certDoc.contenu}</div>
-          <div style={{ marginTop: 52, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div style={{ marginTop: 52 }}>
             <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>
               Fait à <strong>Little Creek</strong>, le <strong>{rpDisplay(certDoc.date)}</strong>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/signature.png" alt="Signature Dr De Millet" style={{ width: 520, display: 'block', marginLeft: 'auto' }} />
             </div>
           </div>
         </div>

@@ -396,14 +396,9 @@ export default function ExamenPsychiquePage() {
             )}
 
             {/* Signature */}
-            <div style={{ marginTop: 52, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <div style={{ marginTop: 52 }}>
               <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>
                 Fait à <strong>{current.lieu || 'Little Creek'}</strong>, le <strong>{rpDisplay(current.date)}</strong>
-              </div>
-              {/* Cachet + signature image */}
-              <div style={{ textAlign: 'right' }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/signature.png" alt="Signature Dr De Millet" style={{ width: 520, display: 'block', marginLeft: 'auto' }} />
               </div>
             </div>
           </div>

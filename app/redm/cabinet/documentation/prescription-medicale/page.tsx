@@ -254,12 +254,8 @@ export default function PrescriptionMedicalePage() {
             {savedPat.patientAge ? <><strong>Âge :</strong> {savedPat.patientAge} ans<br /></> : null}
           </p>
           <div style={{ margin: '0 0 40px', whiteSpace: 'pre-wrap', lineHeight: 2.1 }}>{savedDoc.contenu}</div>
-          <div style={{ marginTop: 52, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div style={{ marginTop: 52 }}>
             <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>Fait à <strong>Little Creek</strong>, le <strong>{rpDisplay(savedDoc.date)}</strong></div>
-            <div style={{ textAlign: 'right' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/signature.png" alt="Signature" style={{ width: 520, display: 'block', marginLeft: 'auto' }} />
-            </div>
           </div>
         </div>
       </div>

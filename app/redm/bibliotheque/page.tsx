@@ -369,9 +369,7 @@ function ReglementDocument() {
       {/* Signature */}
       <div style={{ textAlign: 'center', padding: '8px 0 0' }}>
         <RegPara>Fait à West Elizabeth, en l'an de grâce 1890.</RegPara>
-        <div style={{ fontFamily: DISPLAY, fontSize: 19, color: T.sepia, marginBottom: 2 }}>Docteur François De Millet</div>
         <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.16em', marginBottom: 22 }}>DIRECTEUR DU DISPENSAIRE DE LITTLE CREEK</div>
-        <RegCitation text="La science éclaire le chemin du médecin, mais la compassion guide sa main." author="Docteur François De Millet" />
       </div>
     </div>
   );
