@@ -148,7 +148,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
         }
         .redm-nav::-webkit-scrollbar { display: none; }
         .redm-nav a {
-          font-family: var(--r-body); font-weight: 600; font-size: 13px;
+          font-family: var(--r-body); font-weight: 600; font-size: 15px;
           letter-spacing: 0.03em; text-transform: uppercase;
           color: #C8BEA5; text-decoration: none;
           padding: 7px 9px; border-radius: 6px;
