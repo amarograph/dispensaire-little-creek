@@ -42,7 +42,6 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
         { href: '/redm/comptabilite',     label: 'Comptabilité',          icon: '💰' },
         { href: '/redm/bibliotheque',     label: 'Bibliothèque',          icon: '📚' },
         { href: '/redm/agenda',           label: 'Agenda',                icon: '📅' },
-        { href: '/redm/archives',         label: 'Archives',              icon: '🗄' },
         { href: '/redm/cabinet',          label: 'Cabinet Thérapeutique', icon: '🛋' },
         ...(hasDirectionAccess ? [{ href: '/redm/direction', label: 'Direction', icon: '🏛' }] : []),
       ];

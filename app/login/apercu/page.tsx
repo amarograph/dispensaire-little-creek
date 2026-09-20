@@ -12,7 +12,7 @@ export default function HomePreview() {
   // Reuse the current layout styles so visual edits also update this local preview.
   const layout = readFileSync(join(process.cwd(), 'app/redm/layout.tsx'), 'utf8').replace(/\r\n/g, '\n');
   const css = layout.split('<style>{`')[1]?.split('`}</style>')[0] ?? '';
-  const navigation = ['⌂ Accueil', '📋 Registre Patient', '💰 Caisse et Comptabilité', '📚 Bibliothèque', '🗄 Archives', '📅 Agenda', '🛋 Cabinet Thérapeutique', '🏛 Direction'];
+  const navigation = ['⌂ Accueil', '💰 Comptabilité', '📚 Bibliothèque', '📅 Agenda', '🛋 Cabinet Thérapeutique', '🏛 Direction'];
   return <>
     <style dangerouslySetInnerHTML={{ __html: css }} />
     <div className="redm-root">
