@@ -184,7 +184,7 @@ function ReglementDocument() {
         <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>Révisé et approuvé en l'an de grâce 1890</div>
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>SOUS LA DIRECTION DU DOCTEUR FRANÇOIS DE MILLET · MÉDECIN FORMÉ À PARIS</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${T.gold}, transparent)`, margin: '0 auto 14px' }} />
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>ÉTAT D'EAST WELLSTER'S - COMTÉ DE WEST ELIZABETH</div>
+        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
       </div>
 
       {/* Sommaire */}
@@ -435,7 +435,7 @@ function GuideHerboristeDocument() {
         <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>Plantes, racines et champignons du Dispensaire</div>
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>RECUEIL ÉTABLI PAR MÈRE AGATHE VOCLAIN · HERBORISTE DU DISPENSAIRE</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${T.gold}, transparent)`, margin: '0 auto 14px' }} />
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>ÉTAT D'EAST WELLSTER'S - COMTÉ DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
       </div>
 
       {/* Sommaire */}
@@ -669,9 +669,9 @@ function SpecialitesDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ CATALOGUE MÉDICAL ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 8px', letterSpacing: '0.05em' }}>Spécialités Proposées</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>Disciplines médicales du Dispensaire</div>
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DOMAINES D'EXPERTISE DU CORPS MÉDICAL · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${T.gold}, transparent)`, margin: '0 auto 14px' }} />
-        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>ÉTAT D'EAST WELLSTER'S - COMTÉ DE WEST ELIZABETH</div>
+        <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.2em' }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
       </div>
 
       {/* Liste des spécialités */}
@@ -749,7 +749,7 @@ function DoctrinePureteDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: DC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ DOCTRINE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: DC, margin: '0 0 8px', letterSpacing: '0.04em' }}>🌿 Doctrine de Pureté et de Santé Naturelle</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Fondée sur les travaux du Docteur Pasteur et la sagesse des plantes</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE THÉRAPEUTIQUE DE WEST ELIZABETH · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${DC}, transparent)`, margin: '0 auto 18px' }} />
         {/* Toggle version */}
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${DC}50` }}>
@@ -998,7 +998,7 @@ function BotaniqueMedicaleDocument() {
         <div style={{ fontFamily: MONO, fontSize: 12, color: BC, letterSpacing: '0.3em', marginBottom: 10 }}>✦ COURS DE BOTANIQUE MÉDICALE ✦</div>
         <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: BC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🌱 Les Plantes Purificatrices</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>Tradition des herboristes &amp; science de l'hygiène naturelle</div>
-        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE BLACKWATER · 1890</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${BC}, transparent)`, margin: '0 auto 18px' }} />
         <div style={{ display: 'inline-flex', gap: 0, border: `1px solid ${BC}50` }}>
           <button onClick={() => setVersion('complete')} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.1em', padding: '8px 22px', cursor: 'pointer', border: 'none', background: version === 'complete' ? `${BC}28` : 'transparent', color: version === 'complete' ? BC_LIGHT : T.dim, borderRight: `1px solid ${BC}40` }}>
