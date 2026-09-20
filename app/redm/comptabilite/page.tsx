@@ -351,11 +351,6 @@ export default function CaisseComptabilitePage() {
                     🛒 ACHAT
                   </button>
                 </div>
-                <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.04em', margin:'-6px 0 10px' }}>
-                  {typeFiltre==='vente' && 'AJOUTÉ À LA CAISSE ET AU COMPTE DU DISPENSAIRE (SELON RÉPARTITION)'}
-                  {typeFiltre==='commande' && 'AJOUTÉ EN TOTALITÉ (100%) AU COMPTE DU DISPENSAIRE'}
-                  {typeFiltre==='achat' && 'RETIRÉ DE LA CAISSE ET DU COMPTE DU DISPENSAIRE'}
-                </p>
                 <label style={lbl}>ÉLÉMENT(S)</label>
                 <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
                   {typeFiltre === 'achat' ? (
