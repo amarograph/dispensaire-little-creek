@@ -9,8 +9,8 @@ const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const MODULES = [
   { id: 'patients',      href: '/redm/cabinet/patients',      icon: '📋', label: 'Dossiers Patients',  sub: 'SUIVI THÉRAPEUTIQUE',   desc: 'Consultations, observations, traitements et suivi de chaque patient.',              color: '#A8B991', badge: 'DOS' },
   { id: 'agenda',        href: '/redm/cabinet/agenda',        icon: '📅', label: 'Agenda',             sub: 'RENDEZ-VOUS',            desc: 'Planification des séances, rendez-vous et disponibilités du praticien.',            color: '#AAB9C6', badge: 'AGD' },
-  { id: 'documentation', href: '/redm/cabinet/documentation', icon: '📁', label: 'Documentation',      sub: 'FORMULAIRES OFFICIELS', desc: 'Examens psychiques, formulaires médicaux et documents officiels du cabinet.',       color: '#6B7ABB', badge: 'DOC' },
-  { id: 'archives',      href: '/redm/cabinet/archives',      icon: '🗄', label: 'Archives',           sub: 'DOSSIERS CLÔTURÉS',     desc: 'Patients ayant cessé les séances. Dossiers archivés, consultables et restaurables.', color: '#5A4A6A', badge: 'ARC' },
+  { id: 'documentation', href: '/redm/cabinet/documentation', icon: '📁', label: 'Documentation',      sub: 'FORMULAIRES OFFICIELS', desc: 'Examens psychiques, formulaires médicaux et documents officiels du cabinet.',       color: '#BBC7E3', badge: 'DOC' },
+  { id: 'archives',      href: '/redm/cabinet/archives',      icon: '🗄', label: 'Archives',           sub: 'DOSSIERS CLÔTURÉS',     desc: 'Patients ayant cessé les séances. Dossiers archivés, consultables et restaurables.', color: '#C6B5D2', badge: 'ARC' },
 ];
 
 export default function CabinetPage() {
@@ -53,7 +53,7 @@ export default function CabinetPage() {
               </div>
               <div style={{ fontFamily: MONO, fontSize: 13, color: m.color, letterSpacing: '0.12em', marginBottom: 10 }}>{m.sub}</div>
               <div style={{ fontSize: 17, color: '#C8BEA5', lineHeight: 1.55 }}>{m.desc}</div>
-              <div style={{ fontFamily: MONO, fontSize: 15, color: h ? m.color : '#3A2A1A', marginTop: 16, letterSpacing: '0.1em', transition: 'color 0.15s' }}>→ ACCÉDER</div>
+              <div style={{ fontFamily: MONO, fontSize: 15, color: h ? '#EADCB9' : '#D1B77C', marginTop: 16, letterSpacing: '0.1em', transition: 'color 0.15s' }}>→ ACCÉDER</div>
             </div>
           );
         })}

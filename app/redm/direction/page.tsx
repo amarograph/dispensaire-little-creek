@@ -13,7 +13,7 @@ const MODULES = [
   { id: 'stockage', href: '/redm/direction/stockage', icon: '📦', label: 'Gestionnaire de Stockage', sub: 'INVENTAIRE & RÉAPPROVISIONNEMENT', desc: 'Suivi des stocks de plantes et produits médicaux, avec alerte automatique en cas de rupture imminente.', color: '#D1B77C', badge: 'STK' },
   { id: 'inventaire', href: '/redm/direction/inventaire', icon: '🔒', label: 'Inventaire', sub: 'CONSULTATION — LECTURE SEULE', desc: "Voir l'état complet des stocks par catégorie sans pouvoir le modifier, avec alerte en cas de rupture imminente.", color: '#AAB9C6', badge: 'INV' },
   { id: 'alerte-sanitaire', href: '/redm/direction/alerte-sanitaire', icon: '🚨', label: 'Alerte Sanitaire', sub: 'ÉPIDÉMIES & RISQUES', desc: "Déclarer une épidémie ou un risque sanitaire en cours, et marquer la situation comme critique pour alerter tous les joueurs.", color: '#DF9A88', badge: 'ALR' },
-  { id: 'journal',   href: '/redm/direction/journal',   icon: '📜', label: "Journal d'activité",    sub: 'HISTORIQUE DES ACTIONS',         desc: "Consulter l'historique complet des actions de la direction : modifications de tarifs, salaires, inventaire, fiches médecins…", color: '#7A6A50', badge: 'LOG' },
+  { id: 'journal',   href: '/redm/direction/journal',   icon: '📜', label: "Journal d'activité",    sub: 'HISTORIQUE DES ACTIONS',         desc: "Consulter l'historique complet des actions de la direction : modifications de tarifs, salaires, inventaire, fiches médecins…", color: '#C8BEA5', badge: 'LOG' },
 ];
 
 export default function DirectionPage() {
@@ -28,7 +28,7 @@ export default function DirectionPage() {
       <div style={{ marginBottom: 36 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18 }}>
           <button onClick={() => router.push('/redm')}
-            style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: '1px solid rgba(209,183,124,0.35)', color: '#A08850', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+            style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: '1px solid rgba(209,183,124,0.35)', color: '#D1B77C', padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>
             ← RETOUR
           </button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: '#D1B77C', letterSpacing: '0.18em' }}>DISPENSAIRE · DIRECTION</span>
@@ -64,8 +64,8 @@ export default function DirectionPage() {
                 <span style={{ fontFamily: MONO, fontSize: 12, padding: '3px 7px', background: m.color + '22', color: m.color, border: `1px solid ${m.color + '55'}`, letterSpacing: '0.1em', flexShrink: 0 }}>{m.badge}</span>
               </div>
               <div style={{ fontFamily: MONO, fontSize: 12, color: m.color, letterSpacing: '0.12em', marginBottom: 10 }}>{m.sub}</div>
-              <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 16, color: '#5A4030', lineHeight: 1.55 }}>{m.desc}</div>
-              <div style={{ fontFamily: MONO, fontSize: 14, color: h ? m.color : '#2A1010', marginTop: 14, letterSpacing: '0.1em', transition: 'color 0.15s' }}>→ ACCÉDER</div>
+              <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 16, color: '#C8BEA5', lineHeight: 1.55 }}>{m.desc}</div>
+              <div style={{ fontFamily: MONO, fontSize: 14, color: h ? '#EADCB9' : '#D1B77C', marginTop: 14, letterSpacing: '0.1em', transition: 'color 0.15s' }}>→ ACCÉDER</div>
             </div>
           );
         })}
