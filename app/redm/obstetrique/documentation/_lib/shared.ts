@@ -40,6 +40,8 @@ export interface Scenario {
   recommandationsLabel?: string; recommandations?: string[];
   reposParDefaut?: string; controleParDefaut?: string;
   prioritaires?: string[];
+  remedeNom?: string; remedePreparation?: string; remedePosologie?: string[]; remedeDuree?: string;
+  conseils?: string[]; suivi?: string[];
 }
 
 export const SUIVI_SCENARIOS: Scenario[] = [
@@ -154,11 +156,91 @@ export const SUIVI_SCENARIOS: Scenario[] = [
 ];
 
 export const RX_SCENARIOS: Scenario[] = [
-  { id: 'nausees',  label: 'Nausées et malaises de grossesse', texte: 'Nausées, vertiges et malaises rapportés par la patiente, sans caractère de gravité.' },
-  { id: 'douleurs', label: 'Douleurs et tensions',             texte: 'Douleurs et tensions rapportées par la patiente, nécessitant un soulagement.' },
-  { id: 'sommeil',  label: 'Troubles du sommeil',              texte: 'Difficultés d’endormissement et sommeil agité rapportés par la patiente.' },
-  { id: 'anemie',   label: 'Fortifiant / anémie',              texte: 'Signes de fatigue et de pâleur évoquant une anémie légère.' },
-  { id: 'autre',    label: 'Autre indication',                 texte: '' },
+  {
+    id: 'nausees', label: 'Nausées et malaises de grossesse',
+    texte: "Nausées et malaises légers associés à la grossesse, accompagnés d'une sensation de faiblesse passagère et d'un appétit parfois diminué.",
+    remedeNom: 'Infusion de menthe',
+    remedePreparation: 'Infusion légère.',
+    remedePosologie: [
+      'Une tasse, jusqu’à deux fois par jour.',
+      'À boire lentement, de préférence après un repas léger.',
+    ],
+    remedeDuree: "Trois jours, puis réévaluation selon l'évolution des symptômes.",
+    conseils: [
+      'Prendre plusieurs petits repas dans la journée plutôt que des repas abondants.',
+      "Boire régulièrement de l'eau.",
+      'Se lever lentement après une période assise ou allongée.',
+      'Repos conseillé en cas de malaise.',
+      'Éviter les efforts importants tant que la sensation de faiblesse persiste.',
+    ],
+    suivi: [
+      "Nouvelle consultation si les vomissements deviennent répétés, si la patiente ne parvient plus à s'alimenter ou à boire correctement, ou si les malaises deviennent fréquents.",
+    ],
+  },
+  {
+    id: 'douleurs', label: 'Douleurs et tensions',
+    texte: 'Douleurs musculaires, courbatures et tensions légères à modérées ne présentant aucun signe de fracture ou de lésion grave.',
+    remedeNom: "Pommade à l'Arnica",
+    remedePreparation: 'Pommade médicinale destinée à l’application externe.',
+    remedePosologie: [
+      'Appliquer une petite quantité sur la région douloureuse.',
+      'Faire pénétrer doucement sans exercer de pression excessive.',
+      'Deux applications par jour, matin et soir.',
+    ],
+    remedeDuree: "Trois à cinq jours selon l'évolution des douleurs.",
+    conseils: [
+      'Repos de la région douloureuse.',
+      'Éviter les efforts physiques importants durant le traitement.',
+      'Ne pas appliquer la préparation sur une plaie ouverte ou une peau fortement lésée.',
+      'Ne pas ingérer la préparation.',
+    ],
+    suivi: [
+      "Nouvel examen recommandé si la douleur augmente, si un gonflement important apparaît ou si la mobilité devient difficile.",
+    ],
+  },
+  {
+    id: 'sommeil', label: 'Troubles du sommeil',
+    texte: 'Difficultés d’endormissement, sommeil agité ou réveils nocturnes répétés sans autre affection nécessitant une prise en charge particulière.',
+    remedeNom: 'Infusion de Camomille',
+    remedePreparation: 'Infusion légère de fleurs de camomille.',
+    remedePosologie: [
+      'Une tasse le soir.',
+      'À prendre environ une demi-heure avant le coucher.',
+    ],
+    remedeDuree: 'Cinq soirs consécutifs maximum avant réévaluation.',
+    conseils: [
+      'Favoriser le calme et le repos durant la soirée.',
+      'Éviter les excitants et les repas trop importants avant le coucher.',
+      'Conserver autant que possible des heures régulières de sommeil.',
+      'Ne pas associer spontanément cette préparation à un autre sédatif.',
+    ],
+    suivi: [
+      'En cas de persistance importante des troubles du sommeil, une nouvelle consultation est recommandée afin d’en rechercher la cause avant de prescrire un traitement plus puissant.',
+    ],
+  },
+  {
+    id: 'anemie', label: 'Fortifiant / anémie',
+    texte: "État de faiblesse générale, fatigue persistante, convalescence ou signes compatibles avec un appauvrissement du sang tels que pâleur, vertiges et diminution de la résistance à l'effort.",
+    remedeNom: 'Macération de Panax',
+    remedePreparation: 'Préparation fortifiante à base de Panax.',
+    remedePosologie: [
+      'Une petite dose le matin.',
+      'Une prise quotidienne.',
+    ],
+    remedeDuree: "Sept jours avant réévaluation de l'état général.",
+    conseils: [
+      'Maintenir une alimentation abondante et variée.',
+      'Favoriser notamment les aliments nourrissants et riches en viande, légumes et bouillons.',
+      'Boire suffisamment.',
+      'Respecter plusieurs périodes de repos au cours de la journée.',
+      "Éviter les efforts physiques importants en présence de vertiges ou d'une faiblesse prononcée.",
+    ],
+    suivi: [
+      "Contrôle recommandé après une semaine afin d'évaluer l'évolution de la fatigue, de la pâleur et des éventuels vertiges.",
+      "Une aggravation de la faiblesse, des pertes de connaissance ou un essoufflement important nécessitent un nouvel examen médical.",
+    ],
+  },
+  { id: 'autre', label: 'Autre indication', texte: '' },
 ];
 
 export const ACC_SCENARIOS: Scenario[] = [
@@ -256,8 +338,8 @@ export function estAlerte(champ: keyof SuiviFields, valeur: string): boolean {
   return false;
 }
 
-export interface RxFields { indication: string; remede: string; posologie: string; }
-export const RX_EMPTY: RxFields = { indication: '', remede: '', posologie: '' };
+export interface RxFields { indication: string; remedeNom: string; preparation: string; posologie: string; duree: string; }
+export const RX_EMPTY: RxFields = { indication: '', remedeNom: '', preparation: '', posologie: '', duree: '' };
 
 export interface AccFields { heure: string; lieu: string; duree: string; presentation: string; sexe: string; }
 export const ACC_EMPTY: AccFields = { heure: '', lieu: '', duree: '', presentation: '', sexe: '' };
@@ -401,29 +483,64 @@ Médecin / infirmière / sage-femme ayant effectué le suivi :
 [Nom et signature]`;
 }
 
-export function genRx(nom: string, date: string, f: RxFields, scenario: Scenario): string {
-  return `Prescription Médicale
-Obstétrique — Dispensaire de Little Creek
+export function genRx(nom: string, age: string, date: string, f: RxFields, scenario: Scenario): string {
+  const remedeNom = f.remedeNom || scenario.remedeNom || '[Nom de la plante ou de la préparation]';
+  const preparation = f.preparation || scenario.remedePreparation || '[Infusion / Décoction / Teinture / Macération / Sirop / Cataplasme / Pommade / Baume / Autre]';
+  const posologieSrc = f.posologie || (scenario.remedePosologie?.join('\n') ?? '[Quantité et fréquence]');
+  const posologie = posologieSrc.split('\n').filter(Boolean).map(l => l.trim().startsWith('—') ? l.trim() : `— ${l.trim()}`).join('\n');
+  const duree = f.duree || scenario.remedeDuree || '[Durée du traitement]';
+  const conseils = (scenario.conseils?.length ? scenario.conseils : ['[Repos / alimentation / hydratation / soins particuliers]', '[Précautions liées au traitement]', '[Signes nécessitant une nouvelle consultation]'])
+    .map(c => `— ${c}`).join('\n');
+  const suivi = scenario.suivi?.length
+    ? scenario.suivi.join('\n\n')
+    : `PROCHAIN CONTRÔLE :\n— [Aucun / 24 heures / 48 heures / Quelques jours / Selon évolution]\n\nOBSERVATIONS :\n— [Informations complémentaires]`;
+  const indication = [scenario.texte, f.indication].filter(Boolean).join('\n\n') || '[Motif de la prescription, symptômes constatés et précisions éventuelles.]';
 
-Patiente
-Nom et prénom : ${nom}
-Date : ${date}
+  return `# PRESCRIPTION MÉDICALE
 
-Indication
-${scenario.texte || f.indication || '—'}${scenario.texte && f.indication ? `\n${f.indication}` : ''}
+DISPENSAIRE DE LITTLE CREEK — COMTÉ DE WEST ELIZABETH · 1890
+ORDONNANCE & PRESCRIPTION
 
-──────────────────────────────────────
+PATIENT(E) : ${nom}
+ÂGE : ${age || '[Âge]'}
+DATE : ${date}
 
-${f.remede || '[Nom du remède]'}
+══════════════════════════════════════════════
 
-Posologie et conseils
-${f.posologie || '[À préciser]'}
+## INDICATION
 
-──────────────────────────────────────
+${indication}
 
-Suivi
+══════════════════════════════════════════════
 
-Une nouvelle consultation est requise en cas de persistance ou d'aggravation des symptômes.`;
+## PRESCRIPTION
+
+### ${remedeNom}
+
+PRÉPARATION :
+— ${preparation}
+
+POSOLOGIE :
+${posologie}
+
+DURÉE :
+— ${duree}
+
+══════════════════════════════════════════════
+
+## CONSEILS & PRÉCAUTIONS
+
+${conseils}
+
+══════════════════════════════════════════════
+
+## SUIVI
+
+${suivi}
+
+══════════════════════════════════════════════
+
+Médecin / infirmier signataire : [Nom]`;
 }
 
 export function genAccouchement(nom: string, age: string, date: string, f: AccFields, scenario: Scenario): string {

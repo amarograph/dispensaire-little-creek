@@ -46,7 +46,8 @@ export default function PrescriptionMedicalePage() {
     const nom = useExisting
       ? (() => { const p = patientes.find(x => x.id === selectedPat); return p ? `${p.patientPrenom} ${p.patientNom}`.trim() : ''; })()
       : `${newPrenom} ${newNom}`.trim();
-    setContenu(genRx(nom, createDate, f, scenario));
+    const age = useExisting ? (patientes.find(x => x.id === selectedPat)?.patientAge ?? '') : newAge;
+    setContenu(genRx(nom, age, createDate, f, scenario));
     setStep('preview');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -176,9 +177,13 @@ export default function PrescriptionMedicalePage() {
             <div style={{ fontFamily: MONO, fontSize: 14, color: COL_RX, letterSpacing: '0.1em', marginBottom: 2 }}>PRESCRIPTION</div>
             <div><label style={lbl}>INDICATION / PRÉCISIONS</label><input style={inp} value={f.indication} onChange={e => setF(x => ({ ...x, indication: e.target.value }))} placeholder="Précision optionnelle en plus du scénario" /></div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              <div><label style={lbl}>REMÈDE</label><input style={inp} value={f.remede} onChange={e => setF(x => ({ ...x, remede: e.target.value }))} placeholder="ex : Décoction de framboisier" /></div>
-              <div><label style={lbl}>POSOLOGIE / CONSEILS</label><input style={inp} value={f.posologie} onChange={e => setF(x => ({ ...x, posologie: e.target.value }))} placeholder="ex : 2 fois par jour" /></div>
+              <div><label style={lbl}>REMÈDE</label><input style={inp} value={f.remedeNom || scenario?.remedeNom || ''} onChange={e => setF(x => ({ ...x, remedeNom: e.target.value }))} placeholder="ex : Décoction de framboisier" /></div>
+              <div><label style={lbl}>PRÉPARATION</label><input style={inp} value={f.preparation || scenario?.remedePreparation || ''} onChange={e => setF(x => ({ ...x, preparation: e.target.value }))} placeholder="ex : Infusion légère" /></div>
             </div>
+            <div><label style={lbl}>POSOLOGIE</label>
+              <textarea style={{ ...inp, resize: 'vertical', minHeight: 70 }} value={f.posologie || (scenario?.remedePosologie?.join('\n') ?? '')} onChange={e => setF(x => ({ ...x, posologie: e.target.value }))} placeholder="Une ligne par consigne" />
+            </div>
+            <div><label style={lbl}>DURÉE</label><input style={inp} value={f.duree || scenario?.remedeDuree || ''} onChange={e => setF(x => ({ ...x, duree: e.target.value }))} placeholder="ex : Trois jours" /></div>
           </div>
 
           <button onClick={generate} disabled={!canGenerate}
