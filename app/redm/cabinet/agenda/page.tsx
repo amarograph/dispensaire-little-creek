@@ -72,6 +72,7 @@ export default function AgendaPage() {
   const [editing,     setEditing]     = useState<RendezVous | null>(null);
   const [form,        setForm]        = useState({ ...EMPTY });
   const [delConfirm,  setDelConfirm]  = useState<string | null>(null);
+  const [notifStatus] = useState<'idle' | 'ok'>('idle');
 
   // Calendar navigation
   const today = new Date();
