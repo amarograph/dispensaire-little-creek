@@ -42,6 +42,15 @@ export interface Scenario {
   prioritaires?: string[];
   remedeNom?: string; remedePreparation?: string; remedePosologie?: string[]; remedeDuree?: string;
   conseils?: string[]; suivi?: string[];
+  accDebutTravail?: string; accContractions?: string; accRuptureEaux?: string; accPresentation?: string;
+  accProgression?: string; accObservationsTravail?: string;
+  accType?: string; accGestes?: string[]; accComplications?: string; accComplicationsDetail?: string;
+  accPertesSanguines?: string; accDelivrance?: string;
+  accEtatNaissance?: string; accRespiration?: string; accCris?: string; accColoration?: string; accMouvements?: string;
+  accSoinsImmediats?: string[];
+  accEtatGeneralMere?: string; accConscience?: string; accSaignementsMere?: string; accSoinsEffectues?: string;
+  accSurveillanceMere?: string[]; accSurveillanceEnfant?: string[];
+  accConclusion?: string;
 }
 
 export const SUIVI_SCENARIOS: Scenario[] = [
@@ -244,16 +253,72 @@ export const RX_SCENARIOS: Scenario[] = [
 ];
 
 export const ACC_SCENARIOS: Scenario[] = [
-  { id: 'normal',     label: 'Accouchement normal, sans complication',
-    texte: "L'accouchement s'est déroulé normalement, sans complication notable. La mère et l'enfant se portent bien." },
-  { id: 'complique',  label: 'Accouchement avec complications maîtrisées',
-    texte: "L'accouchement a présenté des complications, maîtrisées grâce aux soins prodigués. La mère et l'enfant se portent bien à l'issue." },
-  { id: 'difficile',  label: 'Accouchement difficile — mère et enfant sauvés',
-    texte: "L'accouchement s'est révélé difficile et a mis en péril la mère et l'enfant. Les soins prodigués ont permis de les sauver l'un et l'autre." },
-  { id: 'mortne',     label: "Issue tragique — enfant mort-né",
-    texte: "Malgré tous les soins prodigués, l'enfant n'a pu être sauvé. La mère a survécu à l'accouchement." },
-  { id: 'perte_mere', label: 'Issue tragique — perte de la mère',
-    texte: "Malgré tous les soins prodigués, la mère n'a pu survivre à l'accouchement." },
+  {
+    id: 'normal', label: 'Accouchement normal, sans complication',
+    texte: "L'accouchement s'est déroulé normalement, sans complication notable. La mère et l'enfant se portent bien.",
+    accDebutTravail: 'Spontané', accContractions: 'Régulières', accRuptureEaux: 'Durant le travail',
+    accPresentation: 'Tête', accProgression: 'Normale',
+    accObservationsTravail: 'Aucune anomalie particulière constatée au cours du travail.',
+    accType: 'Naturel',
+    accGestes: ['Accompagnement de la mère durant le travail', "Assistance lors de l'expulsion", 'Réception et examen immédiat du nouveau-né', 'Ligature et section du cordon ombilical', 'Surveillance de la délivrance du placenta'],
+    accComplications: 'Aucune', accPertesSanguines: 'Faibles', accDelivrance: 'Complète',
+    accEtatNaissance: 'Vigoureux', accRespiration: 'Régulière', accCris: 'Immédiats', accColoration: 'Satisfaisante', accMouvements: 'Vigoureux',
+    accSoinsImmediats: ["Nettoyage et séchage de l'enfant", 'Maintien au chaud', 'Examen général', 'Enfant confié à sa mère après vérification de son état'],
+    accEtatGeneralMere: 'Satisfaisant', accConscience: 'Claire', accSaignementsMere: 'Normaux',
+    accSurveillanceMere: ['Surveillance des saignements', "Surveillance de l'état général", 'Repos et hydratation'],
+    accSurveillanceEnfant: ['Surveillance de la respiration', 'Maintien au chaud', "Surveillance de l'alimentation et de l'état général"],
+    accConclusion: "Accouchement naturel arrivé à son terme sans complication notable.\n\nLa mère et l'enfant présentent tous deux un état satisfaisant après la naissance. Repos et surveillance habituelle recommandés durant les premières heures.",
+  },
+  {
+    id: 'complique', label: 'Accouchement avec complications maîtrisées',
+    texte: "L'accouchement a présenté des complications, maîtrisées grâce aux soins prodigués. La mère et l'enfant se portent bien à l'issue.",
+    accObservationsTravail: "Travail présentant plusieurs difficultés ayant nécessité une surveillance renforcée et une assistance médicale. Les contractions sont demeurées présentes, mais la progression de l'enfant s'est révélée plus lente que prévu.",
+    accProgression: 'Lente', accType: 'Assisté',
+    accGestes: ['Surveillance rapprochée de la mère', "Assistance manuelle à la progression de l'enfant", "Aide à l'expulsion", 'Réception et examen immédiat du nouveau-né', 'Ligature et section du cordon ombilical', 'Surveillance de la délivrance du placenta'],
+    accComplications: 'À préciser', accComplicationsDetail: 'Difficultés rencontrées au cours du travail, maîtrisées sans intervention chirurgicale majeure.',
+    accPertesSanguines: 'Modérées', accDelivrance: 'Complète',
+    accEtatNaissance: 'Faible', accRespiration: 'Faible', accCris: 'Retardés',
+    accSoinsImmediats: ['Nettoyage des voies respiratoires accessibles', 'Séchage et stimulation', 'Maintien au chaud', 'Surveillance prolongée de la respiration'],
+    accEtatGeneralMere: 'Fatigué', accSaignementsMere: 'À surveiller',
+    accSoinsEffectues: "Repos strict recommandé durant les premières heures suivant l'accouchement.",
+    accConclusion: "Accouchement marqué par plusieurs difficultés, toutes maîtrisées lors de la prise en charge.\n\nLa mère et l'enfant sont actuellement dans un état stable. Une surveillance prolongée est recommandée avant d'autoriser leur départ.",
+  },
+  {
+    id: 'difficile', label: 'Accouchement difficile — mère et enfant sauvés',
+    texte: "L'accouchement s'est révélé difficile et a mis en péril la mère et l'enfant. Les soins prodigués ont permis de les sauver l'un et l'autre.",
+    accObservationsTravail: "Accouchement particulièrement difficile caractérisé par une progression insuffisante de l'enfant et un épuisement important de la mère. L'évolution du travail a nécessité une intervention active afin de permettre la naissance et de préserver la vie de la mère et de l'enfant.",
+    accProgression: 'Difficile', accType: 'Intervention nécessaire',
+    accGestes: ["Surveillance constante de l'état de la mère", "Assistance manuelle à la progression de l'enfant", "Aide à l'expulsion", 'Intervention immédiate lors de la naissance', "Contrôle de l'hémorragie maternelle", 'Prise en charge immédiate du nouveau-né', 'Ligature et section du cordon ombilical', 'Surveillance de la délivrance du placenta'],
+    accPertesSanguines: 'Importantes',
+    accEtatNaissance: 'Très faible', accRespiration: 'Faible', accCris: 'Retardés',
+    accSoinsImmediats: ['Libération et nettoyage des voies respiratoires', 'Stimulation du nouveau-né', 'Frictions avec linge propre et chaud', 'Maintien au chaud', "Surveillance continue jusqu'à obtention d'une respiration satisfaisante"],
+    accEtatGeneralMere: 'Affaibli', accSaignementsMere: 'Importants',
+    accSoinsEffectues: 'La mère doit demeurer couchée et sous surveillance médicale.',
+    accConclusion: "Accouchement ayant présenté un danger important pour la mère comme pour l'enfant.\n\nLes interventions réalisées ont permis d'obtenir une issue favorable. Les deux patients sont actuellement vivants et stabilisés, mais leur état nécessite une surveillance rapprochée au dispensaire.\n\nRepos strict imposé à la mère.",
+    prioritaires: ['pertesSanguines', 'etatGeneralMere'],
+  },
+  {
+    id: 'mortne', label: "Issue tragique — enfant mort-né",
+    texte: "Malgré tous les soins prodigués, l'enfant n'a pu être sauvé. La mère a survécu à l'accouchement.",
+    accObservationsTravail: "Travail ayant conduit à la naissance d'un enfant ne présentant aucun signe de vie au moment de l'expulsion. Les circonstances exactes et les éventuelles difficultés rencontrées durant le travail devront être consignées dans le dossier.",
+    accGestes: ["Assistance à l'accouchement", "Réception immédiate de l'enfant", 'Ligature et section du cordon ombilical', "Vérification immédiate de l'état de l'enfant", "Surveillance de la délivrance et de l'état de la mère"],
+    accEtatNaissance: 'Sans réaction', accRespiration: 'Absente à la naissance', accCris: 'Absents', accMouvements: 'Absents',
+    accSoinsEffectues: "La surveillance médicale de la mère est poursuivie après l'accouchement.\n\nUne attention particulière est portée aux saignements, à l'épuisement physique et à son état général.",
+    accConclusion: "Naissance d'un enfant sans signe de vie.\n\nMalgré les soins entrepris immédiatement après l'accouchement, aucune respiration, réaction ou manifestation vitale n'a pu être obtenue. Les manœuvres entreprises afin d'obtenir une respiration spontanée sont demeurées sans résultat. Après examen répété, aucun signe de vie n'a pu être constaté.\n\nL'état de la mère nécessite une surveillance et un repos prolongés après l'épreuve subie.",
+    prioritaires: ['etatNaissance'],
+  },
+  {
+    id: 'perte_mere', label: 'Issue tragique — perte de la mère',
+    texte: "Malgré tous les soins prodigués, la mère n'a pu survivre à l'accouchement.",
+    accObservationsTravail: "Accouchement ayant présenté des complications maternelles extrêmement graves. Malgré les soins et interventions pratiqués, l'état général de la mère s'est progressivement dégradé au cours ou immédiatement après l'accouchement.",
+    accType: 'Intervention nécessaire',
+    accGestes: ["Assistance immédiate à l'accouchement", 'Tentatives de maîtrise de l’hémorragie', 'Contrôle et surveillance des pertes sanguines', 'Maintien de la patiente couchée et au chaud', 'Surveillance continue de la conscience et de la respiration', 'Prise en charge simultanée du nouveau-né'],
+    accPertesSanguines: 'Importantes',
+    accEtatGeneralMere: 'Critique', accSaignementsMere: 'Importants',
+    accSoinsEffectues: 'Les tentatives entreprises afin de maintenir les fonctions vitales sont demeurées sans résultat.',
+    accConclusion: "Décès maternel survenu à la suite de complications graves apparues durant ou immédiatement après l'accouchement.\n\nMalgré les soins et les mesures entreprises, l'état de la patiente n'a pu être stabilisé.\n\nLa cause précise du décès est consignée selon les constatations effectuées par le praticien.\n\nUne surveillance particulière du nouveau-né est mise en place lorsque celui-ci a survécu.",
+    prioritaires: ['etatGeneralMere', 'saignementsMere'],
+  },
 ];
 
 export function scenariosFor(type: DocCreationType): Scenario[] {
@@ -341,11 +406,80 @@ export function estAlerte(champ: keyof SuiviFields, valeur: string): boolean {
 export interface RxFields { indication: string; remedeNom: string; preparation: string; posologie: string; duree: string; }
 export const RX_EMPTY: RxFields = { indication: '', remedeNom: '', preparation: '', posologie: '', duree: '' };
 
-export interface AccFields { heure: string; lieu: string; duree: string; presentation: string; sexe: string; }
-export const ACC_EMPTY: AccFields = { heure: '', lieu: '', duree: '', presentation: '', sexe: '' };
-export const LIEU_OPTIONS = ['', 'Dispensaire', 'Domicile'];
-export const PRESENTATION_OPTIONS = ['', 'Céphalique', 'Siège', 'Autre'];
-export const SEXE_OPTIONS = ['', 'Garçon', 'Fille'];
+export interface AccFields {
+  heureNaissance: string; lieu: string; terme: string; termeSemaines: string;
+  debutTravailHeure: string; dureeTravail: string;
+  debutTravail: string; debutTravailAutre: string; contractions: string; ruptureEaux: string;
+  presentation: string; progression: string; observationsTravail: string;
+  typeAccouchement: string; gestesRealises: string[]; gestesAutre: string;
+  complications: string; complicationsDetail: string;
+  pertesSanguines: string; delivrance: string; delivranceDetail: string;
+  sexe: string; etatNaissance: string; respiration: string; cris: string; coloration: string; mouvementsNe: string;
+  soinsImmediats: string[]; soinsAutre: string;
+  etatGeneralMere: string; conscience: string; saignementsMere: string; lesions: string; lesionsAutre: string; soinsEffectues: string;
+  surveillanceMere: string[]; surveillanceMereAutre: string;
+  surveillanceEnfant: string[]; surveillanceEnfantAutre: string;
+  conclusion: string;
+  dateDeces: string; heureDeces: string; causeDeces: string;
+}
+export const ACC_EMPTY: AccFields = {
+  heureNaissance: '', lieu: '', terme: '', termeSemaines: '',
+  debutTravailHeure: '', dureeTravail: '',
+  debutTravail: '', debutTravailAutre: '', contractions: '', ruptureEaux: '',
+  presentation: '', progression: '', observationsTravail: '',
+  typeAccouchement: '', gestesRealises: [], gestesAutre: '',
+  complications: '', complicationsDetail: '',
+  pertesSanguines: '', delivrance: '', delivranceDetail: '',
+  sexe: '', etatNaissance: '', respiration: '', cris: '', coloration: '', mouvementsNe: '',
+  soinsImmediats: [], soinsAutre: '',
+  etatGeneralMere: '', conscience: '', saignementsMere: '', lesions: '', lesionsAutre: '', soinsEffectues: '',
+  surveillanceMere: [], surveillanceMereAutre: '',
+  surveillanceEnfant: [], surveillanceEnfantAutre: '',
+  conclusion: '',
+  dateDeces: '', heureDeces: '', causeDeces: '',
+};
+export const LIEU_OPTIONS = ['', 'Dispensaire de Little Creek', 'Domicile', 'Autre'];
+export const TERME_OPTIONS = ['', 'À terme', 'Prématuré'];
+export const DEBUT_TRAVAIL_OPTIONS = ['', 'Spontané', 'Autre'];
+export const CONTRACTIONS_TRAVAIL_OPTIONS = ['', 'Régulières', 'Irrégulières', 'Faibles', 'Fortes'];
+export const RUPTURE_EAUX_OPTIONS = ['', 'Spontanée', 'Durant le travail', 'Non constatée'];
+export const PRESENTATION_OPTIONS = ['', 'Tête', 'Siège', 'Transversale', 'Autre'];
+export const PROGRESSION_OPTIONS = ['', 'Normale', 'Lente', 'Difficile', 'Interrompue'];
+export const TYPE_ACCOUCHEMENT_OPTIONS = ['', 'Naturel', 'Assisté', 'Intervention nécessaire'];
+export const GESTES_OPTIONS = [
+  'Accompagnement de la mère durant le travail', "Assistance lors de l'expulsion",
+  'Réception et examen immédiat du nouveau-né', 'Ligature et section du cordon ombilical',
+  'Surveillance de la délivrance du placenta', "Assistance manuelle à la progression de l'enfant",
+  "Aide à l'expulsion", 'Surveillance rapprochée de la mère', 'Intervention immédiate lors de la naissance',
+  "Contrôle de l'hémorragie maternelle", 'Prise en charge immédiate du nouveau-né',
+  "Surveillance constante de l'état de la mère", 'Tentatives de maîtrise de l’hémorragie',
+  'Contrôle et surveillance des pertes sanguines', 'Maintien de la patiente couchée et au chaud',
+  'Surveillance continue de la conscience et de la respiration', 'Prise en charge simultanée du nouveau-né',
+  "Assistance à l'accouchement", "Réception immédiate de l'enfant", "Vérification immédiate de l'état de l'enfant",
+  "Surveillance de la délivrance et de l'état de la mère", 'Autre',
+];
+export const COMPLICATIONS_ACC_OPTIONS = ['', 'Aucune', 'À préciser'];
+export const PERTES_SANGUINES_OPTIONS = ['', 'Faibles', 'Modérées', 'Importantes', 'Très importantes'];
+export const DELIVRANCE_OPTIONS = ['', 'Complète', 'Difficile', 'Incomplète', 'À préciser'];
+export const SEXE_OPTIONS = ['', 'Fille', 'Garçon'];
+export const ETAT_NAISSANCE_OPTIONS = ['', 'Vigoureux', 'Faible', 'Très faible', 'Sans réaction'];
+export const RESPIRATION_NE_OPTIONS = ['', 'Régulière', 'Faible', 'Difficile', 'Absente à la naissance'];
+export const CRIS_OPTIONS = ['', 'Immédiats', 'Retardés', 'Faibles', 'Absents'];
+export const COLORATION_OPTIONS = ['', 'Satisfaisante', 'Pâle', 'Bleutée'];
+export const MOUVEMENTS_NE_OPTIONS = ['', 'Vigoureux', 'Faibles', 'Absents'];
+export const SOINS_IMMEDIATS_OPTIONS = [
+  "Nettoyage et séchage de l'enfant", 'Maintien au chaud', 'Examen général',
+  'Enfant confié à sa mère après vérification de son état', 'Nettoyage des voies respiratoires accessibles',
+  'Séchage et stimulation', 'Surveillance prolongée de la respiration', 'Libération et nettoyage des voies respiratoires',
+  'Stimulation du nouveau-né', 'Frictions avec linge propre et chaud',
+  "Surveillance continue jusqu'à obtention d'une respiration satisfaisante", 'Autre',
+];
+export const ETAT_GENERAL_MERE_OPTIONS = ['', 'Bon', 'Satisfaisant', 'Fatigué', 'Affaibli', 'Critique'];
+export const CONSCIENCE_OPTIONS = ['', 'Claire', 'Fatiguée', 'Confuse', 'Inconsciente'];
+export const SAIGNEMENTS_MERE_OPTIONS = ['', 'Normaux', 'À surveiller', 'Importants'];
+export const LESIONS_OPTIONS = ['', 'Aucune', 'Déchirure légère', 'Déchirure importante', 'Autre'];
+export const SURVEILLANCE_MERE_OPTIONS = ['Surveillance des saignements', "Surveillance de l'état général", 'Repos et hydratation', 'Autre'];
+export const SURVEILLANCE_ENFANT_OPTIONS = ['Surveillance de la respiration', 'Maintien au chaud', "Surveillance de l'alimentation et de l'état général", 'Autre'];
 
 /* ── Génération du document à partir des champs + scénario ── */
 export function genSuivi(nom: string, age: string, date: string, f: SuiviFields, scenario: Scenario): string {
@@ -544,24 +678,155 @@ Médecin / infirmier signataire : [Nom]`;
 }
 
 export function genAccouchement(nom: string, age: string, date: string, f: AccFields, scenario: Scenario): string {
-  return `COMPTE-RENDU D'ACCOUCHEMENT
-DISPENSAIRE DE LITTLE CREEK — OBSTÉTRIQUE
-Année 1890
+  const terme = f.terme === 'Prématuré' && f.termeSemaines
+    ? `Prématuré (${f.termeSemaines} semaines)`
+    : (f.terme || '[Nombre de semaines / À terme / Prématuré]');
 
-IDENTITÉ DE LA PATIENTE
-Nom et prénom : ${nom}
-Âge : ${age || '—'}
+  const gestes = f.gestesRealises.length ? f.gestesRealises : (scenario.accGestes ?? []);
+  const soins = f.soinsImmediats.length ? f.soinsImmediats : (scenario.accSoinsImmediats ?? []);
+  const survMere = f.surveillanceMere.length ? f.surveillanceMere : (scenario.accSurveillanceMere ?? []);
+  const survEnfant = f.surveillanceEnfant.length ? f.surveillanceEnfant : (scenario.accSurveillanceEnfant ?? []);
 
-DÉROULEMENT DE L'ACCOUCHEMENT
-Date et heure : ${date}${f.heure ? ` à ${f.heure}` : ''}
-Lieu : ${f.lieu || '—'}
-Durée du travail : ${f.duree || '—'}
-Présentation : ${f.presentation || '—'}
-Sexe de l'enfant : ${f.sexe || '—'}
+  const complications = f.complications || scenario.accComplications || '[—]';
+  const complicationsDetail = f.complicationsDetail || scenario.accComplicationsDetail || '';
+  const delivrance = f.delivrance || scenario.accDelivrance || '[—]';
+  const lesions = f.lesions || '[—]';
 
-ISSUE
-${scenario.texte}
+  const deces = scenario.id === 'perte_mere' ? `
 
-RECOMMANDATIONS POST-NATALES
-Repos, surveillance et prochaine visite à prévoir selon l'état de la patiente.`;
+══════════════════════════════════════════════
+
+## DÉCÈS CONSTATÉ
+
+— Date : ${f.dateDeces || '[JJ/MM/1890]'}
+— Heure : ${f.heureDeces || '[HHhMM]'}
+
+CAUSE APPARENTE :
+— ${f.causeDeces || '[À préciser selon les constatations médicales]'}` : '';
+
+  return `# COMPTE-RENDU D'ACCOUCHEMENT
+
+DISPENSAIRE DE LITTLE CREEK — COMTÉ DE WEST ELIZABETH · 1890
+REGISTRE DES NAISSANCES & RAPPORT D'ACCOUCHEMENT
+
+MÈRE : ${nom}
+ÂGE : ${age || '[Âge]'}
+DATE DE L'ACCOUCHEMENT : ${date}
+HEURE DE LA NAISSANCE : ${f.heureNaissance || '[HHhMM]'}
+LIEU : ${f.lieu || '[Dispensaire de Little Creek / Domicile / Autre]'}
+
+TERME ESTIMÉ : ${terme}
+DÉBUT DU TRAVAIL : ${f.debutTravailHeure || '[Heure]'}
+DURÉE APPROXIMATIVE DU TRAVAIL : ${f.dureeTravail || '[Durée]'}
+
+══════════════════════════════════════════════
+
+## DÉROULEMENT DU TRAVAIL
+
+DÉBUT DU TRAVAIL :
+— ${f.debutTravail || scenario.accDebutTravail || '[—]'}${(f.debutTravail || scenario.accDebutTravail) === 'Autre' && f.debutTravailAutre ? ` (${f.debutTravailAutre})` : ''}
+
+CONTRACTIONS :
+— ${f.contractions || scenario.accContractions || '[—]'}
+
+RUPTURE DES EAUX :
+— ${f.ruptureEaux || scenario.accRuptureEaux || '[—]'}
+
+PRÉSENTATION DE L'ENFANT :
+— ${f.presentation || scenario.accPresentation || '[—]'}
+
+PROGRESSION :
+— ${f.progression || scenario.accProgression || '[—]'}
+
+OBSERVATIONS :
+— ${f.observationsTravail || scenario.accObservationsTravail || '[À compléter]'}
+
+══════════════════════════════════════════════
+
+## ACCOUCHEMENT
+
+TYPE D'ACCOUCHEMENT :
+— ${f.typeAccouchement || scenario.accType || '[—]'}
+
+GESTES RÉALISÉS :
+${gestes.length ? gestes.map(g => `— ${g}${g === 'Autre' && f.gestesAutre ? ` (${f.gestesAutre})` : ''}`).join('\n') : '— [À compléter]'}
+
+COMPLICATIONS :
+— ${complications}${complications === 'À préciser' && complicationsDetail ? ` — ${complicationsDetail}` : ''}
+
+PERTES SANGUINES :
+— ${f.pertesSanguines || scenario.accPertesSanguines || '[—]'}
+
+DÉLIVRANCE DU PLACENTA :
+— ${delivrance}${delivrance === 'À préciser' && f.delivranceDetail ? ` — ${f.delivranceDetail}` : ''}
+
+══════════════════════════════════════════════
+
+## NOUVEAU-NÉ
+
+SEXE :
+— ${f.sexe || '[—]'}
+
+ÉTAT À LA NAISSANCE :
+— ${f.etatNaissance || scenario.accEtatNaissance || '[—]'}
+
+RESPIRATION :
+— ${f.respiration || scenario.accRespiration || '[—]'}
+
+CRIS :
+— ${f.cris || scenario.accCris || '[—]'}
+
+COLORATION :
+— ${f.coloration || scenario.accColoration || '[—]'}
+
+MOUVEMENTS :
+— ${f.mouvementsNe || scenario.accMouvements || '[—]'}
+
+CORDON OMBILICAL :
+— Ligaturé puis sectionné.
+
+SOINS IMMÉDIATS :
+${soins.length ? soins.map(s => `— ${s}${s === 'Autre' && f.soinsAutre ? ` (${f.soinsAutre})` : ''}`).join('\n') : '— [À compléter]'}
+
+══════════════════════════════════════════════
+
+## ÉTAT DE LA MÈRE APRÈS L'ACCOUCHEMENT
+
+ÉTAT GÉNÉRAL :
+— ${f.etatGeneralMere || scenario.accEtatGeneralMere || '[—]'}
+
+CONSCIENCE :
+— ${f.conscience || scenario.accConscience || '[—]'}
+
+SAIGNEMENTS :
+— ${f.saignementsMere || scenario.accSaignementsMere || '[—]'}
+
+LÉSIONS LIÉES À L'ACCOUCHEMENT :
+— ${lesions}${lesions === 'Autre' && f.lesionsAutre ? ` (${f.lesionsAutre})` : ''}
+
+SOINS EFFECTUÉS :
+— ${f.soinsEffectues || scenario.accSoinsEffectues || '[À compléter]'}
+
+══════════════════════════════════════════════
+
+## SURVEILLANCE POST-ACCOUCHEMENT
+
+MÈRE :
+${survMere.length ? survMere.map(s => `— ${s}${s === 'Autre' && f.surveillanceMereAutre ? ` (${f.surveillanceMereAutre})` : ''}`).join('\n') : '— [Aucune sélectionnée]'}
+
+ENFANT :
+${survEnfant.length ? survEnfant.map(s => `— ${s}${s === 'Autre' && f.surveillanceEnfantAutre ? ` (${f.surveillanceEnfantAutre})` : ''}`).join('\n') : '— [Aucune sélectionnée]'}
+
+══════════════════════════════════════════════
+
+## CONCLUSION
+
+${f.conclusion || scenario.accConclusion || "[Résumé du déroulement de l'accouchement, état final de la mère et de l'enfant et éventuelles recommandations.]"}
+${deces}
+
+══════════════════════════════════════════════
+
+Médecin / sage-femme / infirmière ayant procédé à l'accouchement :
+
+[Nom et signature]`;
 }
