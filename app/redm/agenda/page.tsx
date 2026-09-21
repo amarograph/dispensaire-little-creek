@@ -12,11 +12,12 @@ type StatutRDV = 'CONFIRMÉ' | 'EN ATTENTE' | 'ANNULÉ' | 'PASSÉ';
 interface RendezVous {
   id: string; patientNom: string; date: string; heure: string;
   type: string; statut: StatutRDV; notes: string; createdAt: string;
-  medecin?: string; source?: 'cabinet';
+  medecin?: string; source?: 'cabinet' | 'obstetrique';
 }
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 
+const OBS_COL = '#D08FBE';
 const STATUT_COL:  Record<StatutRDV, string> = { 'CONFIRMÉ': '#A8B991', 'EN ATTENTE': '#D1B77C', 'ANNULÉ': '#8B4040', 'PASSÉ': '#C8BEA5' };
 const STATUT_ICON: Record<StatutRDV, string> = { 'CONFIRMÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕', 'PASSÉ': '◉' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
@@ -117,7 +118,7 @@ export default function AgendaDispensairePage() {
   }
   function openEdit(r: RendezVous, e: React.MouseEvent) {
     e.stopPropagation();
-    if (r.source === 'cabinet') return;
+    if (r.source === 'cabinet' || r.source === 'obstetrique') return;
     setEditing(r);
     setForm({ patientNom: r.patientNom, date: r.date, heure: r.heure, type: r.type, statut: r.statut, notes: r.notes, medecin: r.medecin ?? '' });
     setPanelOpen(true);
@@ -206,7 +207,7 @@ export default function AgendaDispensairePage() {
           <div>
             <h1 style={{ fontFamily: DISPLAY, fontSize: 33, color: T.gold, margin: 0, lineHeight: 1 }}>Agenda du Dispensaire</h1>
             <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 6, letterSpacing: '0.08em' }}>
-              🛋 Les rendez-vous du Cabinet Thérapeutique apparaissent ici de façon anonymisée
+              🛋 Cabinet Thérapeutique et 🤰 Obstétrique apparaissent ici de façon anonymisée
             </div>
           </div>
           <button onClick={openNew}
@@ -319,25 +320,37 @@ export default function AgendaDispensairePage() {
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                         {dayRdvs.slice(0, 3).map(r => {
                           const isCabinet = r.source === 'cabinet';
+                          const isObstetrique = r.source === 'obstetrique';
+                          const col = isCabinet ? '#AAB9C6' : isObstetrique ? OBS_COL : STATUT_COL[r.statut];
+                          const label = isCabinet
+                            ? '🛋 Cabinet'
+                            : isObstetrique
+                              ? `🤰 ${r.medecin || 'Obstétrique'}`
+                              : r.patientNom;
+                          const titleText = isCabinet
+                            ? `${r.heure} · Rendez-vous du Cabinet (anonymisé)`
+                            : isObstetrique
+                              ? `${r.heure} · Dr ${r.medecin || '—'} · RDV Obstétrique (anonymisé)`
+                              : `${r.heure} · ${r.patientNom} · ${r.type}`;
                           return (
                             <div
                               key={r.id}
-                              className={isCabinet ? 'rdv-badge cabinet' : 'rdv-badge'}
+                              className={isCabinet || isObstetrique ? 'rdv-badge cabinet' : 'rdv-badge'}
                               onClick={e => openEdit(r, e)}
-                              title={isCabinet ? `${r.heure} · Rendez-vous du Cabinet (anonymisé)` : `${r.heure} · ${r.patientNom} · ${r.type}`}
+                              title={titleText}
                               style={{
                                 display: 'flex', alignItems: 'center', gap: 4,
-                                background: isCabinet ? 'rgba(170,185,198,0.15)' : `${STATUT_COL[r.statut]}22`,
-                                borderLeft: `2px solid ${isCabinet ? '#AAB9C6' : STATUT_COL[r.statut]}`,
+                                background: isCabinet || isObstetrique ? `${col}22` : `${STATUT_COL[r.statut]}22`,
+                                borderLeft: `2px solid ${col}`,
                                 padding: '2px 5px',
                                 overflow: 'hidden',
                               }}
                             >
-                              <span style={{ fontFamily: MONO, fontSize: 14, color: isCabinet ? '#AAB9C6' : STATUT_COL[r.statut], flexShrink: 0, letterSpacing: '0.04em' }}>
+                              <span style={{ fontFamily: MONO, fontSize: 14, color: col, flexShrink: 0, letterSpacing: '0.04em' }}>
                                 {r.heure || '—'}
                               </span>
                               <span style={{ fontFamily: BODY, fontSize: 14, color: T.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>
-                                {isCabinet ? '🛋 Cabinet' : r.patientNom}
+                                {label}
                               </span>
                             </div>
                           );
@@ -366,6 +379,10 @@ export default function AgendaDispensairePage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <span style={{ display: 'inline-block', width: 3, height: 12, background: '#AAB9C6' }} />
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.1em' }}>🛋 CABINET (anonymisé)</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <span style={{ display: 'inline-block', width: 3, height: 12, background: OBS_COL }} />
+          <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.1em' }}>🤰 OBSTÉTRIQUE (anonymisé)</span>
         </div>
         <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginLeft: 'auto' }}>
           {rdvs.length} RDV total · cliquer un jour pour ajouter · cliquer un badge pour modifier

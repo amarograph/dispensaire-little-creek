@@ -12,6 +12,7 @@ type StatutRDV = 'CONFIRMÉ' | 'EN ATTENTE' | 'ANNULÉ' | 'PASSÉ';
 interface RendezVous {
   id: string; patientNom: string; date: string; heure: string;
   type: string; statut: StatutRDV; notes: string; createdAt: string;
+  medecin?: string;
 }
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
@@ -20,7 +21,7 @@ const STATUT_COL:  Record<StatutRDV, string> = { 'CONFIRMÉ': '#A8B991', 'EN ATT
 const STATUT_ICON: Record<StatutRDV, string> = { 'CONFIRMÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕', 'PASSÉ': '◉' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
-const EMPTY = { patientNom: '', date: '', heure: '', type: 'Consultation prénatale', statut: 'EN ATTENTE' as StatutRDV, notes: '' };
+const EMPTY = { patientNom: '', date: '', heure: '', type: 'Consultation prénatale', statut: 'EN ATTENTE' as StatutRDV, notes: '', medecin: '' };
 const STATUTS: StatutRDV[] = ['EN ATTENTE', 'CONFIRMÉ', 'PASSÉ', 'ANNULÉ'];
 
 const MONTH_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
@@ -117,7 +118,7 @@ export default function ObstetriqueAgendaPage() {
   function openEdit(r: RendezVous, e: React.MouseEvent) {
     e.stopPropagation();
     setEditing(r);
-    setForm({ patientNom: r.patientNom, date: r.date, heure: r.heure, type: r.type, statut: r.statut, notes: r.notes });
+    setForm({ patientNom: r.patientNom, date: r.date, heure: r.heure, type: r.type, statut: r.statut, notes: r.notes, medecin: r.medecin ?? '' });
     setSelectedDay(null);
     setPanelOpen(true);
   }
@@ -401,6 +402,11 @@ export default function ObstetriqueAgendaPage() {
               <div>
                 <label style={lbl}>TYPE DE RENDEZ-VOUS</label>
                 <input style={inp} value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} placeholder="Consultation prénatale, Suivi, Accouchement…" />
+              </div>
+              <div>
+                <label style={lbl}>OBSTÉTRICIEN ASSIGNÉ</label>
+                <input style={inp} value={form.medecin} onChange={e => setForm(f => ({ ...f, medecin: e.target.value }))} placeholder="Nom RP du soignant en charge" />
+                <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 4 }}>↳ seul ce nom (avec l&apos;heure) apparaît dans l&apos;Agenda commun du dispensaire — la patiente reste confidentielle</div>
               </div>
               <div>
                 <label style={lbl}>STATUT</label>
