@@ -7,6 +7,8 @@ const DISPLAY = "'Central Station', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
+const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '10px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
+const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' };
 
 type DocCreationType = 'Suivi de grossesse' | 'Prescription médicale' | "Compte-rendu d'accouchement";
 const COL_SUIVI = '#526C45';
@@ -41,6 +43,8 @@ interface Scenario {
   examensLabel?: string; examens?: string[];
   evolution?: string;
   recommandationsLabel?: string; recommandations?: string[];
+  reposParDefaut?: string; controleParDefaut?: string;
+  prioritaires?: string[];
 }
 
 const SUIVI_SCENARIOS: Scenario[] = [
@@ -67,6 +71,7 @@ const SUIVI_SCENARIOS: Scenario[] = [
       'Éviter les efforts physiques excessifs et le port de charges lourdes.',
       'Poursuite du suivi régulier de la grossesse.',
     ],
+    reposParDefaut: 'Habituel', controleParDefaut: '1 mois',
   },
   {
     id: 'surveiller', label: 'À surveiller — facteurs de risque modérés',
@@ -93,6 +98,7 @@ const SUIVI_SCENARIOS: Scenario[] = [
       'Surveillance de tout nouveau symptôme.',
       'Consultations de contrôle plus rapprochées.',
     ],
+    reposParDefaut: 'Modéré', controleParDefaut: '2 semaines',
   },
   {
     id: 'risque', label: 'Risque élevé — surveillance rapprochée',
@@ -120,6 +126,7 @@ const SUIVI_SCENARIOS: Scenario[] = [
       "Prévoir à l'avance les dispositions nécessaires à l'accouchement.",
       "Consultation immédiate en cas d'apparition ou d'aggravation d'un symptôme.",
     ],
+    reposParDefaut: 'Important', controleParDefaut: '1 semaine',
   },
   {
     id: 'urgence', label: "Consultation d'urgence",
@@ -146,6 +153,8 @@ const SUIVI_SCENARIOS: Scenario[] = [
       "Traitement adapté aux constatations de l'examen.",
       "Maintien au dispensaire si l'état de la patiente nécessite une observation prolongée.",
     ],
+    reposParDefaut: 'Strict', controleParDefaut: 'Consultation immédiate si aggravation',
+    prioritaires: ['etatGeneral', 'saignements', 'douleurs', 'contractions', 'mouvements', 'battements', 'vertiges'],
   },
 ];
 
@@ -171,9 +180,31 @@ const ACC_SCENARIOS: Scenario[] = [
 ];
 
 /* ── Champs structurés par type ── */
-interface SuiviFields { heure: string; semaines: string; mouvements: string; complications: string; }
-const SUIVI_EMPTY: SuiviFields = { heure: '', semaines: '', mouvements: '', complications: '' };
-const MOUVEMENTS_OPTIONS = ['', 'Perçus, réguliers', 'Perçus, faibles', 'Non perçus', 'Non applicable (début de grossesse)'];
+interface SuiviFields {
+  heure: string; semaines: string;
+  poids: string; evolutionPoids: string;
+  grossessesAnt: string; accouchementsAnt: string; fcAnt: string;
+  etatGeneral: string; appetit: string; nausees: string; vomissements: string; vertiges: string; gonflement: string;
+  douleurs: string; douleursLocalisation: string[]; douleursAutre: string;
+  saignements: string; saignementsDepuis: string; saignementsFrequence: string; saignementsDouleurs: string;
+  pertesInhabituelles: string;
+  mouvements: string; battements: string; croissance: string; palpation: string; contractions: string; position: string;
+  complications: string[]; complicationsAutre: string;
+  reposConseille: string; prochainControle: string;
+}
+const SUIVI_EMPTY: SuiviFields = {
+  heure: '', semaines: '',
+  poids: '', evolutionPoids: '',
+  grossessesAnt: '', accouchementsAnt: '', fcAnt: '',
+  etatGeneral: '', appetit: '', nausees: '', vomissements: '', vertiges: '', gonflement: '',
+  douleurs: '', douleursLocalisation: [], douleursAutre: '',
+  saignements: '', saignementsDepuis: '', saignementsFrequence: '', saignementsDouleurs: '',
+  pertesInhabituelles: '',
+  mouvements: '', battements: '', croissance: '', palpation: '', contractions: '', position: '',
+  complications: [], complicationsAutre: '',
+  reposConseille: '', prochainControle: '',
+};
+
 const SEMAINES_OPTIONS = ['', ...Array.from({ length: 19 }, (_, i) => String(4 + i * 2))]; // 4 à 40 semaines, par pas de 2
 function moisDeGrossesse(semaines: string): string {
   const n = Number(semaines);
@@ -181,6 +212,47 @@ function moisDeGrossesse(semaines: string): string {
   const mois = Math.min(9, Math.max(1, Math.ceil(n / 4)));
   const suffixe = mois === 1 ? 'er' : 'e';
   return `${mois}${suffixe} mois`;
+}
+
+const EVOLUTION_POIDS_OPTIONS = ['', 'Non connue', 'Stable', 'Légère prise', 'Prise importante', 'Légère perte', 'Perte importante'];
+const GROSSESSES_ANT_OPTIONS = ['', 'Première grossesse', '1', '2', '3', '4', '5 ou plus', 'Inconnu'];
+const ACCOUCHEMENTS_ANT_OPTIONS = ['', 'Aucun', '1', '2', '3', '4 ou plus', 'Inconnu'];
+const FC_ANT_OPTIONS = ['', 'Aucune', '1', '2', '3 ou plus', 'Inconnu'];
+
+const ETAT_GENERAL_OPTIONS = ['', 'Très bon', 'Bon', 'Satisfaisant', 'Fatiguée', 'Affaiblie', 'Préoccupant'];
+const APPETIT_OPTIONS = ['', 'Normal', 'Augmenté', 'Diminué', 'Très faible'];
+const NAUSEES_OPTIONS = ['', 'Aucune', 'Légères', 'Modérées', 'Importantes'];
+const VOMISSEMENTS_OPTIONS = ['', 'Aucun', 'Occasionnels', 'Fréquents', 'Importants'];
+const VERTIGES_OPTIONS = ['', 'Aucun', 'Occasionnels', 'Fréquents', 'Malaise avec perte de connaissance'];
+const GONFLEMENT_OPTIONS = ['', 'Aucun', 'Pieds', 'Chevilles', 'Jambes', 'Mains', 'Généralisé'];
+
+const DOULEURS_OPTIONS = ['', 'Aucune', 'Légères', 'Modérées', 'Fortes', 'Très fortes'];
+const DOULEURS_LOCALISATION_OPTIONS = ['Bas-ventre', 'Abdomen', 'Dos', 'Bassin', 'Jambes', 'Tête', 'Autre'];
+const SAIGNEMENTS_OPTIONS = ['', 'Aucun', 'Traces légères', 'Modérés', 'Importants'];
+const OUI_NON_OPTIONS = ['', 'Oui', 'Non'];
+const PERTES_OPTIONS = ['', 'Aucune', 'Légères', 'Importantes', 'À examiner'];
+
+const MOUVEMENTS_OPTIONS = ['', 'Non encore perceptibles', 'Perçus, faibles', 'Perçus, réguliers', 'Très actifs', 'Diminution récente', "Absents alors qu'habituellement perçus"];
+const BATTEMENTS_OPTIONS = ['', 'Non recherchés', 'Non perceptibles', 'Perçus, réguliers', 'Perçus, irréguliers', 'Difficiles à percevoir'];
+const CROISSANCE_OPTIONS = ['', 'Conforme au terme estimé', 'Semble faible', 'Semble importante', 'À surveiller'];
+const PALPATION_OPTIONS = ['', 'Souple et indolore', 'Sensible', 'Douloureuse', 'Tension inhabituelle', 'Non réalisée'];
+const CONTRACTIONS_OPTIONS = ['', 'Aucune', 'Occasionnelles', 'Régulières', 'Fréquentes et douloureuses'];
+const POSITION_OPTIONS = ['', 'Non déterminable', 'Tête vers le bas', 'Siège', 'Transversale', 'Position incertaine'];
+
+const COMPLICATIONS_OPTIONS = [
+  'Aucune connue', 'Saignements', 'Douleurs abdominales', 'Vomissements importants', 'Faiblesse importante',
+  'Malaises / vertiges', 'Gonflement important', 'Contractions précoces', "Diminution des mouvements de l'enfant",
+  'Chute ou traumatisme récent', 'Fièvre', 'Antécédent de fausse couche', 'Accouchement antérieur difficile', 'Autre',
+];
+
+const REPOS_OPTIONS = ['', 'Habituel', 'Modéré', 'Important', 'Strict'];
+const CONTROLE_OPTIONS = ['', '24 heures', '48 heures', '1 semaine', '2 semaines', '1 mois', 'Selon évolution', 'Consultation immédiate si aggravation'];
+
+/** Champs dont la valeur doit être mise en évidence visuellement (résultat préoccupant) */
+function estAlerte(champ: keyof SuiviFields, valeur: string): boolean {
+  if (champ === 'contractions') return valeur === 'Régulières' || valeur === 'Fréquentes et douloureuses';
+  if (champ === 'mouvements') return valeur === 'Diminution récente' || valeur === "Absents alors qu'habituellement perçus";
+  return false;
 }
 
 interface RxFields { indication: string; remede: string; posologie: string; }
@@ -195,6 +267,28 @@ const SEXE_OPTIONS = ['', 'Garçon', 'Fille'];
 /* ── Génération du document à partir des champs + scénario ── */
 function genSuivi(nom: string, age: string, date: string, f: SuiviFields, scenario: Scenario): string {
   const mois = moisDeGrossesse(f.semaines) || '[Xᵉ mois]';
+
+  const antecedents = [
+    `— Grossesses antérieures : ${f.grossessesAnt || '[—]'}`,
+    `— Accouchements antérieurs : ${f.accouchementsAnt || '[—]'}`,
+    `— Fausses couches antérieures : ${f.fcAnt || '[—]'}`,
+  ].join('\n');
+
+  const douleursLignes = [`— Douleurs : ${f.douleurs || '[—]'}`];
+  if (f.douleurs && f.douleurs !== 'Aucune') {
+    if (f.douleursLocalisation.length) douleursLignes.push(`— Localisation : ${f.douleursLocalisation.join(', ')}${f.douleursLocalisation.includes('Autre') && f.douleursAutre ? ` (${f.douleursAutre})` : ''}`);
+  }
+  const saignementsLignes = [`— Saignements : ${f.saignements || '[—]'}`];
+  if (f.saignements && f.saignements !== 'Aucun') {
+    if (f.saignementsDepuis) saignementsLignes.push(`— Depuis : ${f.saignementsDepuis}`);
+    if (f.saignementsFrequence) saignementsLignes.push(`— Fréquence : ${f.saignementsFrequence}`);
+    if (f.saignementsDouleurs) saignementsLignes.push(`— Douleurs associées : ${f.saignementsDouleurs}`);
+  }
+
+  const complicationsListe = f.complications.length
+    ? f.complications.map(c => `— ${c}${c === 'Autre' && f.complicationsAutre ? ` (${f.complicationsAutre})` : ''}`).join('\n')
+    : '— [Aucune sélectionnée]';
+
   return `# RAPPORT DE SUIVI DE GROSSESSE
 
 DISPENSAIRE DE LITTLE CREEK — COMTÉ DE WEST ELIZABETH · 1890
@@ -205,10 +299,9 @@ PATIENTE : ${nom}
 DATE DE CONSULTATION : ${date}
 HEURE : ${f.heure || '[HHhMM]'}
 
-DÉBUT ESTIMÉ DE LA GROSSESSE : [Date / période estimée]
-TERME ESTIMÉ : [Date / période estimée]
 MOIS DE GROSSESSE : ${mois}
-GROSSESSE : [Première grossesse / Grossesse précédente]
+POIDS CONSTATÉ : ${f.poids || '[—]'}
+ÉVOLUTION DU POIDS : ${f.evolutionPoids || '[—]'}
 
 ══════════════════════════════════════════════
 
@@ -218,32 +311,44 @@ ${scenario.texte}
 
 ══════════════════════════════════════════════
 
-## ANTÉCÉDENTS
+## ANTÉCÉDENTS DE GROSSESSE
 
-ANTÉCÉDENTS MÉDICAUX :
-
-— [Aucun / À préciser]
-
-ANTÉCÉDENTS DE GROSSESSE :
-
-— Nombre de grossesses précédentes : [—]
-— Nombre d'accouchements : [—]
-— Fausses couches connues : [—]
-— Complications lors de précédentes grossesses : [—]
+${antecedents}
 
 ══════════════════════════════════════════════
 
-## ÉTAT GÉNÉRAL
+## ÉTAT GÉNÉRAL DE LA MÈRE
 
-État général : ${scenario.etatGeneral ?? '[Bon / Satisfaisant / Préoccupant]'}
-Niveau de surveillance : ${scenario.niveauSurveillance ?? '[À déterminer]'}
+— État général : ${f.etatGeneral || '[—]'}
+— Niveau de surveillance : ${scenario.niveauSurveillance ?? '[—]'}
+— Appétit : ${f.appetit || '[—]'}
+— Nausées : ${f.nausees || '[—]'}
+— Vomissements : ${f.vomissements || '[—]'}
+— Vertiges / malaises : ${f.vertiges || '[—]'}
+— Gonflement : ${f.gonflement || '[—]'}
+
+══════════════════════════════════════════════
+
+## DOULEURS ET SAIGNEMENTS
+
+${douleursLignes.join('\n')}
+${saignementsLignes.join('\n')}
+— Pertes inhabituelles : ${f.pertesInhabituelles || '[—]'}
 
 ══════════════════════════════════════════════
 
 ## ${scenario.examensLabel ?? 'EXAMENS À RÉALISER'}
 
 ${(scenario.examens ?? []).map(e => `— ${e}`).join('\n')}
-${f.mouvements ? `— Mouvements de l'enfant constatés : ${f.mouvements}` : ''}
+
+RÉSULTATS DE L'EXAMEN :
+
+— Mouvements de l'enfant : ${f.mouvements || '[—]'}
+— Battements du cœur de l'enfant : ${f.battements || '[—]'}
+— Croissance abdominale : ${f.croissance || '[—]'}
+— Palpation abdominale : ${f.palpation || '[—]'}
+— Contractions : ${f.contractions || '[—]'}
+— Position estimée de l'enfant (par palpation) : ${f.position || '[—]'}
 
 ══════════════════════════════════════════════
 
@@ -253,9 +358,18 @@ ${scenario.evolution ?? '[Normale / Satisfaisante / Nécessitant une surveillanc
 
 ══════════════════════════════════════════════
 
+## COMPLICATIONS
+
+${complicationsListe}
+
+══════════════════════════════════════════════
+
 ## ${scenario.recommandationsLabel ?? 'RECOMMANDATIONS PAR DÉFAUT'}
 
 ${(scenario.recommandations ?? []).map(r => `— ${r}`).join('\n')}
+
+— Repos conseillé : ${f.reposConseille || scenario.reposParDefaut || '[—]'}
+— Prochain contrôle : ${f.prochainControle || scenario.controleParDefaut || '[—]'}
 
 ══════════════════════════════════════════════
 
@@ -275,19 +389,9 @@ DISPOSITIONS PARTICULIÈRES :
 
 ══════════════════════════════════════════════
 
-## PROCHAIN SUIVI
-
-PROCHAINE CONSULTATION RECOMMANDÉE :
-
-— [Date / Dans X semaines]
-
-La patiente devra se présenter plus rapidement au dispensaire en cas de douleurs abdominales importantes, saignements, malaise persistant, fièvre, contractions prématurées ou changement inhabituel dans les mouvements de l'enfant.
-
-══════════════════════════════════════════════
-
 ## OBSERVATIONS COMPLÉMENTAIRES
 
-${f.complications || "[Informations supplémentaires concernant la grossesse, la mère ou la préparation de l'accouchement.]"}
+[Informations supplémentaires concernant la grossesse, la mère ou la préparation de l'accouchement.]
 
 ══════════════════════════════════════════════
 
@@ -497,9 +601,6 @@ export default function ObstetriqueDocumentationPage() {
     setCertPat(patienteById(doc.patientId));
   }
 
-  const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '10px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
-  const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' };
-
   /* ══ VUE CERTIFICAT ══ */
   if (certDoc) return (
     <div style={{ fontFamily: BODY }}>
@@ -691,6 +792,7 @@ export default function ObstetriqueDocumentationPage() {
           {(() => {
             const col = createType === 'Suivi de grossesse' ? COL_SUIVI : createType === 'Prescription médicale' ? COL_RX : COL_ACC;
             const scenarios = scenariosFor(createType);
+            const scenario = scenarios.find(s => s.id === scenarioId);
             const canGenerate = (useExisting ? !!selectedPat : !!newNom.trim()) && !!scenarioId;
             return (
           <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 620, background: T.bg, borderLeft: `2px solid ${col}`, zIndex: 50, display: 'flex', flexDirection: 'column', animation: 'slide-in 0.25s ease' }}>
@@ -751,21 +853,181 @@ export default function ObstetriqueDocumentationPage() {
 
                   {/* Champs structurés selon le type */}
                   {createType === 'Suivi de grossesse' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                        <div><label style={lbl}>SEMAINES DE GROSSESSE</label>
-                          <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.semaines} onChange={e => setSuiviF(f => ({ ...f, semaines: e.target.value }))}>
-                            {SEMAINES_OPTIONS.map(o => <option key={o} value={o}>{o ? `${o} semaines` : '— Sélectionner —'}</option>)}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+                      <FormSection icon="🤰" title="GROSSESSE" color={COL_SUIVI} defaultOpen>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                          <div><label style={lbl}>SEMAINES DE GROSSESSE</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.semaines} onChange={e => setSuiviF(f => ({ ...f, semaines: e.target.value }))}>
+                              {SEMAINES_OPTIONS.map(o => <option key={o} value={o}>{o ? `${o} semaines` : '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>HEURE</label><input style={inp} value={suiviF.heure} onChange={e => setSuiviF(f => ({ ...f, heure: e.target.value }))} placeholder="ex : 14h30" /></div>
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                          <div><label style={lbl}>POIDS CONSTATÉ</label><input style={inp} value={suiviF.poids} onChange={e => setSuiviF(f => ({ ...f, poids: e.target.value }))} placeholder="ex : 58 kg" /></div>
+                          <div><label style={lbl}>ÉVOLUTION DU POIDS</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.evolutionPoids} onChange={e => setSuiviF(f => ({ ...f, evolutionPoids: e.target.value }))}>
+                              {EVOLUTION_POIDS_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                        </div>
+                      </FormSection>
+
+                      <FormSection icon="📜" title="ANTÉCÉDENTS" color={COL_SUIVI}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+                          <div><label style={lbl}>GROSSESSES ANTÉRIEURES</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.grossessesAnt} onChange={e => setSuiviF(f => ({ ...f, grossessesAnt: e.target.value }))}>
+                              {GROSSESSES_ANT_OPTIONS.map(o => <option key={o} value={o}>{o || '—'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>ACCOUCHEMENTS ANTÉRIEURS</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.accouchementsAnt} onChange={e => setSuiviF(f => ({ ...f, accouchementsAnt: e.target.value }))}>
+                              {ACCOUCHEMENTS_ANT_OPTIONS.map(o => <option key={o} value={o}>{o || '—'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>FAUSSES COUCHES ANTÉRIEURES</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.fcAnt} onChange={e => setSuiviF(f => ({ ...f, fcAnt: e.target.value }))}>
+                              {FC_ANT_OPTIONS.map(o => <option key={o} value={o}>{o || '—'}</option>)}
+                            </select>
+                          </div>
+                        </div>
+                      </FormSection>
+
+                      <FormSection icon="🩺" title="ÉTAT DE LA MÈRE" color={COL_SUIVI} alerte={scenario?.prioritaires?.includes('etatGeneral') || scenario?.prioritaires?.includes('vertiges')}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                          <div><label style={lbl}>ÉTAT GÉNÉRAL</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.etatGeneral} onChange={e => setSuiviF(f => ({ ...f, etatGeneral: e.target.value }))}>
+                              {ETAT_GENERAL_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>APPÉTIT</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.appetit} onChange={e => setSuiviF(f => ({ ...f, appetit: e.target.value }))}>
+                              {APPETIT_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>NAUSÉES</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.nausees} onChange={e => setSuiviF(f => ({ ...f, nausees: e.target.value }))}>
+                              {NAUSEES_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>VOMISSEMENTS</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.vomissements} onChange={e => setSuiviF(f => ({ ...f, vomissements: e.target.value }))}>
+                              {VOMISSEMENTS_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>VERTIGES / MALAISES</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.vertiges} onChange={e => setSuiviF(f => ({ ...f, vertiges: e.target.value }))}>
+                              {VERTIGES_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>GONFLEMENT</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.gonflement} onChange={e => setSuiviF(f => ({ ...f, gonflement: e.target.value }))}>
+                              {GONFLEMENT_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                        </div>
+                      </FormSection>
+
+                      <FormSection icon="⚠" title="DOULEURS & SYMPTÔMES" color={COL_SUIVI} alerte={scenario?.prioritaires?.includes('douleurs') || scenario?.prioritaires?.includes('saignements')}>
+                        <div>
+                          <label style={lbl}>DOULEURS</label>
+                          <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.douleurs} onChange={e => setSuiviF(f => ({ ...f, douleurs: e.target.value, douleursLocalisation: [], douleursAutre: '' }))}>
+                            {DOULEURS_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
                           </select>
                         </div>
-                        <div><label style={lbl}>HEURE</label><input style={inp} value={suiviF.heure} onChange={e => setSuiviF(f => ({ ...f, heure: e.target.value }))} placeholder="ex : 14h30" /></div>
-                      </div>
-                      <div><label style={lbl}>MOUVEMENTS DE L&apos;ENFANT</label>
-                        <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.mouvements} onChange={e => setSuiviF(f => ({ ...f, mouvements: e.target.value }))}>
-                          {MOUVEMENTS_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
-                        </select>
-                      </div>
-                      <div><label style={lbl}>COMPLICATIONS ÉVENTUELLES</label><input style={inp} value={suiviF.complications} onChange={e => setSuiviF(f => ({ ...f, complications: e.target.value }))} placeholder="Laisser vide si néant" /></div>
+                        {suiviF.douleurs && suiviF.douleurs !== 'Aucune' && (
+                          <div>
+                            <label style={lbl}>LOCALISATION DES DOULEURS</label>
+                            <MultiToggle options={DOULEURS_LOCALISATION_OPTIONS} value={suiviF.douleursLocalisation} color={COL_SUIVI}
+                              onChange={v => setSuiviF(f => ({ ...f, douleursLocalisation: v }))} />
+                            {suiviF.douleursLocalisation.includes('Autre') && (
+                              <input style={{ ...inp, marginTop: 8 }} value={suiviF.douleursAutre} onChange={e => setSuiviF(f => ({ ...f, douleursAutre: e.target.value }))} placeholder="Précision de la localisation" />
+                            )}
+                          </div>
+                        )}
+                        <div>
+                          <label style={lbl}>SAIGNEMENTS</label>
+                          <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.saignements} onChange={e => setSuiviF(f => ({ ...f, saignements: e.target.value, saignementsDepuis: '', saignementsFrequence: '', saignementsDouleurs: '' }))}>
+                            {SAIGNEMENTS_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                          </select>
+                        </div>
+                        {suiviF.saignements && suiviF.saignements !== 'Aucun' && (
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+                            <div><label style={lbl}>DEPUIS QUAND ?</label><input style={inp} value={suiviF.saignementsDepuis} onChange={e => setSuiviF(f => ({ ...f, saignementsDepuis: e.target.value }))} placeholder="ex : ce matin" /></div>
+                            <div><label style={lbl}>FRÉQUENCE</label><input style={inp} value={suiviF.saignementsFrequence} onChange={e => setSuiviF(f => ({ ...f, saignementsFrequence: e.target.value }))} placeholder="ex : continue" /></div>
+                            <div><label style={lbl}>DOULEURS ASSOCIÉES</label>
+                              <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.saignementsDouleurs} onChange={e => setSuiviF(f => ({ ...f, saignementsDouleurs: e.target.value }))}>
+                                {OUI_NON_OPTIONS.map(o => <option key={o} value={o}>{o || '—'}</option>)}
+                              </select>
+                            </div>
+                          </div>
+                        )}
+                        <div><label style={lbl}>PERTES INHABITUELLES</label>
+                          <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.pertesInhabituelles} onChange={e => setSuiviF(f => ({ ...f, pertesInhabituelles: e.target.value }))}>
+                            {PERTES_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                          </select>
+                        </div>
+                      </FormSection>
+
+                      <FormSection icon="👶" title="EXAMEN DE L'ENFANT" color={COL_SUIVI} alerte={scenario?.prioritaires?.includes('mouvements') || scenario?.prioritaires?.includes('battements') || estAlerte('mouvements', suiviF.mouvements) || estAlerte('contractions', suiviF.contractions)}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                          <div><label style={lbl}>MOUVEMENTS DE L&apos;ENFANT</label>
+                            <select style={{ ...inp, cursor: 'pointer', ...(estAlerte('mouvements', suiviF.mouvements) ? { borderColor: 'rgba(180,70,70,0.6)', color: '#DF9A88' } : {}) }} value={suiviF.mouvements} onChange={e => setSuiviF(f => ({ ...f, mouvements: e.target.value }))}>
+                              {MOUVEMENTS_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>BATTEMENTS DU CŒUR</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.battements} onChange={e => setSuiviF(f => ({ ...f, battements: e.target.value }))}>
+                              {BATTEMENTS_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>CROISSANCE ABDOMINALE</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.croissance} onChange={e => setSuiviF(f => ({ ...f, croissance: e.target.value }))}>
+                              {CROISSANCE_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>PALPATION ABDOMINALE</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.palpation} onChange={e => setSuiviF(f => ({ ...f, palpation: e.target.value }))}>
+                              {PALPATION_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>CONTRACTIONS</label>
+                            <select style={{ ...inp, cursor: 'pointer', ...(estAlerte('contractions', suiviF.contractions) ? { borderColor: 'rgba(180,70,70,0.6)', color: '#DF9A88' } : {}) }} value={suiviF.contractions} onChange={e => setSuiviF(f => ({ ...f, contractions: e.target.value }))}>
+                              {CONTRACTIONS_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>POSITION ESTIMÉE (PAR PALPATION)</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.position} onChange={e => setSuiviF(f => ({ ...f, position: e.target.value }))}>
+                              {POSITION_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                        </div>
+                      </FormSection>
+
+                      <FormSection icon="🗒" title="COMPLICATIONS" color={COL_SUIVI}>
+                        <MultiToggle options={COMPLICATIONS_OPTIONS} value={suiviF.complications} color={COL_SUIVI}
+                          onChange={v => setSuiviF(f => ({ ...f, complications: v }))} />
+                        {suiviF.complications.includes('Autre') && (
+                          <input style={{ ...inp, marginTop: 8 }} value={suiviF.complicationsAutre} onChange={e => setSuiviF(f => ({ ...f, complicationsAutre: e.target.value }))} placeholder="Préciser la complication" />
+                        )}
+                      </FormSection>
+
+                      <FormSection icon="💊" title="RECOMMANDATIONS" color={COL_SUIVI}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                          <div><label style={lbl}>REPOS CONSEILLÉ</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.reposConseille || scenario?.reposParDefaut || ''} onChange={e => setSuiviF(f => ({ ...f, reposConseille: e.target.value }))}>
+                              {REPOS_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                          <div><label style={lbl}>PROCHAIN CONTRÔLE</label>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.prochainControle || scenario?.controleParDefaut || ''} onChange={e => setSuiviF(f => ({ ...f, prochainControle: e.target.value }))}>
+                              {CONTROLE_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
+                            </select>
+                          </div>
+                        </div>
+                      </FormSection>
+
                     </div>
                   )}
                   {createType === 'Prescription médicale' && (
@@ -804,20 +1066,31 @@ export default function ObstetriqueDocumentationPage() {
                   )}
 
                   {/* Scénario */}
-                  <div>
-                    <label style={lbl}>SCÉNARIO *</label>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      {scenarios.map(s => {
-                        const on = scenarioId === s.id;
-                        return (
-                          <button key={s.id} type="button" onClick={() => setScenarioId(s.id)}
-                            style={{ fontFamily: MONO, fontSize: 14, padding: '9px 12px', cursor: 'pointer', textAlign: 'left', letterSpacing: '0.02em', background: on ? col + '22' : 'transparent', color: on ? col : T.dim, border: `1px solid ${on ? col + '70' : T.border}` }}>
-                            {s.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  {(() => {
+                    const scenarioButtons = (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {scenarios.map(s => {
+                          const on = scenarioId === s.id;
+                          return (
+                            <button key={s.id} type="button" onClick={() => setScenarioId(s.id)}
+                              style={{ fontFamily: MONO, fontSize: 14, padding: '9px 12px', cursor: 'pointer', textAlign: 'left', letterSpacing: '0.02em', background: on ? col + '22' : 'transparent', color: on ? col : T.dim, border: `1px solid ${on ? col + '70' : T.border}` }}>
+                              {s.label}
+                            </button>
+                          );
+                        })}
+                        {scenario?.prioritaires && (
+                          <div style={{ marginTop: 4, padding: '10px 12px', background: 'rgba(139,64,64,0.10)', border: '1px solid rgba(139,64,64,0.4)', fontFamily: MONO, fontSize: 13, color: '#DF9A88', letterSpacing: '0.02em' }}>
+                            ⚠ Priorité : vérifier en particulier l&apos;état général, les saignements, les douleurs, les contractions, les mouvements de l&apos;enfant et les battements du cœur.
+                          </div>
+                        )}
+                      </div>
+                    );
+                    return createType === 'Suivi de grossesse' ? (
+                      <FormSection icon="🗂" title="SCÉNARIO *" color={col} defaultOpen>{scenarioButtons}</FormSection>
+                    ) : (
+                      <div><label style={lbl}>SCÉNARIO *</label>{scenarioButtons}</div>
+                    );
+                  })()}
                 </div>
 
                 <div style={{ padding: '16px 28px 24px', borderTop: `1px solid ${T.border}`, flexShrink: 0 }}>
@@ -867,6 +1140,47 @@ export default function ObstetriqueDocumentationPage() {
           })()}
         </>
       )}
+    </div>
+  );
+}
+
+/* ══ Bloc repliable (formulaire Suivi de grossesse) ══ */
+function FormSection({ icon, title, color, defaultOpen, alerte, children }: {
+  icon: string; title: string; color: string; defaultOpen?: boolean; alerte?: boolean; children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(!!defaultOpen);
+  return (
+    <div style={{ border: `1px solid ${alerte ? 'rgba(180,70,70,0.5)' : T.border}`, background: T.card }}>
+      <button type="button" onClick={() => setOpen(o => !o)}
+        style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
+        <span style={{ fontSize: 16 }}>{icon}</span>
+        <span style={{ fontFamily: MONO, fontSize: 14, color: alerte ? '#DF9A88' : color, letterSpacing: '0.08em', flex: 1 }}>{title}</span>
+        {alerte && <span style={{ fontFamily: MONO, fontSize: 13, color: '#DF9A88', background: 'rgba(139,64,64,0.18)', padding: '1px 7px', border: '1px solid rgba(139,64,64,0.4)' }}>⚠</span>}
+        <span style={{ color: T.dim, fontFamily: MONO, fontSize: 13 }}>{open ? '▲' : '▼'}</span>
+      </button>
+      {open && <div style={{ padding: '2px 14px 14px', display: 'flex', flexDirection: 'column', gap: 10, borderTop: `1px solid ${T.border}` }}>{children}</div>}
+    </div>
+  );
+}
+
+/* ══ Menu multi-sélection (boutons à bascule) ══ */
+function MultiToggle({ options, value, onChange, color }: {
+  options: string[]; value: string[]; onChange: (v: string[]) => void; color: string;
+}) {
+  function toggle(opt: string) {
+    onChange(value.includes(opt) ? value.filter(v => v !== opt) : [...value, opt]);
+  }
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+      {options.map(o => {
+        const on = value.includes(o);
+        return (
+          <button key={o} type="button" onClick={() => toggle(o)}
+            style={{ fontFamily: MONO, fontSize: 13, padding: '6px 10px', cursor: 'pointer', background: on ? color + '22' : 'transparent', color: on ? color : T.dim, border: `1px solid ${on ? color + '70' : T.border}` }}>
+            {o}
+          </button>
+        );
+      })}
     </div>
   );
 }
