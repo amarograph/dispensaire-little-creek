@@ -335,6 +335,12 @@ export default function DirectionComptabilitePage() {
   const totalAttente = semaineActuelle.filter(f=>f.statut==='EN ATTENTE').reduce((s,f)=>s+f.montant,0);
   const salairesActes = salairesByMedecin(semaineActuelle, tarifs);
 
+  /* Factures à envoyer aux institutions (semaine en cours) */
+  const factureSherif = semaineActuelle.filter(f => f.payeur === 'Shérif' && f.statut !== 'ANNULÉ');
+  const factureMairie  = semaineActuelle.filter(f => f.payeur === 'Mairie West Elizabeth' && f.statut !== 'ANNULÉ');
+  const totalFactureSherif = factureSherif.reduce((s,f)=>s+f.montant,0);
+  const totalFactureMairie = factureMairie.reduce((s,f)=>s+f.montant,0);
+
   /* Fusion des salaires (ventes) avec les gains de caisses de la semaine, par nom */
   const salaires = (() => {
     const map: Record<string, Salaire & { caisses: number; salaireCaisses: number }> = {};
@@ -644,13 +650,43 @@ export default function DirectionComptabilitePage() {
             </div>
 
             {/* Registre de la semaine */}
-            <div>
+            <div style={{ marginBottom:24 }}>
               <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}>📋 Registre de la semaine</div>
               {semaineActuelle.length === 0 ? (
                 <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucune facture cette semaine</div>
               ) : (
                 <div style={{ display:'flex', flexDirection:'column', gap:7 }}>
                   {semaineActuelle.map(f => <RegistreLine key={f.id} f={f} />)}
+                </div>
+              )}
+            </div>
+
+            {/* Facture Shérif */}
+            <div style={{ marginBottom:24 }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
+                <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text }}>⭐ Facture Shérif</div>
+                <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.gold }}>{fmt$(totalFactureSherif)}</div>
+              </div>
+              {factureSherif.length === 0 ? (
+                <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucune facture Shérif cette semaine</div>
+              ) : (
+                <div style={{ display:'flex', flexDirection:'column', gap:7 }}>
+                  {factureSherif.map(f => <RegistreLine key={f.id} f={f} />)}
+                </div>
+              )}
+            </div>
+
+            {/* Facture Mairie West Elizabeth */}
+            <div>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
+                <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text }}>🏛 Facture Mairie West Elizabeth</div>
+                <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.gold }}>{fmt$(totalFactureMairie)}</div>
+              </div>
+              {factureMairie.length === 0 ? (
+                <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucune facture Mairie cette semaine</div>
+              ) : (
+                <div style={{ display:'flex', flexDirection:'column', gap:7 }}>
+                  {factureMairie.map(f => <RegistreLine key={f.id} f={f} />)}
                 </div>
               )}
             </div>
