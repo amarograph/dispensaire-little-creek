@@ -70,9 +70,17 @@ const ACC_SCENARIOS: Scenario[] = [
 ];
 
 /* ── Champs structurés par type ── */
-interface SuiviFields { terme: string; poids: string; mouvements: string; complications: string; }
-const SUIVI_EMPTY: SuiviFields = { terme: '', poids: '', mouvements: '', complications: '' };
+interface SuiviFields { heure: string; semaines: string; mouvements: string; complications: string; }
+const SUIVI_EMPTY: SuiviFields = { heure: '', semaines: '', mouvements: '', complications: '' };
 const MOUVEMENTS_OPTIONS = ['', 'Perçus, réguliers', 'Perçus, faibles', 'Non perçus', 'Non applicable (début de grossesse)'];
+const SEMAINES_OPTIONS = ['', ...Array.from({ length: 19 }, (_, i) => String(4 + i * 2))]; // 4 à 40 semaines, par pas de 2
+function moisDeGrossesse(semaines: string): string {
+  const n = Number(semaines);
+  if (!n) return '';
+  const mois = Math.min(9, Math.max(1, Math.ceil(n / 4)));
+  const suffixe = mois === 1 ? 'er' : 'e';
+  return `${mois}${suffixe} mois`;
+}
 
 interface RxFields { indication: string; remede: string; posologie: string; }
 const RX_EMPTY: RxFields = { indication: '', remede: '', posologie: '' };
@@ -85,26 +93,142 @@ const SEXE_OPTIONS = ['', 'Garçon', 'Fille'];
 
 /* ── Génération du document à partir des champs + scénario ── */
 function genSuivi(nom: string, age: string, date: string, f: SuiviFields, scenario: Scenario): string {
-  return `SUIVI DE GROSSESSE
-DISPENSAIRE DE LITTLE CREEK — OBSTÉTRIQUE
-Année 1890
+  const mois = moisDeGrossesse(f.semaines) || '[Xᵉ mois]';
+  return `# RAPPORT DE SUIVI DE GROSSESSE
 
-IDENTITÉ DE LA PATIENTE
-Nom et prénom : ${nom}
-Âge : ${age || '—'}
-Date de l'examen : ${date}
+DISPENSAIRE DE LITTLE CREEK — COMTÉ DE WEST ELIZABETH · 1890
+FICHE DE SUIVI DE GROSSESSE
 
-TERME DE LA GROSSESSE
-Semaines de grossesse : ${f.terme || '—'}
-Poids constaté : ${f.poids || '—'}
-Mouvements de l'enfant : ${f.mouvements || '—'}
+PATIENTE : ${nom}
+ÂGE : ${age || '[Âge]'}
+DATE DE CONSULTATION : ${date}
+HEURE : ${f.heure || '[HHhMM]'}
 
-OBSERVATIONS
-${scenario.texte}
-${f.complications ? `\nComplications relevées : ${f.complications}` : "\nComplications relevées : néant"}
+DÉBUT ESTIMÉ DE LA GROSSESSE : [Date / période estimée]
+TERME ESTIMÉ : [Date / période estimée]
+MOIS DE GROSSESSE : ${mois}
+GROSSESSE : [Première grossesse / Grossesse précédente]
 
-CONCLUSION
-${scenario.label}`;
+══════════════════════════════════════════════
+
+## MOTIF DE LA CONSULTATION
+
+${scenario.texte || '[Consultation de suivi régulière / Première consultation / Douleurs / Fatigue / Nausées / Saignements / Autre.]'}
+
+[Préciser ici les symptômes ou préoccupations rapportés par la patiente.]
+
+══════════════════════════════════════════════
+
+## ANTÉCÉDENTS
+
+ANTÉCÉDENTS MÉDICAUX :
+
+— [Aucun / À préciser]
+
+ANTÉCÉDENTS DE GROSSESSE :
+
+— Nombre de grossesses précédentes : [—]
+— Nombre d'accouchements : [—]
+— Fausses couches connues : [—]
+— Complications lors de précédentes grossesses : [—]
+
+══════════════════════════════════════════════
+
+## ÉTAT GÉNÉRAL DE LA MÈRE
+
+— État général : [Bon / Satisfaisant / Préoccupant]
+— Fatigue : [Absente / Légère / Importante]
+— Nausées ou vomissements : [Oui / Non]
+— Appétit : [Normal / Diminué / Augmenté]
+— Sommeil : [Bon / Perturbé]
+— Douleurs : [Aucune / Localisation et description]
+— Saignements : [Aucun / À préciser]
+— Gonflement des jambes ou des pieds : [Oui / Non]
+— Autres observations : ${f.complications || '[À préciser]'}
+
+══════════════════════════════════════════════
+
+## EXAMEN DE LA GROSSESSE
+
+EXAMENS RÉALISÉS :
+
+— Observation générale de la patiente.
+— Palpation prudente de l'abdomen.
+— Évaluation de la croissance abdominale.
+— Recherche de douleurs anormales.
+— Observation des mouvements de l'enfant lorsqu'ils sont perceptibles.
+— Écoute des bruits du cœur de l'enfant lorsque le terme le permet.
+
+RÉSULTATS :
+
+— Développement abdominal : [Conforme / À surveiller]
+— Utérus : [Souple / Tendu / Douloureux / Autre]
+— Mouvements de l'enfant : ${f.mouvements || '[Perçus / Non encore perceptibles / À surveiller]'}
+— Battements du cœur de l'enfant : [Perçus / Non recherchés / Non perceptibles]
+— Position estimée de l'enfant : [À préciser si identifiable]
+— Douleur à la palpation : [Oui / Non]
+— Autres constatations : [À préciser]
+
+══════════════════════════════════════════════
+
+## ÉVOLUTION DE LA GROSSESSE
+
+À ce jour, la grossesse présente une évolution :
+
+[Normale / Satisfaisante / Nécessitant une surveillance particulière.]
+
+OBSERVATIONS :
+
+[Décrire ici l'évolution de la grossesse, l'état de la mère, le développement apparent de l'enfant et les éventuelles inquiétudes médicales.]
+
+══════════════════════════════════════════════
+
+## RECOMMANDATIONS
+
+— Maintenir une alimentation régulière et suffisamment nourrissante.
+— Boire régulièrement de l'eau propre.
+— Éviter les efforts physiques importants et le port de charges lourdes.
+— Favoriser le repos en cas de fatigue.
+— Éviter autant que possible les longues chevauchées et déplacements éprouvants.
+— [Autres recommandations particulières.]
+
+══════════════════════════════════════════════
+
+## PRÉPARATION À L'ACCOUCHEMENT
+
+LIEU ENVISAGÉ POUR L'ACCOUCHEMENT :
+
+— [Dispensaire de Little Creek / Domicile / Autre]
+
+PERSONNE DEVANT ASSISTER L'ACCOUCHEMENT :
+
+— [Médecin / Sage-femme / Infirmière / À déterminer]
+
+DISPOSITIONS PARTICULIÈRES :
+
+— [À préciser]
+
+══════════════════════════════════════════════
+
+## PROCHAIN SUIVI
+
+PROCHAINE CONSULTATION RECOMMANDÉE :
+
+— [Date / Dans X semaines]
+
+La patiente devra se présenter plus rapidement au dispensaire en cas de douleurs abdominales importantes, saignements, malaise persistant, fièvre, contractions prématurées ou changement inhabituel dans les mouvements de l'enfant.
+
+══════════════════════════════════════════════
+
+## OBSERVATIONS COMPLÉMENTAIRES
+
+[Informations supplémentaires concernant la grossesse, la mère ou la préparation de l'accouchement.]
+
+══════════════════════════════════════════════
+
+Médecin / infirmière / sage-femme ayant effectué le suivi :
+
+[Nom et signature]`;
 }
 
 function genRx(nom: string, date: string, f: RxFields, scenario: Scenario): string {
@@ -213,7 +337,7 @@ export default function ObstetriqueDocumentationPage() {
     setUseExisting(true);
     setSelectedPat(patientes[0]?.id ?? '');
     setNewNom(''); setNewPrenom(''); setNewAge('');
-    setCreateTitre('');
+    setCreateTitre(type);
     setCreateDate(rpDate());
     setCreateContenu('');
     setPatSearch('');
@@ -564,8 +688,12 @@ export default function ObstetriqueDocumentationPage() {
                   {createType === 'Suivi de grossesse' && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                        <div><label style={lbl}>SEMAINES DE GROSSESSE</label><input style={inp} value={suiviF.terme} onChange={e => setSuiviF(f => ({ ...f, terme: e.target.value }))} placeholder="ex : 24 semaines" /></div>
-                        <div><label style={lbl}>POIDS CONSTATÉ</label><input style={inp} value={suiviF.poids} onChange={e => setSuiviF(f => ({ ...f, poids: e.target.value }))} placeholder="ex : stable" /></div>
+                        <div><label style={lbl}>SEMAINES DE GROSSESSE</label>
+                          <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.semaines} onChange={e => setSuiviF(f => ({ ...f, semaines: e.target.value }))}>
+                            {SEMAINES_OPTIONS.map(o => <option key={o} value={o}>{o ? `${o} semaines` : '— Sélectionner —'}</option>)}
+                          </select>
+                        </div>
+                        <div><label style={lbl}>HEURE</label><input style={inp} value={suiviF.heure} onChange={e => setSuiviF(f => ({ ...f, heure: e.target.value }))} placeholder="ex : 14h30" /></div>
                       </div>
                       <div><label style={lbl}>MOUVEMENTS DE L&apos;ENFANT</label>
                         <select style={{ ...inp, cursor: 'pointer' }} value={suiviF.mouvements} onChange={e => setSuiviF(f => ({ ...f, mouvements: e.target.value }))}>
