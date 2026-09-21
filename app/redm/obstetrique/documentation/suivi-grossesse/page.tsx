@@ -108,7 +108,7 @@ export default function SuiviGrossessePage() {
   );
 
   return (
-    <div style={{ fontFamily: BODY, maxWidth: 820, margin: '0 auto' }}>
+    <div style={{ fontFamily: BODY, maxWidth: 1100, margin: '0 auto' }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
       <div style={{ marginBottom: 28 }}>
