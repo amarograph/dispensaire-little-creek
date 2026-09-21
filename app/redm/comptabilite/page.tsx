@@ -249,6 +249,14 @@ export default function CaisseComptabilitePage() {
   /* ── Groupements semaine courante ── */
   const allByWeek  = groupByWeek(items);
 
+  /* ── Totaux à facturer (institutions) pour la semaine en cours ── */
+  function totalPayeur(p: Payeur) {
+    const factures = (allByWeek[currentKey]?.factures ?? []).filter(f => f.payeur === p && f.statut !== 'ANNULÉ');
+    return { count: factures.length, montant: factures.reduce((s, f) => s + f.montant, 0) };
+  }
+  const totalMairie  = totalPayeur('Mairie West Elizabeth');
+  const totalSherif  = totalPayeur('Shérif');
+
   /* ── Ligne de facture ── */
   function FactureLine({ f, isCurrent }: { f: Facture; isCurrent: boolean }) {
     const col  = STATUT_COL[f.statut];
@@ -395,6 +403,21 @@ export default function CaisseComptabilitePage() {
                   {PAYEURS.map(p=><option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
+
+              {form.payeur !== 'Civil' && (
+                <div style={{ display:'flex', gap:8 }}>
+                  <div style={{ flex:1, background:'rgba(0,0,0,0.22)', border:`1px solid ${form.payeur==='Mairie West Elizabeth' ? T.gold : T.border}`, padding:'9px 12px' }}>
+                    <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.08em', marginBottom:4 }}>🏛 TOTAL MAIRIE</div>
+                    <div style={{ fontFamily:DISPLAY, fontSize: 20, color:T.gold }}>{fmt$(totalMairie.montant)}</div>
+                    <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim }}>{totalMairie.count} acte(s) cette semaine</div>
+                  </div>
+                  <div style={{ flex:1, background:'rgba(0,0,0,0.22)', border:`1px solid ${form.payeur==='Shérif' ? T.gold : T.border}`, padding:'9px 12px' }}>
+                    <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.08em', marginBottom:4 }}>⭐ TOTAL SHÉRIF</div>
+                    <div style={{ fontFamily:DISPLAY, fontSize: 20, color:T.gold }}>{fmt$(totalSherif.montant)}</div>
+                    <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim }}>{totalSherif.count} acte(s) cette semaine</div>
+                  </div>
+                </div>
+              )}
 
               <div><label style={lbl}>STATUT</label>
                 <select style={{...inp,cursor:'pointer'}} value={form.statut} onChange={e=>setForm(f=>({...f,statut:e.target.value as StatutPaiement}))}>
