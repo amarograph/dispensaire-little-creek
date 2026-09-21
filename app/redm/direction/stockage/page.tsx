@@ -110,6 +110,7 @@ export default function StockagePage() {
   const [renameVal, setRenameVal] = useState('');
 
   const [delCatConfirm, setDelCatConfirm] = useState<string | null>(null);
+  const [delDepotConfirm, setDelDepotConfirm] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/admin/redm-stockage')
@@ -178,6 +179,18 @@ export default function StockagePage() {
     setCategories(prev => prev.map(c => c.id !== catId ? c : { ...c, items: c.items.filter(it => it.id !== itemId) }));
   }
 
+  async function removeDepot(id: string) {
+    setDepots(prev => prev.filter(d => d.id !== id));
+    setDelDepotConfirm(null);
+    try {
+      await fetch('/api/admin/redm-stockage-depots', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+    } catch {}
+  }
+
   return (
     <div style={{ fontFamily: BODY }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
@@ -224,6 +237,19 @@ export default function StockagePage() {
                 <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim, minWidth: 70, flexShrink: 0 }}>{d.date}</span>
                 <span style={{ fontFamily: BODY, fontSize: 15, color: T.text, flex: 1, minWidth: 0 }}>+{d.quantite} × {d.item} <span style={{ color: T.dim }}>({d.categorie})</span></span>
                 <span style={{ fontFamily: MONO, fontSize: 13, color: '#BAAAC6', flexShrink: 0 }}>👤 {d.auteur}</span>
+                {canEdit && (
+                  delDepotConfirm === d.id ? (
+                    <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+                      <button onClick={() => removeDepot(d.id)} style={{ fontFamily: MONO, fontSize: 12, padding: '3px 8px', cursor: 'pointer', background: 'rgba(180,70,70,0.18)', color: '#C87060', border: '1px solid rgba(180,70,70,0.5)' }}>Confirmer ✕</button>
+                      <button onClick={() => setDelDepotConfirm(null)} style={{ fontFamily: MONO, fontSize: 12, padding: '3px 8px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>Annuler</button>
+                    </div>
+                  ) : (
+                    <button onClick={() => setDelDepotConfirm(d.id)} title="Supprimer cette entrée du journal"
+                      style={{ fontFamily: MONO, fontSize: 13, padding: '3px 8px', cursor: 'pointer', background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)', flexShrink: 0 }}>
+                      ✕
+                    </button>
+                  )
+                )}
               </div>
             ))}
           </div>
