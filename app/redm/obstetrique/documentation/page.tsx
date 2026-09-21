@@ -35,17 +35,118 @@ interface DocResult {
 }
 
 /* ── Scénarios proposés par type de document ── */
-interface Scenario { id: string; label: string; texte: string; }
+interface Scenario {
+  id: string; label: string; texte: string;
+  etatGeneral?: string; niveauSurveillance?: string;
+  examensLabel?: string; examens?: string[];
+  evolution?: string;
+  recommandationsLabel?: string; recommandations?: string[];
+}
 
 const SUIVI_SCENARIOS: Scenario[] = [
-  { id: 'normal',     label: 'Grossesse normale — suivi de routine',
-    texte: "La grossesse suit son cours normalement. Aucun signe inquiétant n'a été relevé lors de cet examen. Le suivi de routine est maintenu." },
-  { id: 'surveiller', label: 'À surveiller — facteurs de risque modérés',
-    texte: "Certains éléments observés justifient une surveillance accrue, sans qu'il y ait lieu de s'alarmer outre mesure à ce stade. Un rythme de consultation plus rapproché est recommandé." },
-  { id: 'risque',     label: 'Risque élevé — surveillance rapprochée',
-    texte: "L'état de la grossesse présente des facteurs de risque notables. Une surveillance étroite est requise et la patiente doit être avertie des signes devant motiver une consultation immédiate." },
-  { id: 'urgence',    label: "Consultation d'urgence",
-    texte: "La patiente s'est présentée en urgence. La situation a nécessité une prise en charge immédiate." },
+  {
+    id: 'normal', label: 'Grossesse normale — suivi de routine',
+    texte: "Consultation régulière dans le cadre du suivi de grossesse. Aucun trouble particulier signalé avant l'examen.",
+    etatGeneral: 'Bon', niveauSurveillance: 'Suivi ordinaire',
+    examensLabel: 'EXAMENS À RÉALISER',
+    examens: [
+      "Observation de l'état général de la mère.",
+      'Recherche de douleurs, saignements ou malaises.',
+      "Palpation prudente de l'abdomen.",
+      'Évaluation de la croissance abdominale.',
+      "Recherche des mouvements de l'enfant si le terme le permet.",
+      "Écoute des battements du cœur de l'enfant si le terme le permet.",
+      "Recherche d'un gonflement inhabituel des jambes ou des pieds.",
+    ],
+    evolution: "Grossesse faisant l'objet d'un suivi ordinaire. Aucun facteur de risque particulier connu avant l'examen.",
+    recommandationsLabel: 'RECOMMANDATIONS PAR DÉFAUT',
+    recommandations: [
+      'Alimentation régulière et suffisamment nourrissante.',
+      'Hydratation régulière.',
+      "Repos adapté à l'état de fatigue.",
+      'Éviter les efforts physiques excessifs et le port de charges lourdes.',
+      'Poursuite du suivi régulier de la grossesse.',
+    ],
+  },
+  {
+    id: 'surveiller', label: 'À surveiller — facteurs de risque modérés',
+    texte: "Consultation de suivi nécessitant une attention particulière en raison d'un ou plusieurs facteurs susceptibles de compliquer la grossesse.",
+    etatGeneral: "À déterminer lors de l'examen", niveauSurveillance: 'Renforcé',
+    examensLabel: 'EXAMENS À RÉALISER',
+    examens: [
+      'Examen général approfondi de la mère.',
+      'Recherche de douleurs abdominales ou lombaires.',
+      'Recherche de saignements ou pertes inhabituelles.',
+      'Recherche de malaises, vertiges ou faiblesse importante.',
+      "Palpation prudente de l'abdomen.",
+      'Surveillance de la croissance abdominale.',
+      "Observation des mouvements de l'enfant si perceptibles.",
+      "Écoute des battements du cœur de l'enfant si possible.",
+      'Recherche de gonflements inhabituels.',
+    ],
+    evolution: "Grossesse nécessitant une surveillance plus attentive. La nature et l'importance des facteurs de risque devront être précisées au cours de la consultation.",
+    recommandationsLabel: 'RECOMMANDATIONS PAR DÉFAUT',
+    recommandations: [
+      'Repos accru.',
+      'Limitation des efforts physiques importants.',
+      'Éviter les longues chevauchées et déplacements éprouvants.',
+      'Surveillance de tout nouveau symptôme.',
+      'Consultations de contrôle plus rapprochées.',
+    ],
+  },
+  {
+    id: 'risque', label: 'Risque élevé — surveillance rapprochée',
+    texte: "Suivi d'une grossesse considérée comme présentant un risque important pour la mère, l'enfant ou les deux. Surveillance médicale rapprochée nécessaire.",
+    etatGeneral: 'À surveiller étroitement', niveauSurveillance: 'Élevé',
+    examensLabel: 'EXAMENS À RÉALISER',
+    examens: [
+      "Examen complet de l'état général de la mère.",
+      'Recherche systématique de douleurs, saignements et malaises.',
+      "Surveillance de l'apparition de fièvre ou d'une faiblesse inhabituelle.",
+      "Palpation prudente de l'abdomen.",
+      'Surveillance attentive de la croissance abdominale.',
+      "Contrôle des mouvements de l'enfant lorsqu'ils sont perceptibles.",
+      "Écoute des battements du cœur de l'enfant lorsque cela est possible.",
+      'Recherche de contractions prématurées.',
+      "Recherche d'un gonflement important des membres.",
+    ],
+    evolution: "Grossesse nécessitant une surveillance médicale rapprochée. Toute modification de l'état de la mère ou de l'enfant devra faire l'objet d'un nouvel examen.",
+    recommandationsLabel: 'RECOMMANDATIONS PAR DÉFAUT',
+    recommandations: [
+      'Repos important.',
+      'Efforts physiques fortement limités.',
+      'Éviter les déplacements non indispensables.',
+      'Contrôles médicaux rapprochés.',
+      "Prévoir à l'avance les dispositions nécessaires à l'accouchement.",
+      "Consultation immédiate en cas d'apparition ou d'aggravation d'un symptôme.",
+    ],
+  },
+  {
+    id: 'urgence', label: "Consultation d'urgence",
+    texte: "Patiente reçue en urgence au cours de sa grossesse en raison de symptômes ou d'un événement nécessitant un examen médical immédiat.",
+    etatGeneral: 'À déterminer immédiatement', niveauSurveillance: 'Urgence',
+    examensLabel: 'EXAMENS À RÉALISER EN PRIORITÉ',
+    examens: [
+      "Évaluation immédiate de l'état de conscience et de l'état général de la mère.",
+      "Recherche d'une hémorragie.",
+      'Recherche et localisation des douleurs.',
+      'Recherche de contractions.',
+      "Palpation prudente de l'abdomen lorsque l'état le permet.",
+      "Recherche des mouvements de l'enfant si le terme le permet.",
+      "Écoute des battements du cœur de l'enfant lorsque cela est possible.",
+      "Recherche d'un traumatisme récent, d'une chute ou d'un choc.",
+      'Recherche de fièvre, malaise ou faiblesse importante.',
+    ],
+    evolution: "État de la grossesse à déterminer après examen. Aucun pronostic ne doit être automatiquement établi avant les constatations médicales.",
+    recommandationsLabel: 'CONDUITE À TENIR PAR DÉFAUT',
+    recommandations: [
+      'Mise au repos immédiate de la patiente.',
+      'Surveillance rapprochée.',
+      'Limitation des déplacements.',
+      "Traitement adapté aux constatations de l'examen.",
+      "Maintien au dispensaire si l'état de la patiente nécessite une observation prolongée.",
+    ],
+  },
 ];
 
 const RX_SCENARIOS: Scenario[] = [
@@ -113,9 +214,7 @@ GROSSESSE : [Première grossesse / Grossesse précédente]
 
 ## MOTIF DE LA CONSULTATION
 
-${scenario.texte || '[Consultation de suivi régulière / Première consultation / Douleurs / Fatigue / Nausées / Saignements / Autre.]'}
-
-[Préciser ici les symptômes ou préoccupations rapportés par la patiente.]
+${scenario.texte}
 
 ══════════════════════════════════════════════
 
@@ -134,63 +233,29 @@ ANTÉCÉDENTS DE GROSSESSE :
 
 ══════════════════════════════════════════════
 
-## ÉTAT GÉNÉRAL DE LA MÈRE
+## ÉTAT GÉNÉRAL
 
-— État général : [Bon / Satisfaisant / Préoccupant]
-— Fatigue : [Absente / Légère / Importante]
-— Nausées ou vomissements : [Oui / Non]
-— Appétit : [Normal / Diminué / Augmenté]
-— Sommeil : [Bon / Perturbé]
-— Douleurs : [Aucune / Localisation et description]
-— Saignements : [Aucun / À préciser]
-— Gonflement des jambes ou des pieds : [Oui / Non]
-— Autres observations : ${f.complications || '[À préciser]'}
+État général : ${scenario.etatGeneral ?? '[Bon / Satisfaisant / Préoccupant]'}
+Niveau de surveillance : ${scenario.niveauSurveillance ?? '[À déterminer]'}
 
 ══════════════════════════════════════════════
 
-## EXAMEN DE LA GROSSESSE
+## ${scenario.examensLabel ?? 'EXAMENS À RÉALISER'}
 
-EXAMENS RÉALISÉS :
-
-— Observation générale de la patiente.
-— Palpation prudente de l'abdomen.
-— Évaluation de la croissance abdominale.
-— Recherche de douleurs anormales.
-— Observation des mouvements de l'enfant lorsqu'ils sont perceptibles.
-— Écoute des bruits du cœur de l'enfant lorsque le terme le permet.
-
-RÉSULTATS :
-
-— Développement abdominal : [Conforme / À surveiller]
-— Utérus : [Souple / Tendu / Douloureux / Autre]
-— Mouvements de l'enfant : ${f.mouvements || '[Perçus / Non encore perceptibles / À surveiller]'}
-— Battements du cœur de l'enfant : [Perçus / Non recherchés / Non perceptibles]
-— Position estimée de l'enfant : [À préciser si identifiable]
-— Douleur à la palpation : [Oui / Non]
-— Autres constatations : [À préciser]
+${(scenario.examens ?? []).map(e => `— ${e}`).join('\n')}
+${f.mouvements ? `— Mouvements de l'enfant constatés : ${f.mouvements}` : ''}
 
 ══════════════════════════════════════════════
 
 ## ÉVOLUTION DE LA GROSSESSE
 
-À ce jour, la grossesse présente une évolution :
-
-[Normale / Satisfaisante / Nécessitant une surveillance particulière.]
-
-OBSERVATIONS :
-
-[Décrire ici l'évolution de la grossesse, l'état de la mère, le développement apparent de l'enfant et les éventuelles inquiétudes médicales.]
+${scenario.evolution ?? '[Normale / Satisfaisante / Nécessitant une surveillance particulière.]'}
 
 ══════════════════════════════════════════════
 
-## RECOMMANDATIONS
+## ${scenario.recommandationsLabel ?? 'RECOMMANDATIONS PAR DÉFAUT'}
 
-— Maintenir une alimentation régulière et suffisamment nourrissante.
-— Boire régulièrement de l'eau propre.
-— Éviter les efforts physiques importants et le port de charges lourdes.
-— Favoriser le repos en cas de fatigue.
-— Éviter autant que possible les longues chevauchées et déplacements éprouvants.
-— [Autres recommandations particulières.]
+${(scenario.recommandations ?? []).map(r => `— ${r}`).join('\n')}
 
 ══════════════════════════════════════════════
 
@@ -222,7 +287,7 @@ La patiente devra se présenter plus rapidement au dispensaire en cas de douleur
 
 ## OBSERVATIONS COMPLÉMENTAIRES
 
-[Informations supplémentaires concernant la grossesse, la mère ou la préparation de l'accouchement.]
+${f.complications || "[Informations supplémentaires concernant la grossesse, la mère ou la préparation de l'accouchement.]"}
 
 ══════════════════════════════════════════════
 
