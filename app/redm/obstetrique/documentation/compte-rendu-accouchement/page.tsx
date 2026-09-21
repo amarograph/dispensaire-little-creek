@@ -137,6 +137,12 @@ export default function CompteRenduAccouchementPage() {
                 );
               })}
             </div>
+            {scenario && (
+              <div style={{ marginTop: 10, padding: '12px 14px', background: `${COL_ACC}18`, border: `1px solid ${COL_ACC}60`, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ fontFamily: MONO, fontSize: 12, color: '#8899CC', letterSpacing: '0.12em' }}>APERÇU — ISSUE QUI SERA INSCRITE DANS LE DOCUMENT</div>
+                <div style={{ fontFamily: BODY, fontSize: 16, color: T.text, lineHeight: 1.5 }}>{scenario.texte}</div>
+              </div>
+            )}
           </div>
 
           {/* PATIENTE */}

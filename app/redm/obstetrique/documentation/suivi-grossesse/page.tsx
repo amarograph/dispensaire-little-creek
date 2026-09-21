@@ -142,6 +142,17 @@ export default function SuiviGrossessePage() {
                 );
               })}
             </div>
+            {scenario && (
+              <div style={{ marginTop: 10, padding: '12px 14px', background: `${COL_SUIVI}18`, border: `1px solid ${COL_SUIVI}60`, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ fontFamily: MONO, fontSize: 12, color: '#A8B991', letterSpacing: '0.12em' }}>APERÇU — CE QUI SERA PRÉ-REMPLI DANS LE DOCUMENT</div>
+                <div style={{ fontFamily: BODY, fontSize: 16, color: T.text, lineHeight: 1.5 }}>{scenario.texte}</div>
+                <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 4, fontFamily: MONO, fontSize: 12, color: T.dim }}>
+                  {scenario.niveauSurveillance && <span>Niveau de surveillance : <b style={{ color: '#A8B991' }}>{scenario.niveauSurveillance}</b></span>}
+                  {scenario.reposParDefaut && <span>Repos conseillé ↓ : <b style={{ color: '#A8B991' }}>{scenario.reposParDefaut}</b></span>}
+                  {scenario.controleParDefaut && <span>Prochain contrôle ↓ : <b style={{ color: '#A8B991' }}>{scenario.controleParDefaut}</b></span>}
+                </div>
+              </div>
+            )}
             {scenario?.prioritaires && (
               <div style={{ marginTop: 8, padding: '10px 12px', background: 'rgba(139,64,64,0.10)', border: '1px solid rgba(139,64,64,0.4)', fontFamily: MONO, fontSize: 13, color: '#DF9A88', letterSpacing: '0.02em' }}>
                 ⚠ Priorité : vérifier en particulier l&apos;état général, les saignements, les douleurs, les contractions, les mouvements de l&apos;enfant et les battements du cœur.
@@ -348,11 +359,13 @@ export default function SuiviGrossessePage() {
                 <select style={{ ...inp, cursor: 'pointer' }} value={f.reposConseille || scenario?.reposParDefaut || ''} onChange={e => setF(x => ({ ...x, reposConseille: e.target.value }))}>
                   {REPOS_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
                 </select>
+                {!f.reposConseille && scenario?.reposParDefaut && <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 4 }}>↳ valeur par défaut du scénario, modifiable</div>}
               </div>
               <div><label style={lbl}>PROCHAIN CONTRÔLE</label>
                 <select style={{ ...inp, cursor: 'pointer' }} value={f.prochainControle || scenario?.controleParDefaut || ''} onChange={e => setF(x => ({ ...x, prochainControle: e.target.value }))}>
                   {CONTROLE_OPTIONS.map(o => <option key={o} value={o}>{o || '— Sélectionner —'}</option>)}
                 </select>
+                {!f.prochainControle && scenario?.controleParDefaut && <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 4 }}>↳ valeur par défaut du scénario, modifiable</div>}
               </div>
             </div>
           </FormSection>

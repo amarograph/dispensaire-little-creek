@@ -136,6 +136,17 @@ export default function PrescriptionMedicalePage() {
                 );
               })}
             </div>
+            {scenario && scenario.id !== 'autre' && (
+              <div style={{ marginTop: 10, padding: '12px 14px', background: `${COL_RX}18`, border: `1px solid ${COL_RX}60`, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ fontFamily: MONO, fontSize: 12, color: '#D8A870', letterSpacing: '0.12em' }}>APERÇU — CE QUI SERA PRÉ-REMPLI DANS LE DOCUMENT</div>
+                <div style={{ fontFamily: BODY, fontSize: 16, color: T.text, lineHeight: 1.5 }}>{scenario.texte}</div>
+                {scenario.remedeNom && (
+                  <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, marginTop: 4 }}>
+                    Remède : <b style={{ color: '#D8A870' }}>{scenario.remedeNom}</b>{scenario.remedeDuree ? ` — ${scenario.remedeDuree}` : ''}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* PATIENTE */}
@@ -177,7 +188,9 @@ export default function PrescriptionMedicalePage() {
             <div style={{ fontFamily: MONO, fontSize: 14, color: COL_RX, letterSpacing: '0.1em', marginBottom: 2 }}>PRESCRIPTION</div>
             <div><label style={lbl}>INDICATION / PRÉCISIONS</label><input style={inp} value={f.indication} onChange={e => setF(x => ({ ...x, indication: e.target.value }))} placeholder="Précision optionnelle en plus du scénario" /></div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              <div><label style={lbl}>REMÈDE</label><input style={inp} value={f.remedeNom || scenario?.remedeNom || ''} onChange={e => setF(x => ({ ...x, remedeNom: e.target.value }))} placeholder="ex : Décoction de framboisier" /></div>
+              <div><label style={lbl}>REMÈDE</label><input style={inp} value={f.remedeNom || scenario?.remedeNom || ''} onChange={e => setF(x => ({ ...x, remedeNom: e.target.value }))} placeholder="ex : Décoction de framboisier" />
+                {!f.remedeNom && scenario?.remedeNom && <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 4 }}>↳ valeur par défaut du scénario, modifiable</div>}
+              </div>
               <div><label style={lbl}>PRÉPARATION</label><input style={inp} value={f.preparation || scenario?.remedePreparation || ''} onChange={e => setF(x => ({ ...x, preparation: e.target.value }))} placeholder="ex : Infusion légère" /></div>
             </div>
             <div><label style={lbl}>POSOLOGIE</label>
