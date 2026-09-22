@@ -10,7 +10,7 @@ const BODY     = "'Cormorant Garamond', 'Georgia', serif";
 const MONO     = "'Libre Baskerville', 'Courier New', monospace";
 const T = { bg: '#102B3B', card: '#183746', paper: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5', sepia: '#D4B896' };
 
-const GRADES      = ['Apprenti', 'Infirmier', 'Thérapeute', 'Médecin', 'Médecin Chef', 'Co-Directeur', 'Directeur'];
+const GRADES      = ['Apprenti', 'Infirmier', 'Thérapeute', 'Médecin', 'Médecin Chef', 'Co-Directeur', 'Directeur', 'Préparateur de caisse'];
 const DISPENSAIRES = ['Little Creek', 'Valentine', 'Rhodes', 'Tous'];
 const SPECIALITES = ['Médecine générale', 'Chirurgie', 'Aliénisme', 'Plantes médicinales', 'Obstétrique', 'Traumatologie', 'Dentisterie', 'Ophtalmologie', 'Hygiène', 'Autre'];
 const STATUTS     = ['En service', 'En congé', 'En mission', 'Suspendu'];
@@ -19,21 +19,24 @@ const GRADE_COL: Record<string, string> = {
   'Apprenti': '#888', 'Infirmier': '#5A8AB5', 'Thérapeute': '#BAAAC6',
   'Médecin': '#A8B991', 'Médecin Chef': '#D1B77C',
   'Co-Directeur': '#E8B860', 'Directeur': '#8B4040',
+  'Préparateur de caisse': '#C8845A',
 };
 const STATUT_COL: Record<string, string> = {
   'En service': '#A8B991', 'En congé': '#D1B77C', 'En mission': '#5A8AB5', 'Suspendu': '#DF9A88',
 };
 
-const ROLE_PRIORITY = ['redm_directeur', 'redm_co_directeur', 'redm_medecin_chef', 'redm_medecin', 'redm_therapeute', 'redm_infirmier', 'redm_apprenti'] as const;
+const ROLE_PRIORITY = ['redm_directeur', 'redm_co_directeur', 'redm_medecin_chef', 'redm_medecin', 'redm_therapeute', 'redm_infirmier', 'redm_apprenti', 'redm_preparateur_caisse'] as const;
 const ROLE_LABEL: Record<string, string> = {
   redm_directeur: 'Directeur', redm_co_directeur: 'Co-Directeur', redm_medecin_chef: 'Médecin en Chef',
   redm_medecin: 'Médecin', redm_therapeute: 'Thérapeute', redm_infirmier: 'Infirmier', redm_apprenti: 'Apprenti',
+  redm_preparateur_caisse: 'Préparateur de caisse',
 };
 const ROLE_COL: Record<string, string> = {
   redm_directeur: '#E8B860', redm_co_directeur: '#E8B860', redm_medecin_chef: '#D8AC50',
   redm_medecin: '#D1B77C', redm_therapeute: '#BAAAC6', redm_infirmier: '#C87040', redm_apprenti: '#A05830',
+  redm_preparateur_caisse: '#C8845A',
 };
-function topRole(roles: string[]) { for (const r of ROLE_PRIORITY) if (roles.includes(r)) return r; return 'redm_apprenti'; }
+function topRole(roles: string[]) { for (const r of ROLE_PRIORITY) if (roles.includes(r)) return r; return 'redm_preparateur_caisse'; }
 
 interface Medecin {
   discord_id: string; username: string; avatar: string | null; roles: string[];
@@ -250,7 +253,7 @@ export default function MedecinsPage() {
     } finally { setSaving(false); }
   }
 
-  const GRADE_ORDER = ['Directeur', 'Co-Directeur', 'Médecin Chef', 'Médecin', 'Thérapeute', 'Infirmier', 'Apprenti'];
+  const GRADE_ORDER = ['Directeur', 'Co-Directeur', 'Médecin Chef', 'Médecin', 'Thérapeute', 'Infirmier', 'Apprenti', 'Préparateur de caisse'];
 
   const q = search.toLowerCase();
   const filtered = medecins

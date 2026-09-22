@@ -33,6 +33,9 @@ const REDM_MEDICAL_ROLES = [
   'redm_therapeute', 'redm_infirmier', 'redm_apprenti',
 ] as const;
 
+/* Rôles affichés dans la liste (personnel médical + préparateurs de caisse, tout en bas) */
+const REDM_LISTE_ROLES = [...REDM_MEDICAL_ROLES, 'redm_preparateur_caisse'] as const;
+
 /* ── GET : liste du personnel médical RedM ──────────────────── */
 export async function GET(req: NextRequest) {
   if (!await requireDirectionRead()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -47,10 +50,10 @@ export async function GET(req: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  /* Filtrer : seulement ceux qui ont au moins un rôle médical RedM */
+  /* Filtrer : seulement ceux qui ont au moins un rôle médical RedM (ou préparateur de caisse) */
   const medical = (users ?? []).filter(u => {
     const r: string[] = u.roles ?? [];
-    return r.some(x => (REDM_MEDICAL_ROLES as readonly string[]).includes(x));
+    return r.some(x => (REDM_LISTE_ROLES as readonly string[]).includes(x));
   });
 
   /* Profils RP (universe redm) */
@@ -80,6 +83,7 @@ export async function GET(req: NextRequest) {
     redm_therapeute:   'Thérapeute',
     redm_infirmier:    'Infirmier',
     redm_apprenti:     'Apprenti',
+    redm_preparateur_caisse: 'Préparateur de caisse',
   };
 
   const medecins = medical.map(u => {
@@ -87,7 +91,7 @@ export async function GET(req: NextRequest) {
     const p = rp[u.discord_id] ?? {};
     const m = meta[u.discord_id] ?? {};
     const pr = profils[u.discord_id] ?? {};
-    const topRole = (REDM_MEDICAL_ROLES as readonly string[]).find(r => roles.includes(r)) ?? 'redm_apprenti';
+    const topRole = (REDM_LISTE_ROLES as readonly string[]).find(r => roles.includes(r)) ?? 'redm_preparateur_caisse';
     return {
       discord_id:             u.discord_id,
       username:               u.username,
