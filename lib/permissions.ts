@@ -151,10 +151,11 @@ export const ROLE_PERMISSIONS: Record<Role, PermMap> = {
     redm_direction:    PERM.NONE,
   },
 
-  // ── Préparateur de caisse : note ses caisses uniquement ─────────────────
+  // ── Préparateur de caisse : aucun accès aux sections — uniquement le
+  // Registre des Caisses en libre-service (hors système de sections,
+  // verrouillé côté middleware pour ce rôle) ──────────────────────────────
   redm_preparateur_caisse: {
     ...NONE_MAP,
-    redm_comptabilite: PERM.EDITOR,
   },
 
   // ── Obstétricien dispensaire ─────────────────────────────────────────────
