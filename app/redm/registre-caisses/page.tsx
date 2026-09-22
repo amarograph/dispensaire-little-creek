@@ -60,8 +60,8 @@ export default function RegistreCaissesPage() {
   const toISO   = fmtISO(days[6]);
   const todayISO = fmtISO(new Date());
 
-  const load = useCallback(() => {
-    setLoading(true);
+  const load = useCallback((silent = false) => {
+    if (!silent) setLoading(true);
     setError('');
     fetch(`/api/redm/caisses?from=${fromISO}&to=${toISO}`)
       .then(async r => {
@@ -77,7 +77,18 @@ export default function RegistreCaissesPage() {
       .finally(() => setLoading(false));
   }, [fromISO, toISO]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+    const iv = setInterval(() => load(true), 30_000);
+    function onFocus() { load(true); }
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onFocus);
+    return () => {
+      clearInterval(iv);
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onFocus);
+    };
+  }, [load]);
 
   async function faireCaisse() {
     setMarking(true);
