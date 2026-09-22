@@ -57,9 +57,13 @@ export async function updateSession(request: NextRequest) {
 
     const roles: string[] = member.roles ?? [];
 
-    /* Préparateur de caisse "pur" (aucun autre rôle) : accès exclusif au registre des caisses. */
+    /* Préparateur de caisse "pur" (aucun autre rôle) : accès exclusif au registre des caisses.
+       Les routes /api/* ne sont jamais redirigées ici — elles ont leurs propres vérifications de
+       rôle, et rediriger une requête API vers une page HTML casse le JSON attendu côté client. */
     if (roles.length === 1 && roles[0] === 'redm_preparateur_caisse') {
-      if (!request.nextUrl.pathname.startsWith('/redm/registre-caisses')) {
+      const allowed = request.nextUrl.pathname.startsWith('/redm/registre-caisses')
+        || request.nextUrl.pathname.startsWith('/api/');
+      if (!allowed) {
         const url = request.nextUrl.clone();
         url.pathname = '/redm/registre-caisses';
         return NextResponse.redirect(url);
