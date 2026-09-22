@@ -7,8 +7,6 @@ const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const DISPLAY = "'Cormorant Garamond', 'Georgia', serif";
 
 const LS_RDV_TS   = 'rdm_notif_rdv_ts';
-const LS_ALERTE   = 'rdm_notif_alerte';
-const LS_EPIDEMIE = 'rdm_notif_epidemie';
 
 interface RdvRaw {
   id: string; patientNom: string; date: string; heure: string;
@@ -17,35 +15,19 @@ interface RdvRaw {
 interface RdvInfo {
   id: string; patientNom: string; date: string; heure: string; type: string; urgence?: boolean;
 }
-interface SanitaireEntry { nom: string; critique: boolean; }
 
-type ToastKind = 'reminder' | 'nouveau-rdv' | 'alerte' | 'epidemie';
+type ToastKind = 'reminder' | 'nouveau-rdv';
 
 interface Toast {
   id: string;
   kind: ToastKind;
   rdv?: RdvInfo;
   rdvData?: Pick<RdvRaw, 'patientNom' | 'date' | 'heure' | 'type'>;
-  sanitaire?: { nom: string; critique: boolean; cleared: boolean };
 }
 
 function getStyle(t: Toast) {
   if (t.kind === 'nouveau-rdv')
     return { bg: 'linear-gradient(135deg,#061A0E,#081F12)', bdr: 'rgba(50,180,90,.55)',  acc: '#32B45A', icon: '📋', label: 'NOUVEAU RENDEZ-VOUS ASSIGNÉ' };
-  if (t.kind === 'epidemie') {
-    if (t.sanitaire?.cleared)
-      return { bg: 'linear-gradient(135deg,#0A0A0A,#101010)', bdr: 'rgba(80,180,80,.45)',  acc: '#50B450', icon: '✅', label: 'ÉPIDÉMIE LEVÉE' };
-    if (t.sanitaire?.critique)
-      return { bg: 'linear-gradient(135deg,#1A0606,#1F0808)', bdr: 'rgba(200,40,40,.65)',  acc: '#C82828', icon: '🚨', label: 'ALERTE ÉPIDÉMIQUE CRITIQUE' };
-    return   { bg: 'linear-gradient(135deg,#1A0A06,#200E08)', bdr: 'rgba(200,90,40,.55)',  acc: '#C85A28', icon: '⚠️', label: 'ÉPIDÉMIE DÉCLARÉE' };
-  }
-  if (t.kind === 'alerte') {
-    if (t.sanitaire?.cleared)
-      return { bg: 'linear-gradient(135deg,#0A0A0A,#101010)', bdr: 'rgba(80,180,80,.45)',  acc: '#50B450', icon: '✅', label: 'RISQUE SANITAIRE LEVÉ' };
-    if (t.sanitaire?.critique)
-      return { bg: 'linear-gradient(135deg,#1A0606,#1F0808)', bdr: 'rgba(200,40,40,.65)',  acc: '#C82828', icon: '🚨', label: 'RISQUE SANITAIRE CRITIQUE' };
-    return   { bg: 'linear-gradient(135deg,#0A1020,#0E1A30)', bdr: 'rgba(60,120,200,.55)', acc: '#3C78C8', icon: '⚠️', label: 'ALERTE SANITAIRE DÉCLARÉE' };
-  }
   if (t.rdv?.urgence)
     return { bg: 'linear-gradient(135deg,#1A0606,#1F0A08)', bdr: 'rgba(200,60,60,.65)',  acc: '#C84040', icon: '🔴', label: 'RAPPEL URGENT — DANS 2H' };
   return   { bg: 'linear-gradient(135deg,#102B3B,#1F1208)', bdr: 'rgba(209,183,124,.55)', acc: '#D1B77C', icon: '🔔', label: 'RAPPEL — RENDEZ-VOUS DANS 4H' };
@@ -117,41 +99,6 @@ export default function Notifier() {
     const init = setTimeout(check, 2_000);
     const iv   = setInterval(check, 15_000);
     return () => { clearTimeout(init); clearInterval(iv); };
-  }, []);
-
-  useEffect(() => {
-    function check() {
-      fetch('/api/redm/dispensaire-status')
-        .then(r => r.json())
-        .then((d: { epidemie: SanitaireEntry; risque: SanitaireEntry }) => {
-          const prevA = localStorage.getItem(LS_ALERTE);
-          const prevE = localStorage.getItem(LS_EPIDEMIE);
-          const nowA  = JSON.stringify(d.risque);
-          const nowE  = JSON.stringify(d.epidemie);
-
-          if (prevA === null) { localStorage.setItem(LS_ALERTE, nowA); }
-          else if (nowA !== prevA) {
-            localStorage.setItem(LS_ALERTE, nowA);
-            push({
-              id: `alerte-${Date.now()}`, kind: 'alerte',
-              sanitaire: { nom: d.risque.nom, critique: d.risque.critique, cleared: !d.risque.nom },
-            }, d.risque.nom ? 60_000 : 30_000);
-          }
-
-          if (prevE === null) { localStorage.setItem(LS_EPIDEMIE, nowE); }
-          else if (nowE !== prevE) {
-            localStorage.setItem(LS_EPIDEMIE, nowE);
-            push({
-              id: `epidemie-${Date.now()}`, kind: 'epidemie',
-              sanitaire: { nom: d.epidemie.nom, critique: d.epidemie.critique, cleared: !d.epidemie.nom },
-            }, d.epidemie.nom ? 60_000 : 30_000);
-          }
-        })
-        .catch(() => {});
-    }
-    check();
-    const iv = setInterval(check, 15_000);
-    return () => clearInterval(iv);
   }, []);
 
   if (!mounted || toasts.length === 0) return null;
@@ -230,26 +177,6 @@ export default function Notifier() {
                       {t.rdv.urgence ? 'Dans moins de 2 heures' : 'Dans environ 4 heures'} · {t.rdv.date}
                     </div>
                   </>
-                )}
-
-                {t.kind === 'epidemie' && (
-                  t.sanitaire?.cleared
-                    ? "L'épidémie a été levée par la direction."
-                    : <>
-                        Épidémie déclarée au dispensaire :{' '}
-                        <span style={{ color: s.acc, fontWeight: 700 }}>{t.sanitaire?.nom}</span>.
-                        {' '}Consultez l&apos;alerte sanitaire.
-                      </>
-                )}
-
-                {t.kind === 'alerte' && (
-                  t.sanitaire?.cleared
-                    ? 'Le risque sanitaire a été levé par la direction.'
-                    : <>
-                        Risque sanitaire signalé :{' '}
-                        <span style={{ color: s.acc, fontWeight: 700 }}>{t.sanitaire?.nom}</span>.
-                        {' '}Consultez l&apos;alerte sanitaire.
-                      </>
                 )}
 
               </div>

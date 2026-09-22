@@ -29,6 +29,14 @@ const TITLES: Record<'epidemie' | 'risque', string> = {
 
 type Dismissed = { epidemie: boolean; risque: boolean };
 
+const LS_DISMISSED_PREFIX = 'redm_alerte_sanitaire_dismissed_';
+function getDismissedSig(key: 'epidemie' | 'risque'): string | null {
+  try { return localStorage.getItem(LS_DISMISSED_PREFIX + key); } catch { return null; }
+}
+function setDismissedSig(key: 'epidemie' | 'risque', sig: string) {
+  try { localStorage.setItem(LS_DISMISSED_PREFIX + key, sig); } catch {}
+}
+
 export default function AlerteSanitaire() {
   const [status,    setStatus]    = useState<DispensaireStatus>(DEFAULT_DISPENSAIRE_STATUS);
   const [messages,  setMessages]  = useState<AlertMessages>(DEFAULT_MESSAGES);
@@ -53,7 +61,7 @@ export default function AlerteSanitaire() {
         const out = { ...prev };
         (['epidemie', 'risque'] as const).forEach(key => {
           const sig = `${next[key].nom}|${next[key].critique}`;
-          if (sig !== prevSig.current[key]) out[key] = false;
+          if (sig !== prevSig.current[key]) out[key] = getDismissedSig(key) === sig;
           prevSig.current[key] = sig;
         });
         return out;
@@ -141,7 +149,10 @@ export default function AlerteSanitaire() {
               </div>
             </div>
             <button
-              onClick={() => setDismissed(p => ({ ...p, [key]: true }))}
+              onClick={() => {
+                setDismissedSig(key, `${status[key].nom}|${status[key].critique}`);
+                setDismissed(p => ({ ...p, [key]: true }));
+              }}
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: `${sevColor}80`, fontSize: 18, lineHeight: 1, padding: '2px 4px', flexShrink: 0 }}
             >✕</button>
           </div>
