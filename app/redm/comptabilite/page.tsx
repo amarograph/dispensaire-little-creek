@@ -118,6 +118,10 @@ export default function CaisseComptabilitePage() {
   const [tarifs,         setTarifs]         = useState<Record<string, TarifCategory>>(() => categoriesToMap(DEFAULT_CATEGORIES));
   const autoArchiveDone  = useRef(false);
 
+  const [oldLocalData, setOldLocalData] = useState<{ factures: Facture[]; archives: SemaineArchivee[] } | null>(null);
+  const [migrating,    setMigrating]    = useState(false);
+  const [migrated,     setMigrated]     = useState(false);
+
   const todayMonday = getMondayOf(new Date());
   const currentKey  = mondayISO(todayMonday);
   const montantAuto = calcMontant(form.prestations, tarifs);
@@ -135,6 +139,41 @@ export default function CaisseComptabilitePage() {
       setItems(its); setArchives(arcs); setHydrated(true);
     });
   }, []);
+
+  /* ── Détection d'anciennes données locales (pré-registre partagé) ── */
+  useEffect(() => {
+    try {
+      if (localStorage.getItem('redm_cabinet_compta_migrated_v1')) return;
+      const rawItems = JSON.parse(localStorage.getItem(LS) ?? '[]') as Facture[];
+      const rawArc   = JSON.parse(localStorage.getItem(LS_ARC) ?? '[]') as SemaineArchivee[];
+      if (rawItems.length > 0 || rawArc.length > 0) setOldLocalData({ factures: rawItems, archives: rawArc });
+    } catch {}
+  }, []);
+
+  async function migrerDonneesLocales() {
+    if (!oldLocalData) return;
+    setMigrating(true);
+    try {
+      const [srvItemsRes, srvArcRes] = await Promise.all([load(), loadArc()]);
+      const srvIds = new Set(srvItemsRes.map(f => f.id));
+      const srvArcIds = new Set(srvArcRes.map(a => a.id));
+      const mergedItems = [...srvItemsRes, ...oldLocalData.factures.filter(f => !srvIds.has(f.id))];
+      const mergedArc    = [...srvArcRes, ...oldLocalData.archives.filter(a => !srvArcIds.has(a.id))];
+      await Promise.all([save(mergedItems), saveArc(mergedArc)]);
+      setItems(mergedItems);
+      setArchives(mergedArc);
+      localStorage.setItem('redm_cabinet_compta_migrated_v1', '1');
+      setOldLocalData(null);
+      setMigrated(true);
+    } finally {
+      setMigrating(false);
+    }
+  }
+
+  function ignorerDonneesLocales() {
+    try { localStorage.setItem('redm_cabinet_compta_migrated_v1', '1'); } catch {}
+    setOldLocalData(null);
+  }
 
   /* ── Auto-remplissage du médecin connecté ── */
   useEffect(() => {
@@ -316,6 +355,33 @@ export default function CaisseComptabilitePage() {
           REGISTRE DES HONORAIRES, FACTURES ET RECETTES DU DISPENSAIRE
         </p>
       </div>
+
+      {oldLocalData && (
+        <div style={{ background:'rgba(209,183,124,0.10)', border:'1px solid rgba(209,183,124,0.4)', padding:'16px 20px', marginBottom:20, display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
+          <span style={{ fontSize:22 }}>📦</span>
+          <div style={{ flex:1, minWidth:260 }}>
+            <div style={{ fontFamily:DISPLAY, fontSize:17, color:T.gold, marginBottom:3 }}>Anciennes données locales trouvées sur ce navigateur</div>
+            <div style={{ fontFamily:MONO, fontSize:14, color:T.dim }}>
+              {oldLocalData.factures.length} note{oldLocalData.factures.length>1?'s':''} de frais et {oldLocalData.archives.length} semaine{oldLocalData.archives.length>1?'s':''} archivée{oldLocalData.archives.length>1?'s':''} d&apos;avant la mise en commun — les ajouter au registre partagé ?
+            </div>
+          </div>
+          <div style={{ display:'flex', gap:8, flexShrink:0 }}>
+            <button onClick={ignorerDonneesLocales} disabled={migrating}
+              style={{ fontFamily:MONO, fontSize:14, padding:'9px 16px', cursor:migrating?'default':'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>
+              IGNORER
+            </button>
+            <button onClick={migrerDonneesLocales} disabled={migrating}
+              style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.1em', padding:'9px 20px', cursor:migrating?'default':'pointer', background:'rgba(120,96,48,0.30)', color:T.gold, border:'1px solid rgba(120,96,48,0.55)' }}>
+              {migrating ? '⟳ AJOUT EN COURS…' : '✔ AJOUTER AU REGISTRE PARTAGÉ'}
+            </button>
+          </div>
+        </div>
+      )}
+      {migrated && (
+        <div style={{ background:'rgba(90,152,88,0.12)', border:'1px solid rgba(90,152,88,0.4)', padding:'12px 18px', marginBottom:20, fontFamily:MONO, fontSize:14, color:'#A8B991' }}>
+          ✔ Tes anciennes données ont été ajoutées au registre partagé.
+        </div>
+      )}
 
       {/* Grille : formulaire gauche + contenu droite */}
       {(
