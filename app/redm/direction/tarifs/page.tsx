@@ -89,6 +89,31 @@ export default function DirectionTarifsPage() {
     } finally { setCreating(false); }
   }
 
+  async function move(id: string, direction: 'up' | 'down') {
+    const idx = tarifs.findIndex(t => t.id === id);
+    if (idx === -1) return;
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= tarifs.length) return;
+
+    const a = tarifs[idx], b = tarifs[swapIdx];
+    const next = [...tarifs];
+    next[idx] = { ...b, ordre: a.ordre };
+    next[swapIdx] = { ...a, ordre: b.ordre };
+    setTarifs(next);
+    setActionError('');
+
+    try {
+      const [ra, rb] = await Promise.all([
+        fetch('/api/admin/redm-tarifs', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: a.id, ordre: b.ordre }) }),
+        fetch('/api/admin/redm-tarifs', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: b.id, ordre: a.ordre }) }),
+      ]);
+      if (!ra.ok || !rb.ok) throw new Error();
+    } catch {
+      setTarifs(tarifs);
+      setActionError('Erreur réseau lors du déplacement.');
+    }
+  }
+
   async function remove(id: string) {
     const previous = tarifs;
     setTarifs(prev => prev.filter(t => t.id !== id));
@@ -136,13 +161,21 @@ export default function DirectionTarifsPage() {
               <button onClick={()=>setActionError('')} style={{ fontFamily:MONO, fontSize: 14, background:'transparent', border:'none', color:T.muted, cursor:'pointer' }}>✕</button>
             </div>
           )}
-          {tarifs.map(t => {
+          {tarifs.map((t, i) => {
             const isVente = t.type === 'vente';
             const partDispensaire = Math.round(t.prix * t.pctDispensaire) / 100;
             const partMedecin     = Math.round(t.prix * t.pctMedecin) / 100;
             return (
               <div key={t.id} style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`4px solid ${isVente ? T.gold : '#C8845A'}`, padding:'20px 24px' }}>
                 <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14, flexWrap:'wrap' }}>
+                  {canEdit && (
+                    <div style={{ display:'flex', flexDirection:'column', gap:2, flexShrink:0 }}>
+                      <button onClick={()=>move(t.id,'up')} disabled={i===0} title="Monter"
+                        style={{ fontFamily:MONO, fontSize:12, width:22, height:18, cursor: i===0 ? 'default' : 'pointer', background:'transparent', color: i===0 ? T.dim+'50' : T.dim, border:`1px solid ${T.border}`, padding:0, display:'flex', alignItems:'center', justifyContent:'center' }}>▲</button>
+                      <button onClick={()=>move(t.id,'down')} disabled={i===tarifs.length-1} title="Descendre"
+                        style={{ fontFamily:MONO, fontSize:12, width:22, height:18, cursor: i===tarifs.length-1 ? 'default' : 'pointer', background:'transparent', color: i===tarifs.length-1 ? T.dim+'50' : T.dim, border:`1px solid ${T.border}`, padding:0, display:'flex', alignItems:'center', justifyContent:'center' }}>▼</button>
+                    </div>
+                  )}
                   <span style={{ fontSize:24 }}>{TYPE_ICON[t.type]}</span>
                   {canEdit ? (
                     <>

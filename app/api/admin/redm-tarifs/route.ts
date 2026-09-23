@@ -133,7 +133,7 @@ export async function PATCH(req: NextRequest) {
   if (!actor) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const body = await req.json();
-  const { id, nom, type, prix, pctDispensaire, pctMedecin, commandeSeulement } = body;
+  const { id, nom, type, prix, pctDispensaire, pctMedecin, commandeSeulement, ordre } = body;
   if (!id) return NextResponse.json({ error: 'id manquant' }, { status: 400 });
 
   const patch: Record<string, any> = { updated_at: new Date().toISOString() };
@@ -142,6 +142,7 @@ export async function PATCH(req: NextRequest) {
   if (typeof prix === 'number')                     patch.prix           = prix;
   if (typeof pctDispensaire === 'number')           patch.pct_dispensaire = Math.max(0, Math.min(100, pctDispensaire));
   if (typeof pctMedecin === 'number')               patch.pct_medecin     = Math.max(0, Math.min(100, pctMedecin));
+  if (typeof ordre === 'number')                    patch.ordre           = ordre;
 
   const { error } = await admin().from('redm_tarifs').update(patch).eq('id', id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
