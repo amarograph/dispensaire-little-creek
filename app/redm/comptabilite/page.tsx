@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
@@ -50,10 +50,41 @@ interface SemaineArchivee {
   totalPercu: number; totalAttente: number;
 }
 
-async function load(): Promise<Facture[]>            { try { const r = await fetch('/api/comptabilite'); return r.ok ? await r.json() : []; } catch { return []; } }
-async function loadArc(): Promise<SemaineArchivee[]>  { try { const r = await fetch('/api/comptabilite/archives'); return r.ok ? await r.json() : []; } catch { return []; } }
-async function save(d: Facture[])            { try { await fetch('/api/comptabilite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) }); } catch {} }
-async function saveArc(d: SemaineArchivee[]) { try { await fetch('/api/comptabilite/archives', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) }); } catch {} }
+const OLD_LS     = 'redm_cabinet_compta_v1';
+const OLD_LS_ARC = 'redm_cabinet_compta_archives_v1';
+
+async function load(): Promise<Facture[]>           { try { const r = await fetch('/api/comptabilite'); return r.ok ? await r.json() : []; } catch { return []; } }
+async function loadArc(): Promise<SemaineArchivee[]> { try { const r = await fetch('/api/comptabilite/archives'); return r.ok ? await r.json() : []; } catch { return []; } }
+/* Opérations atomiques : chaque appel lit l'état serveur courant, applique un seul changement, et écrit —
+   jamais un remplacement en bloc du tableau local d'un onglet, qui pourrait écraser les écritures d'un autre. */
+async function upsertFacture(f: Facture): Promise<Facture[] | null> {
+  try {
+    const r = await fetch('/api/comptabilite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'upsert', facture: f }) });
+    if (!r.ok) return null;
+    const d = await r.json(); return d.items ?? null;
+  } catch { return null; }
+}
+async function deleteFacture(id: string): Promise<Facture[] | null> {
+  try {
+    const r = await fetch('/api/comptabilite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', id }) });
+    if (!r.ok) return null;
+    const d = await r.json(); return d.items ?? null;
+  } catch { return null; }
+}
+async function mergeFactures(factures: Facture[]): Promise<Facture[] | null> {
+  try {
+    const r = await fetch('/api/comptabilite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'merge', factures }) });
+    if (!r.ok) return null;
+    const d = await r.json(); return d.items ?? null;
+  } catch { return null; }
+}
+async function mergeArchives(archives: SemaineArchivee[]): Promise<SemaineArchivee[] | null> {
+  try {
+    const r = await fetch('/api/comptabilite/archives', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'merge', archives }) });
+    if (!r.ok) return null;
+    const d = await r.json(); return d.archives ?? null;
+  } catch { return null; }
+}
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 function calcMontant(p: PrestationItem[], tarifs: Record<string, TarifCategory>) { return Math.round(p.reduce((s, x) => s + (x.prix ?? tarifs[x.id]?.prix ?? 0) * x.qty, 0) * 100) / 100; }
@@ -81,7 +112,6 @@ function weekLabel(mon: Date): string {
   return `Semaine du ${f(mon)} au ${f(sun,true)}`;
 }
 function mondayISO(m: Date) { return m.toISOString(); }
-function sortKeys(keys: string[]) { return keys.sort((a,b) => new Date(b).getTime()-new Date(a).getTime()); }
 
 function groupByWeek(factures: Facture[]) {
   const byWeek: Record<string, { label: string; monday: Date; factures: Facture[] }> = {};
@@ -116,7 +146,6 @@ export default function CaisseComptabilitePage() {
   const [delConfirm,     setDelConfirm]     = useState<string | null>(null);
   const [typeFiltre,     setTypeFiltre]     = useState<TypeNote>('vente');
   const [tarifs,         setTarifs]         = useState<Record<string, TarifCategory>>(() => categoriesToMap(DEFAULT_CATEGORIES));
-  const autoArchiveDone  = useRef(false);
 
   const [oldLocalData, setOldLocalData] = useState<{ factures: Facture[]; archives: SemaineArchivee[] } | null>(null);
   const [migrating,    setMigrating]    = useState(false);
@@ -144,8 +173,8 @@ export default function CaisseComptabilitePage() {
   useEffect(() => {
     try {
       if (localStorage.getItem('redm_cabinet_compta_migrated_v1')) return;
-      const rawItems = JSON.parse(localStorage.getItem(LS) ?? '[]') as Facture[];
-      const rawArc   = JSON.parse(localStorage.getItem(LS_ARC) ?? '[]') as SemaineArchivee[];
+      const rawItems = JSON.parse(localStorage.getItem(OLD_LS) ?? '[]') as Facture[];
+      const rawArc   = JSON.parse(localStorage.getItem(OLD_LS_ARC) ?? '[]') as SemaineArchivee[];
       if (rawItems.length > 0 || rawArc.length > 0) setOldLocalData({ factures: rawItems, archives: rawArc });
     } catch {}
   }, []);
@@ -154,14 +183,13 @@ export default function CaisseComptabilitePage() {
     if (!oldLocalData) return;
     setMigrating(true);
     try {
-      const [srvItemsRes, srvArcRes] = await Promise.all([load(), loadArc()]);
-      const srvIds = new Set(srvItemsRes.map(f => f.id));
-      const srvArcIds = new Set(srvArcRes.map(a => a.id));
-      const mergedItems = [...srvItemsRes, ...oldLocalData.factures.filter(f => !srvIds.has(f.id))];
-      const mergedArc    = [...srvArcRes, ...oldLocalData.archives.filter(a => !srvArcIds.has(a.id))];
-      await Promise.all([save(mergedItems), saveArc(mergedArc)]);
-      setItems(mergedItems);
-      setArchives(mergedArc);
+      const [mergedItems, mergedArc] = await Promise.all([
+        mergeFactures(oldLocalData.factures),
+        mergeArchives(oldLocalData.archives),
+      ]);
+      if (mergedItems) setItems(mergedItems);
+      if (mergedArc) setArchives(mergedArc);
+      if (!mergedItems && !mergedArc) { setMigrating(false); return; }
       localStorage.setItem('redm_cabinet_compta_migrated_v1', '1');
       setOldLocalData(null);
       setMigrated(true);
@@ -201,40 +229,8 @@ export default function CaisseComptabilitePage() {
       .catch(() => {});
   }, []);
 
-  /* ── Auto-archivage des semaines passées au chargement ── */
-  useEffect(() => {
-    if (!hydrated || autoArchiveDone.current) return;
-    autoArchiveDone.current = true;
-
-    // items et archives sont ceux chargés depuis le serveur au montage
-    const byWeek = groupByWeek(items);
-    const past   = sortKeys(Object.keys(byWeek)).filter(k => k !== mondayISO(getMondayOf(new Date())));
-    if (past.length === 0) return;
-
-    const newArc: SemaineArchivee[] = [];
-    const toRemove: string[] = [];
-    past.forEach(key => {
-      const g = byWeek[key];
-      newArc.push({
-        id: uid(), weekLabel: g.label, weekStart: key, factures: g.factures,
-        archivedAt: new Date().toISOString(),
-        totalPercu:   g.factures.filter(f=>f.statut==='PAYÉ').reduce((s,f)=>s+f.montant, 0),
-        totalAttente: g.factures.filter(f=>f.statut==='EN ATTENTE').reduce((s,f)=>s+f.montant, 0),
-      });
-      g.factures.forEach(f => toRemove.push(f.id));
-    });
-
-    const existingKeys = new Set(archives.map(a => a.weekStart));
-    const toAdd = newArc.filter(a => !existingKeys.has(a.weekStart));
-    if (toAdd.length === 0) return;
-
-    setArchives(prev => [...toAdd, ...prev]);
-    setItems(prev => prev.filter(f => !toRemove.includes(f.id)));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated]);
-
-  useEffect(() => { if (hydrated) save(items); },      [items, hydrated]);
-  useEffect(() => { if (hydrated) saveArc(archives); }, [archives, hydrated]);
+  /* L'archivage des semaines passées est désormais géré côté serveur (GET /api/comptabilite),
+     de façon atomique — plus besoin (et plus dangereux) de le refaire ici à chaque onglet ouvert. */
 
   function setPrestation(idx: number, val: string) {
     setForm(f => { const p=[...f.prestations]; p[idx]={...p[idx], id:val}; return {...f,prestations:p}; });
@@ -272,17 +268,26 @@ export default function CaisseComptabilitePage() {
   function resetForm() { setForm({ ...EMPTY_FORM, medecin:defaultMedecin, dateSeance:rpDate() }); setTypeFiltre('vente'); }
   function cancelEdit() { setEditing(null); resetForm(); }
 
-  function submit() {
+  async function submit() {
     const medecin = peutAssignerAutrui ? form.medecin : defaultMedecin;
-    const fac: Omit<Facture,'id'|'createdAt'> = { medecin, patientNom:form.patientNom, dateSeance:form.dateSeance, prestations:form.prestations, montant:montantAuto, payeur:form.payeur, statut:form.statut, notes:form.notes, estCommande: typeFiltre === 'commande' };
-    if (editing) { setItems(p=>p.map(h=>h.id===editing.id?{...editing,...fac}:h)); setEditing(null); }
-    else         { setItems(p=>[{id:uid(),createdAt:new Date().toISOString(),...fac},...p]); }
+    const base = { medecin, patientNom:form.patientNom, dateSeance:form.dateSeance, prestations:form.prestations, montant:montantAuto, payeur:form.payeur, statut:form.statut, notes:form.notes, estCommande: typeFiltre === 'commande' };
+    const fac: Facture = editing ? { ...editing, ...base } : { id: uid(), createdAt: new Date().toISOString(), ...base };
+    setItems(p => editing ? p.map(h=>h.id===fac.id?fac:h) : [fac,...p]);
+    setEditing(null);
     resetForm();
+    const result = await upsertFacture(fac);
+    if (result) setItems(result);
   }
 
-  function cycleStatut(id: string) {
+  async function cycleStatut(id: string) {
     const order: StatutPaiement[] = ['EN ATTENTE','PAYÉ','ANNULÉ'];
-    setItems(p=>p.map(h=>h.id!==id?h:{...h,statut:order[(order.indexOf(h.statut)+1)%order.length]}));
+    let changed: Facture | undefined;
+    setItems(p => p.map(h => {
+      if (h.id !== id) return h;
+      changed = { ...h, statut: order[(order.indexOf(h.statut)+1)%order.length] };
+      return changed;
+    }));
+    if (changed) { const result = await upsertFacture(changed); if (result) setItems(result); }
   }
 
   /* ── Groupements semaine courante ── */
@@ -332,7 +337,7 @@ export default function CaisseComptabilitePage() {
             </button>
             <button onClick={()=>startEdit(f)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'rgba(209,183,124,0.10)', color:T.gold, border:`1px solid rgba(209,183,124,0.3)` }}>✎</button>
             {delConfirm===f.id
-              ? <><button onClick={()=>{setItems(p=>p.filter(x=>x.id!==f.id));setDelConfirm(null);}} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>OK?</button>
+              ? <><button onClick={async ()=>{setItems(p=>p.filter(x=>x.id!==f.id));setDelConfirm(null); const result = await deleteFacture(f.id); if (result) setItems(result);}} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>OK?</button>
                   <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 5px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button></>
               : <button onClick={()=>setDelConfirm(f.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕</button>}
           </div>

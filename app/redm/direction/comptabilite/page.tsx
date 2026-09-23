@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
@@ -50,11 +50,8 @@ interface SemaineArchivee {
   totalPercu: number; totalAttente: number;
 }
 
-async function load(): Promise<Facture[]>            { try { const r = await fetch('/api/comptabilite'); return r.ok ? await r.json() : []; } catch { return []; } }
-async function loadArc(): Promise<SemaineArchivee[]>  { try { const r = await fetch('/api/comptabilite/archives'); return r.ok ? await r.json() : []; } catch { return []; } }
-async function save(d: Facture[])            { try { await fetch('/api/comptabilite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) }); } catch {} }
-async function saveArc(d: SemaineArchivee[]) { try { await fetch('/api/comptabilite/archives', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) }); } catch {} }
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+async function load(): Promise<Facture[]>           { try { const r = await fetch('/api/comptabilite'); return r.ok ? await r.json() : []; } catch { return []; } }
+async function loadArc(): Promise<SemaineArchivee[]> { try { const r = await fetch('/api/comptabilite/archives'); return r.ok ? await r.json() : []; } catch { return []; } }
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 
 function getMondayOf(date: Date): Date {
@@ -85,7 +82,6 @@ function weekLabel(mon: Date): string {
   return `Semaine du ${f(mon)} au ${f(sun,true)}`;
 }
 function mondayISO(m: Date) { return m.toISOString(); }
-function sortKeys(keys: string[]) { return keys.sort((a,b) => new Date(b).getTime()-new Date(a).getTime()); }
 
 function groupByWeek(factures: Facture[]) {
   const byWeek: Record<string, { label: string; monday: Date; factures: Facture[] }> = {};
@@ -151,7 +147,6 @@ export default function DirectionComptabilitePage() {
   const [archives, setArchives] = useState<SemaineArchivee[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [tarifs,   setTarifs]   = useState<Record<string, TarifCategory>>({});
-  const autoArchiveDone = useRef(false);
 
   interface CaisseStaff { discord_id: string; nom: string; rate: number; dates: string[]; count: number; salaire: number; }
   const [caissesStaff,   setCaissesStaff]   = useState<CaisseStaff[]>([]);
@@ -293,39 +288,8 @@ export default function DirectionComptabilitePage() {
       .catch(() => {});
   }, []);
 
-  /* ── Auto-archivage des semaines passées (au cas où la Caisse n'a pas encore été ouverte) ── */
-  useEffect(() => {
-    if (!hydrated || autoArchiveDone.current) return;
-    autoArchiveDone.current = true;
-
-    const byWeek = groupByWeek(items);
-    const past   = sortKeys(Object.keys(byWeek)).filter(k => k !== mondayISO(getMondayOf(new Date())));
-    if (past.length === 0) return;
-
-    const newArc: SemaineArchivee[] = [];
-    const toRemove: string[] = [];
-    past.forEach(key => {
-      const g = byWeek[key];
-      newArc.push({
-        id: uid(), weekLabel: g.label, weekStart: key, factures: g.factures,
-        archivedAt: new Date().toISOString(),
-        totalPercu:   g.factures.filter(f=>f.statut==='PAYÉ').reduce((s,f)=>s+f.montant, 0),
-        totalAttente: g.factures.filter(f=>f.statut==='EN ATTENTE').reduce((s,f)=>s+f.montant, 0),
-      });
-      g.factures.forEach(f => toRemove.push(f.id));
-    });
-
-    const existingKeys = new Set(archives.map(a => a.weekStart));
-    const toAdd = newArc.filter(a => !existingKeys.has(a.weekStart));
-    if (toAdd.length === 0) return;
-
-    setArchives(prev => [...toAdd, ...prev]);
-    setItems(prev => prev.filter(f => !toRemove.includes(f.id)));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated]);
-
-  useEffect(() => { if (hydrated) save(items); },      [items, hydrated]);
-  useEffect(() => { if (hydrated) saveArc(archives); }, [archives, hydrated]);
+  /* L'archivage des semaines passées est géré côté serveur (GET /api/comptabilite), de façon atomique.
+     Cette page ne modifie jamais items/archives — elle ne fait que les lire. */
 
 
   const allByWeek = groupByWeek(items);

@@ -49,7 +49,13 @@ interface SemaineArchivee {
 }
 
 async function loadArc(): Promise<SemaineArchivee[]> { try { const r = await fetch('/api/comptabilite/archives'); return r.ok ? await r.json() : []; } catch { return []; } }
-async function saveArc(d: SemaineArchivee[]) { try { await fetch('/api/comptabilite/archives', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) }); } catch {} }
+async function deleteArchive(id: string): Promise<SemaineArchivee[] | null> {
+  try {
+    const r = await fetch('/api/comptabilite/archives', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', id }) });
+    if (!r.ok) return null;
+    const d = await r.json(); return d.archives ?? null;
+  } catch { return null; }
+}
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 
 function addDaysReal(d: Date, n: number): Date { const c = new Date(d); c.setDate(c.getDate()+n); return c; }
@@ -138,14 +144,12 @@ export default function DirectionComptabiliteArchivesPage() {
 
   useEffect(() => { loadArc().then(a => { setArchives(a); setHydrated(true); }); }, []);
 
-  function removeArchive(id: string) {
-    setArchives(prev => {
-      const next = prev.filter(a => a.id !== id);
-      saveArc(next);
-      return next;
-    });
+  async function removeArchive(id: string) {
+    setArchives(prev => prev.filter(a => a.id !== id));
     setDelConfirm(null);
     if (openId === id) setOpenId(null);
+    const result = await deleteArchive(id);
+    if (result) setArchives(result);
   }
 
   /* ── Catégories & répartition définies par la Direction ── */
