@@ -9,8 +9,6 @@ const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const T = { bg: '#102B3B', card: '#183746', paper: '#214452', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5', sepia: '#D4B896' };
 
-const LS = 'redm_bibliotheque_v1';
-
 interface BiblioDoc {
   id: string;
   titre: string;
@@ -83,12 +81,10 @@ function rpDate(d = new Date()) {
   return s.join('/');
 }
 
-function load(): BiblioCategorie[] {
-  if (typeof window === 'undefined') return DEFAULT_CATEGORIES;
+async function load(): Promise<BiblioCategorie[]> {
   try {
-    const raw = localStorage.getItem(LS);
-    if (!raw) return DEFAULT_CATEGORIES;
-    const parsed = JSON.parse(raw);
+    const r = await fetch('/api/redm/bibliotheque');
+    const parsed = r.ok ? await r.json() : [];
     const cats = Array.isArray(parsed) && parsed.length ? parsed : DEFAULT_CATEGORIES;
     return ensureBuiltinCategories(cleanupOldReglementDoc(cats));
   } catch {
@@ -96,9 +92,22 @@ function load(): BiblioCategorie[] {
   }
 }
 
-function save(d: BiblioCategorie[]) {
-  try { localStorage.setItem(LS, JSON.stringify(d)); } catch {}
+/* Opérations atomiques : chaque appel relit l'état serveur, applique un seul changement, écrit —
+   jamais un remplacement en bloc de tout l'arbre local d'un onglet. */
+async function apiCall(body: Record<string, unknown>): Promise<BiblioCategorie[] | null> {
+  try {
+    const r = await fetch('/api/redm/bibliotheque', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    if (!r.ok) return null;
+    const d = await r.json();
+    if (!Array.isArray(d.categories)) return null;
+    return ensureBuiltinCategories(cleanupOldReglementDoc(d.categories));
+  } catch { return null; }
 }
+async function createCategoryApi(categorie: BiblioCategorie) { return apiCall({ action: 'createCategory', categorie }); }
+async function renameCategoryApi(id: string, nom: string, icon: string) { return apiCall({ action: 'renameCategory', id, nom, icon }); }
+async function deleteCategoryApi(id: string) { return apiCall({ action: 'deleteCategory', id }); }
+async function upsertDocApi(categoryId: string, doc: BiblioDoc) { return apiCall({ action: 'upsertDoc', categoryId, doc }); }
+async function deleteDocApi(categoryId: string, docId: string) { return apiCall({ action: 'deleteDoc', categoryId, docId }); }
 
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 14, background: 'rgba(0,0,0,0.25)', border: `1px solid ${T.border}`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
@@ -8193,15 +8202,13 @@ export default function BibliothequePage() {
   const [delDocConfirm, setDelDocConfirm] = useState<string | null>(null);
 
   useEffect(() => {
-    setCategories(load());
-    setHydrated(true);
-    const cat = searchParams.get('cat');
-    if (cat) setOpenCatId(cat);
+    load().then(cats => {
+      setCategories(cats);
+      setHydrated(true);
+      const cat = searchParams.get('cat');
+      if (cat) setOpenCatId(cat);
+    });
   }, []);
-
-  useEffect(() => {
-    if (hydrated) save(categories);
-  }, [categories, hydrated]);
 
   const openCat = categories.find(c => c.id === openCatId) ?? null;
   const reglementCat = categories.find(c => c.id === 'reglement-interne') ?? null;
@@ -8230,25 +8237,32 @@ export default function BibliothequePage() {
   const desinfectionSteriCat     = categories.find(c => c.id === 'desinfection-steri')          ?? null;
   const chirurgieTraumaCat       = categories.find(c => c.id === 'chirurgie-trauma')            ?? null;
 
-  function createCategory() {
+  async function createCategory() {
     const nom = newCatNom.trim();
     if (!nom) return;
     const cat: BiblioCategorie = { id: uid(), nom, icon: newCatIcon || ICONS[0], documents: [] };
     setCategories(prev => [...prev, cat]);
     setNewCatNom(''); setNewCatIcon(ICONS[0]); setCreatingCat(false);
+    const result = await createCategoryApi(cat);
+    if (result) setCategories(result);
   }
 
-  function renameCategory(id: string) {
+  async function renameCategory(id: string) {
     const nom = renameVal.trim();
     if (!nom) { setRenamingCat(null); return; }
+    const icon = categories.find(c => c.id === id)?.icon ?? ICONS[0];
     setCategories(prev => prev.map(c => c.id === id ? { ...c, nom } : c));
     setRenamingCat(null);
+    const result = await renameCategoryApi(id, nom, icon);
+    if (result) setCategories(result);
   }
 
-  function removeCategory(id: string) {
+  async function removeCategory(id: string) {
     setCategories(prev => prev.filter(c => c.id !== id));
     setDelCatConfirm(null);
     if (openCatId === id) setOpenCatId(null);
+    const result = await deleteCategoryApi(id);
+    if (result) setCategories(result);
   }
 
   function startNewDoc() {
@@ -8259,26 +8273,30 @@ export default function BibliothequePage() {
     setDocTitre(doc.titre); setDocContenu(doc.contenu); setEditingDoc(doc.id);
   }
 
-  function saveDoc() {
+  async function saveDoc() {
     if (!openCat) return;
     const titre = docTitre.trim();
     if (!titre) return;
+    const doc: BiblioDoc = editingDoc === 'new'
+      ? { id: uid(), titre, contenu: docContenu, date: rpDate() }
+      : { ...(openCat.documents.find(d => d.id === editingDoc) as BiblioDoc), titre, contenu: docContenu };
     setCategories(prev => prev.map(c => {
       if (c.id !== openCat.id) return c;
-      if (editingDoc === 'new') {
-        const doc: BiblioDoc = { id: uid(), titre, contenu: docContenu, date: rpDate() };
-        return { ...c, documents: [...c.documents, doc] };
-      }
-      return { ...c, documents: c.documents.map(d => d.id === editingDoc ? { ...d, titre, contenu: docContenu } : d) };
+      const idx = c.documents.findIndex(d => d.id === doc.id);
+      return { ...c, documents: idx === -1 ? [...c.documents, doc] : c.documents.map(d => d.id === doc.id ? doc : d) };
     }));
     setEditingDoc(null); setDocTitre(''); setDocContenu('');
+    const result = await upsertDocApi(openCat.id, doc);
+    if (result) setCategories(result);
   }
 
-  function removeDoc(id: string) {
+  async function removeDoc(id: string) {
     if (!openCat) return;
     setCategories(prev => prev.map(c => c.id === openCat.id ? { ...c, documents: c.documents.filter(d => d.id !== id) } : c));
     setDelDocConfirm(null);
     if (openDocId === id) setOpenDocId(null);
+    const result = await deleteDocApi(openCat.id, id);
+    if (result) setCategories(result);
   }
 
   return (
