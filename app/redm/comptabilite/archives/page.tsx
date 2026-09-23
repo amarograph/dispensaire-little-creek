@@ -44,8 +44,7 @@ interface SemaineArchivee {
   totalPercu: number; totalAttente: number;
 }
 
-const LS_ARC = 'redm_cabinet_compta_archives_v1';
-function loadArc(): SemaineArchivee[] { try { return JSON.parse(localStorage.getItem(LS_ARC) ?? '[]'); } catch { return []; } }
+async function loadArc(): Promise<SemaineArchivee[]> { try { const r = await fetch('/api/comptabilite/archives'); return r.ok ? await r.json() : []; } catch { return []; } }
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 
 const PAYEUR_COL: Partial<Record<Payeur, string>> = {
@@ -63,7 +62,7 @@ export default function ArchivesCaisseComptabilitePage() {
   const [openView,  setOpenView]  = useState<'tous' | Payeur>('tous');
   const [tarifs,    setTarifs]    = useState<Record<string, TarifCategory>>({});
 
-  useEffect(() => { setArchives(loadArc()); setHydrated(true); }, []);
+  useEffect(() => { loadArc().then(a => { setArchives(a); setHydrated(true); }); }, []);
 
   useEffect(() => {
     fetch('/api/redm/tarifs')

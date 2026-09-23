@@ -50,12 +50,10 @@ interface SemaineArchivee {
   totalPercu: number; totalAttente: number;
 }
 
-const LS     = 'redm_cabinet_compta_v1';
-const LS_ARC = 'redm_cabinet_compta_archives_v1';
-function load(): Facture[]             { try { return JSON.parse(localStorage.getItem(LS)     ?? '[]'); } catch { return []; } }
-function loadArc(): SemaineArchivee[]  { try { return JSON.parse(localStorage.getItem(LS_ARC) ?? '[]'); } catch { return []; } }
-function save(d: Facture[])            { try { localStorage.setItem(LS,     JSON.stringify(d)); } catch {} }
-function saveArc(d: SemaineArchivee[]) { try { localStorage.setItem(LS_ARC, JSON.stringify(d)); } catch {} }
+async function load(): Promise<Facture[]>            { try { const r = await fetch('/api/comptabilite'); return r.ok ? await r.json() : []; } catch { return []; } }
+async function loadArc(): Promise<SemaineArchivee[]>  { try { const r = await fetch('/api/comptabilite/archives'); return r.ok ? await r.json() : []; } catch { return []; } }
+async function save(d: Facture[])            { try { await fetch('/api/comptabilite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) }); } catch {} }
+async function saveArc(d: SemaineArchivee[]) { try { await fetch('/api/comptabilite/archives', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) }); } catch {} }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 function calcMontant(p: PrestationItem[], tarifs: Record<string, TarifCategory>) { return Math.round(p.reduce((s, x) => s + (x.prix ?? tarifs[x.id]?.prix ?? 0) * x.qty, 0) * 100) / 100; }
@@ -133,7 +131,9 @@ export default function CaisseComptabilitePage() {
   /* ── Hydratation ── */
   useEffect(() => {
     setForm(f => ({ ...f, dateSeance: rpDate() }));
-    setItems(load()); setArchives(loadArc()); setHydrated(true);
+    Promise.all([load(), loadArc()]).then(([its, arcs]) => {
+      setItems(its); setArchives(arcs); setHydrated(true);
+    });
   }, []);
 
   /* ── Auto-remplissage du médecin connecté ── */
@@ -167,7 +167,7 @@ export default function CaisseComptabilitePage() {
     if (!hydrated || autoArchiveDone.current) return;
     autoArchiveDone.current = true;
 
-    // items et archives sont ceux chargés depuis localStorage dans le même render
+    // items et archives sont ceux chargés depuis le serveur au montage
     const byWeek = groupByWeek(items);
     const past   = sortKeys(Object.keys(byWeek)).filter(k => k !== mondayISO(getMondayOf(new Date())));
     if (past.length === 0) return;

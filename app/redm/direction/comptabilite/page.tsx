@@ -50,12 +50,10 @@ interface SemaineArchivee {
   totalPercu: number; totalAttente: number;
 }
 
-const LS     = 'redm_cabinet_compta_v1';
-const LS_ARC = 'redm_cabinet_compta_archives_v1';
-function load(): Facture[]             { try { return JSON.parse(localStorage.getItem(LS)     ?? '[]'); } catch { return []; } }
-function loadArc(): SemaineArchivee[]  { try { return JSON.parse(localStorage.getItem(LS_ARC) ?? '[]'); } catch { return []; } }
-function save(d: Facture[])            { try { localStorage.setItem(LS,     JSON.stringify(d)); } catch {} }
-function saveArc(d: SemaineArchivee[]) { try { localStorage.setItem(LS_ARC, JSON.stringify(d)); } catch {} }
+async function load(): Promise<Facture[]>            { try { const r = await fetch('/api/comptabilite'); return r.ok ? await r.json() : []; } catch { return []; } }
+async function loadArc(): Promise<SemaineArchivee[]>  { try { const r = await fetch('/api/comptabilite/archives'); return r.ok ? await r.json() : []; } catch { return []; } }
+async function save(d: Facture[])            { try { await fetch('/api/comptabilite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) }); } catch {} }
+async function saveArc(d: SemaineArchivee[]) { try { await fetch('/api/comptabilite/archives', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) }); } catch {} }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 
@@ -280,9 +278,11 @@ export default function DirectionComptabilitePage() {
     }
   }
 
-  /* ── Hydratation : on lit les mêmes registres que « Comptabilité » ── */
+  /* ── Hydratation : on lit les mêmes registres partagés que « Comptabilité » ── */
   useEffect(() => {
-    setItems(load()); setArchives(loadArc()); setHydrated(true);
+    Promise.all([load(), loadArc()]).then(([its, arcs]) => {
+      setItems(its); setArchives(arcs); setHydrated(true);
+    });
   }, []);
 
   /* ── Catégories & répartition définies par la Direction ── */
