@@ -25,29 +25,39 @@ interface Document {
   titre: string; contenu: string; date: string; createdAt: string;
 }
 
-/* ── Types comptabilité ── */
+/* ── Types comptabilité (registre partagé, voir /api/comptabilite) ── */
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
-type TypePrestation = 'Consultation' | 'Traitement';
-type Payeur         = 'Civil' | 'Sherif WE' | 'Sherif NH' | 'Marshall' | 'Vétéran';
+type Payeur          = 'Civil' | 'Shérif' | 'Mairie West Elizabeth';
+interface PrestationItem { id: string; qty: number; nom?: string; prix?: number; }
 interface Facture {
-  id: string; patientNom: string; dateSeance: string;
-  prestations: TypePrestation[]; montant: number;
+  id: string; medecin: string; patientNom: string; dateSeance: string;
+  prestations: (string | PrestationItem)[]; montant: number;
   payeur: Payeur; statut: StatutPaiement; notes: string; createdAt: string;
+  estCommande?: boolean;
 }
 interface SemaineArchivee {
   id: string; weekLabel: string; weekStart: string;
   factures: Facture[]; archivedAt: string;
   totalPercu: number; totalAttente: number;
 }
+function normPrestations(raw: unknown): PrestationItem[] {
+  if (!Array.isArray(raw) || raw.length === 0) return [{ id: 'Consultation', qty: 1 }];
+  return raw.map(p => {
+    if (typeof p === 'string') return { id: p, qty: 1 };
+    const o = p as PrestationItem;
+    const qty = Math.max(1, Math.min(99, Number(o.qty) || 1));
+    return o.prix != null ? { id: o.id, qty, nom: o.nom, prix: o.prix } : { id: o.id, qty };
+  });
+}
 
-/* ── localStorage pour comptabilité uniquement ── */
-const LS_COMPTA   = 'redm_cabinet_compta_v1';
-const LS_COMPTA_A = 'redm_cabinet_compta_archives_v1';
-function loadAllFactures(): Facture[] {
+/* ── Registre partagé côté serveur (voir /api/comptabilite) ── */
+async function loadAllFactures(): Promise<Facture[]> {
   try {
-    const current: Facture[]         = JSON.parse(localStorage.getItem(LS_COMPTA)   ?? '[]');
-    const arcs: SemaineArchivee[]    = JSON.parse(localStorage.getItem(LS_COMPTA_A) ?? '[]');
-    const archived: Facture[]        = arcs.flatMap(a => a.factures);
+    const [current, arcs]: [Facture[], SemaineArchivee[]] = await Promise.all([
+      fetch('/api/comptabilite').then(r => r.ok ? r.json() : []),
+      fetch('/api/comptabilite/archives').then(r => r.ok ? r.json() : []),
+    ]);
+    const archived: Facture[] = arcs.flatMap(a => a.factures);
     return [...current, ...archived];
   } catch { return []; }
 }
@@ -259,7 +269,6 @@ ou immédiatement en cas de :
 /* ── Constantes compta ── */
 const PAI_COL:  Record<StatutPaiement, string> = { 'PAYÉ': '#A8B991', 'EN ATTENTE': '#D1B77C', 'ANNULÉ': '#8B4040' };
 const PAI_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
-const TARIFS: Record<TypePrestation, number>   = { 'Consultation': 1, 'Traitement': 0.4 };
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 
 /* ── Styles ── */
@@ -296,7 +305,20 @@ export default function PatientDetailPage() {
   const [dossier,   setDossier]   = useState<Dossier | null>(null);
   const [docs,      setDocs]      = useState<Document[]>([]);
   const [factures,  setFactures]  = useState<Facture[]>([]);
+  const [tarifs,    setTarifs]    = useState<Record<string, { nom: string; prix: number }>>({});
   const [hydrated,  setHydrated]  = useState(false);
+
+  useEffect(() => {
+    fetch('/api/redm/tarifs')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!Array.isArray(d?.categories)) return;
+        const m: Record<string, { nom: string; prix: number }> = {};
+        d.categories.forEach((c: { id: string; nom: string; prix: number }) => { m[c.id] = { nom: c.nom, prix: c.prix }; });
+        setTarifs(m);
+      })
+      .catch(() => {});
+  }, []);
 
   /* Nouveau doc */
   const [docPanelOpen, setDocPanelOpen] = useState(false);
@@ -376,13 +398,15 @@ export default function PatientDetailPage() {
 
         const fullName = [d.patientPrenom, d.patientNom].filter(Boolean).join(' ').toLowerCase();
         const nomSeul  = d.patientNom.toLowerCase();
-        const all = loadAllFactures().filter(f => {
-          const fn = f.patientNom.toLowerCase();
-          return fn === fullName || fn === nomSeul || fullName.includes(fn) || fn.includes(nomSeul);
+        loadAllFactures().then(list => {
+          const all = list.filter(f => {
+            const fn = f.patientNom.toLowerCase();
+            return fn === fullName || fn === nomSeul || fullName.includes(fn) || fn.includes(nomSeul);
+          });
+          all.sort((a, b) => parseDateTs(b.dateSeance) - parseDateTs(a.dateSeance));
+          setFactures(all);
+          setHydrated(true);
         });
-        all.sort((a, b) => parseDateTs(b.dateSeance) - parseDateTs(a.dateSeance));
-        setFactures(all);
-        setHydrated(true);
       })
       .catch(() => setHydrated(true));
   }, [id]);
@@ -800,7 +824,7 @@ export default function PatientDetailPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
                 {factures.map(f => {
                   const col  = PAI_COL[f.statut];
-                  const pres = f.prestations ?? ['Consultation' as TypePrestation];
+                  const pres = normPrestations(f.prestations);
                   return (
                     <div key={f.id} style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `4px solid ${col}` }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 18px' }}>
@@ -811,11 +835,15 @@ export default function PatientDetailPage() {
                         </div>
                         {/* Prestations + payeur */}
                         <div style={{ flex: 1, display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-                          {pres.map((p, i) => (
-                            <span key={i} style={{ fontFamily: MONO, fontSize: 14, color: T.gold, background: 'rgba(209,183,124,0.10)', padding: '2px 8px', border: '1px solid rgba(209,183,124,0.20)' }}>
-                              {p} <span style={{ color: T.muted }}>{fmt$(TARIFS[p] ?? 0)}</span>
-                            </span>
-                          ))}
+                          {pres.map((p, i) => {
+                            const nom  = p.nom ?? tarifs[p.id]?.nom ?? p.id;
+                            const prix = p.prix ?? tarifs[p.id]?.prix ?? 0;
+                            return (
+                              <span key={i} style={{ fontFamily: MONO, fontSize: 14, color: T.gold, background: 'rgba(209,183,124,0.10)', padding: '2px 8px', border: '1px solid rgba(209,183,124,0.20)' }}>
+                                {nom}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{ color: T.muted }}>{fmt$(prix * p.qty)}</span>
+                              </span>
+                            );
+                          })}
                           <span style={{ fontFamily: MONO, fontSize: 14, color: '#88AAC0', background: 'rgba(72,104,120,0.18)', padding: '2px 7px' }}>{f.payeur}</span>
                           {f.notes && <span style={{ fontFamily: BODY, fontSize: 14, color: T.muted, fontStyle: 'italic' }}>{f.notes}</span>}
                         </div>

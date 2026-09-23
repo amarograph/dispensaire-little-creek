@@ -11,9 +11,6 @@ const COL  = '#6B7ABB';
 const COL_S = '#526C45'; // synthèse — vert
 const COL_P = '#A0784A'; // prescription — brun
 
-/* ── LocalStorage keys (examens psychiques uniquement — reste local) ── */
-const LS_EXAMS = 'redm_doc_examen_psychique_v1';
-
 /* ── Helpers ── */
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function rpDate(d = new Date()) {
@@ -52,9 +49,22 @@ interface DocResult {
   titre: string; contenu: string; date: string; createdAt: string;
 }
 
-/* ── LS helpers (examens psychiques uniquement) ── */
-function loadExams(): Examen[]  { try { return JSON.parse(localStorage.getItem(LS_EXAMS) ?? '[]'); } catch { return []; } }
-function saveExams(d: Examen[]) { try { localStorage.setItem(LS_EXAMS, JSON.stringify(d)); } catch {} }
+/* ── Registre partagé côté serveur (examens psychiques) ── */
+async function loadExams(): Promise<Examen[]> { try { const r = await fetch('/api/cabinet/examens-psychiques'); return r.ok ? await r.json() : []; } catch { return []; } }
+async function upsertExam(e: Examen): Promise<Examen[] | null> {
+  try {
+    const r = await fetch('/api/cabinet/examens-psychiques', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'upsert', examen: e }) });
+    if (!r.ok) return null;
+    const d = await r.json(); return d.examens ?? null;
+  } catch { return null; }
+}
+async function deleteExamServer(id: string): Promise<Examen[] | null> {
+  try {
+    const r = await fetch('/api/cabinet/examens-psychiques', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', id }) });
+    if (!r.ok) return null;
+    const d = await r.json(); return d.examens ?? null;
+  } catch { return null; }
+}
 
 /* ── Mapper row Supabase → Patient ── */
 function mapDossier(row: any): Patient {
@@ -299,7 +309,7 @@ export default function DocumentationPage() {
 
   /* ── Chargement ── */
   useEffect(() => {
-    setExams(loadExams());
+    loadExams().then(setExams);
     // Patients depuis Supabase
     fetch('/api/cabinet/dossiers')
       .then(r => r.ok ? r.json() : { dossiers: [] })
@@ -402,18 +412,23 @@ export default function DocumentationPage() {
   }
 
   /* ── Examen psychique ── */
-  function deleteExam(id: string) {
-    const updated = exams.filter(e => e.id !== id);
-    setExams(updated); saveExams(updated); setDelExam(null);
+  async function deleteExam(id: string) {
+    setExams(prev => prev.filter(e => e.id !== id));
+    setDelExam(null);
+    const result = await deleteExamServer(id);
+    if (result) setExams(result);
   }
   function startEditExam(ex: Examen) {
     setEditExam(ex);
     setEditForm({ nom: ex.nom, prenom: ex.prenom, age: ex.age, fonction: ex.fonction, county: ex.county, lieu: ex.lieu ?? 'Little Creek', date: ex.date, etatEmotionnel: ex.etatEmotionnel, stabiliteNerveuse: ex.stabiliteNerveuse, elementsRetenus: ex.elementsRetenus, conclusion: ex.conclusion, recommandations: ex.recommandations });
   }
-  function saveEditExam() {
+  async function saveEditExam() {
     if (!editExam) return;
-    const updated = exams.map(e => e.id === editExam.id ? { ...e, ...editForm } : e);
-    setExams(updated); saveExams(updated); setEditExam(null);
+    const updatedExam: Examen = { ...editExam, ...editForm };
+    setExams(prev => prev.map(e => e.id === editExam.id ? updatedExam : e));
+    setEditExam(null);
+    const result = await upsertExam(updatedExam);
+    if (result) setExams(result);
   }
 
   const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '10px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };

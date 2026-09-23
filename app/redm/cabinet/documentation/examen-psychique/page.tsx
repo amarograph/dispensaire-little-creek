@@ -9,13 +9,15 @@ const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 const COL = '#6B7ABB';
 
-/* ── LocalStorage ── */
-const LS_EXAMS    = 'redm_doc_examen_psychique_v1';
-const LS_PATIENTS = 'redm_cabinet_patients_v2';
-function loadExams(): Examen[]     { try { return JSON.parse(localStorage.getItem(LS_EXAMS)    ?? '[]'); } catch { return []; } }
-function saveExams(d: Examen[])    { try { localStorage.setItem(LS_EXAMS, JSON.stringify(d)); }    catch {} }
-function loadPatients(): Dossier[] { try { return JSON.parse(localStorage.getItem(LS_PATIENTS) ?? '[]'); } catch { return []; } }
-function savePatients(d: Dossier[]){ try { localStorage.setItem(LS_PATIENTS, JSON.stringify(d)); } catch {} }
+/* ── Registre partagé côté serveur ── */
+async function loadExams(): Promise<Examen[]> { try { const r = await fetch('/api/cabinet/examens-psychiques'); return r.ok ? await r.json() : []; } catch { return []; } }
+async function upsertExam(e: Examen): Promise<Examen[] | null> {
+  try {
+    const r = await fetch('/api/cabinet/examens-psychiques', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'upsert', examen: e }) });
+    if (!r.ok) return null;
+    const d = await r.json(); return d.examens ?? null;
+  } catch { return null; }
+}
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function rpDate(d = new Date()) {
   const s = d.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2]) - 136); return s.join('/');
@@ -41,15 +43,6 @@ interface Examen {
   etatEmotionnel: string; stabiliteNerveuse: string;
   elementsRetenus: string; conclusion: string; recommandations: string;
 }
-interface Dossier {
-  id: string; patientNom: string; patientPrenom: string; patientAge: string;
-  dateConsult: string; type: string; plainte: string;
-  antecedentsPersonnels: string; antecedentsFamiliaux: string; evenementsRecents: string;
-  equilibreNerveux: string; noteThérapeute: string;
-  traitement: string; prochaine: string;
-  statut: string; confidentiel: boolean; createdAt: string;
-}
-
 /* ── Verdict ── */
 type Verdict = 'APTE' | 'À SURVEILLER' | 'INAPTE';
 function getVerdict(score: number): Verdict {
@@ -159,16 +152,17 @@ export default function ExamenPsychiquePage() {
   const [recommandations,   setRecommandations]   = useState('');
 
   useEffect(() => {
-    const list = loadExams();
-    setArchives(list);
-    setHydrated(true);
-    // Ouvrir directement le certificat si ?id=xxx&view=letter
-    const paramId   = searchParams.get('id');
-    const paramView = searchParams.get('view');
-    if (paramId && paramView === 'letter') {
-      const found = list.find(e => e.id === paramId);
-      if (found) { setCurrent(found); setView('letter'); }
-    }
+    loadExams().then(list => {
+      setArchives(list);
+      setHydrated(true);
+      // Ouvrir directement le certificat si ?id=xxx&view=letter
+      const paramId   = searchParams.get('id');
+      const paramView = searchParams.get('view');
+      if (paramId && paramView === 'letter') {
+        const found = list.find(e => e.id === paramId);
+        if (found) { setCurrent(found); setView('letter'); }
+      }
+    });
   }, []);
 
   /* Score */
@@ -179,33 +173,30 @@ export default function ExamenPsychiquePage() {
 
   function setReponse(key: string, val: number) { setReponses(r => ({ ...r, [key]: val })); }
 
-  /* ── Créer dossier patient ── */
-  function createPatientDossier(ex: Examen) {
-    const patients = loadPatients();
-    const dossier: Dossier = {
-      id: uid(),
-      patientNom:    ex.nom,
-      patientPrenom: ex.prenom,
-      patientAge:    ex.age,
-      dateConsult:   ex.date,
-      type:          'Première consultation',
-      plainte:       `Examen psychique & moral — ${ex.fonction}${ex.county ? ' du comté de ' + ex.county : ''}`,
-      antecedentsPersonnels: '',
-      antecedentsFamiliaux:  '',
-      evenementsRecents:     '',
-      equilibreNerveux:      ex.score < 41 ? 'III' : ex.score < 76 ? 'II' : 'I',
-      noteThérapeute:        `Score examen psychique : ${ex.score}/${MAX_SCORE} — Verdict : ${ex.verdict}\n\n${ex.conclusion}`,
-      traitement:            ex.recommandations,
-      prochaine:             '',
-      statut:                'EN COURS',
-      confidentiel:          true,
-      createdAt:             new Date().toISOString(),
-    };
-    savePatients([dossier, ...patients]);
+  /* ── Créer dossier patient (registre partagé du Cabinet, pas un stockage local) ── */
+  async function createPatientDossier(ex: Examen) {
+    try {
+      await fetch('/api/cabinet/dossiers', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patientNom:    ex.nom,
+          patientPrenom: ex.prenom,
+          patientAge:    ex.age,
+          dateConsult:   ex.date,
+          type:          'Première consultation',
+          plainte:       `Examen psychique & moral — ${ex.fonction}${ex.county ? ' du comté de ' + ex.county : ''}`,
+          equilibreNerveux: ex.score < 41 ? 'III' : ex.score < 76 ? 'II' : 'I',
+          noteThérapeute:   `Score examen psychique : ${ex.score}/${MAX_SCORE} — Verdict : ${ex.verdict}\n\n${ex.conclusion}`,
+          traitement:       ex.recommandations,
+          statut:           'EN COURS',
+          confidentiel:     true,
+        }),
+      });
+    } catch {}
   }
 
   /* ── Soumettre ── */
-  function submit() {
+  async function submit() {
     if (!nom.trim() || answered < TOTAL_QUESTIONS) return;
     const v = getVerdict(score);
     const examen: Examen = {
@@ -214,12 +205,12 @@ export default function ExamenPsychiquePage() {
       reponses, score, verdict: v,
       etatEmotionnel, stabiliteNerveuse, elementsRetenus, conclusion, recommandations,
     };
-    const list = [examen, ...loadExams()];
-    saveExams(list);
-    setArchives(list);
-    createPatientDossier(examen);
+    setArchives(prev => [examen, ...prev]);
     setCurrent(examen);
     setView('result');
+    const result = await upsertExam(examen);
+    if (result) setArchives(result);
+    await createPatientDossier(examen);
   }
 
   function reset() {
