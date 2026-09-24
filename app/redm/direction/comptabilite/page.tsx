@@ -302,8 +302,9 @@ export default function DirectionComptabilitePage() {
   /* Factures à envoyer aux institutions (semaine en cours) */
   const factureSherif = semaineActuelle.filter(f => f.payeur === 'Shérif' && f.statut !== 'ANNULÉ');
   const factureMairie  = semaineActuelle.filter(f => f.payeur === 'Mairie West Elizabeth' && f.statut !== 'ANNULÉ');
-  const totalFactureSherif = factureSherif.reduce((s,f)=>s+f.montant,0);
-  const totalFactureMairie = factureMairie.reduce((s,f)=>s+f.montant,0);
+  // Le total affiché ne reflète que ce qui reste à facturer : les factures déjà payées ne comptent plus.
+  const totalFactureSherif = factureSherif.filter(f => f.statut === 'EN ATTENTE').reduce((s,f)=>s+f.montant,0);
+  const totalFactureMairie = factureMairie.filter(f => f.statut === 'EN ATTENTE').reduce((s,f)=>s+f.montant,0);
 
   /* Fusion des salaires (ventes) avec les gains de caisses de la semaine, par nom */
   const salaires = (() => {
