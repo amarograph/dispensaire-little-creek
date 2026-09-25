@@ -99,13 +99,14 @@ export default function AideFabricationPage() {
     setVariantes(v => ({ ...v, [nom]: id }));
   }
 
-  function calculer() {
-    if (!cibleNom || quantite <= 0) return;
+  /* Calcul en direct : se met à jour dès qu'on change l'objet, la quantité ou une préférence de recette. */
+  useEffect(() => {
+    if (!cibleNom || !cibleId || quantite <= 0) { setResultat(null); return; }
     const steps: typeof stepsInit = {};
     const raw: Record<string, number> = {};
     resolveDemand(cibleNom, quantite, recipesByNom, { ...variantes, [cibleNom]: cibleId }, steps, raw);
     setResultat({ steps, raw });
-  }
+  }, [cibleNom, cibleId, quantite, variantes, recipesByNom]);
 
   /* ── Gestion des recettes (Direction) ── */
   function startNew() {
@@ -184,7 +185,7 @@ export default function AideFabricationPage() {
           {/* ── Calculateur ── */}
           <div style={{ background: T.card, border: `2px solid ${T.gold}70`, padding: '22px 24px' }}>
             <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold, marginBottom: 16 }}>🧮 Calculateur</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr auto', gap: 12, alignItems: 'end', marginBottom: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12, alignItems: 'end', marginBottom: 14 }}>
               <div>
                 <label style={lbl}>OBJET À FABRIQUER</label>
                 <select style={{ ...inp, cursor: 'pointer' }} value={cibleNom} onChange={e => setCibleNom(e.target.value)}>
@@ -195,10 +196,6 @@ export default function AideFabricationPage() {
                 <label style={lbl}>QUANTITÉ SOUHAITÉE</label>
                 <input type="number" min={1} style={inp} value={quantite} onChange={e => setQuantite(Math.max(1, Number(e.target.value) || 1))} />
               </div>
-              <button onClick={calculer} disabled={!cibleNom}
-                style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.1em', padding: '11px 24px', cursor: 'pointer', background: 'rgba(120,96,48,0.30)', color: T.gold, border: '2px solid rgba(120,96,48,0.6)', whiteSpace: 'nowrap' }}>
-                ✔ CALCULER
-              </button>
             </div>
 
             {ambigus.length > 0 && (
