@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiSession } from '@/lib/api-auth';
 import { canRead, canEdit, isAdmin } from '@/lib/permissions';
 import { createServiceClient } from '@/lib/supabase/server';
+import { redmLog } from '@/lib/redm-log';
 
 const KEY = 'redm_bibliotheque';
 
@@ -13,9 +14,10 @@ async function canReadLib(): Promise<boolean> {
   const s = await session(); if (!s) return false;
   return isAdmin(s.roles) || canRead(s.roles, 'redm_bibliotheque');
 }
-async function canEditLib(): Promise<boolean> {
-  const s = await session(); if (!s) return false;
-  return isAdmin(s.roles) || canEdit(s.roles, 'redm_bibliotheque');
+async function getEditor() {
+  const s = await session(); if (!s) return null;
+  if (!isAdmin(s.roles) && !canEdit(s.roles, 'redm_bibliotheque')) return null;
+  return { id: s.discordId, name: s.username };
 }
 
 /* GET — arbre des catégories (uniquement les catégories créées + documents ajoutés ; les catégories
@@ -30,7 +32,8 @@ export async function GET() {
 
 /* POST — opérations atomiques sur les catégories/documents (jamais un remplacement en bloc) */
 export async function POST(req: NextRequest) {
-  if (!await canEditLib()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const actor = await getEditor();
+  if (!actor) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   try {
     const body = await req.json();
@@ -43,6 +46,7 @@ export async function POST(req: NextRequest) {
       case 'createCategory': {
         if (!body.categorie?.id) return NextResponse.json({ error: 'Catégorie invalide' }, { status: 400 });
         next = current.some(c => c.id === body.categorie.id) ? current : [...current, body.categorie];
+        redmLog(actor, { action: 'bibliotheque_categorie_create', category: 'bibliotheque', description: `${actor.name} a créé la catégorie « ${body.categorie.nom} » dans la Bibliothèque`, meta: { id: body.categorie.id } });
         break;
       }
       case 'renameCategory': {
@@ -51,11 +55,14 @@ export async function POST(req: NextRequest) {
         next = exists
           ? current.map(c => c.id === body.id ? { ...c, nom: body.nom } : c)
           : [...current, { id: body.id, nom: body.nom, icon: body.icon ?? '📜', documents: [] }];
+        redmLog(actor, { action: 'bibliotheque_categorie_rename', category: 'bibliotheque', description: `${actor.name} a renommé une catégorie de la Bibliothèque en « ${body.nom} »`, meta: { id: body.id } });
         break;
       }
       case 'deleteCategory': {
         if (!body.id) return NextResponse.json({ error: 'id manquant' }, { status: 400 });
+        const removed = current.find(c => c.id === body.id);
         next = current.filter(c => c.id !== body.id);
+        if (removed) redmLog(actor, { action: 'bibliotheque_categorie_delete', category: 'bibliotheque', description: `${actor.name} a supprimé la catégorie « ${removed.nom} » de la Bibliothèque`, meta: { id: removed.id } });
         break;
       }
       case 'upsertDoc': {
@@ -66,11 +73,22 @@ export async function POST(req: NextRequest) {
         const nextDocs = docIdx === -1 ? [...base.documents, body.doc] : base.documents.map(d => d.id === body.doc.id ? body.doc : d);
         const nextCat = { ...base, documents: nextDocs };
         next = idx === -1 ? [...current, nextCat] : current.map(c => c.id === body.categoryId ? nextCat : c);
+        redmLog(actor, {
+          action: docIdx === -1 ? 'bibliotheque_doc_create' : 'bibliotheque_doc_update',
+          category: 'bibliotheque',
+          description: docIdx === -1
+            ? `${actor.name} a ajouté le document « ${body.doc.titre} » dans « ${base.nom} »`
+            : `${actor.name} a modifié le document « ${body.doc.titre} » dans « ${base.nom} »`,
+          meta: { categoryId: body.categoryId, docId: body.doc.id },
+        });
         break;
       }
       case 'deleteDoc': {
         if (!body.categoryId || !body.docId) return NextResponse.json({ error: 'Paramètres invalides' }, { status: 400 });
+        const cat = current.find(c => c.id === body.categoryId);
+        const removedDoc = cat?.documents.find(d => d.id === body.docId);
         next = current.map(c => c.id === body.categoryId ? { ...c, documents: c.documents.filter(d => d.id !== body.docId) } : c);
+        if (removedDoc) redmLog(actor, { action: 'bibliotheque_doc_delete', category: 'bibliotheque', description: `${actor.name} a supprimé le document « ${removedDoc.titre} » de « ${cat?.nom ?? body.categoryId} »`, meta: { categoryId: body.categoryId, docId: body.docId } });
         break;
       }
       default:

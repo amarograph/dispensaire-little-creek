@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiSession } from '@/lib/api-auth';
 import { canRead, isAdmin } from '@/lib/permissions';
 import { createServiceClient } from '@/lib/supabase/server';
+import { redmLog } from '@/lib/redm-log';
 
 const KEY = 'redm_comptabilite_archives';
 
@@ -18,15 +19,16 @@ interface SemaineArchivee {
   totalPercu: number; totalAttente: number;
 }
 
-async function canAccess(): Promise<boolean> {
+async function getActor() {
   const session = await getApiSession();
-  if (!session) return false;
-  return isAdmin(session.roles) || canRead(session.roles, 'redm_comptabilite');
+  if (!session) return null;
+  if (!isAdmin(session.roles) && !canRead(session.roles, 'redm_comptabilite')) return null;
+  return { id: session.discordId, name: session.username };
 }
 
 /* GET — semaines archivées du registre partagé */
 export async function GET() {
-  if (!await canAccess()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  if (!await getActor()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const supabase = await createServiceClient();
   const { data } = await supabase.from('site_config').select('value').eq('key', KEY).single();
@@ -35,7 +37,8 @@ export async function GET() {
 
 /* POST — opérations atomiques (lecture fraîche + modification ciblée + écriture) */
 export async function POST(req: NextRequest) {
-  if (!await canAccess()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const actor = await getActor();
+  if (!actor) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   try {
     const body = await req.json();
@@ -45,10 +48,26 @@ export async function POST(req: NextRequest) {
 
     let next: SemaineArchivee[];
     if (body.action === 'delete' && body.id) {
+      const removed = current.find(x => x.id === body.id);
       next = current.filter(x => x.id !== body.id);
+      if (removed) {
+        redmLog(actor, {
+          action: 'facture_archive_delete', category: 'comptabilite',
+          description: `${actor.name} a supprimé l'archive « ${removed.weekLabel} »`,
+          meta: { id: removed.id, weekStart: removed.weekStart },
+        });
+      }
     } else if (body.action === 'merge' && Array.isArray(body.archives)) {
       const existingIds = new Set(current.map(x => x.id));
-      next = [...current, ...body.archives.filter((a: SemaineArchivee) => a?.id && !existingIds.has(a.id))];
+      const added = body.archives.filter((a: SemaineArchivee) => a?.id && !existingIds.has(a.id));
+      next = [...current, ...added];
+      if (added.length > 0) {
+        redmLog(actor, {
+          action: 'facture_archive_merge', category: 'comptabilite',
+          description: `${actor.name} a ajouté ${added.length} ancienne${added.length > 1 ? 's' : ''} archive${added.length > 1 ? 's' : ''} locale${added.length > 1 ? 's' : ''} au registre partagé`,
+          meta: { count: added.length },
+        });
+      }
     } else {
       return NextResponse.json({ error: 'Action invalide' }, { status: 400 });
     }

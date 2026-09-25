@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiSession } from '@/lib/api-auth';
 import { canRead, isAdmin } from '@/lib/permissions';
 import { createServiceClient } from '@/lib/supabase/server';
+import { redmLog } from '@/lib/redm-log';
 
 const KEY          = 'redm_comptabilite_factures';
 const ARCHIVES_KEY = 'redm_comptabilite_archives';
@@ -19,10 +20,11 @@ interface SemaineArchivee {
   totalPercu: number; totalAttente: number;
 }
 
-async function canAccess(): Promise<boolean> {
+async function getActor() {
   const session = await getApiSession();
-  if (!session) return false;
-  return isAdmin(session.roles) || canRead(session.roles, 'redm_comptabilite');
+  if (!session) return null;
+  if (!isAdmin(session.roles) && !canRead(session.roles, 'redm_comptabilite')) return null;
+  return { id: session.discordId, name: session.username };
 }
 
 function getMondayOf(date: Date): Date {
@@ -90,7 +92,7 @@ function archivePastWeeks(items: Facture[], archives: SemaineArchivee[]): { item
 
 /* GET — factures de la semaine en cours (archive automatiquement les semaines passées, côté serveur, une seule fois) */
 export async function GET() {
-  if (!await canAccess()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  if (!await getActor()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const supabase = await createServiceClient();
   const [{ data: itemsRow }, { data: arcRow }] = await Promise.all([
@@ -113,7 +115,8 @@ export async function GET() {
 
 /* POST — opérations atomiques (lecture fraîche + modification ciblée + écriture), jamais un remplacement en bloc du tableau local d'un client */
 export async function POST(req: NextRequest) {
-  if (!await canAccess()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const actor = await getActor();
+  if (!actor) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   try {
     const body = await req.json();
@@ -126,11 +129,36 @@ export async function POST(req: NextRequest) {
       const f: Facture = body.facture;
       const idx = current.findIndex(x => x.id === f.id);
       next = idx === -1 ? [f, ...current] : current.map(x => x.id === f.id ? f : x);
+      const qui = f.medecin || f.patientNom || '— Non assigné —';
+      redmLog(actor, {
+        action: idx === -1 ? 'facture_create' : 'facture_update',
+        category: 'comptabilite',
+        description: idx === -1
+          ? `${actor.name} a créé une note de frais pour ${qui} (${f.montant}$, ${f.payeur}, ${f.statut})`
+          : `${actor.name} a modifié la note de frais de ${qui} (${f.montant}$, ${f.payeur}, ${f.statut})`,
+        meta: { id: f.id, montant: f.montant, payeur: f.payeur, statut: f.statut, medecin: f.medecin },
+      });
     } else if (body.action === 'delete' && body.id) {
+      const removed = current.find(x => x.id === body.id);
       next = current.filter(x => x.id !== body.id);
+      if (removed) {
+        redmLog(actor, {
+          action: 'facture_delete', category: 'comptabilite',
+          description: `${actor.name} a supprimé la note de frais de ${removed.medecin || removed.patientNom || '— Non assigné —'} (${removed.montant}$)`,
+          meta: { id: removed.id, montant: removed.montant, payeur: removed.payeur },
+        });
+      }
     } else if (body.action === 'merge' && Array.isArray(body.factures)) {
       const existingIds = new Set(current.map(x => x.id));
-      next = [...current, ...body.factures.filter((f: Facture) => f?.id && !existingIds.has(f.id))];
+      const added = body.factures.filter((f: Facture) => f?.id && !existingIds.has(f.id));
+      next = [...current, ...added];
+      if (added.length > 0) {
+        redmLog(actor, {
+          action: 'facture_merge', category: 'comptabilite',
+          description: `${actor.name} a ajouté ${added.length} ancienne${added.length > 1 ? 's' : ''} note${added.length > 1 ? 's' : ''} de frais locale${added.length > 1 ? 's' : ''} au registre partagé`,
+          meta: { count: added.length },
+        });
+      }
     } else {
       return NextResponse.json({ error: 'Action invalide' }, { status: 400 });
     }
