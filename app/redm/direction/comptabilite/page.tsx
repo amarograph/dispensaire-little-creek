@@ -286,6 +286,15 @@ export default function DirectionComptabilitePage() {
   const totalAttente = semaineActuelle.filter(f=>f.statut==='EN ATTENTE').reduce((s,f)=>s+f.montant,0);
   const salairesActes = salairesByMedecin(semaineActuelle, tarifs);
 
+  /* Patients vus cette semaine : chaque Consultation / Ordonnance / Consultation + réa compte pour 1 patient */
+  const PRESTATIONS_PATIENT = ['Consultation', 'Ordonnance', 'Consultation + réa'];
+  const patientsVus = semaineActuelle
+    .filter(f => f.statut !== 'ANNULÉ')
+    .reduce((total, f) => total + normPrestations(f.prestations).reduce((s, p) => {
+      const nom = p.nom ?? tarifs[p.id]?.nom;
+      return nom && PRESTATIONS_PATIENT.includes(nom) ? s + p.qty : s;
+    }, 0), 0);
+
   /* Factures à envoyer aux institutions (semaine en cours) */
   const factureSherif = semaineActuelle.filter(f => f.payeur === 'Shérif' && f.statut !== 'ANNULÉ');
   const factureMairie  = semaineActuelle.filter(f => f.payeur === 'Mairie West Elizabeth' && f.statut !== 'ANNULÉ');
@@ -551,12 +560,13 @@ export default function DirectionComptabilitePage() {
             </div>
 
             {/* Stats semaine */}
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10, marginBottom:20 }}>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:10, marginBottom:20 }}>
               {[
-                { l:'NB ACTES',   v: String(semaineActuelle.length), c: T.gold    },
-                { l:'TOTAL PERÇU',v: fmt$(totalPercu),                c: '#A8B991' },
-                { l:'EN ATTENTE', v: fmt$(totalAttente),              c: '#D1B77C' },
-                { l:'MÉDECINS',   v: String(salaires.length),         c: '#BAAAC6' },
+                { l:'NB ACTES',    v: String(semaineActuelle.length), c: T.gold    },
+                { l:'PATIENTS VUS',v: String(patientsVus),            c: '#88AAC0' },
+                { l:'TOTAL PERÇU', v: fmt$(totalPercu),                c: '#A8B991' },
+                { l:'EN ATTENTE',  v: fmt$(totalAttente),              c: '#D1B77C' },
+                { l:'MÉDECINS',    v: String(salaires.length),         c: '#BAAAC6' },
               ].map(s => (
                 <div key={s.l} style={{ background:T.card, border:`1px solid ${T.border}`, padding:'14px 16px', textAlign:'center' }}>
                   <div style={{ fontFamily:DISPLAY, fontSize:24, color:s.c }}>{s.v}</div>
