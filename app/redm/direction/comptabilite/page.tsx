@@ -13,9 +13,6 @@ const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(139,90,43,0.30)', color: T.text, padding: '8px 12px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.1em', marginBottom: 4, display: 'block' };
 
-/** Prix de vente d'une caisse au client ; la différence avec le tarif du grade (5$/5.50$/6$) revient au dispensaire. */
-const PRIX_CAISSE = 7.5;
-
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
 type TypeCategorie  = 'vente' | 'achat';
 type Payeur         = 'Civil' | 'Shérif' | 'Mairie West Elizabeth';
@@ -162,10 +159,9 @@ export default function DirectionComptabilitePage() {
   const caisseIsThisWeek = fmtISODate(caisseMonday) === fmtISODate(getMondayOf(new Date()));
   const caissesTotalSemaine = caissesStaff.reduce((s, x) => s + x.count, 0);
 
-  /* ── Marge dispensaire des caisses (prix client 7.50$ − tarif versé au grade) ── */
+  /* ── Caisses de la semaine (repris dans les salaires ci-dessous uniquement — la marge
+     n'est plus injectée automatiquement dans le compte du dispensaire, saisie à la main). ── */
   interface CaisseSemaineStaff { discord_id: string; nom: string; rate: number; count: number; salaire: number; }
-  const [margeCaissesSemaine, setMargeCaissesSemaine] = useState(0);
-  const [margeCaissesTotal,   setMargeCaissesTotal]   = useState(0);
   const [caissesActuelleStaff, setCaissesActuelleStaff] = useState<CaisseSemaineStaff[]>([]);
 
   /* ── Ajustements manuels du compte du dispensaire (ajout / retrait libre) ── */
@@ -214,10 +210,6 @@ export default function DirectionComptabilitePage() {
 
   const totalAjustements = ajustements.reduce((s, a) => s + a.montant, 0);
 
-  function margeCaisses(staff: { count: number; rate: number }[]): number {
-    return Math.round(staff.reduce((s, x) => s + x.count * (PRIX_CAISSE - x.rate), 0) * 100) / 100;
-  }
-
   /* ── Registre des caisses (self-service du personnel + édition Direction) ── */
   const loadCaisses = useCallback(() => {
     setCaissesLoading(true);
@@ -230,7 +222,7 @@ export default function DirectionComptabilitePage() {
 
   useEffect(() => { loadCaisses(); }, [loadCaisses]);
 
-  /* Caisses de la semaine EN COURS (indépendant de la navigation du registre ci-dessus) */
+  /* Caisses de la semaine EN COURS (indépendant de la navigation du registre ci-dessus) — pour les salaires uniquement */
   useEffect(() => {
     const from = fmtISODate(todayMonday);
     const to   = fmtISODate(addDaysReal(todayMonday, 6));
@@ -238,19 +230,10 @@ export default function DirectionComptabilitePage() {
       .then(r => r.ok ? r.json() : null)
       .then(d => {
         if (!d?.staff) return;
-        setMargeCaissesSemaine(margeCaisses(d.staff));
         setCaissesActuelleStaff(d.staff.filter((s: CaisseSemaineStaff) => s.count > 0));
       })
       .catch(() => {});
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /* Marge cumulée depuis toujours, pour le solde global du dispensaire */
-  useEffect(() => {
-    fetch(`/api/admin/redm-caisses`)
-      .then(r => r.ok ? r.json() : null)
-      .then(d => { if (d?.staff) setMargeCaissesTotal(margeCaisses(d.staff)); })
-      .catch(() => {});
   }, []);
 
   async function toggleCaisse(discordId: string, date: string) {
@@ -320,13 +303,8 @@ export default function DirectionComptabilitePage() {
     return Object.values(map).sort((a,b) => b.salaire - a.salaire);
   })();
 
-  const tresorerieSemaineBrute = tresorerie(semaineActuelle, tarifs);
-  const tresorerieSemaine = {
-    ...tresorerieSemaineBrute,
-    ventes: Math.round((tresorerieSemaineBrute.ventes + margeCaissesSemaine) * 100) / 100,
-    solde:  Math.round((tresorerieSemaineBrute.solde  + margeCaissesSemaine) * 100) / 100,
-  };
-  const soldeDispensaire = Math.round((tresorerie([...items, ...archives.flatMap(a => a.factures)], tarifs).solde + margeCaissesTotal + totalAjustements) * 100) / 100;
+  const tresorerieSemaine = tresorerie(semaineActuelle, tarifs);
+  const soldeDispensaire = Math.round((tresorerie([...items, ...archives.flatMap(a => a.factures)], tarifs).solde + totalAjustements) * 100) / 100;
 
   /* ── Ligne de registre (lecture seule) ── */
   function RegistreLine({ f }: { f: Facture }) {
