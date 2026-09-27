@@ -48,9 +48,19 @@ function weekLabel(mon: Date): string {
 }
 function uid() { return `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`; }
 
+/* "Aujourd'hui" tel que vu par le navigateur du client (YYYY-MM-DD, heure locale) — évite que le serveur,
+   qui tourne en UTC, ne classe une facture fraîchement créée dans la mauvaise semaine juste après minuit
+   heure locale mais encore la veille en UTC (ex : 00h30 en France = 22h30 UTC la veille). */
+function parseLocalISODate(s: string | null): Date | null {
+  if (!s) return null;
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return null;
+  return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+}
+
 /* Déplace les factures des semaines passées vers les archives — pur, idempotent, dédupliqué par weekStart. */
-function archivePastWeeks(items: Facture[], archives: SemaineArchivee[]): { items: Facture[]; archives: SemaineArchivee[]; changed: boolean } {
-  const currentKey = mondayISO(getMondayOf(new Date()));
+function archivePastWeeks(items: Facture[], archives: SemaineArchivee[], today: Date): { items: Facture[]; archives: SemaineArchivee[]; changed: boolean } {
+  const currentKey = mondayISO(getMondayOf(today));
   const byWeek: Record<string, { monday: Date; factures: Facture[] }> = {};
   items.forEach(f => {
     const d = parseDate(f.dateSeance); if (!d) return;
@@ -90,9 +100,11 @@ function archivePastWeeks(items: Facture[], archives: SemaineArchivee[]): { item
   return { items: items.filter(f => !toRemoveIds.has(f.id)), archives: [...brandNew, ...nextArchives], changed: true };
 }
 
-/* GET — factures de la semaine en cours (archive automatiquement les semaines passées, côté serveur, une seule fois) */
-export async function GET() {
+/* GET ?today=YYYY-MM-DD — factures de la semaine en cours (archive automatiquement les semaines passées, côté serveur, une seule fois) */
+export async function GET(req: NextRequest) {
   if (!await getActor()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
+  const today = parseLocalISODate(req.nextUrl.searchParams.get('today')) ?? new Date();
 
   const supabase = await createServiceClient();
   const [{ data: itemsRow }, { data: arcRow }] = await Promise.all([
@@ -102,7 +114,7 @@ export async function GET() {
   const rawItems: Facture[] = Array.isArray(itemsRow?.value) ? itemsRow.value : [];
   const rawArchives: SemaineArchivee[] = Array.isArray(arcRow?.value) ? arcRow.value : [];
 
-  const { items, archives, changed } = archivePastWeeks(rawItems, rawArchives);
+  const { items, archives, changed } = archivePastWeeks(rawItems, rawArchives, today);
   if (changed) {
     await Promise.all([
       supabase.from('site_config').upsert({ key: KEY, value: items }, { onConflict: 'key' }),

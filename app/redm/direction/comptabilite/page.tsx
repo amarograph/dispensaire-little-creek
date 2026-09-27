@@ -47,7 +47,11 @@ interface SemaineArchivee {
   totalPercu: number; totalAttente: number;
 }
 
-async function load(): Promise<Facture[]>           { try { const r = await fetch('/api/comptabilite'); return r.ok ? await r.json() : []; } catch { return []; } }
+function localTodayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+async function load(): Promise<Facture[]>           { try { const r = await fetch(`/api/comptabilite?today=${localTodayISO()}`); return r.ok ? await r.json() : []; } catch { return []; } }
 async function loadArc(): Promise<SemaineArchivee[]> { try { const r = await fetch('/api/comptabilite/archives'); return r.ok ? await r.json() : []; } catch { return []; } }
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 

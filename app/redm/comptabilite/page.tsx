@@ -53,7 +53,11 @@ interface SemaineArchivee {
 const OLD_LS     = 'redm_cabinet_compta_v1';
 const OLD_LS_ARC = 'redm_cabinet_compta_archives_v1';
 
-async function load(): Promise<Facture[]>           { try { const r = await fetch('/api/comptabilite'); return r.ok ? await r.json() : []; } catch { return []; } }
+function localTodayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+async function load(): Promise<Facture[]>           { try { const r = await fetch(`/api/comptabilite?today=${localTodayISO()}`); return r.ok ? await r.json() : []; } catch { return []; } }
 async function loadArc(): Promise<SemaineArchivee[]> { try { const r = await fetch('/api/comptabilite/archives'); return r.ok ? await r.json() : []; } catch { return []; } }
 /* Opérations atomiques : chaque appel lit l'état serveur courant, applique un seul changement, et écrit —
    jamais un remplacement en bloc du tableau local d'un onglet, qui pourrait écraser les écritures d'un autre. */
