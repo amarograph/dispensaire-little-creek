@@ -317,7 +317,10 @@ export default function DirectionComptabilitePage() {
   })();
 
   const tresorerieSemaine = tresorerie(semaineActuelle, tarifs);
-  const soldeDispensaire = Math.round((tresorerie([...items, ...archives.flatMap(a => a.factures)], tarifs).solde + totalAjustements) * 100) / 100;
+  // Le solde du compte du dispensaire est désormais 100% piloté à la main (ajustements manuels
+  // uniquement) — plus de calcul automatique depuis la Comptabilité, pour éviter tout double comptage
+  // avec ce que la direction saisit elle-même en jeu.
+  const soldeDispensaire = Math.round(totalAjustements * 100) / 100;
 
   /* ── Ligne de registre (lecture seule) ── */
   function RegistreLine({ f }: { f: Facture }) {
@@ -398,6 +401,7 @@ export default function DirectionComptabilitePage() {
             <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`5px solid ${soldeDispensaire>=0 ? '#A8B991' : '#8B4040'}`, padding:'22px 24px', textAlign:'center', marginBottom:10 }}>
               <div style={{ fontFamily:DISPLAY, fontSize:42, color: soldeDispensaire>=0 ? '#6A9A68' : '#DF9A88' }}>{fmt$(soldeDispensaire)}</div>
               <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:4, letterSpacing:'0.14em' }}>SOLDE DU COMPTE DU DISPENSAIRE</div>
+              <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, marginTop:8, letterSpacing:'0.06em', opacity:0.75 }}>100% piloté à la main — somme des ajustements ci-dessous</div>
 
               {canEdit && (
                 <div style={{ display:'flex', gap:8, justifyContent:'center', marginTop:16 }}>
