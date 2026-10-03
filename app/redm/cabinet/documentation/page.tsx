@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { RichEditor, RichContent, templateToRich } from '../_components/RichDoc';
 import { useState, useEffect, useRef } from 'react';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
@@ -339,7 +340,7 @@ export default function DocumentationPage() {
     setNewNom(''); setNewPrenom(''); setNewAge('');
     setCreateTitre('');
     setCreateDate(rpDate());
-    setCreateContenu(TEMPLATES[type]);
+    setCreateContenu(templateToRich(TEMPLATES[type]));
     setPatSearch('');
   }
 
@@ -446,12 +447,12 @@ export default function DocumentationPage() {
         <button onClick={() => { setCertDoc(null); setCertPat(null); }} style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
         <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>🖨 IMPRIMER</button>
       </div>
-      <div ref={printRef} className="print-area" style={{ background: '#183746', border: '2px solid #C8BEA5', padding: '52px 60px', maxWidth: 800, margin: '0 auto', color: '#102B3B', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
+      <div ref={printRef} className="print-area" style={{ background: '#FFFFFF', border: '2px solid #C8BEA5', padding: '52px 60px', maxWidth: 800, margin: '0 auto', color: '#1A1A1A', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: 20, letterSpacing: '0.12em', marginBottom: 4, fontWeight: 'bold' }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
-          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
+          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek</div>
           <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 1.7 }}>
-            Sous la direction du Docteur François De Millet<br />
+            Docteur François De Millet<br />
             Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales
           </div>
         </div>
@@ -469,7 +470,7 @@ export default function DocumentationPage() {
             {certPat?.type ? <><strong>Type de suivi :</strong> {certPat.type}</> : null}
           </p>
           <p style={{ margin: '24px 0 8px', fontWeight: 'bold', textDecoration: 'underline', textUnderlineOffset: 4 }}>CONTENU</p>
-          <div style={{ margin: '0 0 32px', whiteSpace: 'pre-wrap', lineHeight: 2.1 }}>{certDoc.contenu}</div>
+          <RichContent value={certDoc.contenu} style={{ margin: '0 0 32px', lineHeight: 2.1 }} />
           <div style={{ marginTop: 52 }}>
             <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>
               Fait à <strong>Little Creek</strong>, le <strong>{rpDisplay(certDoc.date)}</strong>
@@ -720,11 +721,7 @@ export default function DocumentationPage() {
               {/* Contenu / template */}
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <label style={lbl}>CONTENU — REMPLISSEZ LES [ ] AVEC LES INFORMATIONS DU PATIENT</label>
-                <textarea
-                  style={{ ...inp, flex: 1, resize: 'none', minHeight: 420, lineHeight: 1.8, fontSize: 14, padding: '14px' }}
-                  value={createContenu}
-                  onChange={e => setCreateContenu(e.target.value)}
-                />
+                <RichEditor value={createContenu} onChange={setCreateContenu} minHeight={420} />
               </div>
             </div>
 

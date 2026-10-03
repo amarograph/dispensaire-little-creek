@@ -287,7 +287,7 @@ export default function ExamenPsychiquePage() {
     if (!el) return;
     try {
       const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(el, { backgroundColor: '#183746', scale: 2, useCORS: true, allowTaint: true, logging: false });
+      const canvas = await html2canvas(el, { backgroundColor: '#FFFFFF', scale: 2, useCORS: true, allowTaint: true, logging: false });
       const link = document.createElement('a');
       link.download = `examen-${current?.prenom ?? ''}-${current?.nom ?? ''}.png`;
       link.href = canvas.toDataURL('image/png');
@@ -321,14 +321,14 @@ export default function ExamenPsychiquePage() {
         </div>
 
         {/* Certificat */}
-        <div ref={printRef} className="print-area" style={{ background: '#183746', border: '2px solid #C8BEA5', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#102B3B', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
+        <div ref={printRef} className="print-area" style={{ background: '#FFFFFF', border: '2px solid #C8BEA5', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#1A1A1A', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
 
           {/* En-tête */}
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <div style={{ fontSize: 20, letterSpacing: '0.12em', marginBottom: 4, fontWeight: 'bold' }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
-            <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
+            <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek</div>
             <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 1.7 }}>
-              Sous la direction du Docteur François De Millet<br />
+              Docteur François De Millet<br />
               Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales
             </div>
           </div>
@@ -389,7 +389,7 @@ export default function ExamenPsychiquePage() {
             {/* Signature */}
             <div style={{ marginTop: 52 }}>
               <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>
-                Fait à <strong>{current.lieu || 'Little Creek'}</strong>, le <strong>{rpDisplay(current.date)}</strong>
+                Fait à <strong>Little Creek</strong>, le <strong>{rpDisplay(current.date)}</strong>
               </div>
             </div>
           </div>
@@ -492,7 +492,6 @@ export default function ExamenPsychiquePage() {
           <div><label style={lbl}>LIEU DE L'EXAMEN</label>
             <select style={{ ...inp, cursor: 'pointer' }} value={lieu} onChange={e => setLieu(e.target.value)}>
               <option value="Little Creek">Little Creek</option>
-              <option value="Blackwater">Blackwater</option>
             </select>
           </div>
           <div><label style={lbl}>DOCTEUR EN CHARGE</label><input style={inp} value={docteur} onChange={e => setDocteur(e.target.value)} /></div>

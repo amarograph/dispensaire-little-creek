@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { RichEditor, RichContent, templateToRich } from '../../_components/RichDoc';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
@@ -148,7 +149,7 @@ export default function SyntheseConsultationPage() {
   const [newAge,      setNewAge]      = useState('');
   const [titre,       setTitre]       = useState('');
   const [date,        setDate]        = useState('');
-  const [contenu,     setContenu]     = useState(TEMPLATE);
+  const [contenu,     setContenu]     = useState(() => templateToRich(TEMPLATE));
   const [savedDoc,    setSavedDoc]    = useState<DocResult | null>(null);
   const [savedPat,    setSavedPat]    = useState<Patient | null>(null);
   const [saving,      setSaving]      = useState(false);
@@ -245,7 +246,7 @@ export default function SyntheseConsultationPage() {
     if (!el || !savedDoc) return;
     try {
       const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(el, { backgroundColor: '#183746', scale: 2, useCORS: true, allowTaint: true, logging: false });
+      const canvas = await html2canvas(el, { backgroundColor: '#FFFFFF', scale: 2, useCORS: true, allowTaint: true, logging: false });
       const link = document.createElement('a');
       link.download = `${savedDoc.titre}.png`;
       link.href = canvas.toDataURL('image/png');
@@ -267,11 +268,11 @@ export default function SyntheseConsultationPage() {
         <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>🖨 IMPRIMER</button>
         <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#526C45', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>💾 ENREGISTRER PNG</button>
       </div>
-      <div ref={printRef} className="print-area" style={{ background: '#183746', border: '2px solid #C8BEA5', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#102B3B', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
+      <div ref={printRef} className="print-area" style={{ background: '#FFFFFF', border: '2px solid #C8BEA5', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#1A1A1A', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: 20, letterSpacing: '0.12em', fontWeight: 'bold', marginBottom: 4 }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
-          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
-          <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 1.7 }}>Sous la direction du Docteur François De Millet<br />Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales</div>
+          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek</div>
+          <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 1.7 }}>Docteur François De Millet<br />Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales</div>
         </div>
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
           <div style={{ fontSize: 17, letterSpacing: '0.1em', textDecoration: 'underline', textUnderlineOffset: 6, fontWeight: 'bold' }}>{savedDoc.titre.toUpperCase()}</div>
@@ -284,7 +285,7 @@ export default function SyntheseConsultationPage() {
             {savedPat.patientAge ? <><strong>Âge :</strong> {savedPat.patientAge} ans<br /></> : null}
             {savedPat.type ? <><strong>Type de suivi :</strong> {savedPat.type}</> : null}
           </p>
-          <div style={{ margin: '0 0 40px', whiteSpace: 'pre-wrap', lineHeight: 2.1 }}>{savedDoc.contenu}</div>
+          <RichContent value={savedDoc.contenu} style={{ margin: '0 0 40px', lineHeight: 2.1 }} />
           <div style={{ marginTop: 52 }}>
             <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>Fait à <strong>Little Creek</strong>, le <strong>{rpDisplay(savedDoc.date)}</strong></div>
           </div>
@@ -407,9 +408,9 @@ export default function SyntheseConsultationPage() {
             <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.16em' }}>CONTENU DE LA SYNTHÈSE</span>
             <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>Remplacer les [ ] par les informations du patient</span>
           </div>
-          <textarea
-            style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(0,0,0,0.18)', border: 'none', borderBottom: `1px solid ${T.border}`, color: T.text, padding: '20px 24px', outline: 'none', width: '100%', boxSizing: 'border-box', resize: 'vertical', minHeight: 560, lineHeight: 1.85, display: 'block' }}
-            value={contenu} onChange={e => setContenu(e.target.value)} />
+          <div style={{ padding: '18px 24px 24px', display: 'flex', flexDirection: 'column' }}>
+            <RichEditor value={contenu} onChange={setContenu} minHeight={560} />
+          </div>
         </section>
 
         {/* ── Erreur ── */}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { RichEditor, RichContent, templateToRich, isRichEmpty, plainLength } from '../../_components/RichDoc';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
@@ -334,8 +335,7 @@ export default function PatientDetailPage() {
   const [docsError,    setDocsError]    = useState('');
   const [expandedDoc,  setExpandedDoc]   = useState<string | null>(null);
   const [certDoc,      setCertDoc]       = useState<Document | null>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const printRef    = useRef<HTMLDivElement>(null);
+    const printRef    = useRef<HTMLDivElement>(null);
 
   /* Onglet actif */
   const [tab, setTab] = useState<'dossier' | 'documents' | 'facturation'>('dossier');
@@ -416,7 +416,7 @@ export default function PatientDetailPage() {
     setEditingDoc(null);
     setDocType(defaultType);
     setDocTitre('');
-    setDocContenu(TEMPLATES[defaultType] ?? '');
+    setDocContenu(TEMPLATES[defaultType] ? templateToRich(TEMPLATES[defaultType]!) : '');
     setDocDate((() => { const n = new Date(); const s = n.toLocaleDateString('fr-FR').split('/'); s[2] = String(Number(s[2])-136); return s.join('/'); })());
     setDocPanelOpen(true);
   }
@@ -424,9 +424,9 @@ export default function PatientDetailPage() {
   function handleDocTypeChange(newType: DocType) {
     setDocType(newType);
     // Auto-remplir le template si le contenu est vide ou était un template précédent
-    const prevTemplate = TEMPLATES[docType] ?? '';
-    if (!docContenu.trim() || docContenu === prevTemplate) {
-      setDocContenu(TEMPLATES[newType] ?? '');
+    const prevTemplate = TEMPLATES[docType] ? templateToRich(TEMPLATES[docType]!) : '';
+    if (isRichEmpty(docContenu) || docContenu === prevTemplate) {
+      setDocContenu(TEMPLATES[newType] ? templateToRich(TEMPLATES[newType]!) : '');
     }
   }
   function openEditDoc(doc: Document) {
@@ -486,39 +486,6 @@ export default function PatientDetailPage() {
     setDelDocConfirm(null);
   }
 
-  /* ── Formatage gras / italique ── */
-  function applyFormat(marker: string) {
-    const ta = textareaRef.current;
-    if (!ta) return;
-    const start = ta.selectionStart;
-    const end   = ta.selectionEnd;
-    const before   = docContenu.slice(0, start);
-    const selected = docContenu.slice(start, end);
-    const after    = docContenu.slice(end);
-    const newText  = before + marker + selected + marker + after;
-    setDocContenu(newText);
-    setTimeout(() => {
-      ta.focus();
-      ta.setSelectionRange(start + marker.length, end + marker.length);
-    }, 0);
-  }
-
-  /* ── Rendu markdown inline (gras / italique) ── */
-  function renderContent(text: string) {
-    return text.split('\n').map((line, li) => (
-      <span key={li}>
-        {li > 0 && <br />}
-        {line.split(/(\*\*[^*\n]+\*\*|\*[^*\n]+\*)/).map((part, i) => {
-          if (part.startsWith('**') && part.endsWith('**'))
-            return <strong key={i} style={{ fontWeight: 700 }}>{part.slice(2, -2)}</strong>;
-          if (part.startsWith('*') && part.endsWith('*'))
-            return <em key={i}>{part.slice(1, -1)}</em>;
-          return part;
-        })}
-      </span>
-    ));
-  }
-
   if (!hydrated) return null;
 
   /* ── Enregistrer en PNG format A4 ── */
@@ -527,7 +494,7 @@ export default function PatientDetailPage() {
     if (!el || !certDoc) return;
     try {
       const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(el, { backgroundColor: '#183746', scale: 2, useCORS: true, allowTaint: true, logging: false });
+      const canvas = await html2canvas(el, { backgroundColor: '#FFFFFF', scale: 2, useCORS: true, allowTaint: true, logging: false });
       const link = document.createElement('a');
       link.download = `${certDoc.titre}.png`;
       link.href = canvas.toDataURL('image/png');
@@ -559,14 +526,14 @@ export default function PatientDetailPage() {
       </div>
 
       {/* Certificat */}
-      <div ref={printRef} className="print-area" style={{ background: '#183746', border: '2px solid #C8BEA5', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#102B3B', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
+      <div ref={printRef} className="print-area" style={{ background: '#FFFFFF', border: '2px solid #C8BEA5', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#1A1A1A', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
 
         {/* En-tête */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: 20, letterSpacing: '0.12em', marginBottom: 4, fontWeight: 'bold' }}>CABINET THÉRAPEUTIQUE PSYCHIQUE</div>
-          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — Blackwater</div>
+          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek</div>
           <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 1.7 }}>
-            Sous la direction du Docteur François De Millet<br />
+            Docteur François De Millet<br />
             Médecin – Thérapeute, formé aux doctrines modernes de la médecine mentale et des sciences morales
           </div>
         </div>
@@ -593,7 +560,7 @@ export default function PatientDetailPage() {
           <p style={{ margin: '0 0 16px' }}>{certDoc.type}</p>
 
           <p style={{ margin: '24px 0 8px', fontWeight: 'bold', textDecoration: 'underline', textUnderlineOffset: 4 }}>CONTENU</p>
-          <div style={{ margin: '0 0 32px', whiteSpace: 'pre-wrap', lineHeight: 2.1 }}>{certDoc.contenu}</div>
+          <RichContent value={certDoc.contenu} style={{ margin: '0 0 32px', lineHeight: 2.1 }} />
 
           {/* Signature */}
           <div style={{ marginTop: 52 }}>
@@ -759,7 +726,7 @@ export default function PatientDetailPage() {
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.text }}>{doc.titre}</div>
-                        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 2 }}>{doc.date}{doc.contenu ? ` · ${doc.contenu.length} caractères` : ''}</div>
+                        <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 2 }}>{doc.date}{doc.contenu ? ` · ${plainLength(doc.contenu)} caractères` : ''}</div>
                       </div>
                       <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }} onClick={e => e.stopPropagation()}>
                         <button onClick={() => setCertDoc(doc)}
@@ -776,7 +743,7 @@ export default function PatientDetailPage() {
                     {/* Contenu — visible seulement si ouvert */}
                     {isOpen && doc.contenu && (
                       <div style={{ borderTop: `1px solid ${T.border}`, padding: '18px 24px 20px', fontFamily: BODY, fontSize: 17, color: T.text, lineHeight: 1.9 }}>
-                        {renderContent(doc.contenu)}
+                        <RichContent value={doc.contenu} />
                       </div>
                     )}
                   </div>
@@ -917,26 +884,7 @@ export default function PatientDetailPage() {
               {/* Contenu libre */}
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <label style={lbl}>CONTENU DE LA SÉANCE</label>
-                {/* Barre de formatage */}
-                <div style={{ display: 'flex', gap: 4, marginBottom: 6 }}>
-                  {[
-                    { label: 'B', marker: '**', title: 'Gras', style: { fontWeight: 700 } as React.CSSProperties },
-                    { label: 'I', marker: '*',  title: 'Italique', style: { fontStyle: 'italic' } as React.CSSProperties },
-                  ].map(({ label, marker, title, style }) => (
-                    <button key={label} type="button" title={title}
-                      onMouseDown={e => { e.preventDefault(); applyFormat(marker); }}
-                      style={{ fontFamily: BODY, fontSize: 18, ...style, padding: '4px 12px', cursor: 'pointer', background: 'rgba(209,183,124,0.08)', color: T.gold, border: `1px solid rgba(209,183,124,0.3)`, letterSpacing: 0 }}>
-                      {label}
-                    </button>
-                  ))}
-                  <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, alignSelf: 'center', marginLeft: 6 }}>Sélectionner du texte puis cliquer</span>
-                </div>
-                <textarea
-                  ref={textareaRef}
-                  style={{ ...inp, flex: 1, resize: 'none', minHeight: 'calc(100vh - 320px)', lineHeight: 1.85, fontSize: 17, padding: '16px' }}
-                  value={docContenu}
-                  onChange={e => setDocContenu(e.target.value)}
-                  placeholder="Rédigez le compte rendu de la séance ici… Pas de limite de mots." />
+                <RichEditor value={docContenu} onChange={setDocContenu} minHeight="calc(100vh - 360px)" placeholder="Rédigez le compte rendu de la séance ici…" />
               </div>
             </div>
 
