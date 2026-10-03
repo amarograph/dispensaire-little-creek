@@ -1047,7 +1047,7 @@ function BotaniqueMedicaleDocument() {
             </div>
             <RegBlock col={`${BC}45`}>
               <RegPara>Depuis les temps anciens, la nature a offert à l'homme les moyens de se guérir par elle-même. Les plantes ne sont point seulement des remèdes : elles sont les gardiennes silencieuses de la pureté, purifiant l'air, l'eau, le sang et l'esprit. Le progrès scientifique a révélé, par l'observation et l'expérience, que certaines plantes possèdent des vertus antiseptiques, désinfectantes ou assainissantes, capables de combattre les germes et les miasmes dont la science moderne a prouvé l'existence.</RegPara>
-              <RegPara>Le Dispensaire de Blackwater, fidèle à l'enseignement de la nature et éclairé par la science de Pasteur, enseigne ici l'usage méthodique des plantes purificatrices : celles qui maintiennent la santé du corps et la salubrité du lieu.</RegPara>
+              <RegPara>Le Dispensaire de Little Creek, fidèle à l'enseignement de la nature et éclairé par la science de Pasteur, enseigne ici l'usage méthodique des plantes purificatrices : celles qui maintiennent la santé du corps et la salubrité du lieu.</RegPara>
             </RegBlock>
           </div>
 
@@ -1111,7 +1111,7 @@ function BotaniqueMedicaleDocument() {
             </div>
             <RegBlock col={`${BC}45`}>
               <RegPara>Les plantes purificatrices sont le souffle de la Terre au service de la santé humaine. Elles unissent le savoir ancestral des herboristes et la science nouvelle de l'hygiène. Là où la plante pousse, la maladie recule ; là où elle est brûlée, l'air se fait plus pur.</RegPara>
-              <RegPara>Puissent les serviteurs du Dispensaire de Blackwater ne jamais oublier que la nature, lorsqu'on la comprend et qu'on la respecte, est la plus fidèle des alliées contre la corruption des corps et des âmes.</RegPara>
+              <RegPara>Puissent les serviteurs du Dispensaire de Little Creek ne jamais oublier que la nature, lorsqu'on la comprend et qu'on la respecte, est la plus fidèle des alliées contre la corruption des corps et des âmes.</RegPara>
             </RegBlock>
           </div>
 
