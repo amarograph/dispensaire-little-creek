@@ -21,7 +21,7 @@ const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.dim,
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
 
 /* Objets dont les composants sont déjà préparés à l'avance : on affiche le nombre de composants, sans les décomposer en matières premières. */
-const NO_DECOMPOSE = new Set(['Trousse de soins']);
+const NO_DECOMPOSE = new Set(['Trousse de soins', 'Bandage amélioré']);
 
 /* Résout récursivement la demande d'un objet en fabrications intermédiaires + matières premières. */
 function resolveDemand(
