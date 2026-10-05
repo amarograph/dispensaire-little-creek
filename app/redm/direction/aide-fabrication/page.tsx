@@ -20,6 +20,9 @@ const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: '
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.1em', marginBottom: 5, display: 'block' };
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
 
+/* Objets dont les composants sont déjà préparés à l'avance : on affiche le nombre de composants, sans les décomposer en matières premières. */
+const NO_DECOMPOSE = new Set(['Trousse de soins']);
+
 /* Résout récursivement la demande d'un objet en fabrications intermédiaires + matières premières. */
 function resolveDemand(
   nom: string, qtyNeeded: number,
@@ -27,6 +30,7 @@ function resolveDemand(
   chosenVariant: Record<string, string>,
   steps: Record<string, { nom: string; variante?: string; besoin: number; produit: number; fabrications: number }>,
   raw: Record<string, number>,
+  depth = 0,
 ) {
   const options = recipesByNom[nom];
   if (!options || options.length === 0) {
@@ -40,7 +44,11 @@ function resolveDemand(
   steps[recette.id].besoin += qtyNeeded;
   steps[recette.id].produit += produit;
   steps[recette.id].fabrications += batches;
-  recette.ingredients.forEach(ing => resolveDemand(ing.nom, ing.quantite * batches, recipesByNom, chosenVariant, steps, raw));
+  if (depth === 0 && NO_DECOMPOSE.has(nom)) {
+    recette.ingredients.forEach(ing => { raw[ing.nom] = (raw[ing.nom] ?? 0) + ing.quantite * batches; });
+    return;
+  }
+  recette.ingredients.forEach(ing => resolveDemand(ing.nom, ing.quantite * batches, recipesByNom, chosenVariant, steps, raw, depth + 1));
 }
 
 export default function AideFabricationPage() {
@@ -84,7 +92,7 @@ export default function AideFabricationPage() {
   }, [recettes]);
 
   const nomsUniques = useMemo(() => Object.keys(recipesByNom).sort((a, b) => a.localeCompare(b)), [recipesByNom]);
-  const ambigus = useMemo(() => Object.entries(recipesByNom).filter(([, opts]) => opts.length > 1), [recipesByNom]);
+  const ambigusTous = useMemo(() => Object.entries(recipesByNom).filter(([, opts]) => opts.length > 1), [recipesByNom]);
 
   useEffect(() => {
     if (!cibleNom && nomsUniques.length) setCibleNom(nomsUniques[0]);
@@ -94,6 +102,13 @@ export default function AideFabricationPage() {
     const opts = recipesByNom[cibleNom] ?? [];
     setCibleId(opts.length === 1 ? opts[0].id : (variantes[cibleNom] ?? opts[0]?.id ?? ''));
   }, [cibleNom, recipesByNom, variantes]);
+
+  /* Les préférences de recette n'apparaissent que pour les objets réellement fabriqués dans le calcul en cours
+     (ex. la Lotion antiseptique si on la choisit, mais pas pour une Trousse de soins dont la lotion est déjà prête). */
+  const ambigus = useMemo(() => {
+    const noms = new Set(Object.values(resultat?.steps ?? {}).map(s => s.nom));
+    return ambigusTous.filter(([nom]) => noms.has(nom));
+  }, [ambigusTous, resultat]);
 
   function setVariante(nom: string, id: string) {
     setVariantes(v => ({ ...v, [nom]: id }));
@@ -232,7 +247,7 @@ export default function AideFabricationPage() {
                   </div>
                 </div>
                 <div>
-                  <div style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.12em', marginBottom: 10 }}>🌿 MATIÈRES PREMIÈRES AU TOTAL</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.12em', marginBottom: 10 }}>{NO_DECOMPOSE.has(cibleNom) ? '📦 COMPOSANTS À AVOIR PRÉPARÉS' : '🌿 MATIÈRES PREMIÈRES AU TOTAL'}</div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 6 }}>
                     {Object.entries(resultat.raw).sort((a, b) => b[1] - a[1]).map(([nom, q]) => (
                       <div key={nom} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(209,183,124,0.08)', border: `1px solid rgba(209,183,124,0.3)`, padding: '9px 14px' }}>
