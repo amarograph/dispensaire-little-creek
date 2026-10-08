@@ -69,6 +69,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
 
   const [DISPENSAIRE,   setDispensaire]   = useState(DEFAULT_DISPENSAIRE);
   const [medecinsCount, setMedecinsCount] = useState<number | null>(null);
+  const [preparateursCount, setPreparateursCount] = useState<number | null>(null);
   const [sanitaire,     setSanitaire]     = useState<DispensaireStatus>(DEFAULT_DISPENSAIRE_STATUS);
 
   type RDV = { id: string; patientNom: string; date: string; heure: string; type: string; statut: string; };
@@ -94,7 +95,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
 
     fetch('/api/redm/medecins')
       .then(r => r.json())
-      .then(d => { if (Array.isArray(d?.medecins)) setMedecinsCount(d.medecins.length); })
+      .then(d => { if (Array.isArray(d?.medecins)) setMedecinsCount(d.medecins.length); if (Array.isArray(d?.preparateurs)) setPreparateursCount(d.preparateurs.length); })
       .catch(() => {});
 
     fetch('/api/redm/dispensaire-status')
@@ -349,8 +350,23 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
             <div style={{ padding: '16px 22px', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontFamily: BODY, fontWeight: 400, fontSize: 20, color: '#C8BEA5' }}>N° de compte</span>
+                <span style={{ fontFamily: MONO, fontSize: 16, color: '#D1B77C', letterSpacing: '0.07em' }}>● 1967</span>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontFamily: BODY, fontWeight: 400, fontSize: 20, color: '#C8BEA5' }}>{DISPENSAIRE.labelMedecins}</span>
                 <span style={{ fontFamily: MONO, fontSize: 16, color: '#D1B77C', letterSpacing: '0.07em' }}>● {medecinsCount ?? '—'}</span>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontFamily: BODY, fontWeight: 400, fontSize: 20, color: '#C8BEA5' }}>Préparateurs de caisse</span>
+                <span style={{ fontFamily: MONO, fontSize: 16, color: '#D1B77C', letterSpacing: '0.07em' }}>● {preparateursCount ?? '—'}</span>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 12, borderTop: '1px solid rgba(139,90,43,0.30)' }}>
+                <span style={{ fontFamily: BODY, fontWeight: 600, fontSize: 20, color: '#EADCB9' }}>Personnel total</span>
+                <span style={{ fontFamily: MONO, fontSize: 16, color: '#D1B77C', letterSpacing: '0.07em' }}>● {medecinsCount != null && preparateursCount != null ? medecinsCount + preparateursCount : '—'}</span>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>

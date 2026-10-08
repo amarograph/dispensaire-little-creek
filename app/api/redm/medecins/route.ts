@@ -45,5 +45,20 @@ export async function GET() {
 
   const uniques = Array.from(new Set(noms)).sort((a, b) => a.localeCompare(b, 'fr'));
 
-  return NextResponse.json({ medecins: uniques });
+  /* Préparateurs de caisse (hors personnel médical déjà compté) */
+  const nomDe = (u: { discord_id: string; username: string }) => {
+    const p = rp[u.discord_id];
+    const rpName = p ? [p.prenom_rp, p.nom_rp].filter(Boolean).join(' ').trim() : '';
+    return rpName || `@${u.username}`;
+  };
+  const preparateurs = Array.from(new Set(
+    (users ?? [])
+      .filter(u => {
+        const r: string[] = u.roles ?? [];
+        return r.includes('redm_preparateur_caisse') && !r.some(x => (REDM_MEDICAL_ROLES as readonly string[]).includes(x));
+      })
+      .map(nomDe)
+  )).sort((a, b) => a.localeCompare(b, 'fr'));
+
+  return NextResponse.json({ medecins: uniques, preparateurs });
 }
