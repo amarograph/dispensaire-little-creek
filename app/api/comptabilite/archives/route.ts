@@ -3,6 +3,7 @@ import { getApiSession } from '@/lib/api-auth';
 import { canRead, isAdmin } from '@/lib/permissions';
 import { createServiceClient } from '@/lib/supabase/server';
 import { redmLog } from '@/lib/redm-log';
+import { requireDirectionActor } from '@/lib/redm-api-auth';
 
 const KEY = 'redm_comptabilite_archives';
 
@@ -55,6 +56,35 @@ export async function POST(req: NextRequest) {
           action: 'facture_archive_delete', category: 'comptabilite',
           description: `${actor.name} a supprimé l'archive « ${removed.weekLabel} »`,
           meta: { id: removed.id, weekStart: removed.weekStart },
+        });
+      }
+    } else if (body.action === 'set_statut' && body.id && Array.isArray(body.factureIds) && ['PAYÉ', 'EN ATTENTE'].includes(body.statut)) {
+      /* Marquer des factures d'une semaine archivée comme payées / en attente — réservé à la direction */
+      if (!await requireDirectionActor()) return NextResponse.json({ error: 'Réservé à la direction' }, { status: 403 });
+      const ids = new Set<string>(body.factureIds);
+      let changed: Facture[] = [];
+      let weekLabel = '';
+      next = current.map(a => {
+        if (a.id !== body.id) return a;
+        weekLabel = a.weekLabel;
+        const factures = a.factures.map(f => {
+          if (!ids.has(f.id) || f.statut === 'ANNULÉ' || f.statut === body.statut) return f;
+          const upd = { ...f, statut: body.statut as string };
+          changed.push(upd);
+          return upd;
+        });
+        return {
+          ...a, factures,
+          totalPercu:   factures.filter(f => f.statut === 'PAYÉ').reduce((sum, f) => sum + f.montant, 0),
+          totalAttente: factures.filter(f => f.statut === 'EN ATTENTE').reduce((sum, f) => sum + f.montant, 0),
+        };
+      });
+      if (changed.length > 0) {
+        const total = changed.reduce((sum, f) => sum + f.montant, 0);
+        redmLog(actor, {
+          action: 'facture_archive_statut', category: 'comptabilite',
+          description: `${actor.name} a marqué ${changed.length} facture${changed.length > 1 ? 's' : ''} (${total}$) comme ${body.statut === 'PAYÉ' ? 'payée' + (changed.length > 1 ? 's' : '') : 'en attente'} — « ${weekLabel} »`,
+          meta: { archiveId: body.id, factureIds: changed.map(f => f.id), statut: body.statut, total },
         });
       }
     } else if (body.action === 'merge' && Array.isArray(body.archives)) {

@@ -56,6 +56,29 @@ async function deleteArchive(id: string): Promise<SemaineArchivee[] | null> {
     const d = await r.json(); return d.archives ?? null;
   } catch { return null; }
 }
+async function setStatutArchive(id: string, factureIds: string[], statut: 'PAYÉ' | 'EN ATTENTE'): Promise<SemaineArchivee[] | null> {
+  try {
+    const r = await fetch('/api/comptabilite/archives', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'set_statut', id, factureIds, statut }) });
+    if (!r.ok) return null;
+    const d = await r.json(); return d.archives ?? null;
+  } catch { return null; }
+}
+const PAYEUR_COL: Record<string, string> = { 'Civil': '#C8BEA5', 'Shérif': '#6B7ABB', 'Mairie West Elizabeth': '#786030' };
+/* Tout ce qui n'est ni Shérif ni Mairie est rangé avec le Civil */
+function bucket(f: Facture): Payeur { return f.payeur === 'Shérif' || f.payeur === 'Mairie West Elizabeth' ? f.payeur : 'Civil'; }
+interface BucketStats { actes: number; percu: number; attente: number; total: number; }
+function statsOf(factures: Facture[]): BucketStats {
+  const live = factures.filter(f => f.statut !== 'ANNULÉ');
+  const percu = live.filter(f => f.statut === 'PAYÉ').reduce((s, f) => s + f.montant, 0);
+  const attente = live.filter(f => f.statut === 'EN ATTENTE').reduce((s, f) => s + f.montant, 0);
+  return { actes: factures.length, percu, attente, total: percu + attente };
+}
+const BUCKETS: { key: Payeur; icon: string; titre: string }[] = [
+  { key: 'Civil',                 icon: '👥', titre: 'Registre Civil' },
+  { key: 'Shérif',                icon: '⭐', titre: 'Facture Shérif' },
+  { key: 'Mairie West Elizabeth', icon: '🏛', titre: 'Facture Mairie West Elizabeth' },
+];
+
 function fmt$(n: number) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' $'; }
 
 function addDaysReal(d: Date, n: number): Date { const c = new Date(d); c.setDate(c.getDate()+n); return c; }
@@ -90,8 +113,9 @@ function salairesByMedecin(factures: Facture[], tarifs: Record<string, TarifCate
 }
 
 /* ── Ligne de registre (lecture seule) ── */
-function RegistreLine({ f, tarifs }: { f: Facture; tarifs: Record<string, TarifCategory> }) {
+function RegistreLine({ f, tarifs, onToggle }: { f: Facture; tarifs: Record<string, TarifCategory>; onToggle?: (f: Facture) => void }) {
   const col  = STATUT_COL[f.statut];
+  const pcol = PAYEUR_COL[bucket(f)] ?? T.muted;
   const pres = normPrestations(f.prestations);
   return (
     <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`3px solid ${col}` }}>
@@ -116,13 +140,19 @@ function RegistreLine({ f, tarifs }: { f: Facture; tarifs: Record<string, TarifC
                 </span>
               );
             })}
-            <span style={{ fontFamily:MONO, fontSize: 14, color:T.muted, background:'rgba(255,255,255,0.04)', padding:'1px 7px' }}>{f.payeur}</span>
+            <span style={{ fontFamily:MONO, fontSize: 14, color:pcol, background:`${pcol}18`, padding:'1px 7px', border:`1px solid ${pcol}40` }}>{f.payeur}</span>
           </div>
         </div>
         <div style={{ fontFamily:DISPLAY, fontSize: 19, color:col, flexShrink:0, minWidth:65, textAlign:'right' }}>{fmt$(f.montant)}</div>
         <div style={{ fontFamily:MONO, fontSize: 14, padding:'4px 8px', background:col+'18', color:col, border:`1px solid ${col}50`, flexShrink:0 }}>
           {STATUT_ICON[f.statut]} {f.statut}
         </div>
+        {onToggle && f.statut !== 'ANNULÉ' && (
+          <button onClick={() => onToggle(f)} title={f.statut === 'PAYÉ' ? 'Remettre en attente' : 'Marquer comme payée'}
+            style={{ fontFamily:MONO, fontSize: 14, padding:'5px 10px', cursor:'pointer', flexShrink:0, background: f.statut === 'PAYÉ' ? 'transparent' : 'rgba(168,185,145,0.18)', color: f.statut === 'PAYÉ' ? T.dim : '#A8B991', border: `1px solid ${f.statut === 'PAYÉ' ? T.border : 'rgba(168,185,145,0.5)'}` }}>
+            {f.statut === 'PAYÉ' ? '↺ EN ATTENTE' : '✔ MARQUER PAYÉ'}
+          </button>
+        )}
       </div>
     </div>
   );
@@ -143,6 +173,23 @@ export default function DirectionComptabiliteArchivesPage() {
   const [caissesLoading, setCaissesLoading] = useState(false);
 
   useEffect(() => { loadArc().then(a => { setArchives(a); setHydrated(true); }); }, []);
+
+  /* Marquer des factures d'une semaine archivée comme payées / remises en attente (direction) */
+  async function changeStatut(arcId: string, factures: Facture[], statut: 'PAYÉ' | 'EN ATTENTE') {
+    const ids = factures.filter(f => f.statut !== 'ANNULÉ' && f.statut !== statut).map(f => f.id);
+    if (ids.length === 0) return;
+    const before = archives;
+    const idSet = new Set(ids);
+    setArchives(prev => prev.map(a => {
+      if (a.id !== arcId) return a;
+      const fs = a.factures.map(f => idSet.has(f.id) ? { ...f, statut } : f);
+      return { ...a, factures: fs,
+        totalPercu:   fs.filter(f => f.statut === 'PAYÉ').reduce((s, f) => s + f.montant, 0),
+        totalAttente: fs.filter(f => f.statut === 'EN ATTENTE').reduce((s, f) => s + f.montant, 0) };
+    }));
+    const result = await setStatutArchive(arcId, ids, statut);
+    if (result) setArchives(result); else setArchives(before);
+  }
 
   async function removeArchive(id: string) {
     setArchives(prev => prev.filter(a => a.id !== id));
@@ -194,6 +241,8 @@ export default function DirectionComptabiliteArchivesPage() {
   const totalAttente = archives.reduce((s,a) => s + a.totalAttente, 0);
   const totalActes   = archives.reduce((s,a) => s + a.factures.length, 0);
 
+  const globalByBucket = BUCKETS.map(b => ({ ...b, ...statsOf(archives.flatMap(a => a.factures.filter(f => bucket(f) === b.key))) }));
+
   const openArc = hydrated && openId ? archives.find(a => a.id === openId) : null;
 
   /* ── Vue détail d'une semaine ── */
@@ -238,6 +287,25 @@ export default function DirectionComptabiliteArchivesPage() {
               <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
             </div>
           ))}
+        </div>
+
+        {/* Récap par catégorie : Civil / Shérif / Mairie */}
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10, marginBottom:24 }}>
+          {BUCKETS.map(b => {
+            const st  = statsOf(openArc.factures.filter(f => bucket(f) === b.key));
+            const col = PAYEUR_COL[b.key];
+            return (
+              <div key={b.key} style={{ background:`${col}12`, border:`1px solid ${col}45`, borderTop:`3px solid ${col}`, padding:'12px 16px' }}>
+                <div style={{ fontFamily:MONO, fontSize: 14, color:col, letterSpacing:'0.12em', marginBottom:4 }}>{b.icon} {b.key.toUpperCase()}</div>
+                <div style={{ fontFamily:DISPLAY, fontSize:26, color:col }}>{fmt$(st.total)}</div>
+                <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3 }}>
+                  {st.actes} acte(s)
+                  {st.percu > 0 && <span style={{ color:'#A8B991', marginLeft:6 }}>· {fmt$(st.percu)} payé</span>}
+                  {st.attente > 0 && <span style={{ color:'#D1B77C', marginLeft:6 }}>· {fmt$(st.attente)} en attente</span>}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Salaires de la semaine */}
@@ -320,13 +388,43 @@ export default function DirectionComptabiliteArchivesPage() {
           )}
         </div>
 
-        {/* Registre complet */}
-        <div>
-          <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}>📋 Registre de la semaine</div>
-          <div style={{ display:'flex', flexDirection:'column', gap:7 }}>
-            {openArc.factures.map(f => <RegistreLine key={f.id} f={f} tarifs={tarifs} />)}
-          </div>
-        </div>
+        {/* Registre séparé : Civil / Shérif / Mairie */}
+        {BUCKETS.map(b => {
+          const list = openArc.factures.filter(f => bucket(f) === b.key);
+          const st   = statsOf(list);
+          const col  = PAYEUR_COL[b.key];
+          const institution = b.key !== 'Civil';
+          return (
+            <div key={b.key} style={{ marginBottom:24 }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, flexWrap:'wrap', marginBottom:10, paddingBottom:8, borderBottom:`2px solid ${col}60` }}>
+                <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text }}>{b.icon} {b.titre}</div>
+                <div style={{ display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
+                  {institution && canEdit && st.attente > 0 && (
+                    <button onClick={() => changeStatut(openArc.id, list, 'PAYÉ')}
+                      style={{ fontFamily:MONO, fontSize: 14, padding:'6px 14px', cursor:'pointer', background:'rgba(168,185,145,0.18)', color:'#A8B991', border:'1px solid rgba(168,185,145,0.5)', letterSpacing:'0.08em' }}>
+                      ✔ TOUT MARQUER PAYÉ
+                    </button>
+                  )}
+                  <div style={{ textAlign:'right' }}>
+                    <div style={{ fontFamily:DISPLAY, fontSize: 24, color: institution ? T.gold : col }}>{fmt$(institution ? st.attente : st.total)}</div>
+                    <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>
+                      {institution ? 'À FACTURER (EN ATTENTE)' : 'TOTAL'}
+                      {st.percu > 0 && <span style={{ color:'#A8B991', marginLeft:8 }}>· ✔ {fmt$(st.percu)} payé</span>}
+                      {!institution && st.attente > 0 && <span style={{ color:'#D1B77C', marginLeft:8 }}>· ⏳ {fmt$(st.attente)} en attente</span>}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {list.length === 0 ? (
+                <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucune facture {b.key === 'Civil' ? 'civile' : b.key === 'Shérif' ? 'Shérif' : 'Mairie'} cette semaine-là</div>
+              ) : (
+                <div style={{ display:'flex', flexDirection:'column', gap:7 }}>
+                  {list.map(f => <RegistreLine key={f.id} f={f} tarifs={tarifs} onToggle={institution && canEdit ? (x => changeStatut(openArc.id, [x], x.statut === 'PAYÉ' ? 'EN ATTENTE' : 'PAYÉ')) : undefined} />)}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     );
   }
@@ -361,6 +459,24 @@ export default function DirectionComptabiliteArchivesPage() {
             <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3, letterSpacing:'0.1em' }}>{s.l}</div>
           </div>
         ))}
+      </div>
+
+      {/* Totaux par catégorie : Civil / Shérif / Mairie */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10, marginBottom:24 }}>
+        {globalByBucket.map(b => {
+          const col = PAYEUR_COL[b.key];
+          return (
+            <div key={b.key} style={{ background:`${col}12`, border:`1px solid ${col}45`, borderTop:`3px solid ${col}`, padding:'12px 16px' }}>
+              <div style={{ fontFamily:MONO, fontSize: 14, color:col, letterSpacing:'0.12em', marginBottom:4 }}>{b.icon} {b.key.toUpperCase()}</div>
+              <div style={{ fontFamily:DISPLAY, fontSize:26, color:col }}>{fmt$(b.total)}</div>
+              <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3 }}>
+                {b.actes} acte(s)
+                {b.percu > 0 && <span style={{ color:'#A8B991', marginLeft:6 }}>· {fmt$(b.percu)} payé</span>}
+                {b.attente > 0 && <span style={{ color:'#D1B77C', marginLeft:6 }}>· {fmt$(b.attente)} en attente</span>}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Barre de recherche */}
@@ -402,6 +518,12 @@ export default function DirectionComptabiliteArchivesPage() {
                     </div>
                     <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'center' }}>
                       <span style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>{arc.factures.length} acte(s)</span>
+                      {BUCKETS.map(b => {
+                        const st = statsOf(arc.factures.filter(f => bucket(f) === b.key));
+                        if (st.actes === 0) return null;
+                        const col = PAYEUR_COL[b.key];
+                        return <span key={b.key} style={{ fontFamily:MONO, fontSize: 14, color:col, background:`${col}18`, padding:'1px 7px', border:`1px solid ${col}40` }}>{b.key} ×{st.actes}{b.key !== 'Civil' && st.attente > 0 ? ` · ⏳ ${fmt$(st.attente)}` : ''}</span>;
+                      })}
                       {salaires.map(s => (
                         <span key={s.medecin} style={{ fontFamily:MONO, fontSize: 14, color:'#BAAAC6', background:'rgba(155,106,200,0.12)', padding:'1px 7px', border:'1px solid rgba(155,106,200,0.35)' }}>👤 {s.medecin} · {fmt$(s.salaire)}</span>
                       ))}
