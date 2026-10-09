@@ -158,6 +158,12 @@ export default function CaisseComptabilitePage() {
   const todayMonday = getMondayOf(new Date());
   const currentKey  = mondayISO(todayMonday);
   const montantAuto = calcMontant(form.prestations, tarifs);
+  /* Part qui revient au dispensaire : % défini dans les tarifs (100 % pour une commande) ; rien pour un achat */
+  const partDispensaire = typeFiltre === 'achat' ? 0 : Math.round(form.prestations.reduce((sum, x) => {
+    const t = tarifs[x.id];
+    if (x.prix != null || !t || t.type === 'achat') return sum;
+    return sum + t.prix * x.qty * (typeFiltre === 'commande' ? 100 : t.pctDispensaire) / 100;
+  }, 0) * 100) / 100;
   const categoriesSorted = Object.values(tarifs).sort((a,b) => a.ordre - b.ordre);
   const categoriesVenteTout = categoriesSorted.filter(c => c.type === 'vente');
   const categoriesVente     = categoriesVenteTout.filter(c => !c.commandeSeulement);
@@ -471,6 +477,13 @@ export default function CaisseComptabilitePage() {
                 <span style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>MONTANT TOTAL</span>
                 <span style={{ fontFamily:DISPLAY, fontSize: 24, color:T.gold }}>{fmt$(montantAuto)}</span>
               </div>
+
+              {partDispensaire > 0 && (
+                <div style={{ background:'rgba(168,185,145,0.10)', border:'1px solid rgba(168,185,145,0.35)', padding:'9px 13px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                  <span style={{ fontFamily:MONO, fontSize: 14, color:'#A8B991', letterSpacing:'0.1em' }}>🏥 PART DU DISPENSAIRE</span>
+                  <span style={{ fontFamily:DISPLAY, fontSize: 24, color:'#A8B991' }}>{fmt$(partDispensaire)}</span>
+                </div>
+              )}
 
               <div>
                 <label style={lbl}>FONCTION DU PATIENT</label>
