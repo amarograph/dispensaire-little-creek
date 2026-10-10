@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { DateRpField, HeureField, TypeSelect } from '@/app/redm/_components/AgendaFields';
 import { useRouter } from 'next/navigation';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
@@ -22,6 +23,7 @@ const STATUT_ICON: Record<StatutRDV, string> = { 'CONFIRMÉ': '✔', 'EN ATTENTE
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
 const EMPTY = { patientNom: '', date: '', heure: '', type: 'Consultation prénatale', statut: 'EN ATTENTE' as StatutRDV, notes: '', medecin: '' };
+const TYPES_RDV = ['Consultation prénatale', 'Suivi de grossesse', 'Confirmation de grossesse', "Préparation à l'accouchement", 'Accouchement', 'Suivi post-natal', 'Visite de contrôle', 'Autre'];
 const STATUTS: StatutRDV[] = ['EN ATTENTE', 'CONFIRMÉ', 'PASSÉ', 'ANNULÉ'];
 
 const MONTH_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
@@ -73,6 +75,7 @@ export default function ObstetriqueAgendaPage() {
   const [editing,     setEditing]     = useState<RendezVous | null>(null);
   const [form,        setForm]        = useState({ ...EMPTY });
   const [delConfirm,  setDelConfirm]  = useState<string | null>(null);
+  const [praticiens,  setPraticiens]  = useState<string[]>([]);
 
   // Calendar navigation
   const today = new Date();
@@ -83,6 +86,13 @@ export default function ObstetriqueAgendaPage() {
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
 
   /* ── Chargement depuis le serveur ── */
+  useEffect(() => {
+    fetch('/api/redm/medecins')
+      .then(r => r.json())
+      .then(d => { if (Array.isArray(d?.obstetriciens)) setPraticiens(d.obstetriciens); })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     fetch('/api/obstetrique/agenda')
       .then(r => r.json())
@@ -392,20 +402,24 @@ export default function ObstetriqueAgendaPage() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                 <div>
                   <label style={lbl}>DATE</label>
-                  <input style={inp} value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} placeholder="JJ/MM/AAAA" />
+                  <DateRpField value={form.date} onChange={d => setForm(f => ({ ...f, date: d }))} inp={inp} />
                 </div>
                 <div>
                   <label style={lbl}>HEURE</label>
-                  <input style={inp} value={form.heure} onChange={e => setForm(f => ({ ...f, heure: e.target.value }))} placeholder="ex : 14h30" />
+                  <HeureField value={form.heure} onChange={h => setForm(f => ({ ...f, heure: h }))} inp={inp} />
                 </div>
               </div>
               <div>
                 <label style={lbl}>TYPE DE RENDEZ-VOUS</label>
-                <input style={inp} value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} placeholder="Consultation prénatale, Suivi, Accouchement…" />
+                <TypeSelect value={form.type} onChange={t => setForm(f => ({ ...f, type: t }))} options={TYPES_RDV} inp={inp} />
               </div>
               <div>
                 <label style={lbl}>OBSTÉTRICIEN ASSIGNÉ</label>
-                <input style={inp} value={form.medecin} onChange={e => setForm(f => ({ ...f, medecin: e.target.value }))} placeholder="Nom RP du soignant en charge" />
+                <select style={{ ...inp, cursor: 'pointer' }} value={form.medecin} onChange={e => setForm(f => ({ ...f, medecin: e.target.value }))}>
+                  <option value="">— Aucun praticien assigné —</option>
+                  {form.medecin && !praticiens.includes(form.medecin) && <option value={form.medecin}>{form.medecin}</option>}
+                  {praticiens.map(n => <option key={n} value={n}>{n}</option>)}
+                </select>
                 <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 4 }}>↳ seul ce nom (avec l&apos;heure) apparaît dans l&apos;Agenda commun du dispensaire — la patiente reste confidentielle</div>
               </div>
               <div>

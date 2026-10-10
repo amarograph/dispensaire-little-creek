@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { DateRpField, HeureField, TypeSelect } from '@/app/redm/_components/AgendaFields';
 import { useRouter } from 'next/navigation';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
@@ -20,7 +21,8 @@ const STATUT_COL:  Record<StatutRDV, string> = { 'CONFIRMÉ': '#A8B991', 'EN ATT
 const STATUT_ICON: Record<StatutRDV, string> = { 'CONFIRMÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕', 'PASSÉ': '◉' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
-const EMPTY = { patientNom: '', date: '', heure: '', type: 'Consultation', statut: 'EN ATTENTE' as StatutRDV, notes: '' };
+const TYPES_RDV = ['Première consultation', 'Séance de suivi', 'Séance de thérapie', 'Examen psychique', 'Hypnose', 'Entretien', 'Bilan de synthèse', 'Autre'];
+const EMPTY = { patientNom: '', date: '', heure: '', type: 'Séance de suivi', statut: 'EN ATTENTE' as StatutRDV, notes: '' };
 const STATUTS: StatutRDV[] = ['EN ATTENTE', 'CONFIRMÉ', 'PASSÉ', 'ANNULÉ'];
 
 const MONTH_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
@@ -399,16 +401,16 @@ export default function AgendaPage() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                 <div>
                   <label style={lbl}>DATE</label>
-                  <input style={inp} value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} placeholder="JJ/MM/AAAA" />
+                  <DateRpField value={form.date} onChange={d => setForm(f => ({ ...f, date: d }))} inp={inp} />
                 </div>
                 <div>
                   <label style={lbl}>HEURE</label>
-                  <input style={inp} value={form.heure} onChange={e => setForm(f => ({ ...f, heure: e.target.value }))} placeholder="ex : 14h30" />
+                  <HeureField value={form.heure} onChange={h => setForm(f => ({ ...f, heure: h }))} inp={inp} />
                 </div>
               </div>
               <div>
                 <label style={lbl}>TYPE DE SÉANCE</label>
-                <input style={inp} value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} placeholder="Consultation, Suivi, Hypnose…" />
+                <TypeSelect value={form.type} onChange={t => setForm(f => ({ ...f, type: t }))} options={TYPES_RDV} inp={inp} />
               </div>
               <div>
                 <label style={lbl}>STATUT</label>
