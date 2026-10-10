@@ -45,6 +45,30 @@ function formatDate(dt: Date): string {
   return `${d}/${m}/${dt.getFullYear() - 136}`;
 }
 
+/** "12/10/1890" (année RP) → "2026-10-12" pour le sélecteur de date */
+function rpToInputDate(s: string): string {
+  const p = parseDate(s);
+  if (!p) return '';
+  const y = p.year < 1900 ? p.year + 136 : p.year;
+  return `${y}-${String(p.month).padStart(2, '0')}-${String(p.day).padStart(2, '0')}`;
+}
+/** "2026-10-12" → "12/10/1890" */
+function inputToRpDate(iso: string): string {
+  const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? `${m[3]}/${m[2]}/${Number(m[1]) - 136}` : '';
+}
+/** "21", "14h30", "14:30" → { h: '14', m: '30' } */
+function splitHeure(s: string): { h: string; m: string } {
+  const mt = (s ?? '').trim().match(/^(\d{1,2})\s*(?:[h:]\s*(\d{1,2})?)?$/i);
+  if (!mt) return { h: '', m: '' };
+  const h = Math.min(23, Number(mt[1]));
+  const mm = Math.min(59, Number(mt[2] ?? 0));
+  return { h: String(h).padStart(2, '0'), m: String(Math.round(mm / 5) * 5 % 60).padStart(2, '0') };
+}
+const HEURES  = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
+const MINUTES = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
+const TYPES_RDV = ['Consultation', 'Réunion', 'Rendez-vous direction', 'Évènement', 'Entretien', 'Autre'];
+
 /** Build calendar grid: array of 6 rows × 7 cols, each cell = { date: Date, inMonth: boolean } */
 function buildGrid(year: number, month: number) {
   // month is 1-based
@@ -97,6 +121,14 @@ export default function AgendaDispensairePage() {
       .then(d => { if (Array.isArray(d?.soignants)) setSoignants(d.soignants); })
       .catch(() => {});
   }, []);
+
+  /* Ancien rendez-vous avec un médecin saisi à la main : on le relie automatiquement au soignant du même nom */
+  useEffect(() => {
+    if (!panelOpen || !form.medecin || form.medecinDiscordId || soignants.length === 0) return;
+    const q = form.medecin.trim().toLowerCase();
+    const matches = soignants.filter(s => s.nom.toLowerCase() === q || s.nom.toLowerCase().startsWith(q + ' '));
+    if (matches.length === 1) setForm(f => ({ ...f, medecin: matches[0].nom, medecinDiscordId: matches[0].discord_id }));
+  }, [panelOpen, form.medecin, form.medecinDiscordId, soignants]);
 
   /* ── Sauvegarde sur le serveur (entrées natives uniquement) ── */
   async function saveToServer(newRdvs: RendezVous[]) {
@@ -427,16 +459,38 @@ export default function AgendaDispensairePage() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                 <div>
                   <label style={lbl}>DATE</label>
-                  <input style={inp} value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} placeholder="JJ/MM/AAAA" />
+                  <input type="date" style={{ ...inp, cursor: 'pointer', colorScheme: 'dark' }}
+                    value={rpToInputDate(form.date)}
+                    onChange={e => setForm(f => ({ ...f, date: inputToRpDate(e.target.value) }))} />
+                  {form.date && <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginTop: 4 }}>Date RP : {form.date}</div>}
                 </div>
                 <div>
                   <label style={lbl}>HEURE</label>
-                  <input style={inp} value={form.heure} onChange={e => setForm(f => ({ ...f, heure: e.target.value }))} placeholder="ex : 14h30" />
+                  {(() => {
+                    const { h, m } = splitHeure(form.heure);
+                    const setHM = (nh: string, nm: string) => setForm(f => ({ ...f, heure: nh ? `${nh}:${nm || '00'}` : '' }));
+                    return (
+                      <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                        <select style={{ ...inp, cursor: 'pointer' }} value={h} onChange={e => setHM(e.target.value, m)}>
+                          <option value="">--</option>
+                          {HEURES.map(x => <option key={x} value={x}>{x} h</option>)}
+                        </select>
+                        <span style={{ fontFamily: MONO, color: T.dim }}>:</span>
+                        <select style={{ ...inp, cursor: 'pointer' }} value={h ? m : ''} disabled={!h} onChange={e => setHM(h, e.target.value)}>
+                          {!h && <option value="">--</option>}
+                          {MINUTES.map(x => <option key={x} value={x}>{x}</option>)}
+                        </select>
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
               <div>
                 <label style={lbl}>TYPE DE RENDEZ-VOUS</label>
-                <input style={inp} value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} placeholder="Consultation, Suivi, Soin…" />
+                <select style={{ ...inp, cursor: 'pointer' }} value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))}>
+                  {form.type && !TYPES_RDV.includes(form.type) && <option value={form.type}>{form.type}</option>}
+                  {TYPES_RDV.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
               </div>
               <div>
                 <label style={lbl}>MÉDECIN ASSIGNÉ</label>
