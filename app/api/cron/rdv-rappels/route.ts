@@ -36,9 +36,11 @@ function parisOffsetMin(at: Date): number {
 
 /* "DD/MM/1890" (année RP = réelle − 136) + "HH:MM" heure de Paris → instant UTC */
 function rdvInstant(date: string, heure: string): Date | null {
-  const d = (date ?? '').split('/').map(Number);
-  const h = (heure ?? '').split(':').map(Number);
-  if (d.length !== 3 || h.length < 2 || d.some(isNaN) || h.some(isNaN)) return null;
+  const d = (date ?? '').trim().split('/').map(Number);
+  /* Heures saisies à la main acceptées : « 21 », « 21h », « 14h30 », « 14:30 » */
+  const mt = (heure ?? '').trim().match(/^(d{1,2})s*(?:[h:]s*(d{1,2})?)?$/i);
+  if (d.length !== 3 || d.some(x => isNaN(x) || !x) || !mt) return null;
+  const h = [Math.min(23, Number(mt[1])), Math.min(59, Number(mt[2] ?? 0))];
   const [day, month, y] = d;
   const year = y < 1900 ? y + 136 : y;
   const guess = new Date(Date.UTC(year, month - 1, day, h[0], h[1]));
@@ -150,7 +152,8 @@ export async function GET(req: NextRequest) {
   const raisons: string[] = [];
   let envoyes = 0;
   for (const d of dus) {
-    const heure = d.rdv.heure.replace(':', 'h');
+    const hm = (d.rdv.heure ?? '').trim().match(/^(d{1,2})s*(?:[h:]s*(d{1,2})?)?$/i);
+    const heure = hm ? `${String(hm[1]).padStart(2, '0')}h${String(hm[2] ?? '00').padStart(2, '0')}` : d.rdv.heure;
     const content = `**Rappel de rendez-vous**\n\nDocteur ${d.mentions.map(i => `<@${i}>`).join(' ')}, nous vous rappelons que vous avez un rendez-vous prévu le **${d.rdv.date}** à **${heure}**, soit dans une heure.\n\nNous vous invitons à prendre vos dispositions afin d'être disponible à l'heure convenue.`;
     try {
       const res = await fetch(webhook, {
