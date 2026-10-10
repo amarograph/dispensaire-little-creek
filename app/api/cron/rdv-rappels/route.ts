@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
   const envoyes: string[] = [];
   for (const r of aEnvoyer) {
     const ids = Array.from(new Set([r.medecinDiscordId, ...(r.medecinsSup ?? []).map(s => s.discord_id)].filter((x): x is string => !!x)));
-    const content = `⏰ ${ids.map(i => `<@${i}>`).join(' ')} **Rappel — rendez-vous dans 1 h**\n📅 ${r.date} à **${r.heure}** · ${r.type || 'Rendez-vous'}\n👤 Patient : ${r.patientNom}${r.notes ? `\n📝 ${r.notes}` : ''}`;
+    const content = `⏰ ${ids.map(i => `<@${i}>`).join(' ')} **Rappel — rendez-vous dans 1 h**\n📅 ${r.date} à **${r.heure}** · ${r.type || 'Rendez-vous'}\n👤 Patient : ${r.patientNom}`; /* les notes (parfois privées) ne sont jamais publiées sur Discord */
     try {
       const res = await fetch(webhook, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
