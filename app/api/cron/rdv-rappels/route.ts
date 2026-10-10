@@ -62,27 +62,38 @@ export async function GET(req: NextRequest) {
   });
   if (aEnvoyer.length === 0) return NextResponse.json({ ok: true, envoyes: 0 });
 
-  const envoyes: string[] = [];
+  /* Anti-doublon : on MARQUE d'abord les rendez-vous comme « rappelés » (relecture fraîche + écriture ciblée),
+     puis on envoie. Si le marquage échoue, on n'envoie rien : mieux vaut un rappel manqué qu'un message répété
+     à chaque passage du planificateur. */
+  const ids = new Set(aEnvoyer.map(r => r.id));
+  const { data: fresh } = await supabase.from('site_config').select('value').eq('key', KEY).single();
+  const current: RendezVous[] = Array.isArray(fresh?.value) ? fresh.value : [];
+  const marque = current.map(r => ids.has(r.id) && !r.rappelEnvoye ? { ...r, rappelEnvoye: true } : r);
+  const { error: errMark } = await supabase.from('site_config').upsert({ key: KEY, value: marque }, { onConflict: 'key' });
+  if (errMark) return NextResponse.json({ ok: false, error: 'Marquage impossible, aucun rappel envoyé' }, { status: 500 });
+
+  const echecs: string[] = [];
+  let envoyes = 0;
   for (const r of aEnvoyer) {
-    const ids = Array.from(new Set([r.medecinDiscordId, ...(r.medecinsSup ?? []).map(s => s.discord_id)].filter((x): x is string => !!x)));
-    const content = `⏰ ${ids.map(i => `<@${i}>`).join(' ')} **Rappel — rendez-vous dans 1 h**\n📅 ${r.date} à **${r.heure}** · ${r.type || 'Rendez-vous'}\n👤 Patient : ${r.patientNom}`; /* les notes (parfois privées) ne sont jamais publiées sur Discord */
+    const mentions = Array.from(new Set([r.medecinDiscordId, ...(r.medecinsSup ?? []).map(s => s.discord_id)].filter((x): x is string => !!x)));
+    /* Confidentialité : ni nom du patient ni notes — seulement les médecins, la date/heure et le type */
+    const content = `⏰ ${mentions.map(i => `<@${i}>`).join(' ')} **Rappel — rendez-vous dans 1 h**\n📅 ${r.date} à **${r.heure}** · ${r.type || 'Rendez-vous'}`;
     try {
       const res = await fetch(webhook, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, allowed_mentions: { users: ids } }),
+        body: JSON.stringify({ content, allowed_mentions: { users: mentions } }),
       });
-      if (res.ok) envoyes.push(r.id);
-    } catch {}
+      if (res.ok) envoyes++; else echecs.push(r.id);
+    } catch { echecs.push(r.id); }
   }
 
-  /* Marquage atomique : relecture fraîche puis écriture ciblée (n'écrase pas un RDV créé entre-temps) */
-  if (envoyes.length > 0) {
-    const { data: fresh } = await supabase.from('site_config').select('value').eq('key', KEY).single();
-    const current: RendezVous[] = Array.isArray(fresh?.value) ? fresh.value : [];
-    const done = new Set(envoyes);
-    const next = current.map(r => done.has(r.id) ? { ...r, rappelEnvoye: true } : r);
-    await supabase.from('site_config').upsert({ key: KEY, value: next }, { onConflict: 'key' });
+  /* Un envoi qui a échoué (Discord indisponible) est ré-armé pour être retenté au prochain passage */
+  if (echecs.length > 0) {
+    const { data: again } = await supabase.from('site_config').select('value').eq('key', KEY).single();
+    const cur: RendezVous[] = Array.isArray(again?.value) ? again.value : [];
+    const redo = new Set(echecs);
+    await supabase.from('site_config').upsert({ key: KEY, value: cur.map(r => redo.has(r.id) ? { ...r, rappelEnvoye: false } : r) }, { onConflict: 'key' });
   }
 
-  return NextResponse.json({ ok: true, envoyes: envoyes.length });
+  return NextResponse.json({ ok: true, envoyes, echecs: echecs.length });
 }
