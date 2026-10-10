@@ -9,7 +9,7 @@ const OBSTETRIQUE_KEY = 'redm_obstetrique_agenda';
 interface RendezVous {
   id: string; patientNom: string; date: string; heure: string;
   type: string; statut: string; notes: string; createdAt: string;
-  medecin?: string; medecinDiscordId?: string; rappelEnvoye?: boolean; source?: 'cabinet' | 'obstetrique';
+  medecin?: string; medecinDiscordId?: string; medecinsSup?: { nom: string; discord_id: string }[]; rappelEnvoye?: boolean; source?: 'cabinet' | 'obstetrique';
 }
 
 export async function GET() {
@@ -77,7 +77,8 @@ export async function POST(req: NextRequest) {
     const before: RendezVous[] = Array.isArray(row?.value) ? row.value : [];
     natifs = natifs.map(r => {
       const old = before.find(x => x.id === r.id);
-      const inchange = old && old.date === r.date && old.heure === r.heure && (old.medecinDiscordId ?? '') === (r.medecinDiscordId ?? '');
+      const ids = (x: RendezVous) => [x.medecinDiscordId ?? '', ...(x.medecinsSup ?? []).map(s => s.discord_id)].sort().join(',');
+      const inchange = old && old.date === r.date && old.heure === r.heure && ids(old) === ids(r);
       if (inchange && old.rappelEnvoye) return { ...r, rappelEnvoye: true };
       const { rappelEnvoye, ...reste } = r;
       return reste;

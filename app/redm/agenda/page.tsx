@@ -12,7 +12,7 @@ type StatutRDV = 'CONFIRMÉ' | 'EN ATTENTE' | 'ANNULÉ' | 'PASSÉ';
 interface RendezVous {
   id: string; patientNom: string; date: string; heure: string;
   type: string; statut: StatutRDV; notes: string; createdAt: string;
-  medecin?: string; medecinDiscordId?: string; rappelEnvoye?: boolean; source?: 'cabinet' | 'obstetrique';
+  medecin?: string; medecinDiscordId?: string; medecinsSup?: Soignant[]; rappelEnvoye?: boolean; source?: 'cabinet' | 'obstetrique';
 }
 interface Soignant { nom: string; discord_id: string; }
 
@@ -23,7 +23,7 @@ const STATUT_COL:  Record<StatutRDV, string> = { 'CONFIRMÉ': '#A8B991', 'EN ATT
 const STATUT_ICON: Record<StatutRDV, string> = { 'CONFIRMÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕', 'PASSÉ': '◉' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
-const EMPTY = { patientNom: '', date: '', heure: '', type: 'Consultation', statut: 'EN ATTENTE' as StatutRDV, notes: '', medecin: '', medecinDiscordId: '' };
+const EMPTY = { patientNom: '', date: '', heure: '', type: 'Consultation', statut: 'EN ATTENTE' as StatutRDV, notes: '', medecin: '', medecinDiscordId: '', medecinsSup: [] as Soignant[] };
 const STATUTS: StatutRDV[] = ['EN ATTENTE', 'CONFIRMÉ', 'PASSÉ', 'ANNULÉ'];
 
 const MONTH_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
@@ -162,7 +162,7 @@ export default function AgendaDispensairePage() {
     e.stopPropagation();
     if (r.source === 'cabinet' || r.source === 'obstetrique') return;
     setEditing(r);
-    setForm({ patientNom: r.patientNom, date: r.date, heure: r.heure, type: r.type, statut: r.statut, notes: r.notes, medecin: r.medecin ?? '', medecinDiscordId: r.medecinDiscordId ?? '' });
+    setForm({ patientNom: r.patientNom, date: r.date, heure: r.heure, type: r.type, statut: r.statut, notes: r.notes, medecin: r.medecin ?? '', medecinDiscordId: r.medecinDiscordId ?? '', medecinsSup: r.medecinsSup ?? [] });
     setPanelOpen(true);
   }
   function openNew() {
@@ -499,13 +499,37 @@ export default function AgendaDispensairePage() {
                     const id = e.target.value;
                     if (id === '__legacy') return;
                     const s = soignants.find(x => x.discord_id === id);
-                    setForm(f => ({ ...f, medecin: s?.nom ?? '', medecinDiscordId: s?.discord_id ?? '' }));
+                    setForm(f => ({ ...f, medecin: s?.nom ?? '', medecinDiscordId: s?.discord_id ?? '', medecinsSup: s ? f.medecinsSup.filter(x => x.discord_id !== s.discord_id) : [] }));
                   }}>
                   <option value="">— Aucun soignant assigné —</option>
                   {form.medecin && !form.medecinDiscordId && <option value="__legacy">{form.medecin} (sans compte Discord lié)</option>}
                   {soignants.map(s => <option key={s.discord_id} value={s.discord_id}>{s.nom}</option>)}
                 </select>
-                {form.medecinDiscordId && <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginTop: 5 }}>🔔 Rappel Discord envoyé à ce soignant 1 h avant le rendez-vous.</div>}
+
+                {/* Médecins supplémentaires — tous sont tagués sur Discord */}
+                {form.medecinsSup.length > 0 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+                    {form.medecinsSup.map(s => (
+                      <span key={s.discord_id} style={{ fontFamily: MONO, fontSize: 14, color: T.gold, background: 'rgba(209,183,124,0.12)', border: '1px solid rgba(209,183,124,0.35)', padding: '3px 6px 3px 10px', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                        {s.nom}
+                        <button type="button" onClick={() => setForm(f => ({ ...f, medecinsSup: f.medecinsSup.filter(x => x.discord_id !== s.discord_id) }))}
+                          style={{ background: 'transparent', border: 'none', color: '#DF9A88', cursor: 'pointer', fontSize: 14, padding: 0 }} title="Retirer">✕</button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {form.medecinDiscordId && (
+                  <select style={{ ...inp, cursor: 'pointer', marginTop: 8 }} value="" onChange={e => {
+                    const s = soignants.find(x => x.discord_id === e.target.value);
+                    if (s) setForm(f => ({ ...f, medecinsSup: [...f.medecinsSup, s] }));
+                  }}>
+                    <option value="">+ Ajouter un autre médecin…</option>
+                    {soignants
+                      .filter(s => s.discord_id !== form.medecinDiscordId && !form.medecinsSup.some(x => x.discord_id === s.discord_id))
+                      .map(s => <option key={s.discord_id} value={s.discord_id}>{s.nom}</option>)}
+                  </select>
+                )}
+                {form.medecinDiscordId && <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginTop: 5 }}>🔔 {form.medecinsSup.length > 0 ? 'Rappel Discord envoyé à tous les médecins assignés' : 'Rappel Discord envoyé à ce soignant'} 1 h avant le rendez-vous.</div>}
               </div>
               <div>
                 <label style={lbl}>STATUT</label>

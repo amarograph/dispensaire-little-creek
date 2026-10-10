@@ -15,7 +15,7 @@ const FENETRE_MAX_RETARD = 15; // …mais pas si le RDV est déjà passé de plu
 interface RendezVous {
   id: string; patientNom: string; date: string; heure: string;
   type: string; statut: string; notes: string; createdAt: string;
-  medecin?: string; medecinDiscordId?: string; rappelEnvoye?: boolean;
+  medecin?: string; medecinDiscordId?: string; medecinsSup?: { nom: string; discord_id: string }[]; rappelEnvoye?: boolean;
 }
 
 /* Décalage horaire de Paris à un instant donné, en minutes (gère l'heure d'été / d'hiver) */
@@ -64,11 +64,12 @@ export async function GET(req: NextRequest) {
 
   const envoyes: string[] = [];
   for (const r of aEnvoyer) {
-    const content = `⏰ <@${r.medecinDiscordId}> **Rappel — rendez-vous dans 1 h**\n📅 ${r.date} à **${r.heure}** · ${r.type || 'Rendez-vous'}\n👤 Patient : ${r.patientNom}${r.notes ? `\n📝 ${r.notes}` : ''}`;
+    const ids = Array.from(new Set([r.medecinDiscordId, ...(r.medecinsSup ?? []).map(s => s.discord_id)].filter((x): x is string => !!x)));
+    const content = `⏰ ${ids.map(i => `<@${i}>`).join(' ')} **Rappel — rendez-vous dans 1 h**\n📅 ${r.date} à **${r.heure}** · ${r.type || 'Rendez-vous'}\n👤 Patient : ${r.patientNom}${r.notes ? `\n📝 ${r.notes}` : ''}`;
     try {
       const res = await fetch(webhook, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, allowed_mentions: { users: [r.medecinDiscordId] } }),
+        body: JSON.stringify({ content, allowed_mentions: { users: ids } }),
       });
       if (res.ok) envoyes.push(r.id);
     } catch {}
