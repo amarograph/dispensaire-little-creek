@@ -70,6 +70,14 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
   const [DISPENSAIRE,   setDispensaire]   = useState(DEFAULT_DISPENSAIRE);
   const [medecinsCount, setMedecinsCount] = useState<number | null>(null);
   const [preparateursCount, setPreparateursCount] = useState<number | null>(null);
+  const [noteZoom, setNoteZoom] = useState(false);
+
+  useEffect(() => {
+    if (!noteZoom) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setNoteZoom(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [noteZoom]);
   const [sanitaire,     setSanitaire]     = useState<DispensaireStatus>(DEFAULT_DISPENSAIRE_STATUS);
 
   type RDV = { id: string; patientNom: string; date: string; heure: string; type: string; statut: string; };
@@ -417,8 +425,21 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
           <img
             src="/noteprix.png"
             alt="Note de prix"
-            style={{ width: '100%', display: 'block', borderRadius: 2, boxShadow: '0 4px 16px rgba(74,62,32,0.14)' }}
+            onClick={() => setNoteZoom(true)}
+            title="Cliquer pour agrandir"
+            style={{ width: '100%', display: 'block', borderRadius: 2, boxShadow: '0 4px 16px rgba(74,62,32,0.14)', cursor: 'zoom-in' }}
           />
+
+          {noteZoom && (
+            <div onClick={() => setNoteZoom(false)}
+              style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.88)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, cursor: 'zoom-out' }}>
+              <button onClick={() => setNoteZoom(false)} aria-label="Fermer"
+                style={{ position: 'fixed', top: 18, right: 22, fontFamily: MONO, fontSize: 22, lineHeight: 1, padding: '8px 14px', cursor: 'pointer', background: 'rgba(24,55,70,0.95)', color: '#EADCB9', border: '1px solid rgba(180,160,113,0.55)' }}>✕</button>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/noteprix.png" alt="Note de prix" onClick={e => e.stopPropagation()}
+                style={{ maxWidth: '96vw', maxHeight: '94vh', objectFit: 'contain', boxShadow: '0 8px 40px rgba(0,0,0,0.6)', cursor: 'default' }} />
+            </div>
+          )}
 
         </div>
       </div>
