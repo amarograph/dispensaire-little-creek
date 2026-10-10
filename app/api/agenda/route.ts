@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
+import { keepRappelFlag } from '@/lib/rdv-rappel-flag';
 import { requireCabinetActor } from '@/lib/redm-api-auth';
 
 const KEY = 'redm_cabinet_agenda';
@@ -24,7 +25,13 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
     const supabase = await createServiceClient();
-    const { error } = await supabase.from('site_config').upsert({ key: KEY, value: data }, { onConflict: 'key' });
+    /* Le marquage « rappel Discord envoyé » est posé côté serveur : on ne le laisse pas écraser par une liste plus ancienne */
+    let value = data;
+    if (Array.isArray(data)) {
+      const { data: row } = await supabase.from('site_config').select('value').eq('key', KEY).single();
+      value = keepRappelFlag(Array.isArray(row?.value) ? row.value : [], data);
+    }
+    const { error } = await supabase.from('site_config').upsert({ key: KEY, value }, { onConflict: 'key' });
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ ok: true });
   } catch {
