@@ -73,6 +73,7 @@ export async function GET(req: NextRequest) {
   if (errMark) return NextResponse.json({ ok: false, error: 'Marquage impossible, aucun rappel envoyé' }, { status: 500 });
 
   const echecs: string[] = [];
+  const raisons: string[] = [];
   let envoyes = 0;
   for (const r of aEnvoyer) {
     const mentions = Array.from(new Set([r.medecinDiscordId, ...(r.medecinsSup ?? []).map(s => s.discord_id)].filter((x): x is string => !!x)));
@@ -84,8 +85,8 @@ export async function GET(req: NextRequest) {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content, allowed_mentions: { users: mentions } }),
       });
-      if (res.ok) envoyes++; else echecs.push(r.id);
-    } catch { echecs.push(r.id); }
+      if (res.ok) envoyes++; else { echecs.push(r.id); raisons.push(`discord_http_${res.status}`); }
+    } catch { echecs.push(r.id); raisons.push('discord_injoignable_ou_url_invalide'); }
   }
 
   /* Un envoi qui a échoué (Discord indisponible) est ré-armé pour être retenté au prochain passage */
@@ -96,5 +97,5 @@ export async function GET(req: NextRequest) {
     await supabase.from('site_config').upsert({ key: KEY, value: cur.map(r => redo.has(r.id) ? { ...r, rappelEnvoye: false } : r) }, { onConflict: 'key' });
   }
 
-  return NextResponse.json({ ok: true, envoyes, echecs: echecs.length });
+  return NextResponse.json({ ok: true, envoyes, echecs: echecs.length, raisons });
 }
