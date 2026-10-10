@@ -62,6 +62,7 @@ export async function updateSession(request: NextRequest) {
        rôle, et rediriger une requête API vers une page HTML casse le JSON attendu côté client. */
     if (roles.length === 1 && roles[0] === 'redm_preparateur_caisse') {
       const allowed = request.nextUrl.pathname.startsWith('/redm/registre-caisses')
+        || request.nextUrl.pathname.startsWith('/redm/profil')
         || request.nextUrl.pathname.startsWith('/api/');
       if (!allowed) {
         const url = request.nextUrl.clone();

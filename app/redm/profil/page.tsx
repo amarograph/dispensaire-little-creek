@@ -201,6 +201,7 @@ function CropModal({ file, onConfirm, onCancel }: {
    ══════════════════════════════════════════════════════════════════════ */
 export default function ProfilMedecinPage() {
   const { roles: sessionRoles, username } = useRedmSession();
+  const isPrepOnly  = sessionRoles.length > 0 && sessionRoles.every((r: string) => r === 'redm_preparateur_caisse');
   const isDirection = checkIsAdmin(sessionRoles) || sessionRoles.some((r: string) => ['redm_directeur', 'redm_co_directeur'].includes(r));
 
   const [profile,  setProfile]  = useState<Profile>(EMPTY);
@@ -318,7 +319,7 @@ export default function ProfilMedecinPage() {
     </div>
   );
 
-  const fullName = `${profile.prenom_rp} ${profile.nom_rp}`.trim() || 'Médecin non identifié';
+  const fullName = `${profile.prenom_rp} ${profile.nom_rp}`.trim() || (isPrepOnly ? 'Nom non renseigné' : 'Médecin non identifié');
   const gc = GRADE_COL[profile.grade]  ?? COLOR;
   const sc = STATUT_COL[profile.statut] ?? '#888';
 
@@ -423,12 +424,12 @@ export default function ProfilMedecinPage() {
                 {profile.dispensaire}
               </span>
             )}
-            {profile.specialites.length > 0 && (
+            {!isPrepOnly && profile.specialites.length > 0 && (
               <span style={{ fontFamily: BODY, fontSize: 13, color: '#7A6050' }}>
                 · {profile.specialites.join(', ')}
               </span>
             )}
-            {profile.age_rp && (
+            {!isPrepOnly && profile.age_rp && (
               <span style={{ fontFamily: BODY, fontSize: 13, color: '#7A6050' }}>
                 {profile.dispensaire || profile.specialites.length > 0 ? '—' : ''} {profile.age_rp}{profile.origine ? ` · ${profile.origine}` : ''}
               </span>
@@ -442,7 +443,7 @@ export default function ProfilMedecinPage() {
 
         {/* Identité */}
         <div style={card}>
-          <div style={secTitle}>⚕ Identité du praticien</div>
+          <div style={secTitle}>⚕ {isPrepOnly ? 'Identité' : 'Identité du praticien'}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div>
@@ -458,7 +459,7 @@ export default function ProfilMedecinPage() {
                   placeholder="Ex : De Millet" />
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            {!isPrepOnly && <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div>
                 <label style={lbl}>Âge</label>
                 <input style={inp} value={profile.age_rp}
@@ -471,7 +472,7 @@ export default function ProfilMedecinPage() {
                   onChange={e => setProfile(p => ({ ...p, origine: e.target.value }))}
                   placeholder="Ex : Louisiane" />
               </div>
-            </div>
+            </div>}
             <div>
               <label style={lbl}>Numéro de compte</label>
               <input style={inp} value={profile.numero_compte}
@@ -536,7 +537,7 @@ export default function ProfilMedecinPage() {
 
         {/* Fonction */}
         <div style={card}>
-          <div style={secTitle}>✦ Fonction médicale</div>
+          <div style={secTitle}>✦ {isPrepOnly ? 'Fonction' : 'Fonction médicale'}</div>
           {!isDirection && (
             <div style={{ fontFamily: MONO, fontSize: 10, color: '#7A5040', letterSpacing: '0.14em', marginBottom: 16, padding: '6px 12px', background: 'rgba(180,160,113,0.08)', border: '1px solid rgba(180,160,113,0.18)', borderRadius: 4 }}>
               MODIFIABLE PAR LA DIRECTION UNIQUEMENT
@@ -556,7 +557,7 @@ export default function ProfilMedecinPage() {
                 </div>
               )}
             </div>
-            <div>
+            {!isPrepOnly && <div>
               <label style={lbl}>
                 Spécialité(s)
                 {profile.specialites.length > 0 && (
@@ -595,7 +596,7 @@ export default function ProfilMedecinPage() {
                     : <span style={{ color: '#5A4030', fontStyle: 'italic' }}>Aucune spécialité</span>}
                 </div>
               )}
-            </div>
+            </div>}
           </div>
         </div>
 

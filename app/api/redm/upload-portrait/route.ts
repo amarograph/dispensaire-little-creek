@@ -13,10 +13,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
-import { requireRedmStaff } from '@/lib/redm-api-auth';
+import { requireRedmProfileUser } from '@/lib/redm-api-auth';
 
 export async function POST(req: NextRequest) {
-  const ctx = await requireRedmStaff();
+  const ctx = await requireRedmProfileUser();
   if (!ctx) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const body = await req.json();

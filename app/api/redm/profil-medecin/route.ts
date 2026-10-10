@@ -20,12 +20,12 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
-import { requireRedmStaff } from '@/lib/redm-api-auth';
+import { requireRedmProfileUser } from '@/lib/redm-api-auth';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const ctx = await requireRedmStaff();
+  const ctx = await requireRedmProfileUser();
   if (!ctx) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const supabase = await createServiceClient();
@@ -70,8 +70,13 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const ctx = await requireRedmStaff();
+  const ctx = await requireRedmProfileUser();
   if (!ctx) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
+  /* Préparateur de caisse : seulement nom/prénom RP, photo et numéro de compte.
+     Grade, dispensaire, spécialités et statut ne sont modifiables que par la direction. */
+  const prepOnly    = ctx.roles.length > 0 && ctx.roles.every(r => r === 'redm_preparateur_caisse');
+  const isDirection = ctx.isAdmin || ctx.roles.some(r => ['redm_directeur', 'redm_co_directeur'].includes(r));
 
   const body = await req.json();
   const supabase = await createServiceClient();
@@ -82,20 +87,19 @@ export async function POST(req: NextRequest) {
     { onConflict: 'discord_id,universe' },
   );
 
-  const { error } = await supabase.from('redm_profils').upsert(
-    {
-      discord_id:   ctx.discordId,
-      age_rp:       body.age_rp       ?? '',
-      origine:      body.origine       ?? '',
-      portrait_url: body.portrait_url  ?? '',
-      grade:        body.grade         ?? 'Apprenti',
-      dispensaire:  body.dispensaire   ?? 'Little Creek',
-      specialite:   body.specialite    ?? '',
-      statut:       body.statut        ?? 'En service',
-      updated_at:   new Date().toISOString(),
-    },
-    { onConflict: 'discord_id' },
-  );
+  /* Seuls les champs autorisés ET fournis sont écrits : on n'écrase plus le grade / statut par des valeurs par défaut. */
+  const fields: Record<string, any> = { discord_id: ctx.discordId, portrait_url: body.portrait_url ?? '', updated_at: new Date().toISOString() };
+  if (!prepOnly) {
+    if (body.age_rp !== undefined)  fields.age_rp  = body.age_rp  ?? '';
+    if (body.origine !== undefined) fields.origine = body.origine ?? '';
+  }
+  if (isDirection) {
+    if (body.grade !== undefined)       fields.grade       = body.grade;
+    if (body.dispensaire !== undefined) fields.dispensaire = body.dispensaire;
+    if (body.specialite !== undefined)  fields.specialite  = body.specialite;
+    if (body.statut !== undefined)      fields.statut      = body.statut;
+  }
+  const { error } = await supabase.from('redm_profils').upsert(fields, { onConflict: 'discord_id' });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 

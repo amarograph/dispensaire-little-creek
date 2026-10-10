@@ -48,6 +48,16 @@ const REDM_STAFF_ROLES = [
   'redm_infirmier', 'redm_apprenti', 'redm_therapeute', 'redm_obstetricien',
 ];
 
+/** Personnel RedM + préparateurs de caisse (ou dev) — uniquement pour leur propre profil / portrait. */
+export async function requireRedmProfileUser(): Promise<{ discordId: string; roles: string[]; isAdmin: boolean } | null> {
+  const session = await getApiSession();
+  if (!session) return null;
+  const admin = isAdmin(session.roles);
+  const ok = admin || session.roles.some(r => REDM_STAFF_ROLES.includes(r) || r === 'redm_preparateur_caisse');
+  if (!ok) return null;
+  return { discordId: session.discordId, roles: session.roles, isAdmin: admin };
+}
+
 /** N'importe quel membre du personnel RedM (ou dev) — profil, portrait… */
 export async function requireRedmStaff(): Promise<{ discordId: string; roles: string[]; isAdmin: boolean } | null> {
   const session = await getApiSession();
