@@ -9,7 +9,7 @@ const OBSTETRIQUE_KEY = 'redm_obstetrique_agenda';
 interface RendezVous {
   id: string; patientNom: string; date: string; heure: string;
   type: string; statut: string; notes: string; createdAt: string;
-  medecin?: string; source?: 'cabinet' | 'obstetrique';
+  medecin?: string; medecinDiscordId?: string; rappelEnvoye?: boolean; source?: 'cabinet' | 'obstetrique';
 }
 
 export async function GET() {
@@ -67,8 +67,22 @@ export async function POST(req: NextRequest) {
 
   try {
     const data = await req.json();
-    const natifs = Array.isArray(data) ? data.filter((r: RendezVous) => r.source !== 'cabinet' && r.source !== 'obstetrique') : [];
+    let natifs: RendezVous[] = Array.isArray(data) ? data.filter((r: RendezVous) => r.source !== 'cabinet' && r.source !== 'obstetrique') : [];
     const supabase = await createServiceClient();
+
+    /* Le rappel Discord est marqué côté serveur : un navigateur qui enregistre avec une liste plus ancienne
+       ne doit pas effacer ce marquage (sinon le rappel serait renvoyé). Si la date, l'heure ou le soignant
+       change, le rappel est réarmé. */
+    const { data: row } = await supabase.from('site_config').select('value').eq('key', KEY).single();
+    const before: RendezVous[] = Array.isArray(row?.value) ? row.value : [];
+    natifs = natifs.map(r => {
+      const old = before.find(x => x.id === r.id);
+      const inchange = old && old.date === r.date && old.heure === r.heure && (old.medecinDiscordId ?? '') === (r.medecinDiscordId ?? '');
+      if (inchange && old.rappelEnvoye) return { ...r, rappelEnvoye: true };
+      const { rappelEnvoye, ...reste } = r;
+      return reste;
+    });
+
     const { error } = await supabase.from('site_config').upsert({ key: KEY, value: natifs }, { onConflict: 'key' });
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ ok: true });

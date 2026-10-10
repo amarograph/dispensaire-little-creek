@@ -12,8 +12,9 @@ type StatutRDV = 'CONFIRMÉ' | 'EN ATTENTE' | 'ANNULÉ' | 'PASSÉ';
 interface RendezVous {
   id: string; patientNom: string; date: string; heure: string;
   type: string; statut: StatutRDV; notes: string; createdAt: string;
-  medecin?: string; source?: 'cabinet' | 'obstetrique';
+  medecin?: string; medecinDiscordId?: string; rappelEnvoye?: boolean; source?: 'cabinet' | 'obstetrique';
 }
+interface Soignant { nom: string; discord_id: string; }
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 
@@ -22,7 +23,7 @@ const STATUT_COL:  Record<StatutRDV, string> = { 'CONFIRMÉ': '#A8B991', 'EN ATT
 const STATUT_ICON: Record<StatutRDV, string> = { 'CONFIRMÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕', 'PASSÉ': '◉' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
-const EMPTY = { patientNom: '', date: '', heure: '', type: 'Consultation', statut: 'EN ATTENTE' as StatutRDV, notes: '', medecin: '' };
+const EMPTY = { patientNom: '', date: '', heure: '', type: 'Consultation', statut: 'EN ATTENTE' as StatutRDV, notes: '', medecin: '', medecinDiscordId: '' };
 const STATUTS: StatutRDV[] = ['EN ATTENTE', 'CONFIRMÉ', 'PASSÉ', 'ANNULÉ'];
 
 const MONTH_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
@@ -74,6 +75,7 @@ export default function AgendaDispensairePage() {
   const [editing,     setEditing]     = useState<RendezVous | null>(null);
   const [form,        setForm]        = useState({ ...EMPTY });
   const [delConfirm,  setDelConfirm]  = useState<string | null>(null);
+  const [soignants,   setSoignants]   = useState<Soignant[]>([]);
 
   // Calendar navigation
   const today = new Date();
@@ -86,6 +88,14 @@ export default function AgendaDispensairePage() {
       .then(r => r.json())
       .then((data: RendezVous[]) => { setRdvs(data); setHydrated(true); })
       .catch(() => setHydrated(true));
+  }, []);
+
+  /* Soignants assignables (avec leur identifiant Discord, pour les rappels) */
+  useEffect(() => {
+    fetch('/api/redm/medecins')
+      .then(r => r.json())
+      .then(d => { if (Array.isArray(d?.soignants)) setSoignants(d.soignants); })
+      .catch(() => {});
   }, []);
 
   /* ── Sauvegarde sur le serveur (entrées natives uniquement) ── */
@@ -120,7 +130,7 @@ export default function AgendaDispensairePage() {
     e.stopPropagation();
     if (r.source === 'cabinet' || r.source === 'obstetrique') return;
     setEditing(r);
-    setForm({ patientNom: r.patientNom, date: r.date, heure: r.heure, type: r.type, statut: r.statut, notes: r.notes, medecin: r.medecin ?? '' });
+    setForm({ patientNom: r.patientNom, date: r.date, heure: r.heure, type: r.type, statut: r.statut, notes: r.notes, medecin: r.medecin ?? '', medecinDiscordId: r.medecinDiscordId ?? '' });
     setPanelOpen(true);
   }
   function openNew() {
@@ -430,7 +440,18 @@ export default function AgendaDispensairePage() {
               </div>
               <div>
                 <label style={lbl}>MÉDECIN ASSIGNÉ</label>
-                <input style={inp} value={form.medecin} onChange={e => setForm(f => ({ ...f, medecin: e.target.value }))} placeholder="Nom RP du soignant en charge" />
+                <select style={{ ...inp, cursor: 'pointer' }} value={form.medecinDiscordId || (form.medecin ? '__legacy' : '')}
+                  onChange={e => {
+                    const id = e.target.value;
+                    if (id === '__legacy') return;
+                    const s = soignants.find(x => x.discord_id === id);
+                    setForm(f => ({ ...f, medecin: s?.nom ?? '', medecinDiscordId: s?.discord_id ?? '' }));
+                  }}>
+                  <option value="">— Aucun soignant assigné —</option>
+                  {form.medecin && !form.medecinDiscordId && <option value="__legacy">{form.medecin} (sans compte Discord lié)</option>}
+                  {soignants.map(s => <option key={s.discord_id} value={s.discord_id}>{s.nom}</option>)}
+                </select>
+                {form.medecinDiscordId && <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginTop: 5 }}>🔔 Rappel Discord envoyé à ce soignant 1 h avant le rendez-vous.</div>}
               </div>
               <div>
                 <label style={lbl}>STATUT</label>

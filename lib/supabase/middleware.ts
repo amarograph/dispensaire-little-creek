@@ -3,6 +3,9 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { canRead, isAdmin, isDirection, ROUTE_SECTION } from '@/lib/permissions';
 
 export async function updateSession(request: NextRequest) {
+  /* Routes planifiées (cron) : pas de session, elles se protègent elles-mêmes avec CRON_SECRET */
+  if (request.nextUrl.pathname.startsWith('/api/cron/')) return NextResponse.next({ request });
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
