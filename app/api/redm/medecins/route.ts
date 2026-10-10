@@ -66,6 +66,16 @@ export async function GET() {
       })
   )).sort((a, b) => a.localeCompare(b, 'fr'));
 
+  /* Même liste avec l'identifiant Discord (rappels Discord de l'agenda obstétrique) */
+  const obstetriciensListe = (users ?? [])
+    .filter(u => (u.roles ?? []).some((x: string) => OBS.includes(x)))
+    .map(u => {
+      const p = rp[u.discord_id];
+      const rpName = p ? [p.prenom_rp, p.nom_rp].filter(Boolean).join(' ').trim() : '';
+      return { nom: rpName || `@${u.username}`, discord_id: u.discord_id as string };
+    })
+    .sort((a, b) => a.nom.localeCompare(b.nom, 'fr'));
+
   /* Préparateurs de caisse (hors personnel médical déjà compté) */
   const nomDe = (u: { discord_id: string; username: string }) => {
     const p = rp[u.discord_id];
@@ -81,5 +91,5 @@ export async function GET() {
       .map(nomDe)
   )).sort((a, b) => a.localeCompare(b, 'fr'));
 
-  return NextResponse.json({ medecins: uniques, preparateurs, soignants, obstetriciens });
+  return NextResponse.json({ medecins: uniques, preparateurs, soignants, obstetriciens, obstetriciensListe });
 }

@@ -13,7 +13,7 @@ type StatutRDV = 'CONFIRMÉ' | 'EN ATTENTE' | 'ANNULÉ' | 'PASSÉ';
 interface RendezVous {
   id: string; patientNom: string; date: string; heure: string;
   type: string; statut: StatutRDV; notes: string; createdAt: string;
-  medecin?: string;
+  medecin?: string; medecinDiscordId?: string; rappelEnvoye?: boolean;
 }
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
@@ -22,7 +22,7 @@ const STATUT_COL:  Record<StatutRDV, string> = { 'CONFIRMÉ': '#A8B991', 'EN ATT
 const STATUT_ICON: Record<StatutRDV, string> = { 'CONFIRMÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕', 'PASSÉ': '◉' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
-const EMPTY = { patientNom: '', date: '', heure: '', type: 'Consultation prénatale', statut: 'EN ATTENTE' as StatutRDV, notes: '', medecin: '' };
+const EMPTY = { patientNom: '', date: '', heure: '', type: 'Consultation prénatale', statut: 'EN ATTENTE' as StatutRDV, notes: '', medecin: '', medecinDiscordId: '' };
 const TYPES_RDV = ['Consultation prénatale', 'Suivi de grossesse', 'Confirmation de grossesse', "Préparation à l'accouchement", 'Accouchement', 'Suivi post-natal', 'Visite de contrôle', 'Autre'];
 const STATUTS: StatutRDV[] = ['EN ATTENTE', 'CONFIRMÉ', 'PASSÉ', 'ANNULÉ'];
 
@@ -75,7 +75,7 @@ export default function ObstetriqueAgendaPage() {
   const [editing,     setEditing]     = useState<RendezVous | null>(null);
   const [form,        setForm]        = useState({ ...EMPTY });
   const [delConfirm,  setDelConfirm]  = useState<string | null>(null);
-  const [praticiens,  setPraticiens]  = useState<string[]>([]);
+  const [praticiens,  setPraticiens]  = useState<{ nom: string; discord_id: string }[]>([]);
 
   // Calendar navigation
   const today = new Date();
@@ -89,7 +89,7 @@ export default function ObstetriqueAgendaPage() {
   useEffect(() => {
     fetch('/api/redm/medecins')
       .then(r => r.json())
-      .then(d => { if (Array.isArray(d?.obstetriciens)) setPraticiens(d.obstetriciens); })
+      .then(d => { if (Array.isArray(d?.obstetriciensListe)) setPraticiens(d.obstetriciensListe); })
       .catch(() => {});
   }, []);
 
@@ -128,7 +128,7 @@ export default function ObstetriqueAgendaPage() {
   function openEdit(r: RendezVous, e: React.MouseEvent) {
     e.stopPropagation();
     setEditing(r);
-    setForm({ patientNom: r.patientNom, date: r.date, heure: r.heure, type: r.type, statut: r.statut, notes: r.notes, medecin: r.medecin ?? '' });
+    setForm({ patientNom: r.patientNom, date: r.date, heure: r.heure, type: r.type, statut: r.statut, notes: r.notes, medecin: r.medecin ?? '', medecinDiscordId: r.medecinDiscordId ?? '' });
     setSelectedDay(null);
     setPanelOpen(true);
   }
@@ -415,10 +415,16 @@ export default function ObstetriqueAgendaPage() {
               </div>
               <div>
                 <label style={lbl}>OBSTÉTRICIEN ASSIGNÉ</label>
-                <select style={{ ...inp, cursor: 'pointer' }} value={form.medecin} onChange={e => setForm(f => ({ ...f, medecin: e.target.value }))}>
+                <select style={{ ...inp, cursor: 'pointer' }} value={form.medecinDiscordId || (form.medecin ? '__legacy' : '')}
+                  onChange={e => {
+                    const id = e.target.value;
+                    if (id === '__legacy') return;
+                    const p = praticiens.find(x => x.discord_id === id);
+                    setForm(f => ({ ...f, medecin: p?.nom ?? '', medecinDiscordId: p?.discord_id ?? '' }));
+                  }}>
                   <option value="">— Aucun praticien assigné —</option>
-                  {form.medecin && !praticiens.includes(form.medecin) && <option value={form.medecin}>{form.medecin}</option>}
-                  {praticiens.map(n => <option key={n} value={n}>{n}</option>)}
+                  {form.medecin && !form.medecinDiscordId && <option value="__legacy">{form.medecin} (à re-sélectionner pour le rappel Discord)</option>}
+                  {praticiens.map(p => <option key={p.discord_id} value={p.discord_id}>{p.nom}</option>)}
                 </select>
                 <div style={{ fontFamily: MONO, fontSize: 11, color: T.dim, marginTop: 4 }}>↳ seul ce nom (avec l&apos;heure) apparaît dans l&apos;Agenda commun du dispensaire — la patiente reste confidentielle</div>
               </div>
