@@ -60,7 +60,18 @@ export async function GET(req: NextRequest) {
     const minutes = (t.getTime() - now) / 60000;
     return minutes <= FENETRE_MIN && minutes >= -FENETRE_MAX_RETARD;
   });
-  if (aEnvoyer.length === 0) return NextResponse.json({ ok: true, envoyes: 0 });
+  if (aEnvoyer.length === 0) {
+    /* Diagnostic (sans aucune donnée patient) : pourquoi aucun rappel n'est dû */
+    const diagnostic = rdvs.map(r => {
+      if (r.rappelEnvoye) return 'deja_envoye';
+      if (!r.medecinDiscordId) return 'sans_medecin_discord';
+      if (r.statut === 'ANNULÉ' || r.statut === 'PASSÉ') return `statut_${r.statut}`;
+      const t = rdvInstant(r.date, r.heure);
+      if (!t) return 'date_ou_heure_invalide';
+      return `dans_${Math.round((t.getTime() - now) / 60000)}_min`;
+    });
+    return NextResponse.json({ ok: true, envoyes: 0, rdvs: rdvs.length, diagnostic });
+  }
 
   /* Anti-doublon : on MARQUE d'abord les rendez-vous comme « rappelés » (relecture fraîche + écriture ciblée),
      puis on envoie. Si le marquage échoue, on n'envoie rien : mieux vaut un rappel manqué qu'un message répété
