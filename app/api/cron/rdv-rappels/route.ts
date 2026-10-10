@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServiceClient } from '@/lib/supabase/server';
+import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,8 +47,12 @@ export async function GET(req: NextRequest) {
   if (!secret || given !== secret) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   if (!webhook) return NextResponse.json({ ok: false, error: 'DISCORD_RAPPELS_WEBHOOK_URL non configurée' }, { status: 200 });
 
-  const supabase = await createServiceClient();
-  const { data } = await supabase.from('site_config').select('value').eq('key', KEY).single();
+  /* Client sans cache : le planificateur doit toujours lire l'état réel de l'agenda */
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+    global: { fetch: (input, init) => fetch(input, { ...init, cache: 'no-store' }) },
+  });
+  const { data, error: errLecture } = await supabase.from('site_config').select('value').eq('key', KEY).single();
   const rdvs: RendezVous[] = Array.isArray(data?.value) ? data.value : [];
 
   const now = Date.now();
@@ -70,7 +74,7 @@ export async function GET(req: NextRequest) {
       if (!t) return 'date_ou_heure_invalide';
       return `dans_${Math.round((t.getTime() - now) / 60000)}_min`;
     });
-    return NextResponse.json({ ok: true, envoyes: 0, rdvs: rdvs.length, diagnostic });
+    return NextResponse.json({ ok: true, envoyes: 0, rdvs: rdvs.length, diagnostic, lecture: errLecture?.message ?? 'ok' });
   }
 
   /* Anti-doublon : on MARQUE d'abord les rendez-vous comme « rappelés » (relecture fraîche + écriture ciblée),
