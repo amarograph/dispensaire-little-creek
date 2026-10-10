@@ -132,6 +132,14 @@ export async function GET(req: NextRequest) {
   });
 
   const now = Date.now();
+
+  /* Trace des derniers passages du planificateur (pour vérifier qu'il tourne bien) : 10 derniers, sans donnée patient */
+  try {
+    const { data: trace } = await supabase.from('site_config').select('value').eq('key', 'redm_rappels_passages').single();
+    const passages: { at: string; ua: string }[] = Array.isArray(trace?.value) ? trace.value : [];
+    passages.push({ at: new Date(now).toISOString(), ua: (req.headers.get('user-agent') ?? '').slice(0, 60) });
+    await supabase.from('site_config').upsert({ key: 'redm_rappels_passages', value: passages.slice(-10) }, { onConflict: 'key' });
+  } catch {}
   const lus = await Promise.all(SOURCES.map(async s => ({ s, rdvs: await lire(supabase, s.key) })));
 
   /* RDV dus, avec les personnes à tagger (sans personne identifiée : rien à envoyer) */
