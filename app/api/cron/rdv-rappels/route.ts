@@ -14,7 +14,7 @@ const FENETRE_MIN = 60;        // rappel envoyé quand le RDV est dans <= 60 min
 const FENETRE_MAX_RETARD = 15; // …mais pas si le RDV est déjà passé de plus de 15 min
 
 interface RendezVous {
-  id: string; date: string; heure: string; statut: string;
+  id: string; date: string; heure: string; statut: string; notes?: string;
   medecin?: string; medecinDiscordId?: string; medecinsSup?: { nom: string; discord_id: string }[]; rappelEnvoye?: boolean;
 }
 interface Annuaire { parNom: Map<string, string[]>; therapeutes: string[]; }
@@ -34,13 +34,30 @@ function parisOffsetMin(at: Date): number {
   return Math.round((asUtc - Math.floor(at.getTime() / 60000) * 60000) / 60000);
 }
 
-/* "DD/MM/1890" (année RP = réelle − 136) + "HH:MM" heure de Paris → instant UTC */
+/* Heure saisie à la main : « 21 », « 21h », « 14h30 », « 22H00 », « 14:30 » */
+function parseHeure(s: string | undefined): { h: number; m: number } | null {
+  const mt = (s ?? '').trim().match(/^(\d{1,2})\s*(?:[hH:]\s*(\d{1,2})?)?$/);
+  if (!mt) return null;
+  return { h: Math.min(23, Number(mt[1])), m: Math.min(59, Number(mt[2] ?? 0)) };
+}
+
+/* Mise en gras « mathématique » Unicode (𝐀𝐚𝟎), comme le texte du rappel */
+function gras(s: string): string {
+  return Array.from(s).map(c => {
+    if (c >= 'A' && c <= 'Z') return String.fromCodePoint(0x1d400 + c.charCodeAt(0) - 65);
+    if (c >= 'a' && c <= 'z') return String.fromCodePoint(0x1d41a + c.charCodeAt(0) - 97);
+    if (c >= '0' && c <= '9') return String.fromCodePoint(0x1d7ce + c.charCodeAt(0) - 48);
+    return c;
+  }).join('');
+}
+
+/* "DD/MM/1890" (année RP = réelle − 136) + heure de Paris → instant UTC */
 function rdvInstant(date: string, heure: string): Date | null {
   const d = (date ?? '').trim().split('/').map(Number);
   /* Heures saisies à la main acceptées : « 21 », « 21h », « 14h30 », « 14:30 » */
-  const mt = (heure ?? '').trim().match(/^(d{1,2})s*(?:[h:]s*(d{1,2})?)?$/i);
-  if (d.length !== 3 || d.some(x => isNaN(x) || !x) || !mt) return null;
-  const h = [Math.min(23, Number(mt[1])), Math.min(59, Number(mt[2] ?? 0))];
+  const hm = parseHeure(heure);
+  if (d.length !== 3 || d.some(x => isNaN(x) || !x) || !hm) return null;
+  const h = [hm.h, hm.m];
   const [day, month, y] = d;
   const year = y < 1900 ? y + 136 : y;
   const guess = new Date(Date.UTC(year, month - 1, day, h[0], h[1]));
@@ -60,13 +77,13 @@ function idParNom(nom: string | undefined, a: Annuaire): string[] {
 }
 
 /* Qui tagger pour un rendez-vous de chaque agenda */
-const SOURCES: { key: string; nom: string; mentions: (r: RendezVous, a: Annuaire) => string[] }[] = [
-  { key: KEY_COMMUN, nom: 'commun', mentions: (r, a) => {
+const SOURCES: { key: string; nom: string; avecNotes: boolean; mentions: (r: RendezVous, a: Annuaire) => string[] }[] = [
+  { key: KEY_COMMUN, nom: 'commun', avecNotes: true, mentions: (r, a) => {
       const ids = [r.medecinDiscordId, ...(r.medecinsSup ?? []).map(s => s.discord_id)].filter((x): x is string => !!x);
       return ids.length > 0 ? ids : idParNom(r.medecin, a);
   } },
-  { key: KEY_OBS, nom: 'obstetrique', mentions: (r, a) => r.medecinDiscordId ? [r.medecinDiscordId] : idParNom(r.medecin, a) },
-  { key: KEY_CAB, nom: 'cabinet', mentions: (_r, a) => a.therapeutes },
+  { key: KEY_OBS, nom: 'obstetrique', avecNotes: false, mentions: (r, a) => r.medecinDiscordId ? [r.medecinDiscordId] : idParNom(r.medecin, a) },
+  { key: KEY_CAB, nom: 'cabinet', avecNotes: false, mentions: (_r, a) => a.therapeutes },
 ];
 
 function estDu(r: RendezVous, now: number): { du: boolean; raison: string } {
@@ -152,9 +169,13 @@ export async function GET(req: NextRequest) {
   const raisons: string[] = [];
   let envoyes = 0;
   for (const d of dus) {
-    const hm = (d.rdv.heure ?? '').trim().match(/^(d{1,2})s*(?:[h:]s*(d{1,2})?)?$/i);
-    const heure = hm ? `${String(hm[1]).padStart(2, '0')}h${String(hm[2] ?? '00').padStart(2, '0')}` : d.rdv.heure;
-    const content = `**Rappel de rendez-vous**\n\nDocteur ${d.mentions.map(i => `<@${i}>`).join(' ')}, nous vous rappelons que vous avez un rendez-vous prévu le **${d.rdv.date}** à **${heure}**, soit dans une heure.\n\nNous vous invitons à prendre vos dispositions afin d'être disponible à l'heure convenue.`;
+    const hm = parseHeure(d.rdv.heure);
+    const heure = hm ? `${String(hm.h).padStart(2, '0')}h${String(hm.m).padStart(2, '0')}` : (d.rdv.heure ?? '');
+    /* Les notes ne sont reprises que pour l'agenda commun (là où elles sont visibles de tous) :
+       celles du cabinet et de l'obstétrique restent confidentielles et ne vont jamais sur Discord. */
+    const notes = d.s.avecNotes ? (d.rdv.notes ?? '').trim().slice(0, 600) : '';
+    const complement = notes ? ` 𝐄𝐭 𝐯𝐨𝐢𝐜𝐢 𝐮𝐧 𝐜𝐨𝐦𝐩𝐥𝐞́𝐦𝐞𝐧𝐭 𝐝'𝐢𝐧𝐟𝐨𝐫𝐦𝐚𝐭𝐢𝐨𝐧 𝐩𝐨𝐮𝐫 𝐯𝐨𝐭𝐫𝐞 𝐫𝐞𝐧𝐝𝐞𝐳-𝐯𝐨𝐮𝐬 : ${notes}` : '';
+    const content = `**𝐑𝐚𝐩𝐩𝐞𝐥 𝐝𝐞 𝐫𝐞𝐧𝐝𝐞𝐳-𝐯𝐨𝐮𝐬**\n\n𝐃𝐨𝐜𝐭𝐞𝐮𝐫 ${d.mentions.map(i => `<@${i}>`).join(' ')}, 𝐧𝐨𝐮𝐬 𝐯𝐨𝐮𝐬 𝐫𝐚𝐩𝐩𝐞𝐥𝐨𝐧𝐬 𝐪𝐮𝐞 𝐯𝐨𝐮𝐬 𝐚𝐯𝐞𝐳 𝐮𝐧 𝐫𝐞𝐧𝐝𝐞𝐳-𝐯𝐨𝐮𝐬 𝐩𝐫𝐞́𝐯𝐮 𝐥𝐞 **${gras(d.rdv.date)} 𝐚̀ ${gras(heure)}**, 𝐬𝐨𝐢𝐭 𝐝𝐚𝐧𝐬 𝐮𝐧𝐞 𝐡𝐞𝐮𝐫𝐞.${complement}\n\n𝐍𝐨𝐮𝐬 𝐯𝐨𝐮𝐬 𝐢𝐧𝐯𝐢𝐭𝐨𝐧𝐬 𝐚̀ 𝐩𝐫𝐞𝐧𝐝𝐫𝐞 𝐯𝐨𝐬 𝐝𝐢𝐬𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧𝐬 𝐚𝐟𝐢𝐧 𝐝'𝐞̂𝐭𝐫𝐞 𝐝𝐢𝐬𝐩𝐨𝐧𝐢𝐛𝐥𝐞 𝐚̀ 𝐥'𝐡𝐞𝐮𝐫𝐞 𝐜𝐨𝐧𝐯𝐞𝐧𝐮𝐞.`;
     try {
       const res = await fetch(webhook, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
