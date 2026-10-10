@@ -76,8 +76,9 @@ export async function GET(req: NextRequest) {
   let envoyes = 0;
   for (const r of aEnvoyer) {
     const mentions = Array.from(new Set([r.medecinDiscordId, ...(r.medecinsSup ?? []).map(s => s.discord_id)].filter((x): x is string => !!x)));
-    /* Confidentialité : ni nom du patient ni notes — seulement les médecins, la date/heure et le type */
-    const content = `⏰ ${mentions.map(i => `<@${i}>`).join(' ')} **Rappel — rendez-vous dans 1 h**\n📅 ${r.date} à **${r.heure}** · ${r.type || 'Rendez-vous'}`;
+    /* Confidentialité : ni nom du patient, ni notes, ni motif — seulement les médecins, la date et l'heure */
+    const heure = r.heure.replace(':', 'h');
+    const content = `**Rappel de rendez-vous**\n\nDocteur ${mentions.map(i => `<@${i}>`).join(' ')}, nous vous rappelons que vous avez un rendez-vous prévu le **${r.date}** à **${heure}**, soit dans une heure.\n\nNous vous invitons à prendre vos dispositions afin d'être disponible à l'heure convenue.`;
     try {
       const res = await fetch(webhook, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
