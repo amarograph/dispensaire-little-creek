@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 
@@ -216,7 +217,7 @@ export default function CircuitCueillettePage() {
       </div>
 
       {/* ── Formulaire d'ajout / de modification (direction) ── */}
-      {edit && (
+      {edit && createPortal(
         <div onClick={() => !saving && setEdit(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 110, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: '#183746', border: '1px solid rgba(122,170,112,0.5)', width: '100%', maxWidth: 520, padding: '24px 26px', display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ fontFamily: DISPLAY, fontSize: 24, color: '#EADCB9' }}>{edit.id ? '✎ Modifier la carte' : '＋ Nouvelle plante'}</div>
@@ -254,11 +255,12 @@ export default function CircuitCueillettePage() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── Visionneuse : zoom, déplacement, navigation ── */}
-      {ouvert && (
+      {ouvert && createPortal(
         <div
           onClick={() => { if (!drag.current?.moved) fermer(); }}
           onWheel={e => changerZoom(z => e.deltaY < 0 ? z * 1.15 : z / 1.15)}
@@ -312,7 +314,8 @@ export default function CircuitCueillettePage() {
               </div>
             </>
           )}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

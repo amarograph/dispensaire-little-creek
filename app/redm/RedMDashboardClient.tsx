@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { isAdmin as checkIsAdmin, canRead } from '@/lib/permissions';
 import { DEFAULT_DISPENSAIRE_STATUS, sanitaireColor, sanitaireLabel, type DispensaireStatus } from './_lib/sanitaireListes';
 
@@ -430,7 +431,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
             style={{ width: '100%', display: 'block', borderRadius: 2, boxShadow: '0 4px 16px rgba(74,62,32,0.14)', cursor: 'zoom-in' }}
           />
 
-          {noteZoom && (
+          {noteZoom && createPortal(
             <div onClick={() => setNoteZoom(false)}
               style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.88)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, cursor: 'zoom-out' }}>
               <button onClick={() => setNoteZoom(false)} aria-label="Fermer"
@@ -438,7 +439,8 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/noteprix.png" alt="Note de prix" onClick={e => e.stopPropagation()}
                 style={{ maxWidth: '96vw', maxHeight: '94vh', objectFit: 'contain', boxShadow: '0 8px 40px rgba(0,0,0,0.6)', cursor: 'default' }} />
-            </div>
+            </div>,
+            document.body
           )}
 
         </div>
