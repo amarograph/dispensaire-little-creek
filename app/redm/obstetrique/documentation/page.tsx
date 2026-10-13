@@ -7,6 +7,7 @@ import {
   COL_SUIVI, COL_RX, COL_ACC, rpDisplay,
   type Patiente, type DocResult,
 } from './_lib/shared';
+import { DocCertificate } from './_components/DocCertificate';
 
 export default function ObstetriqueDocumentationPage() {
   const router  = useRouter();
@@ -56,45 +57,21 @@ export default function ObstetriqueDocumentationPage() {
   }
 
   /* ══ VUE CERTIFICAT ══ */
-  if (certDoc) return (
-    <div style={{ fontFamily: BODY }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
-        @font-face { font-family: 'Libre Baskerville'; src: url('/SpecialElite-Regular.ttf') format('truetype'); font-weight: normal; font-style: normal; }
-        @media print { .no-print { display: none !important; } .print-area { background: white !important; color: black !important; padding: 40px !important; font-family: 'Libre Baskerville', 'Courier New', monospace !important; } }
-      `}</style>
-      <div className="no-print" style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
-        <button onClick={() => { setCertDoc(null); setCertPat(null); }} style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
-        <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>🖨 IMPRIMER</button>
-      </div>
-      <div ref={printRef} className="print-area" style={{ background: '#183746', border: '2px solid #C8BEA5', padding: '52px 60px', maxWidth: 800, margin: '0 auto', color: '#102B3B', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ fontSize: 20, letterSpacing: '0.12em', marginBottom: 4, fontWeight: 'bold' }}>DISPENSAIRE DE LITTLE CREEK — OBSTÉTRIQUE</div>
-          <div style={{ fontSize: 15, color: '#4A3018', marginBottom: 4 }}>Little Creek — West Elizabeth</div>
-        </div>
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ fontSize: 17, letterSpacing: '0.1em', textDecoration: 'underline', textUnderlineOffset: 6, fontWeight: 'bold' }}>
-            {certDoc.titre.toUpperCase()}
-          </div>
-          <div style={{ fontSize: 14, color: '#6A5030', marginTop: 6, letterSpacing: '0.1em' }}>{certDoc.type}</div>
-        </div>
-        <div style={{ fontSize: 15, lineHeight: 2 }}>
-          <p style={{ margin: '0 0 16px' }}>Document rédigé le <strong>{rpDisplay(certDoc.date)}</strong>, concernant :</p>
-          <p style={{ paddingLeft: 28, margin: '0 0 16px' }}>
-            <strong>Nom et Prénom :</strong> {certPat ? `${certPat.patientPrenom} ${certPat.patientNom}` : '—'}<br />
-            {certPat?.patientAge ? <><strong>Âge :</strong> {certPat.patientAge} ans<br /></> : null}
-          </p>
-          <p style={{ margin: '24px 0 8px', fontWeight: 'bold', textDecoration: 'underline', textUnderlineOffset: 4 }}>CONTENU</p>
-          <div style={{ margin: '0 0 32px', whiteSpace: 'pre-wrap', lineHeight: 2.1 }}>{certDoc.contenu}</div>
-          <div style={{ marginTop: 52 }}>
-            <div style={{ fontSize: 14, color: '#6A5030', lineHeight: 2 }}>
-              Fait à <strong>Little Creek</strong>, le <strong>{rpDisplay(certDoc.date)}</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  if (certDoc) {
+    const color = certDoc.type === 'Suivi de grossesse' ? COL_SUIVI : certDoc.type === 'Prescription médicale' ? COL_RX : COL_ACC;
+    return (
+      <DocCertificate
+        doc={certDoc}
+        patiente={certPat}
+        color={color}
+        onBack={() => { setCertDoc(null); setCertPat(null); }}
+        extraButtons={certPat ? (
+          <button onClick={() => router.push(`/redm/obstetrique/patientes/${certPat.id}`)}
+            style={{ fontFamily: MONO, fontSize: 14, background: `${color}22`, border: `1px solid ${color}55`, color, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>📋 VOIR DOSSIER</button>
+        ) : undefined}
+      />
+    );
+  }
 
   /* ══ PAGE PRINCIPALE ══ */
   return (

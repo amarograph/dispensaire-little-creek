@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { RichEditor, RichContent, templateToRich } from '../../_components/RichDoc';
+import { RichEditor, RichContent, templateToRich } from '@/app/redm/_components/RichDoc';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
@@ -296,7 +296,7 @@ export default function SyntheseConsultationPage() {
 
   /* ══ VUE FORMULAIRE ══ */
   return (
-    <div style={{ fontFamily: BODY, maxWidth: 860, margin: '0 auto' }}>
+    <div style={{ fontFamily: BODY, maxWidth: 1700, margin: '0 auto' }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
 
       {/* ── Header ── */}

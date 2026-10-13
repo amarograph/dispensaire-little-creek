@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { RichEditor, RichContent, templateToRich, isRichEmpty, plainLength } from '../../_components/RichDoc';
+import { RichEditor, RichContent, templateToRich, isRichEmpty, plainLength } from '@/app/redm/_components/RichDoc';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";

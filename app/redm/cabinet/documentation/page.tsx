@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { RichEditor, RichContent, templateToRich } from '../_components/RichDoc';
+import { RichEditor, RichContent, templateToRich } from '@/app/redm/_components/RichDoc';
 import { useState, useEffect, useRef } from 'react';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
