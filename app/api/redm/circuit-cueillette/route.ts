@@ -13,7 +13,7 @@ export interface Circuit { id: string; nom: string; icon: string; image: string;
 /* Cartes proposées au départ : la carte du Laurier Rose existe déjà, les autres sont des cases vides
    à remplir par la direction (image vide = « carte à venir »). */
 const DEFAUT: Circuit[] = [
-  { id: 'laurier-rose',      nom: 'Laurier Rose',      icon: '🌺', image: '/circuit-cueillette/laurier-rose.webp' },
+  { id: 'laurier-rose',      nom: 'Laurier Rose',      icon: '🌺', image: '/circuit-cueillette/laurier-rose-v2.webp' },
   { id: 'ginseng-americain', nom: 'Ginseng Américain', icon: '🌿', image: '' },
   { id: 'ginseng-alaska',    nom: "Ginseng d'Alaska",  icon: '🌿', image: '' },
   { id: 'thym-sauvage',      nom: 'Thym sauvage',      icon: '🌱', image: '' },

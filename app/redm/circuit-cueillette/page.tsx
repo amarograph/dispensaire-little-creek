@@ -13,7 +13,7 @@ interface Circuit { id: string; nom: string; icon: string; image: string; }
 
 /* Cartes affichées tant que le serveur n'a pas répondu */
 const INITIAL: Circuit[] = [
-  { id: 'laurier-rose', nom: 'Laurier Rose', icon: '🌺', image: '/circuit-cueillette/laurier-rose.webp' },
+  { id: 'laurier-rose', nom: 'Laurier Rose', icon: '🌺', image: '/circuit-cueillette/laurier-rose-v2.webp' },
 ];
 
 /* Redimensionne l'image choisie (max 2200 px) et la convertit en JPEG avant l'envoi */
