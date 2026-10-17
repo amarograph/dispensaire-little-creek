@@ -22,6 +22,9 @@ const CATEGORIES: { id: string; label: string; icon: string; color: string }[] =
   { id: 'entretiens',    label: 'Entretiens',   icon: '📋', color: '#5A7896' },
   { id: 'presences',     label: 'Présences',    icon: '📅', color: '#5A9858' },
   { id: 'cueilleurs',    label: 'Cueilleurs',   icon: '🌿', color: '#6A9860' },
+  { id: 'notes',         label: 'Notes',        icon: '📝', color: '#9DB8D0' },
+  { id: 'comptabilite',  label: 'Comptabilité', icon: '📊', color: '#D4A840' },
+  { id: 'bibliotheque',  label: 'Bibliothèque', icon: '📚', color: '#AAB9C6' },
 ];
 
 function catMeta(category: string) {
