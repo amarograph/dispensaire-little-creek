@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
 import { RichEditor, RichContent, templateToRich, isRichEmpty } from '@/app/redm/_components/RichDoc';
+import { CodesSection } from './CodesSection';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
@@ -52,6 +53,7 @@ export default function RegistreNotesPage() {
   const { roles } = useRedmSession();
   const canEdit = checkIsAdmin(roles) || roles.some((r: string) => ['redm_directeur', 'redm_co_directeur'].includes(r));
 
+  const [vue, setVue]           = useState<'notes' | 'codes'>('notes');
   const [notes, setNotes]       = useState<Note[]>([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState('');
@@ -127,7 +129,7 @@ export default function RegistreNotesPage() {
               NOTES, DÉCISIONS ET COMPTES-RENDUS DE LA DIRECTION · VISIBLES PAR LA DIRECTION UNIQUEMENT
             </p>
           </div>
-          {canEdit && (
+          {canEdit && vue === 'notes' && (
             <button onClick={() => { setError(''); setEdit({ titre: '', categorie: 'Général', contenu: templateToRich(''), date: rpDate(), epinglee: false }); }}
               style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '12px 26px', cursor: 'pointer', background: 'rgba(209,183,124,0.18)', color: T.gold, border: '2px solid rgba(209,183,124,0.55)' }}>
               ✚ NOUVELLE NOTE
@@ -136,6 +138,20 @@ export default function RegistreNotesPage() {
         </div>
       </div>
 
+      {/* Onglets : notes libres / comptes & codes (confidentiel) */}
+      <div style={{ display: 'flex', gap: 0, marginBottom: 22, borderBottom: `1px solid ${T.border}` }}>
+        {([['notes', '📝 NOTES'], ['codes', '🔐 COMPTES & CODES']] as const).map(([id, label]) => {
+          const on = vue === id;
+          return (
+            <button key={id} onClick={() => setVue(id)}
+              style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.1em', padding: '12px 28px', cursor: 'pointer', background: on ? 'rgba(209,183,124,0.14)' : 'transparent', color: on ? T.gold : T.dim, border: 'none', borderBottom: `3px solid ${on ? T.gold : 'transparent'}` }}>
+              {label}
+            </button>
+          );
+        })}
+      </div>
+
+      {vue === 'codes' ? <CodesSection /> : (<>
       {error && (
         <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14, display: 'flex', justifyContent: 'space-between' }}>
           <span>⚠ {error}</span><button onClick={() => setError('')} style={{ background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button>
@@ -233,6 +249,8 @@ export default function RegistreNotesPage() {
           })}
         </div>
       )}
+
+      </>)}
 
       {/* Création / modification */}
       {edit && createPortal(
