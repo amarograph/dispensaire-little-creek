@@ -23,6 +23,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
 import { requireDirectionRead } from '@/lib/redm-api-auth';
+import { rpNamesByUsername } from '@/lib/rp-name';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,7 +47,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  const enriched = (logs ?? []).map(l => ({ ...l, actor_avatar: null }));
+  /* Nom et prénom RP à la place du pseudo Discord (acteur et texte de la description) */
+  const noms = await rpNamesByUsername();
+  const enriched = (logs ?? []).map(l => {
+    const rp = noms.get(String(l.actor_name).toLowerCase());
+    return rp
+      ? { ...l, actor_name: rp, description: String(l.description ?? '').split(l.actor_name).join(rp), actor_avatar: null }
+      : { ...l, actor_avatar: null };
+  });
 
   return NextResponse.json({ logs: enriched });
 }

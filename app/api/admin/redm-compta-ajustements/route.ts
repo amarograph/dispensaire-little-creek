@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireDirectionActor, requireDirectionRead } from '@/lib/redm-api-auth';
 import { createClient } from '@supabase/supabase-js';
 import { redmLog } from '@/lib/redm-log';
+import { rpNameOf, rpNamesByUsername } from '@/lib/rp-name';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,7 +25,10 @@ export async function GET() {
   if (!await requireDirectionRead()) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const { data } = await db().from('site_config').select('value').eq('key', KEY).single();
-  return NextResponse.json({ ajustements: Array.isArray(data?.value) ? data.value : [] });
+  /* Les anciens ajustements ne gardaient que le pseudo Discord : on affiche le nom et prénom RP quand il existe */
+  const liste: Ajustement[] = Array.isArray(data?.value) ? data.value : [];
+  const noms = await rpNamesByUsername();
+  return NextResponse.json({ ajustements: liste.map(a => ({ ...a, auteur: noms.get(String(a.auteur).toLowerCase()) ?? a.auteur })) });
 }
 
 /* POST { montant, motif } — ajoute un ajustement (direction / co-direction uniquement) */
@@ -44,7 +48,7 @@ export async function POST(req: NextRequest) {
 
   const entry: Ajustement = {
     id: `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`,
-    montant, motif, auteur: actor.name,
+    montant, motif, auteur: await rpNameOf(actor.id, actor.name),
     date: new Date().toLocaleDateString('fr-FR'),
     createdAt: new Date().toISOString(),
   };

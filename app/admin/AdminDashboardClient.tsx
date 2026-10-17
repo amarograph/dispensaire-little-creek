@@ -11,6 +11,8 @@ type Member = {
   status: string;
   roles: string[];
   requested_at: string;
+  prenom_rp?: string;
+  nom_rp?: string;
 };
 
 interface LogEntry {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { decideMember, updateMemberRoles } from '@/actions/members';
+import { decideMember, updateMemberRoles, updateMemberRp } from '@/actions/members';
 import { ROLES, ASSIGNABLE_ROLES, ROLE_LABELS, type Role } from '@/lib/permissions';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
@@ -15,6 +15,8 @@ type Member = {
   status: string;
   roles: string[];
   requested_at: string;
+  prenom_rp?: string;
+  nom_rp?: string;
 };
 
 const btn: React.CSSProperties = { fontFamily: MONO, fontSize: 14, letterSpacing: '0.06em', padding: '7px 14px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` };
@@ -29,6 +31,21 @@ export default function MemberRow({ member }: { member: Member }) {
     (member.roles ?? []).filter((r): r is Role => (ROLES as readonly string[]).includes(r))
   );
   const [editingRoles, setEditingRoles] = useState(false);
+  const [editingRp, setEditingRp] = useState(false);
+  const [prenom, setPrenom] = useState(member.prenom_rp ?? '');
+  const [nom, setNom] = useState(member.nom_rp ?? '');
+
+  function handleSaveRp() {
+    setError('');
+    startTransition(async () => {
+      try {
+        await updateMemberRp(member.discord_id, prenom, nom);
+        setEditingRp(false);
+      } catch {
+        setError('Action impossible.');
+      }
+    });
+  }
 
   function toggleRole(role: Role) {
     setSelectedRoles(prev =>
@@ -78,6 +95,9 @@ export default function MemberRow({ member }: { member: Member }) {
 
         <div style={{ flex: 1, minWidth: 220 }}>
           <div style={{ fontFamily: DISPLAY, fontSize: 19, color: T.text }}>{member.username}</div>
+          <div style={{ fontFamily: MONO, fontSize: 14, marginTop: 3, color: (member.prenom_rp || member.nom_rp) ? T.gold : T.dim }}>
+            {(member.prenom_rp || member.nom_rp) ? `${member.prenom_rp ?? ''} ${member.nom_rp ?? ''}`.trim() : 'Nom RP non renseigné'}
+          </div>
           <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginTop: 2 }}>{member.discord_id}</div>
           {member.status === 'approved' && member.roles.length > 0 && !editingRoles && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
@@ -95,6 +115,9 @@ export default function MemberRow({ member }: { member: Member }) {
           <span style={{ fontFamily: MONO, fontSize: 13, letterSpacing: '0.08em', color: statusInfo.col, background: statusInfo.col + '18', padding: '4px 10px', border: `1px solid ${statusInfo.col}40` }}>
             {statusInfo.text}
           </span>
+          {!editingRp && (
+            <button onClick={() => { setPrenom(member.prenom_rp ?? ''); setNom(member.nom_rp ?? ''); setEditingRp(true); }} style={btnGold}>✎ Nom RP</button>
+          )}
           {member.status === 'approved' && !editingRoles && (
             <button onClick={() => setEditingRoles(true)} style={btnGold}>✎ Rôles</button>
           )}
@@ -106,6 +129,22 @@ export default function MemberRow({ member }: { member: Member }) {
           )}
         </div>
       </div>
+
+      {editingRp && (
+        <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${T.border}` }}>
+          <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, letterSpacing: '0.1em', marginBottom: 10 }}>NOM ET PRÉNOM RP</div>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
+            <input value={prenom} onChange={e => setPrenom(e.target.value)} placeholder="Prénom RP" disabled={isPending}
+              style={{ fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '9px 14px', outline: 'none', minWidth: 220 }} />
+            <input value={nom} onChange={e => setNom(e.target.value)} placeholder="Nom RP" disabled={isPending}
+              style={{ fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '9px 14px', outline: 'none', minWidth: 220 }} />
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={handleSaveRp} disabled={isPending} style={{ ...btnGold, opacity: isPending ? 0.5 : 1 }}>✔ Enregistrer</button>
+            <button onClick={() => setEditingRp(false)} style={btn}>Annuler</button>
+          </div>
+        </div>
+      )}
 
       {showRolePicker && (
         <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${T.border}` }}>

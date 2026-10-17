@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireDirectionActor, requireDirectionRead } from '@/lib/redm-api-auth';
 import { createServiceClient } from '@/lib/supabase/server';
 import { redmLog } from '@/lib/redm-log';
+import { rpNameOf } from '@/lib/rp-name';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,6 +40,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const db = await createServiceClient();
     const current = await lire();
+    const auteurRp = await rpNameOf(actor.id, actor.name);
     let next: Note[];
 
     if (body.action === 'upsert' && body.note && typeof body.note.titre === 'string' && body.note.titre.trim()) {
@@ -52,11 +54,11 @@ export async function POST(req: NextRequest) {
       };
       const idx = n.id ? current.findIndex(x => x.id === n.id) : -1;
       if (idx === -1) {
-        const note: Note = { id: uid(), ...champs, auteur: actor.name, auteurId: actor.id, createdAt: new Date().toISOString() };
+        const note: Note = { id: uid(), ...champs, auteur: auteurRp, auteurId: actor.id, createdAt: new Date().toISOString() };
         next = [note, ...current];
         redmLog(actor, { action: 'note_create', category: 'notes', description: `${actor.name} a ajouté la note « ${note.titre} » (${note.categorie}) au registre des notes`, meta: { id: note.id } });
       } else {
-        next = current.map((x, i) => i !== idx ? x : { ...x, ...champs, modifieePar: actor.name, modifieeAt: new Date().toISOString() });
+        next = current.map((x, i) => i !== idx ? x : { ...x, ...champs, modifieePar: auteurRp, modifieeAt: new Date().toISOString() });
         redmLog(actor, { action: 'note_update', category: 'notes', description: `${actor.name} a modifié la note « ${champs.titre} » du registre des notes`, meta: { id: n.id } });
       }
     } else if (body.action === 'pin' && body.id) {
