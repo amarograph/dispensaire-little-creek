@@ -257,7 +257,7 @@ export default function MedecinsPage() {
 
   const q = search.toLowerCase();
   const filtered = medecins
-    .filter(m => `${m.rp_prenom} ${m.rp_nom} ${m.username}`.toLowerCase().includes(q))
+    .filter(m => `${m.rp_prenom} ${m.rp_nom} ${m.username} ${m.numero_compte ?? ''}`.toLowerCase().includes(q))
     .sort((a, b) => {
       const ia = GRADE_ORDER.indexOf(a.grade);
       const ib = GRADE_ORDER.indexOf(b.grade);
@@ -289,7 +289,7 @@ export default function MedecinsPage() {
 
       {/* Barre recherche */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
-        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Rechercher un médecin…"
+        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Rechercher un nom, un pseudo ou un n° de compte…"
           style={{ ...inp, flex: 1, maxWidth: 320, fontSize: 14 }} />
         <button onClick={fetchMedecins} disabled={loading}
           style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em', padding: '9px 20px', cursor: 'pointer', background: T.gold + '20', color: T.gold, border: `1px solid ${T.gold}60`, borderRadius: 4 }}>
@@ -350,6 +350,12 @@ export default function MedecinsPage() {
                       {(m.rp_prenom || m.rp_nom) ? `${m.rp_prenom} ${m.rp_nom}`.trim() : '— Non renseigné —'}
                     </div>
                     <div style={{ fontFamily: MONO, fontSize: 14, color: T.muted, marginTop: 2 }}>@{m.username}</div>
+                  </div>
+
+                  {/* N° de compte */}
+                  <div style={{ flex: '0 0 130px', textAlign: 'center', padding: '6px 10px', background: m.numero_compte ? 'rgba(209,183,124,0.10)' : 'rgba(0,0,0,0.18)', border: `1px solid ${m.numero_compte ? 'rgba(209,183,124,0.45)' : T.border}` }}>
+                    <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.14em' }}>N° DE COMPTE</div>
+                    <div style={{ fontFamily: DISPLAY, fontSize: 22, color: m.numero_compte ? T.gold : T.dim, lineHeight: 1.2, marginTop: 2 }}>{m.numero_compte || '—'}</div>
                   </div>
 
                   {/* Grade + statut */}

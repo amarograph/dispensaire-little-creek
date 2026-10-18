@@ -90,7 +90,7 @@ function fmtDayShort(d: Date): string {
   return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
 }
 const JOURS_CAISSE = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
-interface CaisseStaff { discord_id: string; nom: string; rate: number; dates: string[]; count: number; salaire: number; }
+interface CaisseStaff { discord_id: string; nom: string; numero_compte?: string; rate: number; dates: string[]; count: number; salaire: number; }
 
 interface Salaire { medecin: string; actes: number; ca: number; salaire: number; }
 function salairesByMedecin(factures: Facture[], tarifs: Record<string, TarifCategory>): Salaire[] {
@@ -365,6 +365,7 @@ export default function DirectionComptabiliteArchivesPage() {
                       <tr key={s.discord_id} style={{ borderBottom: idx < caissesStaff.length-1 ? `1px solid rgba(139,90,43,0.12)` : 'none' }}>
                         <td style={{ padding:'10px 16px', borderRight:`1px solid ${T.border}`, background:T.card }}>
                           <div style={{ fontFamily:DISPLAY, fontSize:15, color:T.text }}>{s.nom}</div>
+                          <div style={{ fontFamily:MONO, fontSize: 14, color: s.numero_compte ? T.gold : T.dim, marginTop:2 }}>N° compte : <b style={{ letterSpacing:'0.06em' }}>{s.numero_compte || '—'}</b></div>
                           <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:2 }}>{fmt$(s.rate)} / caisse</div>
                         </td>
                         {days.map((d, i) => {

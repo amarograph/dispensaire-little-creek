@@ -149,7 +149,7 @@ export default function DirectionComptabilitePage() {
   const [hydrated, setHydrated] = useState(false);
   const [tarifs,   setTarifs]   = useState<Record<string, TarifCategory>>({});
 
-  interface CaisseStaff { discord_id: string; nom: string; rate: number; dates: string[]; count: number; salaire: number; }
+  interface CaisseStaff { discord_id: string; nom: string; numero_compte?: string; rate: number; dates: string[]; count: number; salaire: number; }
   const [caissesStaff,   setCaissesStaff]   = useState<CaisseStaff[]>([]);
   const [caissesLoading, setCaissesLoading] = useState(true);
   const [caisseMonday,   setCaisseMonday]   = useState<Date>(() => getMondayOf(new Date()));
@@ -520,6 +520,7 @@ export default function DirectionComptabilitePage() {
                       <tr key={s.discord_id} style={{ borderBottom: idx < caissesStaff.length-1 ? `1px solid rgba(139,90,43,0.12)` : 'none' }}>
                         <td style={{ padding:'10px 16px', borderRight:`1px solid ${T.border}`, background:T.card }}>
                           <div style={{ fontFamily:DISPLAY, fontSize:15, color:T.text }}>{s.nom}</div>
+                          <div style={{ fontFamily:MONO, fontSize: 14, color: s.numero_compte ? T.gold : T.dim, marginTop:2 }}>N° compte : <b style={{ letterSpacing:'0.06em' }}>{s.numero_compte || '—'}</b></div>
                           <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:2 }}>{fmt$(s.rate)} / caisse</div>
                         </td>
                         {caisseDays.map((d, i) => {

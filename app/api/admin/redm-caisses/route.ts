@@ -45,6 +45,11 @@ export async function GET(req: NextRequest) {
   const rp: Record<string, { nom_rp: string; prenom_rp: string }> = {};
   for (const row of profiles ?? []) rp[row.discord_id] = row;
 
+  /* N° de compte de chaque membre (fiche de la Liste des Médecins) */
+  const { data: metas } = await supabase.from('redm_medecins_meta').select('discord_id, numero_compte');
+  const compte: Record<string, string> = {};
+  for (const row of metas ?? []) compte[row.discord_id] = row.numero_compte ?? '';
+
   let caissesQuery = supabase.from('redm_caisses').select('discord_id, date');
   if (from && to) caissesQuery = caissesQuery.gte('date', from).lte('date', to);
   const { data: caisses, error } = await caissesQuery;
@@ -70,6 +75,7 @@ export async function GET(req: NextRequest) {
     return {
       discord_id: m.discord_id,
       nom,
+      numero_compte: compte[m.discord_id] ?? '',
       roles,
       rate,
       dates,
