@@ -87,6 +87,34 @@ export async function POST(req: NextRequest) {
           meta: { archiveId: body.id, factureIds: changed.map(f => f.id), statut: body.statut, total },
         });
       }
+    } else if (body.action === 'set_statut_all' && ['PAYÉ', 'EN ATTENTE'].includes(body.statut)) {
+      /* Tout marquer payé : une semaine (id) ou toutes les semaines archivées (sans id) — direction uniquement.
+         Les factures annulées ne sont jamais touchées. */
+      if (!await requireDirectionActor()) return NextResponse.json({ error: 'Réservé à la direction' }, { status: 403 });
+      let nb = 0, total = 0, semaines = 0;
+      next = current.map(a => {
+        if (body.id && a.id !== body.id) return a;
+        let touche = false;
+        const factures = a.factures.map(f => {
+          if (f.statut === 'ANNULÉ' || f.statut === body.statut) return f;
+          nb++; total += f.montant; touche = true;
+          return { ...f, statut: body.statut as string };
+        });
+        if (!touche) return a;
+        semaines++;
+        return {
+          ...a, factures,
+          totalPercu:   factures.filter(f => f.statut === 'PAYÉ').reduce((sum, f) => sum + f.montant, 0),
+          totalAttente: factures.filter(f => f.statut === 'EN ATTENTE').reduce((sum, f) => sum + f.montant, 0),
+        };
+      });
+      if (nb > 0) {
+        redmLog(actor, {
+          action: 'facture_archive_statut_all', category: 'comptabilite',
+          description: `${actor.name} a marqué ${nb} facture${nb > 1 ? 's' : ''} (${Math.round(total * 100) / 100}$) comme ${body.statut === 'PAYÉ' ? 'payée' + (nb > 1 ? 's' : '') : 'en attente'} — ${body.id ? 'une semaine archivée' : `toutes les semaines archivées (${semaines})`}`,
+          meta: { archiveId: body.id ?? null, nb, total, statut: body.statut },
+        });
+      }
     } else if (body.action === 'merge' && Array.isArray(body.archives)) {
       const existingIds = new Set(current.map(x => x.id));
       const added = body.archives.filter((a: SemaineArchivee) => a?.id && !existingIds.has(a.id));

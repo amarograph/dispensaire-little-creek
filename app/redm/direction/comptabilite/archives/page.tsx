@@ -63,6 +63,13 @@ async function setStatutArchive(id: string, factureIds: string[], statut: 'PAYÉ
     const d = await r.json(); return d.archives ?? null;
   } catch { return null; }
 }
+async function setStatutToutArchive(id: string | null, statut: 'PAYÉ' | 'EN ATTENTE'): Promise<SemaineArchivee[] | null> {
+  try {
+    const r = await fetch('/api/comptabilite/archives', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'set_statut_all', id: id ?? undefined, statut }) });
+    if (!r.ok) return null;
+    const d = await r.json(); return d.archives ?? null;
+  } catch { return null; }
+}
 const PAYEUR_COL: Record<string, string> = { 'Civil': '#C8BEA5', 'Shérif': '#6B7ABB', 'Mairie West Elizabeth': '#786030' };
 /* Tout ce qui n'est ni Shérif ni Mairie est rangé avec le Civil */
 function bucket(f: Facture): Payeur { return f.payeur === 'Shérif' || f.payeur === 'Mairie West Elizabeth' ? f.payeur : 'Civil'; }
@@ -191,6 +198,22 @@ export default function DirectionComptabiliteArchivesPage() {
     if (result) setArchives(result); else setArchives(before);
   }
 
+  /* Tout marquer payé : une semaine (arcId) ou toutes les semaines archivées (null) */
+  const [confirmTout, setConfirmTout] = useState<string | null>(null);
+  async function marquerTout(arcId: string | null) {
+    setConfirmTout(null);
+    const before = archives;
+    setArchives(prev => prev.map(a => {
+      if (arcId && a.id !== arcId) return a;
+      const fs = a.factures.map(f => f.statut === 'ANNULÉ' ? f : { ...f, statut: 'PAYÉ' as StatutPaiement });
+      return { ...a, factures: fs,
+        totalPercu:   fs.filter(f => f.statut === 'PAYÉ').reduce((s, f) => s + f.montant, 0),
+        totalAttente: 0 };
+    }));
+    const result = await setStatutToutArchive(arcId, 'PAYÉ');
+    if (result) setArchives(result); else setArchives(before);
+  }
+
   async function removeArchive(id: string) {
     setArchives(prev => prev.filter(a => a.id !== id));
     setDelConfirm(null);
@@ -260,7 +283,13 @@ export default function DirectionComptabiliteArchivesPage() {
             <button onClick={()=>setOpenId(null)} style={{ fontFamily:MONO, fontSize:15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR AUX ARCHIVES</button>
             <button onClick={()=>router.push('/redm/direction/comptabilite')} style={{ fontFamily:MONO, fontSize:14, background:'transparent', border:'none', color:T.dim, padding:'8px 12px', cursor:'pointer', letterSpacing:'0.08em' }}>COMPTABILITÉ</button>
             {canEdit && (
-              <div style={{ marginLeft:'auto', display:'flex', gap:8 }}>
+              <div style={{ marginLeft:'auto', display:'flex', gap:8, flexWrap:'wrap' }}>
+                {openArc.totalAttente > 0 && (confirmTout === 'semaine'
+                  ? <>
+                      <button onClick={()=>marquerTout(openArc.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'8px 16px', cursor:'pointer', background:'rgba(168,185,145,0.25)', color:'#A8B991', border:'1px solid rgba(168,185,145,0.6)' }}>CONFIRMER : TOUT PAYÉ ({fmt$(openArc.totalAttente)})</button>
+                      <button onClick={()=>setConfirmTout(null)} style={{ fontFamily:MONO, fontSize: 14, padding:'8px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
+                    </>
+                  : <button onClick={()=>setConfirmTout('semaine')} style={{ fontFamily:MONO, fontSize: 14, padding:'8px 16px', cursor:'pointer', background:'rgba(168,185,145,0.15)', color:'#A8B991', border:'1px solid rgba(168,185,145,0.5)' }}>✔ TOUT MARQUER PAYÉ (SEMAINE)</button>)}
                 {delConfirm === openArc.id
                   ? <>
                       <button onClick={()=>removeArchive(openArc.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'8px 16px', cursor:'pointer', background:'#8B404025', color:'#DF9A88', border:'1px solid #8B404060' }}>SUPPRIMER CETTE SEMAINE ?</button>
@@ -400,7 +429,7 @@ export default function DirectionComptabiliteArchivesPage() {
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, flexWrap:'wrap', marginBottom:10, paddingBottom:8, borderBottom:`2px solid ${col}60` }}>
                 <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text }}>{b.icon} {b.titre}</div>
                 <div style={{ display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
-                  {institution && canEdit && st.attente > 0 && (
+                  {canEdit && st.attente > 0 && (
                     <button onClick={() => changeStatut(openArc.id, list, 'PAYÉ')}
                       style={{ fontFamily:MONO, fontSize: 14, padding:'6px 14px', cursor:'pointer', background:'rgba(168,185,145,0.18)', color:'#A8B991', border:'1px solid rgba(168,185,145,0.5)', letterSpacing:'0.08em' }}>
                       ✔ TOUT MARQUER PAYÉ
@@ -420,7 +449,7 @@ export default function DirectionComptabiliteArchivesPage() {
                 <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucune facture {b.key === 'Civil' ? 'civile' : b.key === 'Shérif' ? 'Shérif' : 'Mairie'} cette semaine-là</div>
               ) : (
                 <div style={{ display:'flex', flexDirection:'column', gap:7 }}>
-                  {list.map(f => <RegistreLine key={f.id} f={f} tarifs={tarifs} onToggle={institution && canEdit ? (x => changeStatut(openArc.id, [x], x.statut === 'PAYÉ' ? 'EN ATTENTE' : 'PAYÉ')) : undefined} />)}
+                  {list.map(f => <RegistreLine key={f.id} f={f} tarifs={tarifs} onToggle={canEdit ? (x => changeStatut(openArc.id, [x], x.statut === 'PAYÉ' ? 'EN ATTENTE' : 'PAYÉ')) : undefined} />)}
                 </div>
               )}
             </div>
@@ -479,6 +508,21 @@ export default function DirectionComptabiliteArchivesPage() {
           );
         })}
       </div>
+
+      {/* Tout marquer payé — toutes les semaines archivées */}
+      {canEdit && totalAttente > 0 && (
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, flexWrap:'wrap', marginBottom:20, padding:'12px 18px', background:'rgba(168,185,145,0.08)', border:'1px solid rgba(168,185,145,0.35)' }}>
+          <span style={{ fontFamily:MONO, fontSize: 14, color:T.muted }}>
+            ⏳ <b style={{ color:'#D1B77C' }}>{fmt$(totalAttente)}</b> encore en attente sur l&apos;ensemble des archives (Civil, Shérif et Mairie)
+          </span>
+          {confirmTout === 'global'
+            ? <span style={{ display:'flex', gap:8 }}>
+                <button onClick={()=>marquerTout(null)} style={{ fontFamily:MONO, fontSize: 14, padding:'9px 18px', cursor:'pointer', background:'rgba(168,185,145,0.25)', color:'#A8B991', border:'1px solid rgba(168,185,145,0.6)' }}>CONFIRMER : TOUT MARQUER PAYÉ</button>
+                <button onClick={()=>setConfirmTout(null)} style={{ fontFamily:MONO, fontSize: 14, padding:'9px 12px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
+              </span>
+            : <button onClick={()=>setConfirmTout('global')} style={{ fontFamily:MONO, fontSize: 14, padding:'9px 18px', cursor:'pointer', background:'rgba(168,185,145,0.15)', color:'#A8B991', border:'1px solid rgba(168,185,145,0.5)' }}>✔ TOUT MARQUER PAYÉ — TOUTES LES SEMAINES</button>}
+        </div>
+      )}
 
       {/* Barre de recherche */}
       <div style={{ marginBottom:20 }}>
@@ -541,6 +585,16 @@ export default function DirectionComptabiliteArchivesPage() {
                               <button onClick={()=>setDelConfirm(null)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
                             </span>
                           : <button onClick={()=>setDelConfirm(arc.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 9px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕ SUPPRIMER</button>}
+                      </div>
+                    )}
+                    {canEdit && arc.totalAttente > 0 && (
+                      <div onClick={e => e.stopPropagation()}>
+                        {confirmTout === 'c-' + arc.id
+                          ? <span style={{ display:'flex', gap:6 }}>
+                              <button onClick={()=>marquerTout(arc.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 9px', cursor:'pointer', background:'rgba(168,185,145,0.25)', color:'#A8B991', border:'1px solid rgba(168,185,145,0.6)' }}>TOUT PAYÉ ?</button>
+                              <button onClick={()=>setConfirmTout(null)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px solid ${T.border}` }}>✕</button>
+                            </span>
+                          : <button onClick={()=>setConfirmTout('c-' + arc.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 9px', cursor:'pointer', background:'rgba(168,185,145,0.12)', color:'#A8B991', border:'1px solid rgba(168,185,145,0.45)' }}>✔ TOUT PAYÉ</button>}
                       </div>
                     )}
                     <div style={{ fontFamily:DISPLAY, fontSize:26, color: allDone ? '#6A9A68' : T.gold }}>
