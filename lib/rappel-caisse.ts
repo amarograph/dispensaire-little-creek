@@ -99,7 +99,7 @@ export function texteRappel(message: string, mentions: string[], roleId = ''): s
 export async function envoyerTestCaisse(config: ConfigRappelCaisse): Promise<{ ok: boolean; error?: string }> {
   const webhook = process.env.DISCORD_CAISSE_WEBHOOK_URL;
   if (!webhook) return { ok: false, error: 'DISCORD_CAISSE_WEBHOOK_URL non configurée dans Vercel' };
-  const corps = remplacerMentions(config.message || MESSAGE_DEFAUT, '@Préparateur de caisse').texte;
+  const corps = remplacerMentions(config.message || MESSAGE_DEFAUT, '@rôle Discord').texte;
   const contenu = `🧪 *Test du rappel de caisse — personne n'est tagué*\n\n${corps}`.slice(0, 1900);
   try {
     const r = await fetch(webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: contenu, allowed_mentions: { parse: [] } }) });
