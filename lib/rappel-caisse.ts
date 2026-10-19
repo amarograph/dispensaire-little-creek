@@ -96,9 +96,20 @@ export function texteRappel(message: string, mentions: string[], roleId = ''): s
 }
 
 /* Envoi immédiat (bouton « test » : aucun tag réel, rien n'est enregistré) */
-export async function envoyerTestCaisse(config: ConfigRappelCaisse): Promise<{ ok: boolean; error?: string }> {
+export async function envoyerTestCaisse(config: ConfigRappelCaisse, pingUserId = ''): Promise<{ ok: boolean; error?: string }> {
   const webhook = process.env.DISCORD_CAISSE_WEBHOOK_URL;
   if (!webhook) return { ok: false, error: 'DISCORD_CAISSE_WEBHOOK_URL non configurée dans Vercel' };
+
+  /* Test AVEC notification : seule la personne qui clique est prévenue (sa propre mention) — le rôle n'est pas touché */
+  if (/^\d{15,25}$/.test(pingUserId)) {
+    const corps = remplacerMentions(config.message || MESSAGE_DEFAUT, `<@${pingUserId}>`).texte;
+    const contenu = `🔔 *Test avec notification — seul <@${pingUserId}> est prévenu (le rôle n'est pas touché)*\n\n${corps}`.slice(0, 1900);
+    try {
+      const r = await fetch(webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: contenu, allowed_mentions: { users: [pingUserId] } }) });
+      return r.ok ? { ok: true } : { ok: false, error: `Discord a répondu ${r.status}` };
+    } catch { return { ok: false, error: 'Discord injoignable ou URL invalide' }; }
+  }
+
   /* En mode rôle, la vraie mention du rôle est écrite (elle s'affiche comme un tag avec le nom du rôle si l'ID est bon),
      mais allowed_mentions est vide : Discord n'envoie AUCUNE notification à personne. */
   const roleId = config.mode === 'role' && /^\d{15,25}$/.test(config.roleId) ? config.roleId : '';

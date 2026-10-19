@@ -56,12 +56,12 @@ export default function RappelCaissePage() {
     else setError(r.error ?? 'Erreur');
   }
 
-  async function tester() {
+  async function tester(avecNotification = false) {
     if (!cfg) return;
     setTesting(true); setError(''); setInfo('');
-    const r = await appeler({ action: 'test', message: cfg.message });
+    const r = await appeler({ action: avecNotification ? 'test_ping' : 'test', message: cfg.message });
     setTesting(false);
-    if (r.ok) { setInfo('✔ Message de test envoyé dans le salon (personne n’est tagué).'); setTimeout(() => setInfo(''), 5000); }
+    if (r.ok) { setInfo(avecNotification ? '✔ Message envoyé : vous devez recevoir une notification Discord (vous seul êtes prévenu).' : '✔ Message de test envoyé dans le salon (personne n’est prévenu).'); setTimeout(() => setInfo(''), 6000); }
     else setError(r.error ?? 'Erreur');
   }
 
@@ -188,8 +188,11 @@ export default function RappelCaissePage() {
               <button onClick={enregistrer} disabled={saving} style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '13px 34px', cursor: 'pointer', background: 'rgba(209,183,124,0.2)', color: T.gold, border: '2px solid rgba(209,183,124,0.55)', opacity: saving ? 0.6 : 1 }}>
                 {saving ? '⟳ ENREGISTREMENT…' : '✔ ENREGISTRER'}
               </button>
-              <button onClick={tester} disabled={testing || !webhookOk} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 24px', cursor: webhookOk ? 'pointer' : 'not-allowed', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, opacity: testing || !webhookOk ? 0.5 : 1 }}>
+              <button onClick={() => tester(false)} disabled={testing || !webhookOk} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 24px', cursor: webhookOk ? 'pointer' : 'not-allowed', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, opacity: testing || !webhookOk ? 0.5 : 1 }}>
                 {testing ? '⟳ ENVOI…' : '🧪 ENVOYER UN MESSAGE DE TEST'}
+              </button>
+              <button onClick={() => tester(true)} disabled={testing || !webhookOk} title="Vous seul êtes prévenu (votre propre mention) ; le rôle n'est pas touché" style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 24px', cursor: webhookOk ? 'pointer' : 'not-allowed', background: 'rgba(232,184,96,0.10)', color: '#E8B860', border: '1px solid rgba(232,184,96,0.45)', opacity: testing || !webhookOk ? 0.5 : 1 }}>
+                🔔 TEST AVEC NOTIFICATION (MOI SEUL)
               </button>
             </div>
           )}
