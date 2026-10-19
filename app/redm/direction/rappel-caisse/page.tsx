@@ -56,6 +56,16 @@ export default function RappelCaissePage() {
     else setError(r.error ?? 'Erreur');
   }
 
+  async function testerRole() {
+    if (!cfg) return;
+    if (!window.confirm('Ceci préviendra VRAIMENT tous les membres du rôle Discord indiqué (identifiant ' + cfg.roleId + '). Continuer ?')) return;
+    setTesting(true); setError(''); setInfo('');
+    const r = await appeler({ action: 'test_role', roleId: cfg.roleId, message: cfg.message });
+    setTesting(false);
+    if (r.ok) { setInfo('✔ Message envoyé : tous les membres de ce rôle ont dû recevoir une notification.'); setTimeout(() => setInfo(''), 7000); }
+    else setError(r.error ?? 'Erreur');
+  }
+
   async function tester(avecNotification = false) {
     if (!cfg) return;
     setTesting(true); setError(''); setInfo('');
@@ -194,6 +204,11 @@ export default function RappelCaissePage() {
               <button onClick={() => tester(true)} disabled={testing || !webhookOk} title="Vous seul êtes prévenu (votre propre mention) ; le rôle n'est pas touché" style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 24px', cursor: webhookOk ? 'pointer' : 'not-allowed', background: 'rgba(232,184,96,0.10)', color: '#E8B860', border: '1px solid rgba(232,184,96,0.45)', opacity: testing || !webhookOk ? 0.5 : 1 }}>
                 🔔 TEST AVEC NOTIFICATION (MOI SEUL)
               </button>
+              {cfg.mode === 'role' && (
+                <button onClick={testerRole} disabled={testing || !webhookOk || cfg.roleId.length < 15} title="Prévient réellement tous les membres du rôle : à utiliser avec un rôle de test" style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 24px', cursor: webhookOk ? 'pointer' : 'not-allowed', background: 'rgba(200,80,80,0.10)', color: '#DF9A88', border: '1px solid rgba(200,80,80,0.45)', opacity: testing || !webhookOk || cfg.roleId.length < 15 ? 0.5 : 1 }}>
+                  ⚠ TEST RÉEL DU RÔLE
+                </button>
+              )}
             </div>
           )}
         </div>

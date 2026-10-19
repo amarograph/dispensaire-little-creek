@@ -29,6 +29,12 @@ export async function POST(req: NextRequest) {
     const db = await createServiceClient();
     const actuelle = await lireConfigCaisse(db);
 
+    if (body.action === 'test_role') {
+      const roleId = typeof body.roleId === 'string' ? body.roleId.trim() : actuelle.roleId;
+      const r = await envoyerTestCaisse({ ...actuelle, roleId, message: typeof body.message === 'string' && body.message.trim() ? body.message : actuelle.message }, '', true);
+      return NextResponse.json(r, { status: r.ok ? 200 : 400 });
+    }
+
     if (body.action === 'test_ping') {
       const r = await envoyerTestCaisse({ ...actuelle, message: typeof body.message === 'string' && body.message.trim() ? body.message : actuelle.message }, actor.id);
       return NextResponse.json(r, { status: r.ok ? 200 : 400 });

@@ -96,9 +96,20 @@ export function texteRappel(message: string, mentions: string[], roleId = ''): s
 }
 
 /* Envoi immédiat (bouton « test » : aucun tag réel, rien n'est enregistré) */
-export async function envoyerTestCaisse(config: ConfigRappelCaisse, pingUserId = ''): Promise<{ ok: boolean; error?: string }> {
+export async function envoyerTestCaisse(config: ConfigRappelCaisse, pingUserId = '', pingRole = false): Promise<{ ok: boolean; error?: string }> {
   const webhook = process.env.DISCORD_CAISSE_WEBHOOK_URL;
   if (!webhook) return { ok: false, error: 'DISCORD_CAISSE_WEBHOOK_URL non configurée dans Vercel' };
+
+  /* Test RÉEL du rôle : le rôle est vraiment prévenu (à utiliser avec un rôle de test pour ne déranger personne) */
+  if (pingRole) {
+    if (!/^\d{15,25}$/.test(config.roleId)) return { ok: false, error: 'Identifiant de rôle manquant ou invalide' };
+    const corps = remplacerMentions(config.message || MESSAGE_DEFAUT, `<@&${config.roleId}>`).texte;
+    const contenu = `🔔 *Test réel du rôle — tous ses membres sont prévenus*\n\n${corps}`.slice(0, 1900);
+    try {
+      const r = await fetch(webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: contenu, allowed_mentions: { roles: [config.roleId] } }) });
+      return r.ok ? { ok: true } : { ok: false, error: `Discord a répondu ${r.status}` };
+    } catch { return { ok: false, error: 'Discord injoignable ou URL invalide' }; }
+  }
 
   /* Test AVEC notification : seule la personne qui clique est prévenue (sa propre mention) — le rôle n'est pas touché */
   if (/^\d{15,25}$/.test(pingUserId)) {
