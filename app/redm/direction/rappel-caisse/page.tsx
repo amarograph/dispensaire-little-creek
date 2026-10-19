@@ -10,7 +10,7 @@ const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
-interface Config { actif: boolean; heure: string; jours: number[]; seulementNonFaits: boolean; message: string; derniereDate?: string; derniereHeure?: string; }
+interface Config { actif: boolean; heure: string; jours: number[]; seulementNonFaits: boolean; mode: 'role' | 'individuel'; roleId: string; message: string; derniereDate?: string; derniereHeure?: string; }
 const JOURS = [[1, 'Lun'], [2, 'Mar'], [3, 'Mer'], [4, 'Jeu'], [5, 'Ven'], [6, 'Sam'], [7, 'Dim']] as const;
 const HEURES  = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
 const MINUTES = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
@@ -135,11 +135,33 @@ export default function RappelCaissePage() {
               </div>
             </div>
 
+            <div style={{ marginTop: 22, paddingTop: 18, borderTop: `1px solid ${T.border}` }}>
+              <label style={lbl}>QUI EST TAGUÉ</label>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+                {([['role', '🏷 Le rôle Discord « Préparateur de caisse »'], ['individuel', '👤 Chaque préparateur individuellement']] as const).map(([id, label]) => {
+                  const on = cfg.mode === id;
+                  return (
+                    <button key={id} type="button" disabled={!canEdit} onClick={() => setCfg({ ...cfg, mode: id })}
+                      style={{ fontFamily: MONO, fontSize: 14, padding: '10px 16px', cursor: 'pointer', textAlign: 'left', background: on ? 'rgba(209,183,124,0.2)' : 'transparent', color: on ? T.gold : T.dim, border: `1px solid ${on ? 'rgba(209,183,124,0.55)' : T.border}` }}>{label}</button>
+                  );
+                })}
+              </div>
+              {cfg.mode === 'role' && (
+                <div style={{ maxWidth: 420 }}>
+                  <label style={lbl}>IDENTIFIANT DU RÔLE DISCORD</label>
+                  <input style={inp} value={cfg.roleId} disabled={!canEdit} onChange={e => setCfg({ ...cfg, roleId: e.target.value.replace(/D/g, '') })} placeholder="ex : 1561880592801464461" autoComplete="off" />
+                  <div style={{ fontFamily: MONO, fontSize: 13, color: cfg.roleId.length >= 15 ? T.dim : '#E8B860', marginTop: 6, lineHeight: 1.6 }}>
+                    {cfg.roleId.length >= 15 ? 'Tous les membres qui ont ce rôle sur Discord sont prévenus par une seule mention.' : '⚠ Identifiant manquant ou trop court : les préparateurs seront tagués individuellement.'}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginTop: 20, cursor: canEdit ? 'pointer' : 'default' }}>
               <input type="checkbox" checked={cfg.seulementNonFaits} disabled={!canEdit} onChange={e => setCfg({ ...cfg, seulementNonFaits: e.target.checked })} style={{ width: 18, height: 18, marginTop: 3, cursor: 'pointer' }} />
               <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted, lineHeight: 1.6 }}>
-                Ne taguer que les préparateurs qui <b>n&apos;ont pas encore fait leur caisse aujourd&apos;hui</b>
-                <span style={{ display: 'block', color: T.dim, fontSize: 13 }}>Si tout le monde l&apos;a déjà faite, aucun message n&apos;est envoyé. Décoché : tous les préparateurs sont toujours tagués.</span>
+                N&apos;envoyer le rappel que si des préparateurs <b>n&apos;ont pas encore fait leur caisse aujourd&apos;hui</b>
+                <span style={{ display: 'block', color: T.dim, fontSize: 13 }}>Si tout le monde l&apos;a déjà faite, aucun message n&apos;est envoyé. En mode « rôle », tout le rôle est prévenu dès qu&apos;au moins un préparateur reste à faire ; en mode « individuel », seuls ceux qui restent sont tagués. Décoché : le message part toujours.</span>
               </span>
             </label>
             <div style={{ marginTop: 14, fontFamily: MONO, fontSize: 13, color: T.dim }}>

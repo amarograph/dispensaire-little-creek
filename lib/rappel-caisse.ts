@@ -13,6 +13,8 @@ export interface ConfigRappelCaisse {
   heure: string;            // "HH:MM" (heure de Paris)
   jours: number[];          // 1 = lundi … 7 = dimanche
   seulementNonFaits: boolean; // ne taguer que ceux qui n'ont pas encore fait leur caisse aujourd'hui
+  mode: 'role' | 'individuel'; // 'role' : tague le rôle Discord ; 'individuel' : tague chaque préparateur concerné
+  roleId: string;           // identifiant du rôle Discord « Préparateur de caisse »
   message: string;          // {mentions} est remplacé par la liste des tags
   derniereDate?: string;    // "YYYY-MM-DD" du dernier envoi (anti-doublon)
   derniereHeure?: string;   // ISO du dernier envoi
@@ -31,7 +33,7 @@ export function gras(s: string): string {
 export const MESSAGE_DEFAUT = `**${gras('Rappel de caisse')}**\n\n{mentions}, ${gras("n'oubliez pas de faire votre caisse aujourd'hui.")}`;
 
 export const CONFIG_DEFAUT: ConfigRappelCaisse = {
-  actif: false, heure: '18:00', jours: [1, 2, 3, 4, 5, 6, 7], seulementNonFaits: true, message: MESSAGE_DEFAUT,
+  actif: false, heure: '18:00', jours: [1, 2, 3, 4, 5, 6, 7], seulementNonFaits: true, mode: 'role', roleId: '1561880592801464461', message: MESSAGE_DEFAUT,
 };
 
 export async function lireConfigCaisse(supabase: SupabaseClient): Promise<ConfigRappelCaisse> {
@@ -64,8 +66,8 @@ async function destinataires(supabase: SupabaseClient, date: string, seulementNo
   return Array.from(new Set(ids));
 }
 
-export function texteRappel(message: string, mentions: string[]): string {
-  const tags = mentions.map(i => `<@${i}>`).join(' ');
+export function texteRappel(message: string, mentions: string[], roleId = ''): string {
+  const tags = roleId ? `<@&${roleId}>` : mentions.map(i => `<@${i}>`).join(' ');
   return (message || MESSAGE_DEFAUT).includes('{mentions}') ? message.split('{mentions}').join(tags) : `${tags}\n\n${message}`;
 }
 
@@ -73,7 +75,7 @@ export function texteRappel(message: string, mentions: string[]): string {
 export async function envoyerTestCaisse(config: ConfigRappelCaisse): Promise<{ ok: boolean; error?: string }> {
   const webhook = process.env.DISCORD_CAISSE_WEBHOOK_URL;
   if (!webhook) return { ok: false, error: 'DISCORD_CAISSE_WEBHOOK_URL non configurée dans Vercel' };
-  const corps = (config.message || MESSAGE_DEFAUT).split('{mentions}').join('@préparateurs');
+  const corps = (config.message || MESSAGE_DEFAUT).split('{mentions}').join('@Préparateur de caisse');
   const contenu = `🧪 *Test du rappel de caisse — personne n'est tagué*\n\n${corps}`.slice(0, 1900);
   try {
     const r = await fetch(webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: contenu, allowed_mentions: { parse: [] } }) });
@@ -109,17 +111,20 @@ export async function traiterRappelCaisse(supabase: SupabaseClient, now = new Da
   const ids = await destinataires(supabase, p.date, config.seulementNonFaits);
   if (ids.length === 0) return { actif: true, envoye: false, raison: 'tout_le_monde_a_fait_sa_caisse' };
 
+  /* Mode « rôle » : on tague le rôle Discord (tous ses membres) ; mode « individuel » : seulement les préparateurs concernés */
+  const roleId = config.mode === 'role' && /^d{15,25}$/.test(config.roleId) ? config.roleId : '';
+
   try {
     const res = await fetch(webhook, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: texteRappel(config.message, ids).slice(0, 1900), allowed_mentions: { users: ids } }),
+      body: JSON.stringify({ content: texteRappel(config.message, ids, roleId).slice(0, 1900), allowed_mentions: roleId ? { roles: [roleId] } : { users: ids } }),
     });
     if (!res.ok) {
       /* échec : on ré-arme pour un nouvel essai au prochain passage (dans la fenêtre de retard) */
       await supabase.from('site_config').upsert({ key: CAISSE_KEY, value: { ...fresh, derniereDate: undefined } }, { onConflict: 'key' });
       return { actif: true, envoye: false, raison: `discord_http_${res.status}` };
     }
-    return { actif: true, envoye: true, tags: ids.length };
+    return { actif: true, envoye: true, tags: roleId ? 'role' : ids.length };
   } catch {
     await supabase.from('site_config').upsert({ key: CAISSE_KEY, value: { ...fresh, derniereDate: undefined } }, { onConflict: 'key' });
     return { actif: true, envoye: false, raison: 'discord_injoignable' };
