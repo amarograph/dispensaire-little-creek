@@ -66,16 +66,40 @@ async function destinataires(supabase: SupabaseClient, date: string, seulementNo
   return Array.from(new Set(ids));
 }
 
+/* Remet en lettres normales les caractères « gras mathématique » Unicode (𝐀𝐚𝟎) pour reconnaître {𝐦𝐞𝐧𝐭𝐢𝐨𝐧𝐬} */
+function enNormal(s: string): string {
+  return Array.from(s).map(c => {
+    const cp = c.codePointAt(0) ?? 0;
+    if (cp >= 0x1d400 && cp <= 0x1d419) return String.fromCharCode(65 + cp - 0x1d400);
+    if (cp >= 0x1d41a && cp <= 0x1d433) return String.fromCharCode(97 + cp - 0x1d41a);
+    if (cp >= 0x1d7ce && cp <= 0x1d7d7) return String.fromCharCode(48 + cp - 0x1d7ce);
+    return c;
+  }).join('');
+}
+
+const MOTS_MENTIONS = ['mentions', 'mention', 'role', 'rôle', 'roles', 'rôles', 'tag', 'tags'];
+
+/* Remplace {mentions} (écrit en lettres normales OU en gras Unicode, majuscules acceptées) par les tags */
+export function remplacerMentions(message: string, tags: string): { texte: string; trouve: boolean } {
+  let trouve = false;
+  const texte = message.replace(/\{([^{}\n]{1,24})\}/g, (m, inner: string) => {
+    if (MOTS_MENTIONS.includes(enNormal(inner).trim().toLowerCase())) { trouve = true; return tags; }
+    return m;
+  });
+  return { texte, trouve };
+}
+
 export function texteRappel(message: string, mentions: string[], roleId = ''): string {
   const tags = roleId ? `<@&${roleId}>` : mentions.map(i => `<@${i}>`).join(' ');
-  return (message || MESSAGE_DEFAUT).includes('{mentions}') ? message.split('{mentions}').join(tags) : `${tags}\n\n${message}`;
+  const { texte, trouve } = remplacerMentions(message || MESSAGE_DEFAUT, tags);
+  return trouve ? texte : `${tags}\n\n${texte}`;
 }
 
 /* Envoi immédiat (bouton « test » : aucun tag réel, rien n'est enregistré) */
 export async function envoyerTestCaisse(config: ConfigRappelCaisse): Promise<{ ok: boolean; error?: string }> {
   const webhook = process.env.DISCORD_CAISSE_WEBHOOK_URL;
   if (!webhook) return { ok: false, error: 'DISCORD_CAISSE_WEBHOOK_URL non configurée dans Vercel' };
-  const corps = (config.message || MESSAGE_DEFAUT).split('{mentions}').join('@Préparateur de caisse');
+  const corps = remplacerMentions(config.message || MESSAGE_DEFAUT, '@Préparateur de caisse').texte;
   const contenu = `🧪 *Test du rappel de caisse — personne n'est tagué*\n\n${corps}`.slice(0, 1900);
   try {
     const r = await fetch(webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: contenu, allowed_mentions: { parse: [] } }) });
