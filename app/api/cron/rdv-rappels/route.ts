@@ -207,7 +207,7 @@ async function traiterRdv(req: NextRequest) {
    1) rappel quotidien de caisse (préparateurs de caisse), 2) rappels de rendez-vous 1 h avant. */
 export async function GET(req: NextRequest) {
   const secret = process.env.CRON_SECRET;
-  const given = req.headers.get('authorization')?.replace(/^Bearers+/i, '') ?? req.nextUrl.searchParams.get('key');
+  const given = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ?? req.nextUrl.searchParams.get('key');
   if (!secret || given !== secret) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {

@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
         jours,
         seulementNonFaits: !!c.seulementNonFaits,
         mode: c.mode === 'individuel' ? 'individuel' : 'role',
-        roleId: typeof c.roleId === 'string' && /^d{15,25}$/.test(c.roleId.trim()) ? c.roleId.trim() : '',
+        roleId: typeof c.roleId === 'string' && /^\d{15,25}$/.test(c.roleId.trim()) ? c.roleId.trim() : '',
         message: typeof c.message === 'string' && c.message.trim() ? c.message.slice(0, 1500) : MESSAGE_DEFAUT,
         /* si l'heure ou les jours changent, la journée du jour peut de nouveau déclencher */
         derniereDate: (actuelle.heure !== heure) ? undefined : actuelle.derniereDate,

@@ -112,7 +112,7 @@ export async function traiterRappelCaisse(supabase: SupabaseClient, now = new Da
   if (ids.length === 0) return { actif: true, envoye: false, raison: 'tout_le_monde_a_fait_sa_caisse' };
 
   /* Mode « rôle » : on tague le rôle Discord (tous ses membres) ; mode « individuel » : seulement les préparateurs concernés */
-  const roleId = config.mode === 'role' && /^d{15,25}$/.test(config.roleId) ? config.roleId : '';
+  const roleId = config.mode === 'role' && /^\d{15,25}$/.test(config.roleId) ? config.roleId : '';
 
   try {
     const res = await fetch(webhook, {

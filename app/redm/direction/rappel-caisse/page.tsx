@@ -149,7 +149,7 @@ export default function RappelCaissePage() {
               {cfg.mode === 'role' && (
                 <div style={{ maxWidth: 420 }}>
                   <label style={lbl}>IDENTIFIANT DU RÔLE DISCORD</label>
-                  <input style={inp} value={cfg.roleId} disabled={!canEdit} onChange={e => setCfg({ ...cfg, roleId: e.target.value.replace(/D/g, '') })} placeholder="ex : 1561880592801464461" autoComplete="off" />
+                  <input style={inp} value={cfg.roleId} disabled={!canEdit} onChange={e => setCfg({ ...cfg, roleId: e.target.value.replace(/\D/g, '') })} placeholder="ex : 1561880592801464461" autoComplete="off" />
                   <div style={{ fontFamily: MONO, fontSize: 13, color: cfg.roleId.length >= 15 ? T.dim : '#E8B860', marginTop: 6, lineHeight: 1.6 }}>
                     {cfg.roleId.length >= 15 ? 'Tous les membres qui ont ce rôle sur Discord sont prévenus par une seule mention.' : '⚠ Identifiant manquant ou trop court : les préparateurs seront tagués individuellement.'}
                   </div>
