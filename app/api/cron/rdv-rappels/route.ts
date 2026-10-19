@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { traiterRappelCaisse } from '@/lib/rappel-caisse';
 
 export const dynamic = 'force-dynamic';
 
@@ -118,7 +119,7 @@ async function annuaire(supabase: SupabaseClient): Promise<Annuaire> {
   return { parNom, therapeutes };
 }
 
-export async function GET(req: NextRequest) {
+async function traiterRdv(req: NextRequest) {
   const secret = process.env.CRON_SECRET;
   const webhook = process.env.DISCORD_RAPPELS_WEBHOOK_URL;
   const given = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ?? req.nextUrl.searchParams.get('key');
@@ -200,4 +201,22 @@ export async function GET(req: NextRequest) {
   for (const [key, ids] of Array.from(echecs.entries())) await marquer(key, ids, false);
 
   return NextResponse.json({ ok: true, envoyes, echecs: raisons.length, raisons });
+}
+
+/* Point d'entrée unique appelé chaque minute par cron-job.org :
+   1) rappel quotidien de caisse (préparateurs de caisse), 2) rappels de rendez-vous 1 h avant. */
+export async function GET(req: NextRequest) {
+  const secret = process.env.CRON_SECRET;
+  const given = req.headers.get('authorization')?.replace(/^Bearers+/i, '') ?? req.nextUrl.searchParams.get('key');
+  if (!secret || given !== secret) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+    global: { fetch: (input, init) => fetch(input, { ...init, cache: 'no-store' }) },
+  });
+  const caisse = await traiterRappelCaisse(supabase).catch(() => ({ erreur: 'rappel_caisse_indisponible' }));
+
+  const res = await traiterRdv(req);
+  const body = await res.json().catch(() => ({}));
+  return NextResponse.json({ ...body, caisse }, { status: res.status });
 }
