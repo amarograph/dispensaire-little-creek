@@ -99,8 +99,11 @@ export function texteRappel(message: string, mentions: string[], roleId = ''): s
 export async function envoyerTestCaisse(config: ConfigRappelCaisse): Promise<{ ok: boolean; error?: string }> {
   const webhook = process.env.DISCORD_CAISSE_WEBHOOK_URL;
   if (!webhook) return { ok: false, error: 'DISCORD_CAISSE_WEBHOOK_URL non configurée dans Vercel' };
-  const corps = remplacerMentions(config.message || MESSAGE_DEFAUT, '@rôle Discord').texte;
-  const contenu = `🧪 *Test du rappel de caisse — personne n'est tagué*\n\n${corps}`.slice(0, 1900);
+  /* En mode rôle, la vraie mention du rôle est écrite (elle s'affiche comme un tag avec le nom du rôle si l'ID est bon),
+     mais allowed_mentions est vide : Discord n'envoie AUCUNE notification à personne. */
+  const roleId = config.mode === 'role' && /^\d{15,25}$/.test(config.roleId) ? config.roleId : '';
+  const corps = remplacerMentions(config.message || MESSAGE_DEFAUT, roleId ? `<@&${roleId}>` : '@préparateurs').texte;
+  const contenu = `🧪 *Test du rappel de caisse — personne n'est prévenu*\n\n${corps}`.slice(0, 1900);
   try {
     const r = await fetch(webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: contenu, allowed_mentions: { parse: [] } }) });
     return r.ok ? { ok: true } : { ok: false, error: `Discord a répondu ${r.status}` };
