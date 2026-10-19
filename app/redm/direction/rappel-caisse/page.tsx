@@ -151,7 +151,7 @@ export default function RappelCaissePage() {
                   <label style={lbl}>IDENTIFIANT DU RÔLE DISCORD</label>
                   <input style={inp} value={cfg.roleId} disabled={!canEdit} onChange={e => setCfg({ ...cfg, roleId: e.target.value.replace(/\D/g, '') })} placeholder="ex : 1561880592801464461" autoComplete="off" />
                   <div style={{ fontFamily: MONO, fontSize: 13, color: cfg.roleId.length >= 15 ? T.dim : '#E8B860', marginTop: 6, lineHeight: 1.6 }}>
-                    {cfg.roleId.length >= 15 ? '⚠ Tous les membres qui ont ce rôle sur Discord sont prévenus par une seule mention — pas seulement les préparateurs de caisse. Si ce rôle regroupe tout le dispensaire (ex. « Membres Dispensaire LC »), tout le monde recevra la notification. Pour ne prévenir que les préparateurs, choisissez « Chaque préparateur individuellement » ou indiquez l'identifiant d'un rôle réservé aux préparateurs.' : '⚠ Identifiant manquant ou trop court : les préparateurs seront tagués individuellement.'}
+                    {cfg.roleId.length >= 15 ? '⚠ Tous les membres qui ont ce rôle sur Discord sont prévenus par une seule mention — pas seulement les préparateurs de caisse. Si ce rôle regroupe tout le dispensaire (ex. « Membres Dispensaire LC »), tout le monde recevra la notification. Pour ne prévenir que les préparateurs, choisissez « Chaque préparateur individuellement » ou indiquez l’identifiant d’un rôle réservé aux préparateurs.' : '⚠ Identifiant manquant ou trop court : les préparateurs seront tagués individuellement.'}
                   </div>
                 </div>
               )}
