@@ -44,6 +44,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
         { href: '/redm/depot-stock',      label: 'Dépôt de Stock',        icon: '📥' },
         { href: '/redm/bibliotheque',     label: 'Bibliothèque',          icon: '📚' },
         { href: '/redm/agenda',           label: 'Agenda',                icon: '📅' },
+        { href: '/redm/evenements',       label: 'Évènements',            icon: '🎃' },
         { href: '/redm/cabinet',          label: 'Cabinet Thérapeutique', icon: '🛋' },
         ...(hasObstetriqueAccess ? [{ href: '/redm/obstetrique', label: 'Obstétrique', icon: '🤱' }] : []),
         ...(hasDirectionAccess ? [{ href: '/redm/direction', label: 'Direction', icon: '🏛' }] : []),
