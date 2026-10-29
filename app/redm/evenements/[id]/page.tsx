@@ -13,9 +13,51 @@ const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 const OK = '#A8B991', KO = '#DF9A88';
 
+interface Enigme { titre: string; date: string; enonce: string; reponse: string; }
 interface Affiche { id: string; titre: string; url: string; createdAt: string; auteur: string; }
 interface Participant { id: string; prenom: string; nom: string; notes: string; reponses: (boolean | null)[]; createdAt: string; auteur: string; }
-interface Evenement { id: string; nom: string; icon: string; description: string; couleur: string; enigmes: string[]; affiches: Affiche[]; participants: Participant[]; }
+interface Evenement { id: string; nom: string; icon: string; description: string; couleur: string; enigmes: Enigme[]; affiches: Affiche[]; participants: Participant[]; }
+
+const ROMAINS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+function romain(i: number) { return ROMAINS[i] ?? String(i + 1); }
+function versIndex(jeton: string, total: number): number {
+  const t = jeton.trim().toUpperCase();
+  if (/^FINALE?$/.test(t)) return total - 1;
+  const r = ROMAINS.indexOf(t);
+  if (r >= 0) return r;
+  const d = parseInt(t, 10);
+  return isNaN(d) ? -1 : d - 1;
+}
+
+/* Reconnaît un texte du type :
+   « 25 octobre — Énigme I / La visiteuse de minuit / « énoncé » / Réponse : Un fantôme. » (une ou plusieurs énigmes) */
+function analyserEnigmes(texte: string, actuelles: Enigme[]): { liste: Enigme[]; nb: number } {
+  const liste = actuelles.map(x => ({ ...x }));
+  type Bloc = { idx: number; date: string; titre: string; enonce: string[]; reponse: string; etat: 'titre' | 'enonce' | 'reponse' };
+  const blocs: Bloc[] = [];
+  let cur: Bloc | null = null;
+  for (const brut of texte.replace(/\r/g, '').split('\n')) {
+    const l = brut.trim();
+    const h = l.match(/^(?:\d+\s*[.)]\s*)?(.*?)[—–-]+\s*[ÉEé]nigme\s+(\S+)\s*$/i);
+    if (h) { cur = { idx: versIndex(h[2], liste.length), date: h[1].trim(), titre: '', enonce: [], reponse: '', etat: 'titre' }; blocs.push(cur); continue; }
+    if (!cur || !l) continue;
+    if (/^r[ée]ponse\s*:/i.test(l)) { cur.etat = 'reponse'; cur.reponse = l.replace(/^r[ée]ponse\s*:\s*/i, ''); continue; }
+    if (cur.etat === 'titre') { cur.titre = l; cur.etat = 'enonce'; }
+    else if (cur.etat === 'enonce') cur.enonce.push(l);
+    else cur.reponse += ' ' + l;
+  }
+  let nb = 0;
+  for (const b of blocs) {
+    if (b.idx < 0 || b.idx >= liste.length) continue;
+    liste[b.idx] = {
+      titre: b.titre, date: b.date,
+      enonce: b.enonce.join(' ').replace(/^[«"“\s]+|[»"”\s]+$/g, ''),
+      reponse: b.reponse.trim(),
+    };
+    nb++;
+  }
+  return { liste, nb };
+}
 
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '10px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' };
@@ -69,7 +111,11 @@ export default function EvenementPage() {
   const [nouveau, setNouveau] = useState<{ prenom: string; nom: string } | null>(null);
   const [editP, setEditP]     = useState<{ id: string; prenom: string; nom: string; notes: string } | null>(null);
   const [delP, setDelP]       = useState<string | null>(null);
-  const [editEnigmes, setEditEnigmes] = useState<string[] | null>(null);
+  const [editEnigmes, setEditEnigmes] = useState<Enigme[] | null>(null);
+  const [collage, setCollage] = useState('');
+  const [infoCollage, setInfoCollage] = useState('');
+  const [voirEnigmes, setVoirEnigmes] = useState(false);
+  const [reponsesVisibles, setReponsesVisibles] = useState<Set<number>>(new Set());
   const [saving, setSaving]   = useState(false);
 
   useEffect(() => {
@@ -241,7 +287,7 @@ export default function EvenementPage() {
               <option value="score">Classement (meilleur score)</option>
               <option value="nom">Ordre alphabétique</option>
             </select>
-            {canStructure && <button onClick={() => setEditEnigmes([...ev.enigmes])} style={{ fontFamily: MONO, fontSize: 14, padding: '10px 18px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>🧩 NOMMER LES ÉNIGMES</button>}
+            {canStructure && <button onClick={() => { setCollage(''); setInfoCollage(''); setEditEnigmes(ev.enigmes.map(x => ({ ...x }))); }} style={{ fontFamily: MONO, fontSize: 14, padding: '10px 18px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>🧩 ÉDITER LES ÉNIGMES</button>}
             {canRegistre && <button onClick={() => setNouveau({ prenom: '', nom: '' })} style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.1em', padding: '10px 24px', cursor: 'pointer', background: `${col}22`, color: col, border: `2px solid ${col}70` }}>✚ NOUVELLE FICHE</button>}
           </div>
 
@@ -256,6 +302,39 @@ export default function EvenementPage() {
               <button onClick={() => setNouveau(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '11px 18px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>ANNULER</button>
             </div>
           )}
+
+          {/* Énigmes et réponses (pour juger : ✔ bonne / ✕ fausse) — réponses masquées tant qu'on ne clique pas */}
+          <div style={{ background: T.card, border: `1px solid ${T.border}`, marginBottom: 18 }}>
+            <div onClick={() => setVoirEnigmes(v => !v)} style={{ padding: '12px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
+              <span style={{ fontFamily: DISPLAY, fontSize: 20, color: T.text }}>📜 Les énigmes et leurs réponses</span>
+              <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>{voirEnigmes ? '▲ MASQUER' : '▼ AFFICHER'}</span>
+            </div>
+            {voirEnigmes && (
+              <div style={{ borderTop: `1px solid ${T.border}`, padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div>
+                  <button onClick={() => setReponsesVisibles(rv => rv.size === n ? new Set() : new Set(ev.enigmes.map((_, i) => i)))}
+                    style={{ fontFamily: MONO, fontSize: 13, padding: '6px 12px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>
+                    {reponsesVisibles.size === n ? '🙈 MASQUER TOUTES LES RÉPONSES' : '👁 AFFICHER TOUTES LES RÉPONSES'}
+                  </button>
+                </div>
+                {ev.enigmes.map((en, i) => {
+                  const vue = reponsesVisibles.has(i);
+                  return (
+                    <div key={i} style={{ borderLeft: `3px solid ${col}`, paddingLeft: 14 }}>
+                      <div style={{ fontFamily: MONO, fontSize: 13, color: col, letterSpacing: '0.08em' }}>{en.date ? `${en.date} — ` : ''}{i === n - 1 ? 'ÉNIGME FINALE' : `ÉNIGME ${romain(i)}`}</div>
+                      <div style={{ fontFamily: DISPLAY, fontSize: 19, color: T.text, margin: '2px 0 4px' }}>{en.titre || '— à renseigner —'}</div>
+                      {en.enonce && <div style={{ fontFamily: BODY, fontSize: 17, color: T.muted, fontStyle: 'italic', lineHeight: 1.55 }}>« {en.enonce} »</div>}
+                      <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <button onClick={() => setReponsesVisibles(rv => { const s = new Set(rv); if (s.has(i)) s.delete(i); else s.add(i); return s; })}
+                          style={{ fontFamily: MONO, fontSize: 13, padding: '4px 10px', cursor: 'pointer', background: 'transparent', color: OK, border: '1px solid rgba(168,185,145,0.4)' }}>{vue ? '🙈' : '👁 Réponse'}</button>
+                        {vue && <span style={{ fontFamily: DISPLAY, fontSize: 18, color: OK }}>{en.reponse || '— non renseignée —'}</span>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
 
           {liste.length === 0 ? (
             <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, padding: '60px 20px', textAlign: 'center', border: `1px dashed ${T.border}` }}>
@@ -302,7 +381,10 @@ export default function EvenementPage() {
                     <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(n, 7)}, minmax(0, 1fr))`, gap: 8 }}>
                       {s.reps.map((r, i) => (
                         <div key={i} style={{ background: r === true ? 'rgba(168,185,145,0.12)' : r === false ? 'rgba(223,154,136,0.10)' : 'rgba(0,0,0,0.2)', border: `1px solid ${r === true ? 'rgba(168,185,145,0.5)' : r === false ? 'rgba(223,154,136,0.45)' : T.border}`, padding: '8px 8px 10px', textAlign: 'center' }}>
-                          <div title={ev.enigmes[i]} style={{ fontFamily: MONO, fontSize: 12, color: T.dim, letterSpacing: '0.04em', marginBottom: 7, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ev.enigmes[i]}</div>
+                          <div title={ev.enigmes[i].titre || `Énigme ${romain(i)}`} style={{ marginBottom: 7, overflow: 'hidden' }}>
+                            <div style={{ fontFamily: MONO, fontSize: 12, color: col, letterSpacing: '0.06em' }}>{i === n - 1 ? 'FINALE' : romain(i)}</div>
+                            <div style={{ fontFamily: BODY, fontSize: 13, color: T.dim, lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ev.enigmes[i].titre || ' '}</div>
+                          </div>
                           <div style={{ display: 'flex', gap: 5, justifyContent: 'center' }}>
                             <button disabled={!canRegistre} onClick={() => noter(p, i, true)} title="Bonne réponse"
                               style={{ flex: 1, fontFamily: MONO, fontSize: 17, padding: '6px 0', cursor: canRegistre ? 'pointer' : 'default', background: r === true ? 'rgba(168,185,145,0.35)' : 'transparent', color: r === true ? '#EAF2DC' : OK, border: `1px solid ${r === true ? OK : 'rgba(168,185,145,0.35)'}` }}>✔</button>
@@ -340,19 +422,36 @@ export default function EvenementPage() {
         document.body
       )}
 
-      {/* Nom des énigmes */}
+      {/* Édition des énigmes (direction) */}
       {editEnigmes && createPortal(
-        <div onClick={() => !saving && setEditEnigmes(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.78)', zIndex: 110, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, overflowY: 'auto' }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: '#102B3B', border: `2px solid ${col}`, width: '100%', maxWidth: 520, padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <div style={{ fontFamily: DISPLAY, fontSize: 24, color: col }}>🧩 Nom des énigmes</div>
-            <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, lineHeight: 1.6 }}>Donnez un titre court à chaque énigme (affiché sur les fiches). Les résultats déjà saisis sont conservés.</div>
-            {editEnigmes.map((lib, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, minWidth: 24 }}>{i + 1}.</span>
-                <input style={inp} value={lib} onChange={e => setEditEnigmes(editEnigmes.map((x, j) => j === i ? e.target.value : x))} placeholder={`Énigme ${i + 1}`} />
+        <div onClick={() => !saving && setEditEnigmes(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.78)', zIndex: 110, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '4vh 20px', overflowY: 'auto' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: '#102B3B', border: `2px solid ${col}`, width: '100%', maxWidth: 900, padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ fontFamily: DISPLAY, fontSize: 24, color: col }}>🧩 Énigmes et réponses</div>
+
+            <details style={{ border: `1px solid ${T.border}`, padding: '10px 14px', background: 'rgba(0,0,0,0.15)' }}>
+              <summary style={{ fontFamily: MONO, fontSize: 14, color: T.gold, cursor: 'pointer' }}>📋 Coller toutes les énigmes d&apos;un coup</summary>
+              <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, margin: '10px 0', lineHeight: 1.6 }}>
+                Collez le texte au format « 25 octobre — Énigme I / titre / « énoncé » / Réponse : … ». Les énigmes reconnues remplissent les cases ci-dessous (à enregistrer ensuite).
+              </div>
+              <textarea style={{ ...inp, minHeight: 120, resize: 'vertical' }} value={collage} onChange={e => setCollage(e.target.value)} placeholder="Collez ici…" />
+              <button onClick={() => { const r = analyserEnigmes(collage, editEnigmes); setEditEnigmes(r.liste); setInfoCollage(`${r.nb} énigme${r.nb > 1 ? 's' : ''} reconnue${r.nb > 1 ? 's' : ''}.`); }} disabled={!collage.trim()}
+                style={{ marginTop: 8, fontFamily: MONO, fontSize: 14, padding: '8px 16px', cursor: 'pointer', background: `${col}22`, color: col, border: `1px solid ${col}60` }}>↳ ANALYSER LE TEXTE</button>
+              {infoCollage && <span style={{ fontFamily: MONO, fontSize: 13, color: OK, marginLeft: 12 }}>{infoCollage}</span>}
+            </details>
+
+            {editEnigmes.map((en, i) => (
+              <div key={i} style={{ border: `1px solid ${T.border}`, padding: '12px 14px', background: 'rgba(0,0,0,0.12)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '60px minmax(0,1fr) 170px', gap: 8, alignItems: 'center' }}>
+                  <span style={{ fontFamily: DISPLAY, fontSize: 20, color: col }}>{romain(i)}</span>
+                  <input style={inp} value={en.titre} onChange={e => setEditEnigmes(editEnigmes.map((x, j) => j === i ? { ...x, titre: e.target.value } : x))} placeholder="Titre (ex : La visiteuse de minuit)" />
+                  <input style={inp} value={en.date} onChange={e => setEditEnigmes(editEnigmes.map((x, j) => j === i ? { ...x, date: e.target.value } : x))} placeholder="Date (25 octobre)" />
+                </div>
+                <textarea style={{ ...inp, minHeight: 64, resize: 'vertical' }} value={en.enonce} onChange={e => setEditEnigmes(editEnigmes.map((x, j) => j === i ? { ...x, enonce: e.target.value } : x))} placeholder="Énoncé de l'énigme" />
+                <input style={{ ...inp, borderColor: 'rgba(168,185,145,0.5)' }} value={en.reponse} onChange={e => setEditEnigmes(editEnigmes.map((x, j) => j === i ? { ...x, reponse: e.target.value } : x))} placeholder="Réponse attendue" />
               </div>
             ))}
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 6 }}>
+
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 4 }}>
               <button onClick={() => setEditEnigmes(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '11px 24px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>ANNULER</button>
               <button onClick={async () => { setSaving(true); const ok = await appeler({ action: 'set_enigmes', enigmes: editEnigmes }); setSaving(false); if (ok) setEditEnigmes(null); }} disabled={saving}
                 style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '11px 30px', cursor: 'pointer', background: `${col}28`, color: col, border: `2px solid ${col}70` }}>{saving ? '⟳ …' : '✔ ENREGISTRER'}</button>
