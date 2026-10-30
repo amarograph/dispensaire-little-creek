@@ -12,8 +12,8 @@ const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
 interface Evenement {
-  id: string; nom: string; icon: string; description: string; couleur: string; enigmes: string[];
-  affiches: { id: string }[]; participants: { id: string; reponses: (boolean | null)[] }[];
+  id: string; nom: string; icon: string; description: string; couleur: string; visible?: boolean; enigmes: unknown[];
+  affiches: { id: string }[]; participants: { id: string; reponses: (boolean | null)[] }[]; recompenses?: { id: string }[];
 }
 
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '10px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
@@ -71,9 +71,9 @@ export default function EvenementsPage() {
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
           <div>
-            <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 }}>🎃 Évènements</h1>
+            <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 }}>📣 Évènements</h1>
             <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginTop: 8 }}>
-              UN DOSSIER PAR ÉVÈNEMENT · AFFICHES ET REGISTRE DES PARTICIPANTS
+              UN DOSSIER PAR ÉVÈNEMENT · AFFICHES · REGISTRE DES PARTICIPANTS · RÉCOMPENSES
             </p>
           </div>
           {canEdit && (
@@ -94,15 +94,26 @@ export default function EvenementsPage() {
           {evenements.map(e => {
             const h = hover === e.id; const col = e.couleur || '#E8A04C';
             const repondues = e.participants.filter(p => p.reponses.some(r => r !== null)).length;
+            const masque = e.visible === false;
             return (
               <div key={e.id} onMouseEnter={() => setHover(e.id)} onMouseLeave={() => setHover(null)} onClick={() => router.push(`/redm/evenements/${e.id}`)}
-                style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? col + '90' : T.border}`, borderLeft: `4px solid ${h ? col : col + '70'}`, padding: '26px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
-                <div style={{ fontSize: 46, marginBottom: 12 }}>{e.icon}</div>
+                style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? col + '90' : T.border}`, borderLeft: `4px solid ${h ? col : col + '70'}`, padding: '26px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)', opacity: masque && !h ? 0.8 : 1 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
+                  <div style={{ fontSize: 46, marginBottom: 12 }}>{e.icon}</div>
+                  {canEdit && (
+                    <button onClick={ev => { ev.stopPropagation(); appeler({ action: 'set_visible', id: e.id, visible: masque }); }} disabled={saving}
+                      title={masque ? 'Actuellement réservé à la direction — cliquer pour montrer à tout le monde' : 'Actuellement visible par tout le monde — cliquer pour réserver à la direction'}
+                      style={{ fontFamily: MONO, fontSize: 13, letterSpacing: '0.06em', padding: '6px 12px', cursor: 'pointer', background: masque ? 'rgba(200,80,80,0.12)' : 'rgba(168,185,145,0.12)', color: masque ? '#DF9A88' : '#A8B991', border: `1px solid ${masque ? 'rgba(223,154,136,0.5)' : 'rgba(168,185,145,0.5)'}` }}>
+                      {masque ? '🔒 DIRECTION SEULE' : '👁 VISIBLE PAR TOUS'}
+                    </button>
+                  )}
+                </div>
                 <div style={{ fontFamily: DISPLAY, fontSize: 26, color: T.text, marginBottom: 6 }}>{e.nom}</div>
                 {e.description && <div style={{ fontFamily: BODY, fontSize: 16, color: T.dim, lineHeight: 1.5, marginBottom: 12 }}>{e.description}</div>}
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: `${col}18`, padding: '3px 9px', border: `1px solid ${col}45` }}>🖼 {e.affiches.length} affiche{e.affiches.length > 1 ? 's' : ''}</span>
                   <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: `${col}18`, padding: '3px 9px', border: `1px solid ${col}45` }}>👥 {e.participants.length} participant{e.participants.length > 1 ? 's' : ''}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: `${col}18`, padding: '3px 9px', border: `1px solid ${col}45` }}>🏆 {(e.recompenses ?? []).length} prix</span>
                   <span style={{ fontFamily: MONO, fontSize: 13, color: T.muted, background: 'rgba(255,255,255,0.05)', padding: '3px 9px', border: `1px solid ${T.border}` }}>🧩 {e.enigmes.length} énigmes · {repondues} en jeu</span>
                 </div>
                 <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

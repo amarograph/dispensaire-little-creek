@@ -10,22 +10,29 @@ export const dynamic = 'force-dynamic';
 /* Évènements : un dossier par évènement (Halloween…), avec des affiches et un registre des participants
    (fiches nom/prénom + résultat de chaque énigme : bonne / fausse / pas répondue).
    Stockage serveur (site_config). Écritures atomiques : lecture fraîche + modification ciblée.
-   • Structure (dossiers, affiches, nom des énigmes) : directeur, co-directeur, admin.
-   • Registre (fiches participants et résultats) : tout le personnel du dispensaire. */
+   • Structure (dossiers, visibilité, affiches, récompenses, énigmes) : directeur, co-directeur, admin.
+   • Registre (fiches participants et résultats) : tout le personnel du dispensaire.
+   • Un dossier « masqué » n'est visible (et modifiable) que par la direction. */
 
 const KEY = 'redm_evenements';
 const NB_ENIGMES_DEFAUT = 7;
 
-interface Enigme { titre: string; date: string; enonce: string; reponse: string; }
+/* groupe : les énigmes d'un même groupe ne comptent qu'une fois (dès que l'une est notée, les autres ne comptent plus) */
+interface Enigme { titre: string; date: string; enonce: string; reponse: string; groupe?: string; }
 interface Affiche { id: string; titre: string; url: string; createdAt: string; auteur: string; }
+interface Recompense { id: string; rang: string; titre: string; description: string; gagnant: string; }
 interface Participant {
   id: string; prenom: string; nom: string; notes: string;
   reponses: (boolean | null)[]; // true = bonne, false = fausse, null = pas encore répondue
+  reponsesBonus?: (boolean | null)[]; // énigmes de départage (égalité à 7/7)
   createdAt: string; auteur: string; modifieAt?: string;
 }
 interface Evenement {
   id: string; nom: string; icon: string; description: string; couleur: string;
-  enigmes: Enigme[];           // les énigmes de l'évènement (titre, date, énoncé, réponse attendue)
+  visible?: boolean;           // false = réservé à la direction (défaut : visible par tous)
+  enigmes: Enigme[];           // les énigmes de l'évènement (date, énoncé, réponse attendue)
+  bonus?: Enigme[];            // énigmes de départage, affichées seulement en cas d'égalité parfaite
+  recompenses?: Recompense[];
   affiches: Affiche[]; participants: Participant[];
   createdAt: string; auteur: string;
 }
@@ -57,18 +64,54 @@ const ENIGMES_DEFAUT: Enigme[] = [
     reponse: 'La Mort.' },
 ].slice(0, NB_ENIGMES_DEFAUT);
 
+/* Énigmes de départage : n'apparaissent que si plusieurs participants sont à égalité parfaite (7/7).
+   Les deux dernières sont alternatives : l'une notée, l'autre ne compte plus (anti-triche). */
+const GROUPE_FINAL = 'depart-final';
+const BONUS_DEFAUT: Enigme[] = [
+  { titre: '', date: '',
+    enonce: "Je tiens de la guérisseuse autant que du maléfice,\nEt ce qui soigne entre mes mains peut devenir supplice.\nOn me prête un pacte, un bal et des prières inversées,\nTandis que d’autres me voient comme femme savante rejetée.\nJ’habite les récits que l’Église et la peur ont façonnés.\nQui suis-je ?",
+    reponse: 'La sorcière' },
+  { titre: '', date: '',
+    enonce: "Je ne suis plus tout à fait de ce monde,\nEt pourtant les routes, les ponts et les rives me répondent.\nOn me voit lorsque le brouillard se lève et que tout devient froid,\nMa robe semble claire, mais mon histoire ne l’est pas.\nOn me dit née d’un malheur que le temps n’a pas lavé,\nD’un amour, d’un meurtre ou d’un serment inachevé.\nJe ne poursuis pas toujours, je n’appelle pas toujours,\nMais ceux qui me croisent doutent parfois de leur retour.\nQui suis-je ?",
+    reponse: 'La dame blanche' },
+  { titre: '', date: '',
+    enonce: "Je marche sans repos, bien que mon heure soit passée.\nLa terre m’a pris, mais ne m’a point gardé.\nJe ne suis plus des vôtres, et pourtant je reviens,\nPortant dans mes pas l’effroi des anciens.\nNi tout à fait mort, ni véritablement en vie.\nQui suis-je ?",
+    reponse: 'Le mort-vivant' },
+  { titre: '', date: '',
+    enonce: "Je suis un domaine où nul ne possède plus rien,\nSinon un nom gravé, quelques dates et la mémoire des siens.\nLes pas s’y font lents, les voix s’y font basses,\nEt même le vent semble y respecter ce qui passe.\nJe reçois sans choisir l’enfant, le pauvre, le roi,\nEt pourtant nul n’y demeure par goût ou par choix.\nQui suis-je ?",
+    reponse: 'Le cimetière' },
+  { titre: '', date: '',
+    enonce: "Je fus jadis caché sous la chaleur du vivant,\nMais le temps m’a rendu à ma vérité d’avant.\nSans moi, nul pas, nul geste, nulle stature ne demeure,\nEt pourtant l’on ne me découvre vraiment qu’après la dernière heure.\nJe suis l’ouvrage nu sur lequel la chair fut portée,\nLa dernière architecture quand toute beauté s’est effacée.\nQui suis-je ?",
+    reponse: 'Le squelette' },
+  { titre: '', date: '',
+    enonce: "Je ne règne ni par couronne ni par justice,\nMais par le désir, la faiblesse et le vice.\nJe m’invite là où l’âme hésite et se fend,\nCar je connais le prix exact des rêves des vivants.\nOn m’imagine dans la flamme, dans l’ombre ou sous un nom interdit,\nMais je suis surtout la promesse qui corrompt avant même d’avoir été saisie.\nQui suis-je ?",
+    reponse: 'Le démon' },
+  { titre: '', date: '', groupe: GROUPE_FINAL,
+    enonce: "Lorsque la nuit recouvre les chemins oubliés,\nOn entend mon passage avant de me distinguer.\nJe poursuis sans relâche ce que le destin m'a ravi,\nCondamné à chercher ce qui me manque depuis la fin de ma vie.\nNul ne connaît le repos de mon errance,\nEt ceux qui me croisent regrettent souvent leur imprudence.\nMon histoire est celle d'une perte que même la tombe n'a su apaiser.\n\nQui suis-je ?",
+    reponse: 'Le Cavalier sans tête' },
+  { titre: '', date: '', groupe: GROUPE_FINAL,
+    enonce: "Je demeure lorsque ceux qui m'ont donné vie ne sont plus,\nGardienne silencieuse de secrets à jamais tus.\nLe temps me dévore, mais certains souvenirs lui résistent,\nEt dans mon silence, d'étranges présences persistent.\n\nJe ne retiens personne, pourtant certains ne peuvent me quitter,\nJe ne possède aucune voix, mais l'on prétend m'entendre murmurer.\nCeux qui franchissent mon seuil viennent chercher la vérité,\nMais découvrent parfois que le passé refuse d'être enterré.\n\nQui suis-je ?",
+    reponse: 'La maison hantée' },
+];
+
 /* Anciennes données : les énigmes étaient de simples libellés (texte) */
 function normEnigmes(x: unknown): Enigme[] {
   const l = Array.isArray(x) ? x : [];
-  return l.map((e: unknown) => typeof e === 'string'
-    ? { titre: /^Énigme \d+$/.test(e) ? '' : e, date: '', enonce: '', reponse: '' }
-    : { titre: String((e as Enigme)?.titre ?? ''), date: String((e as Enigme)?.date ?? ''), enonce: String((e as Enigme)?.enonce ?? ''), reponse: String((e as Enigme)?.reponse ?? '') });
+  return l.map((e: unknown) => {
+    if (typeof e === 'string') return { titre: /^Énigme \d+$/.test(e) ? '' : e, date: '', enonce: '', reponse: '' };
+    const g = (e as Enigme)?.groupe;
+    return {
+      titre: String((e as Enigme)?.titre ?? ''), date: String((e as Enigme)?.date ?? ''),
+      enonce: String((e as Enigme)?.enonce ?? ''), reponse: String((e as Enigme)?.reponse ?? ''),
+      ...(typeof g === 'string' && g ? { groupe: g.slice(0, 40) } : {}),
+    };
+  });
 }
 
 const HALLOWEEN: Evenement = {
-  id: 'halloween', nom: 'Halloween', icon: '🎃', couleur: '#E8A04C',
-  description: "Chasse aux énigmes d'Halloween — affiches de l'évènement et registre des participants (7 énigmes).",
-  enigmes: ENIGMES_DEFAUT,
+  id: 'halloween', nom: 'Halloween', icon: '🎃', couleur: '#E8A04C', visible: true,
+  description: "Chasse aux énigmes d'Halloween — affiches de l'évènement, registre des participants (7 énigmes) et récompenses.",
+  enigmes: ENIGMES_DEFAUT, bonus: BONUS_DEFAUT, recompenses: [],
   affiches: [], participants: [], createdAt: new Date(0).toISOString(), auteur: 'Système',
 };
 
@@ -76,31 +119,40 @@ async function lire(): Promise<Evenement[]> {
   const db = await createServiceClient();
   const { data } = await db.from('site_config').select('value').eq('key', KEY).single();
   const liste: Evenement[] = Array.isArray(data?.value) ? data.value : [HALLOWEEN];
-  return liste.map(e => ({ ...e, enigmes: normEnigmes(e.enigmes) }));
+  return liste.map(e => {
+    /* Le dossier Halloween existant reçoit les énigmes de départage tant qu'il n'en a pas */
+    const bonus = Array.isArray(e.bonus) ? normEnigmes(e.bonus) : (e.id === 'halloween' ? BONUS_DEFAUT : []);
+    return {
+      ...e, visible: e.visible !== false,
+      enigmes: normEnigmes(e.enigmes), bonus,
+      recompenses: Array.isArray(e.recompenses) ? e.recompenses : [],
+      participants: (e.participants ?? []).map(p => ({ ...p, reponsesBonus: bonus.map((_, i) => p.reponsesBonus?.[i] ?? null) })),
+    };
+  });
 }
 
-/* GET — tout membre approuvé */
+/* GET — tout membre approuvé ; les dossiers masqués ne sont renvoyés qu'à la direction */
 export async function GET() {
   const session = await getApiSession();
   if (!session) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 });
-  return NextResponse.json({ evenements: await lire() });
+  const direction = await requireDirectionActor();
+  const liste = await lire();
+  return NextResponse.json({ evenements: direction ? liste : liste.filter(e => e.visible !== false) });
 }
 
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
   if (!body || typeof body.action !== 'string') return NextResponse.json({ error: 'Action invalide' }, { status: 400 });
 
-  const ACTIONS_REGISTRE = ['add_participant', 'update_participant', 'delete_participant', 'set_reponse'];
+  const ACTIONS_REGISTRE = ['add_participant', 'update_participant', 'delete_participant', 'set_reponse', 'set_reponse_bonus'];
   const registre = ACTIONS_REGISTRE.includes(body.action);
 
   /* Droits : registre → personnel du dispensaire ; le reste → direction */
-  let actor: { id: string; name: string } | null = null;
-  if (registre) {
+  const direction = await requireDirectionActor();
+  let actor: { id: string; name: string } | null = direction;
+  if (!actor && registre) {
     const staff = await requireRedmStaff();
     if (staff) { const s = await getApiSession(); if (s) actor = { id: s.discordId, name: s.username }; }
-    if (!actor) actor = await requireDirectionActor();
-  } else {
-    actor = await requireDirectionActor();
   }
   if (!actor) return NextResponse.json({ error: registre ? 'Réservé au personnel du dispensaire' : 'Réservé à la direction' }, { status: 403 });
 
@@ -108,9 +160,12 @@ export async function POST(req: NextRequest) {
     const db = await createServiceClient();
     const current = await lire();
     const auteur = await rpNameOf(actor.id, actor.name);
-    const ev = (id: unknown) => current.find(e => e.id === id);
+    /* Un dossier masqué n'existe pas pour ceux qui ne sont pas de la direction */
+    const ev = (id: unknown) => current.find(e => e.id === id && (direction || e.visible !== false));
     const maj = (id: unknown, f: (e: Evenement) => Evenement) => current.map(e => e.id === id ? f(e) : e);
     let next: Evenement[] = current;
+
+    if (body.action !== 'create_event' && !ev(body.id)) return NextResponse.json({ error: 'Évènement introuvable' }, { status: 404 });
 
     switch (body.action) {
       case 'create_event': {
@@ -118,9 +173,9 @@ export async function POST(req: NextRequest) {
         if (!nom) return NextResponse.json({ error: 'Nom requis' }, { status: 400 });
         const e: Evenement = {
           id: `${nom.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'evenement'}-${Date.now().toString(36)}`,
-          nom, icon: String(body.icon || '🎉').slice(0, 4), couleur: '#E8A04C',
+          nom, icon: String(body.icon || '🎉').slice(0, 4), couleur: '#E8A04C', visible: true,
           description: String(body.description ?? '').slice(0, 500),
-          enigmes: Array.from({ length: NB_ENIGMES_DEFAUT }, VIDE),
+          enigmes: Array.from({ length: NB_ENIGMES_DEFAUT }, VIDE), bonus: [], recompenses: [],
           affiches: [], participants: [], createdAt: new Date().toISOString(), auteur,
         };
         next = [...current, e];
@@ -140,13 +195,49 @@ export async function POST(req: NextRequest) {
         redmLog(actor, { action: 'evenement_delete', category: 'evenements', description: `${actor.name} a supprimé le dossier évènement « ${e.nom} »`, meta: { id: e.id } });
         break;
       }
+      case 'set_visible': {
+        if (!direction) return NextResponse.json({ error: 'Réservé à la direction' }, { status: 403 });
+        const visible = body.visible !== false;
+        const e = ev(body.id)!;
+        next = maj(body.id, x => ({ ...x, visible }));
+        redmLog(actor, { action: 'evenement_visibilite', category: 'evenements', description: `${actor.name} a ${visible ? 'affiché à tous' : 'masqué (direction seulement)'} le dossier « ${e.nom} »`, meta: { id: e.id, visible } });
+        break;
+      }
       case 'set_enigmes': {
-        if (!ev(body.id) || !Array.isArray(body.enigmes)) return NextResponse.json({ error: 'Données invalides' }, { status: 400 });
-        const libs: Enigme[] = normEnigmes(body.enigmes.slice(0, 20)).map(x => ({ titre: x.titre.trim().slice(0, 100), date: x.date.trim().slice(0, 40), enonce: x.enonce.trim().slice(0, 2000), reponse: x.reponse.trim().slice(0, 500) }));
-        next = maj(body.id, e => ({
-          ...e, enigmes: libs,
-          participants: e.participants.map(p => ({ ...p, reponses: libs.map((_, i) => p.reponses[i] ?? null) })),
-        }));
+        if (!Array.isArray(body.enigmes)) return NextResponse.json({ error: 'Données invalides' }, { status: 400 });
+        const nettoie = (l: unknown[]): Enigme[] => normEnigmes(l.slice(0, 20)).map(x => ({ ...x, titre: x.titre.trim().slice(0, 100), date: x.date.trim().slice(0, 40), enonce: x.enonce.trim().slice(0, 3000), reponse: x.reponse.trim().slice(0, 500) }));
+        const libs = nettoie(body.enigmes);
+        const bonus = Array.isArray(body.bonus) ? nettoie(body.bonus) : null;
+        next = maj(body.id, e => {
+          const b = bonus ?? e.bonus ?? [];
+          return {
+            ...e, enigmes: libs, bonus: b,
+            participants: e.participants.map(p => ({ ...p, reponses: libs.map((_, i) => p.reponses[i] ?? null), reponsesBonus: b.map((_, i) => p.reponsesBonus?.[i] ?? null) })),
+          };
+        });
+        break;
+      }
+      case 'add_recompense':
+      case 'update_recompense': {
+        const champs = {
+          rang: String(body.rang ?? '').trim().slice(0, 60), titre: String(body.titre ?? '').trim().slice(0, 120),
+          description: String(body.description ?? '').trim().slice(0, 1000), gagnant: String(body.gagnant ?? '').trim().slice(0, 120),
+        };
+        if (!champs.titre) return NextResponse.json({ error: 'Intitulé du prix requis' }, { status: 400 });
+        const e = ev(body.id)!;
+        if (body.action === 'add_recompense') {
+          next = maj(body.id, x => ({ ...x, recompenses: [...(x.recompenses ?? []), { id: uid(), ...champs }] }));
+          redmLog(actor, { action: 'evenement_recompense_add', category: 'evenements', description: `${actor.name} a ajouté le prix « ${champs.titre} » au dossier « ${e.nom} »`, meta: { id: e.id } });
+        } else {
+          next = maj(body.id, x => ({ ...x, recompenses: (x.recompenses ?? []).map(r => r.id === body.recompenseId ? { ...r, ...champs } : r) }));
+        }
+        break;
+      }
+      case 'delete_recompense': {
+        const e = ev(body.id)!;
+        const r = (e.recompenses ?? []).find(x => x.id === body.recompenseId);
+        next = maj(body.id, x => ({ ...x, recompenses: (x.recompenses ?? []).filter(y => y.id !== body.recompenseId) }));
+        if (r) redmLog(actor, { action: 'evenement_recompense_delete', category: 'evenements', description: `${actor.name} a supprimé le prix « ${r.titre} » du dossier « ${e.nom} »`, meta: { id: e.id } });
         break;
       }
       case 'add_affiche': {
@@ -183,7 +274,7 @@ export async function POST(req: NextRequest) {
         if (!e) return NextResponse.json({ error: 'Évènement introuvable' }, { status: 404 });
         const prenom = String(body.prenom ?? '').trim().slice(0, 60), nom = String(body.nom ?? '').trim().slice(0, 60);
         if (!prenom && !nom) return NextResponse.json({ error: 'Nom ou prénom requis' }, { status: 400 });
-        const p: Participant = { id: uid(), prenom, nom, notes: String(body.notes ?? '').slice(0, 500), reponses: e.enigmes.map(() => null), createdAt: new Date().toISOString(), auteur };
+        const p: Participant = { id: uid(), prenom, nom, notes: String(body.notes ?? '').slice(0, 500), reponses: e.enigmes.map(() => null), reponsesBonus: (e.bonus ?? []).map(() => null), createdAt: new Date().toISOString(), auteur };
         next = maj(body.id, x => ({ ...x, participants: [...x.participants, p] }));
         redmLog(actor, { action: 'evenement_participant_add', category: 'evenements', description: `${actor.name} a ajouté ${prenom} ${nom} au registre « ${e.nom} »`, meta: { id: e.id, participant: p.id } });
         break;
@@ -214,13 +305,33 @@ export async function POST(req: NextRequest) {
         }));
         break;
       }
+      case 'set_reponse_bonus': {
+        const idx = Number(body.index);
+        const valeur = body.valeur === true ? true : body.valeur === false ? false : null;
+        const e = ev(body.id)!;
+        const bonus = e.bonus ?? [];
+        if (!Number.isInteger(idx) || idx < 0 || idx >= bonus.length) return NextResponse.json({ error: 'Énigme inconnue' }, { status: 400 });
+        /* Anti-triche : dans un groupe d'énigmes alternatives, dès que l'une est notée les autres ne comptent plus */
+        const g = bonus[idx].groupe;
+        const p0 = e.participants.find(p => p.id === body.participantId);
+        if (g && valeur !== null && p0 && bonus.some((b, i) => i !== idx && b.groupe === g && (p0.reponsesBonus?.[i] ?? null) !== null))
+          return NextResponse.json({ error: "L'autre énigme de ce choix est déjà notée : elle seule compte." }, { status: 409 });
+        next = maj(body.id, x => ({
+          ...x,
+          participants: x.participants.map(p => {
+            if (p.id !== body.participantId) return p;
+            return { ...p, reponsesBonus: bonus.map((_, i) => i === idx ? valeur : (p.reponsesBonus?.[i] ?? null)), modifieAt: new Date().toISOString() };
+          }),
+        }));
+        break;
+      }
       default:
         return NextResponse.json({ error: 'Action invalide' }, { status: 400 });
     }
 
     const { error } = await db.from('site_config').upsert({ key: KEY, value: next }, { onConflict: 'key' });
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-    return NextResponse.json({ ok: true, evenements: next });
+    return NextResponse.json({ ok: true, evenements: direction ? next : next.filter(e => e.visible !== false) });
   } catch {
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
