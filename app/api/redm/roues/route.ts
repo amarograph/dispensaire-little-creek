@@ -114,6 +114,25 @@ export async function POST(req: NextRequest) {
         next = maj(body.id, x => ({ ...x, segments: [...x.segments, ...labels.map((label: string) => ({ id: uid(), label, actif: true }))] }));
         break;
       }
+      /* Nombre d'exemplaires d'une case : on décuple (ou on réduit) les cases en jeu portant cet intitulé */
+      case 'set_count': {
+        const label = String(body.label ?? '').trim();
+        const count = Math.floor(Number(body.count));
+        if (!label || !Number.isFinite(count) || count < 0 || count > 100) return NextResponse.json({ error: 'Nombre invalide (0 à 100)' }, { status: 400 });
+        const r = roue(body.id)!;
+        const memes = r.segments.filter(s => s.actif && s.label === label);
+        if (r.segments.length + Math.max(0, count - memes.length) > MAX_CASES) return NextResponse.json({ error: `Maximum ${MAX_CASES} cases par roue` }, { status: 400 });
+        const aSupprimer = new Set(memes.slice(count).map(s => s.id));
+        const aAjouter = Math.max(0, count - memes.length);
+        next = maj(body.id, x => ({ ...x, segments: [...x.segments.filter(s => !aSupprimer.has(s.id)), ...Array.from({ length: aAjouter }, () => ({ id: uid(), label, actif: true }))] }));
+        break;
+      }
+      case 'rename_label': {
+        const de = String(body.de ?? '').trim(), label = String(body.label ?? '').trim().slice(0, 80);
+        if (!de || !label) return NextResponse.json({ error: 'Intitulé requis' }, { status: 400 });
+        next = maj(body.id, x => ({ ...x, segments: x.segments.map(s => s.label === de ? { ...s, label } : s) }));
+        break;
+      }
       case 'update_segment': {
         const label = String(body.label ?? '').trim().slice(0, 80);
         if (!label) return NextResponse.json({ error: 'Intitulé requis' }, { status: 400 });

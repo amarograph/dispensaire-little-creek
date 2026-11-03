@@ -35,6 +35,17 @@ function analyserCases(texte: string): string[] {
   return out;
 }
 
+/* Ordre des cases sur la roue : les exemplaires d'une même case sont répartis régulièrement autour de la roue
+   (et non collés les uns aux autres). Le tirage est indépendant de cet ordre. */
+function ordreRoue(segments: Segment[]): Segment[] {
+  const groupes = new Map<string, Segment[]>();
+  for (const s of segments) { const g = groupes.get(s.label); if (g) g.push(s); else groupes.set(s.label, [s]); }
+  const cles: { s: Segment; k: number }[] = [];
+  let gi = 0;
+  groupes.forEach(g => { g.forEach((s, j) => cles.push({ s, k: (j + 0.5) / g.length + gi * 1e-6 })); gi++; });
+  return cles.sort((a, b) => a.k - b.k).map(x => x.s);
+}
+
 function fmt(iso: string) {
   return new Date(iso).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
@@ -59,7 +70,13 @@ export default function RouePage() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const initialise = useRef(false);
 
-  const actifs = useMemo(() => (roue?.segments ?? []).filter(s => s.actif), [roue]);
+  const actifs = useMemo(() => ordreRoue((roue?.segments ?? []).filter(s => s.actif)), [roue]);
+  /* Cases en jeu regroupées par intitulé, avec leur nombre d'exemplaires */
+  const groupes = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const s of roue?.segments ?? []) if (s.actif) m.set(s.label, (m.get(s.label) ?? 0) + 1);
+    return Array.from(m, ([label, nb]) => ({ label, nb }));
+  }, [roue]);
   const retirees = useMemo(() => (roue?.segments ?? []).filter(s => !s.actif), [roue]);
   const enAttente = roue?.historique.find(t => t.retire === null) ?? null;
 
@@ -101,7 +118,7 @@ export default function RouePage() {
     const res = await appeler({ action: 'spin', participant });
     if (!res.ok || !res.roue) { setAnim(false); return; }
     const t = res.roue.historique.find(x => x.id === res.data?.tirageId);
-    const liste = res.roue.segments.filter(s => s.actif);
+    const liste = ordreRoue(res.roue.segments.filter(s => s.actif));
     const idx = t ? liste.findIndex(s => s.id === t.segmentId) : -1;
     if (idx < 0) { setAnim(false); return; }
     setDuree(DUREE);
@@ -194,27 +211,35 @@ export default function RouePage() {
           )}
 
           <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '18px 20px' }}>
-            <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text, marginBottom: 10 }}>🎯 Cases en jeu ({actifs.length})</div>
-            {actifs.length === 0 ? (
+            <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text, marginBottom: 4 }}>🎯 Cases en jeu ({actifs.length})</div>
+            {canStructure && groupes.length > 0 && <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, marginBottom: 10, lineHeight: 1.6 }}>Les exemplaires d’une même case sont répartis autour de la roue. « ＋ » en ajoute un, « × » permet de fixer le nombre exact (ex : 10).</div>}
+            {groupes.length === 0 ? (
               <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>{canStructure ? 'Aucune case — ajoutez-en ci-dessus.' : 'Aucune case pour le moment.'}</div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: 320, overflowY: 'auto' }}>
-                {actifs.map(s => (
-                  <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 8px', background: 'rgba(0,0,0,0.18)' }}>
-                    <span style={{ fontFamily: BODY, fontSize: 17, color: T.text, flex: 1, overflowWrap: 'anywhere' }}>{s.label}</span>
-                    {canStructure && (delSeg === s.id ? (
-                      <>
-                        <button onClick={() => { setDelSeg(null); appeler({ action: 'delete_segment', segmentId: s.id }).then(r => { if (r.ok) { setDuree(0); setRot(0); } }); }} style={{ ...petit, background: '#8B404025', color: KO, border: '1px solid #8B404060' }}>SUPPRIMER ?</button>
-                        <button onClick={() => setDelSeg(null)} style={{ ...petit, background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button>
-                      </>
-                    ) : (
-                      <>
-                        <button title="Renommer" onClick={() => { const t = window.prompt('Nom de la case :', s.label); if (t && t.trim()) appeler({ action: 'update_segment', segmentId: s.id, label: t }); }} style={{ ...petit, background: 'rgba(209,183,124,0.10)', color: T.gold, border: '1px solid rgba(209,183,124,0.3)' }}>✎</button>
-                        <button title="Supprimer la case" onClick={() => setDelSeg(s.id)} style={{ ...petit, background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)' }}>✕</button>
-                      </>
-                    ))}
-                  </div>
-                ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: 360, overflowY: 'auto' }}>
+                {groupes.map(g => {
+                  const regler = (count: number) => appeler({ action: 'set_count', label: g.label, count }).then(r => { if (r.ok) { setDuree(0); setRot(0); } });
+                  return (
+                    <div key={g.label} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 8px', background: 'rgba(0,0,0,0.18)' }}>
+                      <span style={{ fontFamily: BODY, fontSize: 17, color: T.text, flex: 1, overflowWrap: 'anywhere' }}>{g.label}</span>
+                      {canStructure ? (delSeg === g.label ? (
+                        <>
+                          <button onClick={() => { setDelSeg(null); regler(0); }} style={{ ...petit, background: '#8B404025', color: KO, border: '1px solid #8B404060' }}>SUPPRIMER {g.nb > 1 ? `LES ${g.nb}` : ''} ?</button>
+                          <button onClick={() => setDelSeg(null)} style={{ ...petit, background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button>
+                        </>
+                      ) : (
+                        <>
+                          <button title="Retirer un exemplaire" disabled={saving} onClick={() => regler(g.nb - 1)} style={{ ...petit, background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>−</button>
+                          <button title="Fixer le nombre d’exemplaires" onClick={() => { const t = window.prompt(`Combien d’exemplaires de « ${g.label} » sur la roue ?`, String(g.nb)); const v = t === null ? NaN : parseInt(t, 10); if (!isNaN(v) && v >= 0 && v <= 100) regler(v); }}
+                            style={{ ...petit, minWidth: 54, background: `${COL}18`, color: COL, border: `1px solid ${COL}60` }}>× {g.nb}</button>
+                          <button title="Ajouter un exemplaire" disabled={saving} onClick={() => regler(g.nb + 1)} style={{ ...petit, background: 'rgba(168,185,145,0.10)', color: OK, border: '1px solid rgba(168,185,145,0.4)' }}>＋</button>
+                          <button title="Renommer (tous les exemplaires)" onClick={() => { const t = window.prompt('Nom de la case :', g.label); if (t && t.trim() && t.trim() !== g.label) appeler({ action: 'rename_label', de: g.label, label: t }); }} style={{ ...petit, background: 'rgba(209,183,124,0.10)', color: T.gold, border: '1px solid rgba(209,183,124,0.3)' }}>✎</button>
+                          <button title="Supprimer la case" onClick={() => setDelSeg(g.label)} style={{ ...petit, background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)' }}>✕</button>
+                        </>
+                      )) : (g.nb > 1 && <span style={{ fontFamily: MONO, fontSize: 13, color: COL }}>× {g.nb}</span>)}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
