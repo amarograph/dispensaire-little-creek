@@ -509,13 +509,13 @@ export default function EvenementPage() {
                             <span style={{ fontFamily: MONO, fontSize: 14, color: OK, background: 'rgba(168,185,145,0.10)', padding: '3px 10px', border: '1px solid rgba(168,185,145,0.4)' }}>✔ {sb.bonnes}</span>
                             <span style={{ fontFamily: MONO, fontSize: 14, color: KO, background: 'rgba(223,154,136,0.10)', padding: '3px 10px', border: '1px solid rgba(223,154,136,0.4)' }}>✕ {sb.fausses}</span>
                             <span style={{ fontFamily: DISPLAY, fontSize: 22, color: col }}>{sb.bonnes}/{sb.total}</span>
-                            {bonusListe.some(b => b.groupe) && <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim }}>Énigmes en alternative : une seule compte (dès que l’une est notée, l’autre est bloquée).</span>}
+                            {bonusListe.some(b => b.groupe) && <span style={{ fontFamily: MONO, fontSize: 12, color: T.dim }}>Énigmes en alternative : une seule compte (on peut noter les deux, seule la première notée compte).</span>}
                           </div>
                           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8 }}>
                             {bonusListe.map((b, i) => {
                               const r = p.reponsesBonus?.[i] ?? null;
-                              const bloque = !!b.groupe && r === null && bonusListe.some((o, k) => k !== i && o.groupe === b.groupe && (p.reponsesBonus?.[k] ?? null) !== null);
-                              const actif = canRegistre && !bloque;
+                              const bloque = !!b.groupe && bonusListe.some((o, k) => k !== i && o.groupe === b.groupe && (p.reponsesBonus?.[k] ?? null) !== null && (r === null || k < i));
+                              const actif = canRegistre;
                               return (
                                 <div key={i} style={{ opacity: bloque ? 0.45 : 1, background: r === true ? 'rgba(168,185,145,0.12)' : r === false ? 'rgba(223,154,136,0.10)' : 'rgba(0,0,0,0.2)', border: `1px solid ${r === true ? 'rgba(168,185,145,0.5)' : r === false ? 'rgba(223,154,136,0.45)' : T.border}`, padding: '8px 8px 10px', textAlign: 'center' }}>
                                   <div style={{ marginBottom: 8 }}>
@@ -623,7 +623,7 @@ export default function EvenementPage() {
 
             <div style={{ fontFamily: DISPLAY, fontSize: 21, color: KO, marginTop: 6 }}>⚖ Énigmes de départage (égalité à {editEnigmes.length}/{editEnigmes.length})</div>
             <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, lineHeight: 1.6 }}>
-              Affichées sur la fiche des participants à égalité parfaite. Deux énigmes ayant le même « choix » ne comptent qu’une fois (dès que l’une est notée, l’autre est bloquée).
+              Affichées sur la fiche des participants à égalité parfaite. Deux énigmes ayant le même « choix » ne comptent qu’une fois (on peut noter les deux, seule la première notée compte).
             </div>
             {editBonus.map((en, i) => (
               <div key={i} style={{ border: `1px solid ${T.border}`, padding: '12px 14px', background: 'rgba(0,0,0,0.12)', display: 'flex', flexDirection: 'column', gap: 8 }}>

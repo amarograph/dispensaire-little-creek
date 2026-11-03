@@ -311,11 +311,7 @@ export async function POST(req: NextRequest) {
         const e = ev(body.id)!;
         const bonus = e.bonus ?? [];
         if (!Number.isInteger(idx) || idx < 0 || idx >= bonus.length) return NextResponse.json({ error: 'Énigme inconnue' }, { status: 400 });
-        /* Anti-triche : dans un groupe d'énigmes alternatives, dès que l'une est notée les autres ne comptent plus */
-        const g = bonus[idx].groupe;
-        const p0 = e.participants.find(p => p.id === body.participantId);
-        if (g && valeur !== null && p0 && bonus.some((b, i) => i !== idx && b.groupe === g && (p0.reponsesBonus?.[i] ?? null) !== null))
-          return NextResponse.json({ error: "L'autre énigme de ce choix est déjà notée : elle seule compte." }, { status: 409 });
+        /* Les énigmes d'un même groupe peuvent toutes être notées, mais une seule compte (la première notée dans l'ordre) */
         next = maj(body.id, x => ({
           ...x,
           participants: x.participants.map(p => {
