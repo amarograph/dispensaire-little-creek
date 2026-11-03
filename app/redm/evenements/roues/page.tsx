@@ -1,0 +1,170 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
+import { isAdmin as checkIsAdmin } from '@/lib/permissions';
+
+const DISPLAY = "'Central Station', 'Georgia', serif";
+const BODY    = "'Cormorant Garamond', 'Georgia', serif";
+const MONO    = "'Libre Baskerville', 'Courier New', monospace";
+const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
+const COL = '#E8A04C', OK = '#A8B991', KO = '#DF9A88';
+
+interface RoueData {
+  id: string; nom: string; icon: string; description: string; visible: boolean;
+  segments: { id: string; actif: boolean }[]; historique: { id: string }[];
+}
+
+const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 15, background: 'rgba(0,0,0,0.28)', border: `1px solid ${T.border}`, color: T.text, padding: '10px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
+const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 6, display: 'block' };
+
+export default function RouesPage() {
+  const router = useRouter();
+  const { roles } = useRedmSession();
+  const canEdit = checkIsAdmin(roles) || roles.some((r: string) => ['redm_directeur', 'redm_co_directeur'].includes(r));
+
+  const [roues, setRoues]     = useState<RoueData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError]     = useState('');
+  const [hover, setHover]     = useState<string | null>(null);
+  const [edit, setEdit]       = useState<{ id?: string; nom: string; icon: string; description: string } | null>(null);
+  const [saving, setSaving]   = useState(false);
+  const [delConfirm, setDelConfirm] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/redm/roues')
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+      .then(d => setRoues(Array.isArray(d.roues) ? d.roues : []))
+      .catch(() => setError('Impossible de charger les roues.'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function appeler(payload: object): Promise<{ ok: boolean; id?: string }> {
+    setSaving(true); setError('');
+    try {
+      const r = await fetch('/api/redm/roues', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) { setError(d.error ?? `Erreur ${r.status}`); return { ok: false }; }
+      if (Array.isArray(d.roues)) setRoues(d.roues);
+      return { ok: true, id: d.id };
+    } catch { setError('Erreur réseau.'); return { ok: false }; }
+    finally { setSaving(false); }
+  }
+
+  async function enregistrer() {
+    if (!edit || !edit.nom.trim()) return;
+    const res = await appeler(edit.id
+      ? { action: 'update_roue', id: edit.id, nom: edit.nom, icon: edit.icon, description: edit.description }
+      : { action: 'create_roue', nom: edit.nom, icon: edit.icon, description: edit.description });
+    if (res.ok) {
+      const nouvelle = !edit.id && res.id;
+      setEdit(null);
+      if (nouvelle) router.push(`/redm/evenements/roues/${res.id}`);
+    }
+  }
+
+  return (
+    <div style={{ fontFamily: BODY }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
+
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18 }}>
+          <button onClick={() => router.push('/redm/evenements')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>DISPENSAIRE · ÉVÈNEMENTS · LA ROUE DES GAINS</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+          <div>
+            <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 }}>🎡 La roue des gains</h1>
+            <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginTop: 8 }}>
+              UNE ROUE PAR TIRAGE DE LOTS · TIRAGE ÉQUITABLE · CASE RETIRÉE OU NON APRÈS CHAQUE TOUR
+            </p>
+          </div>
+          {canEdit && (
+            <button onClick={() => { setError(''); setEdit({ nom: '', icon: '🎡', description: '' }); }}
+              style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '12px 26px', cursor: 'pointer', background: 'rgba(232,160,76,0.18)', color: COL, border: '2px solid rgba(232,160,76,0.55)' }}>
+              ✚ NOUVELLE ROUE
+            </button>
+          )}
+        </div>
+      </div>
+
+      {error && <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: KO, fontFamily: MONO, fontSize: 14 }}>⚠ {error}</div>}
+
+      {loading ? (
+        <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 48, textAlign: 'center', fontFamily: MONO, fontSize: 14, color: T.dim }}>⟳ CHARGEMENT...</div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 20 }}>
+          {roues.map(r => {
+            const h = hover === r.id;
+            const actives = r.segments.filter(s => s.actif).length;
+            return (
+              <div key={r.id} onMouseEnter={() => setHover(r.id)} onMouseLeave={() => setHover(null)} onClick={() => router.push(`/redm/evenements/roues/${r.id}`)}
+                style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? COL + '90' : T.border}`, borderLeft: `4px solid ${h ? COL : COL + '70'}`, padding: '24px 22px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)', opacity: r.visible ? 1 : 0.8 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
+                  <div style={{ fontSize: 44, marginBottom: 10 }}>{r.icon}</div>
+                  {canEdit && (
+                    <button onClick={ev => { ev.stopPropagation(); appeler({ action: 'set_visible', id: r.id, visible: !r.visible }); }} disabled={saving}
+                      title={r.visible ? 'Visible par tout le monde — cliquer pour réserver à la direction' : 'Réservée à la direction — cliquer pour montrer à tout le monde'}
+                      style={{ fontFamily: MONO, fontSize: 13, letterSpacing: '0.06em', padding: '6px 12px', cursor: 'pointer', background: r.visible ? 'rgba(168,185,145,0.12)' : 'rgba(200,80,80,0.12)', color: r.visible ? OK : KO, border: `1px solid ${r.visible ? 'rgba(168,185,145,0.5)' : 'rgba(223,154,136,0.5)'}` }}>
+                      {r.visible ? '👁 VISIBLE PAR TOUS' : '🔒 DIRECTION SEULE'}
+                    </button>
+                  )}
+                </div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 26, color: T.text, marginBottom: 6 }}>{r.nom}</div>
+                {r.description && <div style={{ fontFamily: BODY, fontSize: 16, color: T.dim, lineHeight: 1.5, marginBottom: 12 }}>{r.description}</div>}
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: COL, background: `${COL}18`, padding: '3px 9px', border: `1px solid ${COL}45` }}>🎯 {actives} case{actives > 1 ? 's' : ''} en jeu</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: T.muted, background: 'rgba(255,255,255,0.05)', padding: '3px 9px', border: `1px solid ${T.border}` }}>📜 {r.historique.length} tirage{r.historique.length > 1 ? 's' : ''}</span>
+                </div>
+                <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontFamily: MONO, fontSize: 14, color: h ? COL : T.dim, letterSpacing: '0.1em' }}>→ OUVRIR LA ROUE</span>
+                  {canEdit && (
+                    <span onClick={ev => ev.stopPropagation()} style={{ display: 'flex', gap: 6 }}>
+                      {delConfirm === r.id ? (
+                        <>
+                          <button onClick={() => { setDelConfirm(null); appeler({ action: 'delete_roue', id: r.id }); }} style={{ fontFamily: MONO, fontSize: 13, padding: '5px 10px', cursor: 'pointer', background: '#8B404025', color: KO, border: '1px solid #8B404060' }}>SUPPRIMER ?</button>
+                          <button onClick={() => setDelConfirm(null)} style={{ fontFamily: MONO, fontSize: 13, padding: '5px 8px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button>
+                        </>
+                      ) : (
+                        <>
+                          <button title="Modifier" onClick={() => { setError(''); setEdit({ id: r.id, nom: r.nom, icon: r.icon, description: r.description }); }} style={{ fontFamily: MONO, fontSize: 13, padding: '5px 10px', cursor: 'pointer', background: 'rgba(209,183,124,0.10)', color: T.gold, border: '1px solid rgba(209,183,124,0.3)' }}>✎</button>
+                          <button title="Supprimer la roue" onClick={() => setDelConfirm(r.id)} style={{ fontFamily: MONO, fontSize: 13, padding: '5px 10px', cursor: 'pointer', background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)' }}>✕</button>
+                        </>
+                      )}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+          {roues.length === 0 && <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, padding: 40, border: `1px dashed ${T.border}`, textAlign: 'center', gridColumn: '1 / -1' }}>
+            {canEdit ? 'Aucune roue pour l’instant — créez la première avec « Nouvelle roue ».' : 'Aucune roue pour l’instant.'}
+          </div>}
+        </div>
+      )}
+
+      {edit && createPortal(
+        <div onClick={() => !saving && setEdit(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.78)', zIndex: 110, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div onClick={ev => ev.stopPropagation()} style={{ background: '#102B3B', border: `2px solid ${COL}`, width: '100%', maxWidth: 520, padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ fontFamily: DISPLAY, fontSize: 24, color: COL }}>{edit.id ? '✎ Modifier la roue' : '✚ Nouvelle roue'}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 90px', gap: 10 }}>
+              <div><label style={lbl}>NOM DE LA ROUE *</label><input style={inp} value={edit.nom} onChange={ev => setEdit(x => x ? { ...x, nom: ev.target.value } : x)} placeholder="ex : Tombola de Noël" autoFocus /></div>
+              <div><label style={lbl}>ICÔNE</label><input style={{ ...inp, textAlign: 'center' }} value={edit.icon} onChange={ev => setEdit(x => x ? { ...x, icon: ev.target.value } : x)} /></div>
+            </div>
+            <div><label style={lbl}>DESCRIPTION</label><textarea style={{ ...inp, resize: 'vertical', minHeight: 80 }} value={edit.description} onChange={ev => setEdit(x => x ? { ...x, description: ev.target.value } : x)} /></div>
+            {error && <div style={{ padding: '8px 12px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: KO, fontFamily: MONO, fontSize: 14 }}>⚠ {error}</div>}
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+              <button onClick={() => setEdit(null)} disabled={saving} style={{ fontFamily: MONO, fontSize: 14, padding: '11px 24px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>ANNULER</button>
+              <button onClick={enregistrer} disabled={saving || !edit.nom.trim()} style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '11px 30px', cursor: 'pointer', background: 'rgba(232,160,76,0.2)', color: COL, border: '2px solid rgba(232,160,76,0.55)', opacity: saving || !edit.nom.trim() ? 0.5 : 1 }}>
+                {saving ? '⟳ …' : '✔ ENREGISTRER'}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+    </div>
+  );
+}

@@ -92,6 +92,13 @@ export default function EvenementsPage() {
         <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 48, textAlign: 'center', fontFamily: MONO, fontSize: 14, color: T.dim }}>⟳ CHARGEMENT...</div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 20 }}>
+          <div onMouseEnter={() => setHover('__roues')} onMouseLeave={() => setHover(null)} onClick={() => router.push('/redm/evenements/roues')}
+            style={{ background: hover === '__roues' ? '#254B5C' : T.card, border: `2px solid ${hover === '__roues' ? '#E8A04C90' : T.border}`, borderLeft: '4px solid #E8A04C', padding: '26px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: hover === '__roues' ? 'translateY(-2px)' : 'none', boxShadow: hover === '__roues' ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
+            <div style={{ fontSize: 46, marginBottom: 12 }}>🎡</div>
+            <div style={{ fontFamily: DISPLAY, fontSize: 26, color: T.text, marginBottom: 6 }}>La roue des gains</div>
+            <div style={{ fontFamily: BODY, fontSize: 16, color: T.dim, lineHeight: 1.5, marginBottom: 12 }}>Créez autant de roues que vous voulez pour tirer les lots au sort : vrai tour de roue, tirage équitable, et choix de retirer la case après chaque tour.</div>
+            <span style={{ fontFamily: MONO, fontSize: 14, color: hover === '__roues' ? '#E8A04C' : T.dim, letterSpacing: '0.1em' }}>→ OUVRIR LES ROUES</span>
+          </div>
           {evenements.map(e => {
             const h = hover === e.id; const col = e.couleur || '#E8A04C';
             const repondues = e.participants.filter(p => p.reponses.some(r => r !== null)).length;
