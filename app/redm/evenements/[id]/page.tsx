@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { ImageViewer } from '@/app/redm/_components/ImageViewer';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
+import { StatutPastille } from '../_statut';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
@@ -17,7 +18,7 @@ interface Enigme { titre: string; date: string; enonce: string; reponse: string;
 interface Affiche { id: string; titre: string; url: string; createdAt: string; auteur: string; }
 interface Recompense { id: string; rang: string; titre: string; description: string; gagnant: string; }
 interface Participant { id: string; prenom: string; nom: string; notes: string; reponses: (boolean | null)[]; reponsesBonus?: (boolean | null)[]; createdAt: string; auteur: string; }
-interface Evenement { id: string; nom: string; icon: string; description: string; couleur: string; visible?: boolean; enigmes: Enigme[]; bonus?: Enigme[]; recompenses?: Recompense[]; affiches: Affiche[]; participants: Participant[]; }
+interface Evenement { id: string; nom: string; icon: string; description: string; couleur: string; visible?: boolean; statut?: string; enigmes: Enigme[]; bonus?: Enigme[]; recompenses?: Recompense[]; affiches: Affiche[]; participants: Participant[]; }
 
 const ROMAINS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 function romain(i: number) { return ROMAINS[i] ?? String(i + 1); }
@@ -245,6 +246,7 @@ export default function EvenementPage() {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
           <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: col, margin: 0 }}>{ev.icon} {ev.nom}</h1>
+          <StatutPastille statut={ev.statut} editable={canStructure} onChange={s => appeler({ action: 'set_statut', statut: s })} />
           {canStructure && (
             <button onClick={() => appeler({ action: 'set_visible', visible: ev.visible === false })}
               title={ev.visible === false ? 'Réservé à la direction — cliquer pour montrer à tout le monde' : 'Visible par tout le monde — cliquer pour réserver à la direction'}

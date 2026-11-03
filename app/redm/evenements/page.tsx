@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
+import { StatutPastille } from './_statut';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
@@ -12,7 +13,7 @@ const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold: '#D1B77C', text: '#EADCB9', muted: '#C8BEA5', dim: '#C8BEA5' };
 
 interface Evenement {
-  id: string; nom: string; icon: string; description: string; couleur: string; visible?: boolean; enigmes: unknown[];
+  id: string; nom: string; icon: string; description: string; couleur: string; visible?: boolean; statut?: string; enigmes: unknown[];
   affiches: { id: string }[]; participants: { id: string; reponses: (boolean | null)[] }[]; recompenses?: { id: string }[];
 }
 
@@ -100,6 +101,8 @@ export default function EvenementsPage() {
                 style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? col + '90' : T.border}`, borderLeft: `4px solid ${h ? col : col + '70'}`, padding: '26px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)', opacity: masque && !h ? 0.8 : 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
                   <div style={{ fontSize: 46, marginBottom: 12 }}>{e.icon}</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8 }}>
+                  <StatutPastille statut={e.statut} editable={canEdit} disabled={saving} onChange={s => appeler({ action: 'set_statut', id: e.id, statut: s })} />
                   {canEdit && (
                     <button onClick={ev => { ev.stopPropagation(); appeler({ action: 'set_visible', id: e.id, visible: masque }); }} disabled={saving}
                       title={masque ? 'Actuellement réservé à la direction — cliquer pour montrer à tout le monde' : 'Actuellement visible par tout le monde — cliquer pour réserver à la direction'}
@@ -107,6 +110,7 @@ export default function EvenementsPage() {
                       {masque ? '🔒 DIRECTION SEULE' : '👁 VISIBLE PAR TOUS'}
                     </button>
                   )}
+                  </div>
                 </div>
                 <div style={{ fontFamily: DISPLAY, fontSize: 26, color: T.text, marginBottom: 6 }}>{e.nom}</div>
                 {e.description && <div style={{ fontFamily: BODY, fontSize: 16, color: T.dim, lineHeight: 1.5, marginBottom: 12 }}>{e.description}</div>}

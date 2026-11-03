@@ -27,9 +27,13 @@ interface Participant {
   reponsesBonus?: (boolean | null)[]; // énigmes de départage (égalité à 7/7)
   createdAt: string; auteur: string; modifieAt?: string;
 }
+type Statut = 'a_faire' | 'en_cours' | 'termine';
+const STATUTS: Statut[] = ['a_faire', 'en_cours', 'termine'];
+const LIBELLE_STATUT: Record<Statut, string> = { a_faire: 'à faire', en_cours: 'en cours', termine: 'terminé' };
 interface Evenement {
   id: string; nom: string; icon: string; description: string; couleur: string;
   visible?: boolean;           // false = réservé à la direction (défaut : visible par tous)
+  statut?: Statut;             // « à faire », « en cours » ou « terminé » (vignette affichée sur le dossier)
   enigmes: Enigme[];           // les énigmes de l'évènement (date, énoncé, réponse attendue)
   bonus?: Enigme[];            // énigmes de départage, affichées seulement en cas d'égalité parfaite
   recompenses?: Recompense[];
@@ -109,7 +113,7 @@ function normEnigmes(x: unknown): Enigme[] {
 }
 
 const HALLOWEEN: Evenement = {
-  id: 'halloween', nom: 'Halloween', icon: '🎃', couleur: '#E8A04C', visible: true,
+  id: 'halloween', nom: 'Halloween', icon: '🎃', couleur: '#E8A04C', visible: true, statut: 'en_cours',
   description: "Chasse aux énigmes d'Halloween — affiches de l'évènement, registre des participants (7 énigmes) et récompenses.",
   enigmes: ENIGMES_DEFAUT, bonus: BONUS_DEFAUT, recompenses: [],
   affiches: [], participants: [], createdAt: new Date(0).toISOString(), auteur: 'Système',
@@ -124,7 +128,7 @@ async function lire(): Promise<Evenement[]> {
     const bonus = (Array.isArray(e.bonus) ? normEnigmes(e.bonus) : (e.id === 'halloween' ? BONUS_DEFAUT : []))
       .map(({ groupe, ...b }) => groupe && groupe !== GROUPE_ANCIEN ? { ...b, groupe } : b);
     return {
-      ...e, visible: e.visible !== false,
+      ...e, visible: e.visible !== false, statut: STATUTS.includes(e.statut as Statut) ? e.statut : 'en_cours',
       enigmes: normEnigmes(e.enigmes), bonus,
       recompenses: Array.isArray(e.recompenses) ? e.recompenses : [],
       participants: (e.participants ?? []).map(p => ({ ...p, reponsesBonus: bonus.map((_, i) => p.reponsesBonus?.[i] ?? null) })),
@@ -174,7 +178,7 @@ export async function POST(req: NextRequest) {
         if (!nom) return NextResponse.json({ error: 'Nom requis' }, { status: 400 });
         const e: Evenement = {
           id: `${nom.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'evenement'}-${Date.now().toString(36)}`,
-          nom, icon: String(body.icon || '🎉').slice(0, 4), couleur: '#E8A04C', visible: true,
+          nom, icon: String(body.icon || '🎉').slice(0, 4), couleur: '#E8A04C', visible: true, statut: 'a_faire',
           description: String(body.description ?? '').slice(0, 500),
           enigmes: Array.from({ length: NB_ENIGMES_DEFAUT }, VIDE), bonus: [], recompenses: [],
           affiches: [], participants: [], createdAt: new Date().toISOString(), auteur,
@@ -202,6 +206,15 @@ export async function POST(req: NextRequest) {
         const e = ev(body.id)!;
         next = maj(body.id, x => ({ ...x, visible }));
         redmLog(actor, { action: 'evenement_visibilite', category: 'evenements', description: `${actor.name} a ${visible ? 'affiché à tous' : 'masqué (direction seulement)'} le dossier « ${e.nom} »`, meta: { id: e.id, visible } });
+        break;
+      }
+      case 'set_statut': {
+        if (!direction) return NextResponse.json({ error: 'Réservé à la direction' }, { status: 403 });
+        const statut = STATUTS.find(s => s === body.statut);
+        if (!statut) return NextResponse.json({ error: 'Statut invalide' }, { status: 400 });
+        const e = ev(body.id)!;
+        next = maj(body.id, x => ({ ...x, statut }));
+        redmLog(actor, { action: 'evenement_statut', category: 'evenements', description: `${actor.name} a passé le dossier « ${e.nom} » en « ${LIBELLE_STATUT[statut]} »`, meta: { id: e.id, statut } });
         break;
       }
       case 'set_enigmes': {
