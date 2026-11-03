@@ -65,8 +65,8 @@ const ENIGMES_DEFAUT: Enigme[] = [
 ].slice(0, NB_ENIGMES_DEFAUT);
 
 /* Énigmes de départage : n'apparaissent que si plusieurs participants sont à égalité parfaite (7/7).
-   Les deux dernières sont alternatives : l'une notée, l'autre ne compte plus (anti-triche). */
-const GROUPE_FINAL = 'depart-final';
+   Chaque énigme compte (7.2 et 8.2 sont deux questions distinctes). */
+const GROUPE_ANCIEN = 'depart-final'; // ancien regroupement 7.2/8.2, supprimé
 const BONUS_DEFAUT: Enigme[] = [
   { titre: '', date: '',
     enonce: "Je tiens de la guérisseuse autant que du maléfice,\nEt ce qui soigne entre mes mains peut devenir supplice.\nOn me prête un pacte, un bal et des prières inversées,\nTandis que d’autres me voient comme femme savante rejetée.\nJ’habite les récits que l’Église et la peur ont façonnés.\nQui suis-je ?",
@@ -86,10 +86,10 @@ const BONUS_DEFAUT: Enigme[] = [
   { titre: '', date: '',
     enonce: "Je ne règne ni par couronne ni par justice,\nMais par le désir, la faiblesse et le vice.\nJe m’invite là où l’âme hésite et se fend,\nCar je connais le prix exact des rêves des vivants.\nOn m’imagine dans la flamme, dans l’ombre ou sous un nom interdit,\nMais je suis surtout la promesse qui corrompt avant même d’avoir été saisie.\nQui suis-je ?",
     reponse: 'Le démon' },
-  { titre: '', date: '', groupe: GROUPE_FINAL,
+  { titre: '', date: '',
     enonce: "Lorsque la nuit recouvre les chemins oubliés,\nOn entend mon passage avant de me distinguer.\nJe poursuis sans relâche ce que le destin m'a ravi,\nCondamné à chercher ce qui me manque depuis la fin de ma vie.\nNul ne connaît le repos de mon errance,\nEt ceux qui me croisent regrettent souvent leur imprudence.\nMon histoire est celle d'une perte que même la tombe n'a su apaiser.\n\nQui suis-je ?",
     reponse: 'Le Cavalier sans tête' },
-  { titre: '', date: '', groupe: GROUPE_FINAL,
+  { titre: '', date: '',
     enonce: "Je demeure lorsque ceux qui m'ont donné vie ne sont plus,\nGardienne silencieuse de secrets à jamais tus.\nLe temps me dévore, mais certains souvenirs lui résistent,\nEt dans mon silence, d'étranges présences persistent.\n\nJe ne retiens personne, pourtant certains ne peuvent me quitter,\nJe ne possède aucune voix, mais l'on prétend m'entendre murmurer.\nCeux qui franchissent mon seuil viennent chercher la vérité,\nMais découvrent parfois que le passé refuse d'être enterré.\n\nQui suis-je ?",
     reponse: 'La maison hantée' },
 ];
@@ -121,7 +121,8 @@ async function lire(): Promise<Evenement[]> {
   const liste: Evenement[] = Array.isArray(data?.value) ? data.value : [HALLOWEEN];
   return liste.map(e => {
     /* Le dossier Halloween existant reçoit les énigmes de départage tant qu'il n'en a pas */
-    const bonus = Array.isArray(e.bonus) ? normEnigmes(e.bonus) : (e.id === 'halloween' ? BONUS_DEFAUT : []);
+    const bonus = (Array.isArray(e.bonus) ? normEnigmes(e.bonus) : (e.id === 'halloween' ? BONUS_DEFAUT : []))
+      .map(({ groupe, ...b }) => groupe && groupe !== GROUPE_ANCIEN ? { ...b, groupe } : b);
     return {
       ...e, visible: e.visible !== false,
       enigmes: normEnigmes(e.enigmes), bonus,
