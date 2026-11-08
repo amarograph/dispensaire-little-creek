@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import type { Bloc, Cours } from './_cours';
+import { Livre } from './_Livre';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
@@ -89,7 +91,7 @@ function Rendu({ blocs, c, l }: { blocs: Bloc[]; c: string; l: string }) {
   );
 }
 
-export function CoursDocument({ cours }: { cours: Cours }) {
+function CoursContinu({ cours }: { cours: Cours }) {
   const { c, l } = cours;
   const groupes = grouper(cours.blocs);
   const chapitres = groupes.filter(g => g.titre).map(g => g.titre as string);
@@ -143,6 +145,30 @@ export function CoursDocument({ cours }: { cours: Cours }) {
           </div>
         );
       })}
+    </div>
+  );
+}
+
+/* Affichage en livre (par défaut) ou en lecture continue */
+export function CoursDocument({ cours }: { cours: Cours }) {
+  const [mode, setMode] = useState<'livre' | 'continu'>('livre');
+  useEffect(() => {
+    try { if (localStorage.getItem('biblio-mode') === 'continu') setMode('continu'); } catch { /* stockage indisponible */ }
+  }, []);
+  const choisir = (m: 'livre' | 'continu') => {
+    setMode(m);
+    try { localStorage.setItem('biblio-mode', m); } catch { /* stockage indisponible */ }
+  };
+  return (
+    <div style={{ marginTop: 30 }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 14 }}>
+        {(['livre', 'continu'] as const).map(m => (
+          <button key={m} onClick={() => choisir(m)} style={{ fontFamily: MONO, fontSize: 13, letterSpacing: '0.1em', padding: '7px 16px', cursor: 'pointer', background: mode === m ? 'rgba(209,183,124,0.14)' : 'transparent', color: mode === m ? '#D1B77C' : T.muted, border: `1px solid ${mode === m ? '#D1B77C' : T.border}` }}>
+            {m === 'livre' ? '📖 LIVRE' : '📜 LECTURE CONTINUE'}
+          </button>
+        ))}
+      </div>
+      {mode === 'livre' ? <Livre cours={cours} /> : <CoursContinu cours={cours} />}
     </div>
   );
 }
