@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { Bloc, Cours } from './_cours';
 
 /* Lecteur en forme de livre : couverture, page de titre, sommaire, pages à tourner (double page sur grand écran,
@@ -175,7 +176,7 @@ function Cover({ cours }: { cours: Cours }) {
       <div style={{ position: 'absolute', inset: '0 0 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '0 15%' }}>
         <div style={{ fontFamily: MONO, fontSize: 12, color: GOLD, letterSpacing: '0.28em', marginBottom: 18 }}>✦ {cours.kicker} ✦</div>
         <div style={{ fontSize: 52, marginBottom: 14, filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.5))' }}>{cours.icon}</div>
-        <div style={{ fontFamily: DISPLAY, fontSize: 'clamp(20px, 2.6vw, 30px)', color: GOLD, lineHeight: 1.3, textShadow: '0 2px 4px rgba(0,0,0,0.6)' }}>{cours.titre}</div>
+        <div style={{ fontFamily: DISPLAY, fontSize: 30, color: GOLD, lineHeight: 1.3, textShadow: '0 2px 4px rgba(0,0,0,0.6)' }}>{cours.titre}</div>
         <div style={{ width: 90, height: 1, background: `linear-gradient(to right, transparent, ${GOLD}, transparent)`, margin: '20px 0 14px' }} />
         <div style={{ fontFamily: MONO, fontSize: 11.5, color: `${GOLD}cc`, letterSpacing: '0.2em' }}>DISPENSAIRE DE LITTLE CREEK</div>
         <div style={{ fontFamily: MONO, fontSize: 11.5, color: `${GOLD}cc`, letterSpacing: '0.2em', marginTop: 4 }}>L’AN 1890</div>
@@ -275,25 +276,36 @@ function Feuille({ def, idx, side, w, h, ctx }: { def: PageDef | null; idx: numb
 
 /* ───────── Le livre ───────── */
 
+const ZOOM_MIN = 0.5, ZOOM_MAX = 4;
+
 export function Livre({ cours }: { cours: Cours }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const measRef = useRef<HTMLDivElement>(null);
-  const [box, setBox] = useState({ w: 0, vh: 800 });
+  const panRef = useRef<HTMLDivElement>(null);
+  const racinePlein = useRef<HTMLDivElement>(null);
+  const [wrapW, setWrapW] = useState(0);
+  const [win, setWin] = useState({ w: 1200, h: 800 });
   const [fontTick, setFontTick] = useState(0);
   const [contenu, setContenu] = useState<number[][] | null>(null);
   const [pos, setPos] = useState(0);                       // page « de tête » : couverture, ou page de gauche de la double page
   const [flip, setFlip] = useState<null | { dir: 1 | -1; to: number; go: boolean }>(null);
   const [slide, setSlide] = useState<1 | -1>(1);
+  const [plein, setPlein] = useState(false);               // lecture en plein écran
+  const [zoom, setZoom] = useState(1);                     // zoom (plein écran seulement)
   const touchX = useRef<number | null>(null);
+  const centre = useRef<{ fx: number; fy: number } | null>(null);
+  const pan = useRef<{ x: number; y: number; sl: number; st: number } | null>(null);
+  const aBouge = useRef(false);
+  const vraiPleinEcran = useRef(false);
 
   const c = useMemo(() => shade(cours.c, 0.8), [cours.c]);
   const atoms = useMemo(() => atomes(cours.blocs), [cours.blocs]);
 
-  /* dimensions */
+  /* dimensions : conteneur et fenêtre */
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
-    const maj = () => setBox({ w: el.clientWidth, vh: window.innerHeight });
+    const maj = () => { setWrapW(el.clientWidth); setWin({ w: window.innerWidth, h: window.innerHeight }); };
     maj();
     const ro = new ResizeObserver(maj);
     ro.observe(el);
@@ -302,20 +314,25 @@ export function Livre({ cours }: { cours: Cours }) {
   }, []);
   useEffect(() => { document.fonts?.ready.then(() => setFontTick(t => t + 1)).catch(() => {}); }, []);
 
-  const two = box.w >= 860;
-  const bookW = two ? Math.min(box.w, 1180) : Math.min(box.w, 600);
-  const pageW = two ? bookW / 2 : bookW;
-  const hMax = Math.max(520, Math.min(box.vh - 250, 800));
-  const H = Math.round(Math.max(480, Math.min(hMax, pageW * (two ? 1.5 : 1.7))));
-  const innerW = Math.max(160, Math.floor(pageW - PAD_X * 2));
-  const innerH = H - PAD_TOP - PAD_BOTTOM - 20;            // 20 px de marge pour l'en-tête courant
+  /* Géométrie : la page « logique » a toujours la même taille (donc la même pagination),
+     le livre est ensuite agrandi ou réduit pour remplir la place disponible. */
+  const avW = plein ? win.w - 24 : wrapW;
+  const two = avW >= 1000;
+  const LW = Math.round(Math.min(Math.max(wrapW, 260), 600));
+  const LH = Math.min(800, Math.max(480, Math.round(LW * 1.6)));
+  const bookLW = two ? LW * 2 : LW;
+  const sNormal = Math.min(two ? 1.6 : 1.25, (wrapW || bookLW) / bookLW);
+  const fit = Math.max(0.2, Math.min((win.w - 24) / bookLW, (win.h - 136) / LH));
+  const s = plein ? fit * zoom : sNormal;
+  const innerW = Math.max(160, LW - PAD_X * 2);
+  const innerH = LH - PAD_TOP - PAD_BOTTOM - 20;            // 20 px de marge pour l'en-tête courant
 
   /* pagination d'après la hauteur réelle du texte */
   useLayoutEffect(() => {
-    if (!box.w || !measRef.current) return;
+    if (!wrapW || !measRef.current) return;
     const hs = Array.from(measRef.current.children).map(k => (k as HTMLElement).getBoundingClientRect().height);
     setContenu(paginer(atoms, hs, innerH));
-  }, [atoms, innerW, innerH, box.w, fontTick]);
+  }, [atoms, innerW, innerH, wrapW > 0, fontTick]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const chapitresAtomes = useMemo(() => atoms.map((a, i) => ({ a, i })).filter(x => x.a.k === 'h1'), [atoms]);
   const capacite = Math.max(6, Math.floor((innerH - 70) / 40));
@@ -341,7 +358,7 @@ export function Livre({ cours }: { cours: Cours }) {
   const visibles = useMemo(() => (two ? pages : pages.filter(p => p.kind !== 'blank')), [two, pages]);
   const nbSpreads = Math.ceil((pages.length - 1) / 2) + 1;
   const spread = pos === 0 ? 0 : Math.ceil(pos / 2);
-  const posDeSpread = (s: number) => (s === 0 ? 0 : 2 * s - 1);
+  const posDeSpread = (sp: number) => (sp === 0 ? 0 : 2 * sp - 1);
   const reduit = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
   const tourner = useCallback((dir: 1 | -1) => {
@@ -383,12 +400,65 @@ export function Livre({ cours }: { cours: Cours }) {
     return () => clearTimeout(t);
   }, [flip]);
 
-  /* quand on change de mode d'affichage ou de pagination, rester dans les bornes */
+  /* changement de mode (double page / page seule) ou de pagination : rester sur la même page, dans les bornes */
   useEffect(() => {
     if (!pages.length) return;
     setFlip(null);
-    setPos(p => Math.max(0, Math.min(two ? pages.length - 1 : visibles.length - 1, p)));
+    setPos(p => (two
+      ? Math.min(posDeSpread(p === 0 ? 0 : Math.ceil(p / 2)), pages.length - 1)
+      : Math.max(0, Math.min(visibles.length - 1, p))));
   }, [two, pages.length, visibles.length]);
+
+  /* plein écran : ouverture / fermeture */
+  const fermerPlein = useCallback(() => { setPlein(false); setZoom(1); }, []);
+  useEffect(() => {
+    if (!plein) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const racine = racinePlein.current;
+    vraiPleinEcran.current = false;
+    if (racine?.requestFullscreen) {
+      racine.requestFullscreen().then(() => { vraiPleinEcran.current = true; }).catch(() => { /* plein écran du navigateur refusé : on garde l'affichage sur toute la page */ });
+    }
+    const onFs = () => {
+      if (vraiPleinEcran.current && !document.fullscreenElement) { vraiPleinEcran.current = false; fermerPlein(); }
+    };
+    document.addEventListener('fullscreenchange', onFs);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFs);
+      document.body.style.overflow = prev;
+      if (vraiPleinEcran.current && document.fullscreenElement) { vraiPleinEcran.current = false; document.exitFullscreen?.().catch(() => {}); }
+    };
+  }, [plein, fermerPlein]);
+
+  /* zoom : on garde le centre de la vue */
+  const zoomer = useCallback((cible: number) => {
+    const el = panRef.current;
+    if (el && el.scrollWidth > 0 && el.scrollHeight > 0) {
+      centre.current = { fx: (el.scrollLeft + el.clientWidth / 2) / el.scrollWidth, fy: (el.scrollTop + el.clientHeight / 2) / el.scrollHeight };
+    }
+    setZoom(z => Math.round(Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, typeof cible === 'number' ? cible : z)) * 100) / 100);
+  }, []);
+  useLayoutEffect(() => {
+    const el = panRef.current, ct = centre.current;
+    if (!el || !ct) return;
+    el.scrollLeft = ct.fx * el.scrollWidth - el.clientWidth / 2;
+    el.scrollTop = ct.fy * el.scrollHeight - el.clientHeight / 2;
+    centre.current = null;
+  }, [zoom]);
+
+  /* Ctrl + molette = zoom (plein écran) */
+  useEffect(() => {
+    const el = panRef.current;
+    if (!plein || !el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (!e.ctrlKey) return;
+      e.preventDefault();
+      zoomer(zoom * (e.deltaY < 0 ? 1.12 : 1 / 1.12));
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [plein, zoom, zoomer]);
 
   /* clavier */
   useEffect(() => {
@@ -397,14 +467,18 @@ export function Livre({ cours }: { cours: Cours }) {
       if (t && ['INPUT', 'TEXTAREA', 'SELECT'].includes(t.tagName)) return;
       if (e.key === 'ArrowRight' || e.key === 'PageDown') { tourner(1); }
       else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { tourner(-1); }
+      else if (plein && e.key === 'Escape') { fermerPlein(); }
+      else if (plein && (e.key === '+' || e.key === '=')) { e.preventDefault(); zoomer(zoom + 0.25); }
+      else if (plein && (e.key === '-' || e.key === '_')) { e.preventDefault(); zoomer(zoom - 0.25); }
+      else if (plein && e.key === '0') { zoomer(1); }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [tourner]);
+  }, [tourner, plein, zoom, zoomer, fermerPlein]);
 
   const ctx: Ctx = { cours, c, atoms, chapitres, aller, total: pages.length };
-  const L = (s: number): number | null => (s === 0 ? null : 2 * s - 1 < pages.length ? 2 * s - 1 : null);
-  const R = (s: number): number | null => (s === 0 ? 0 : 2 * s < pages.length ? 2 * s : null);
+  const L = (sp: number): number | null => (sp === 0 ? null : 2 * sp - 1 < pages.length ? 2 * sp - 1 : null);
+  const R = (sp: number): number | null => (sp === 0 ? 0 : 2 * sp < pages.length ? 2 * sp : null);
   const def = (i: number | null): PageDef | null => (i === null ? null : pages[i] ?? null);
 
   const cible = flip ? flip.to : spread;
@@ -416,14 +490,12 @@ export function Livre({ cours }: { cours: Cours }) {
   else if (flip) { gauche = L(flip.to); droite = R(spread); avant = R(flip.to); arriere = L(spread); }
   else { gauche = L(spread); droite = R(spread); }
 
-  const surClicDroite = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('button, a')) return;
-    tourner(1);
+  const clicOk = (e: React.MouseEvent) => {
+    if (aBouge.current) { aBouge.current = false; return false; }   // c'était un glissement (déplacement dans la page zoomée)
+    return !(e.target as HTMLElement).closest('button, a');
   };
-  const surClicGauche = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('button, a')) return;
-    tourner(-1);
-  };
+  const surClicDroite = (e: React.MouseEvent) => { if (clicOk(e)) tourner(1); };
+  const surClicGauche = (e: React.MouseEvent) => { if (clicOk(e)) tourner(-1); };
 
   const info = !pages.length ? '' : two
     ? (spread === 0 ? 'Couverture' : `Pages ${L(spread) ?? ''}${R(spread) !== null && pages[R(spread) as number]?.kind !== 'blank' ? ` – ${R(spread)}` : ''} sur ${pages.length - (pages[pages.length - 1].kind === 'blank' ? 2 : 1)}`)
@@ -431,6 +503,69 @@ export function Livre({ cours }: { cours: Cours }) {
 
   const premier = two ? spread === 0 : pos === 0;
   const dernier = two ? spread >= nbSpreads - 1 : pos >= visibles.length - 1;
+
+  /* le livre lui-même (dimensions logiques, puis agrandi par transform) */
+  const livre = (
+    <div style={{ width: bookLW * s, height: LH * s, position: 'relative', flex: 'none' }}>
+      <div
+        onTouchStart={e => { touchX.current = e.touches[0].clientX; }}
+        onTouchEnd={e => {
+          if (touchX.current === null) return;
+          const dx = e.changedTouches[0].clientX - touchX.current;
+          touchX.current = null;
+          if (plein && zoom > 1.05) return;                 // zoomé : le glissement sert à se déplacer
+          if (dx < -50) tourner(1); else if (dx > 50) tourner(-1);
+        }}
+        style={{
+          position: 'absolute', left: 0, top: 0, width: bookLW, height: LH, perspective: 2600, transformOrigin: '0 0',
+          transform: `scale(${s})${decale ? ` translateX(${-bookLW / 4}px)` : ''}`,
+          transition: `transform ${DUR - 120}ms ease-in-out`,
+        }}>
+        {two ? (
+          <>
+            <div style={{ position: 'absolute', left: 0, top: 0, cursor: premier ? 'default' : 'w-resize' }} onClick={surClicGauche}>
+              <Feuille def={def(gauche)} idx={gauche ?? 0} side="left" w={LW} h={LH} ctx={ctx} />
+            </div>
+            <div style={{ position: 'absolute', left: LW, top: 0, cursor: dernier ? 'default' : 'e-resize' }} onClick={surClicDroite}>
+              <Feuille def={def(droite)} idx={droite ?? 0} side="right" w={LW} h={LH} ctx={ctx} />
+            </div>
+            {flip && (
+              <div style={{
+                position: 'absolute', left: LW, top: 0, width: LW, height: LH, transformStyle: 'preserve-3d', transformOrigin: 'left center', zIndex: 5,
+                transform: `rotateY(${flip.dir === 1 ? (flip.go ? -180 : 0) : (flip.go ? 0 : -180)}deg)`,
+                transition: flip.go ? `transform ${DUR}ms ease-in-out` : 'none',
+              }}>
+                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}>
+                  <Feuille def={def(avant)} idx={avant ?? 0} side="right" w={LW} h={LH} ctx={ctx} />
+                </div>
+                <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
+                  <Feuille def={def(arriere)} idx={arriere ?? 0} side="left" w={LW} h={LH} ctx={ctx} />
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div key={pos} style={{ position: 'absolute', inset: 0, animation: `${slide === 1 ? 'bk-in-next' : 'bk-in-prev'} 320ms ease-out` }}
+            onClick={e => { if (!clicOk(e)) return; const r = e.currentTarget.getBoundingClientRect(); tourner(e.clientX - r.left > r.width * 0.4 ? 1 : -1); }}>
+            <Feuille def={visibles[pos] ?? null} idx={pos} side="right" w={LW} h={LH} ctx={ctx} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  /* commandes sous le livre */
+  const commandes = (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
+      <button className="bk-ctrl" onClick={() => tourner(-1)} disabled={premier || !!flip}>‹ PAGE PRÉCÉDENTE</button>
+      {nbToc > 0 && <button className="bk-ctrl" onClick={() => aller(2)} disabled={!!flip}>📑 SOMMAIRE</button>}
+      <span style={{ fontFamily: MONO, fontSize: 12.5, color: '#C8BEA5', letterSpacing: '0.1em', minWidth: 150, textAlign: 'center' }}>{info}</span>
+      <button className="bk-ctrl" onClick={() => tourner(1)} disabled={dernier || !!flip}>PAGE SUIVANTE ›</button>
+      {!plein && <button className="bk-ctrl" onClick={() => setPlein(true)} title="Lire en plein écran, avec zoom">⛶ PLEIN ÉCRAN</button>}
+    </div>
+  );
+
+  const pct = Math.round(zoom * 100);
 
   return (
     <div ref={wrapRef} style={{ width: '100%', userSelect: 'none' }}>
@@ -440,6 +575,7 @@ export function Livre({ cours }: { cours: Cours }) {
         .bk-ctrl { font-family: Libre Baskerville, Courier New, monospace; font-size: 13px; letter-spacing: 0.12em; padding: 9px 18px; cursor: pointer; background: rgba(0,0,0,0.3); color: #EADCB9; border: 1px solid rgba(209,183,124,0.45); }
         .bk-ctrl:hover:not(:disabled) { background: rgba(209,183,124,0.14); }
         .bk-ctrl:disabled { opacity: 0.35; cursor: default; }
+        .bk-zoom { padding: 6px 12px; font-size: 16px; letter-spacing: 0; line-height: 1; }
       `}</style>
 
       {/* mesure (invisible) */}
@@ -452,58 +588,61 @@ export function Livre({ cours }: { cours: Cours }) {
       ) : (
         <>
           {/* table de lecture */}
-          <div style={{ padding: '34px 0 26px', background: 'radial-gradient(ellipse at 50% 40%, #3a2a1a 0%, #20150c 70%, #150d07 100%)', border: '1px solid rgba(139,90,43,0.45)', overflow: 'hidden' }}>
-            <div
-              onTouchStart={e => { touchX.current = e.touches[0].clientX; }}
-              onTouchEnd={e => {
-                if (touchX.current === null) return;
-                const dx = e.changedTouches[0].clientX - touchX.current;
-                touchX.current = null;
-                if (dx < -50) tourner(1); else if (dx > 50) tourner(-1);
-              }}
-              style={{ width: bookW, margin: '0 auto', height: H, position: 'relative', perspective: 2600, transform: decale ? `translateX(${-bookW / 4}px)` : 'none', transition: two ? `transform ${DUR - 120}ms ease-in-out` : 'none' }}>
-              {two ? (
-                <>
-                  <div style={{ position: 'absolute', left: 0, top: 0, cursor: premier ? 'default' : 'w-resize' }} onClick={surClicGauche}>
-                    <Feuille def={def(gauche)} idx={gauche ?? 0} side="left" w={pageW} h={H} ctx={ctx} />
-                  </div>
-                  <div style={{ position: 'absolute', left: pageW, top: 0, cursor: dernier ? 'default' : 'e-resize' }} onClick={surClicDroite}>
-                    <Feuille def={def(droite)} idx={droite ?? 0} side="right" w={pageW} h={H} ctx={ctx} />
-                  </div>
-                  {flip && (
-                    <div style={{
-                      position: 'absolute', left: pageW, top: 0, width: pageW, height: H, transformStyle: 'preserve-3d', transformOrigin: 'left center', zIndex: 5,
-                      transform: `rotateY(${flip.dir === 1 ? (flip.go ? -180 : 0) : (flip.go ? 0 : -180)}deg)`,
-                      transition: flip.go ? `transform ${DUR}ms ease-in-out` : 'none',
-                    }}>
-                      <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}>
-                        <Feuille def={def(avant)} idx={avant ?? 0} side="right" w={pageW} h={H} ctx={ctx} />
-                      </div>
-                      <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
-                        <Feuille def={def(arriere)} idx={arriere ?? 0} side="left" w={pageW} h={H} ctx={ctx} />
-                      </div>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div key={pos} style={{ position: 'absolute', inset: 0, animation: `${slide === 1 ? 'bk-in-next' : 'bk-in-prev'} 320ms ease-out` }}
-                  onClick={e => { if ((e.target as HTMLElement).closest('button, a')) return; const r = e.currentTarget.getBoundingClientRect(); tourner(e.clientX - r.left > r.width * 0.4 ? 1 : -1); }}>
-                  <Feuille def={visibles[pos] ?? null} idx={pos} side="right" w={pageW} h={H} ctx={ctx} />
-                </div>
-              )}
-            </div>
+          <div style={{ padding: '30px 0 26px', background: 'radial-gradient(ellipse at 50% 40%, #3a2a1a 0%, #20150c 70%, #150d07 100%)', border: '1px solid rgba(139,90,43,0.45)', overflow: 'hidden', display: 'flex', justifyContent: 'center', minHeight: plein ? LH * sNormal : undefined }}>
+            {!plein && livre}
+            {plein && <div style={{ alignSelf: 'center', fontFamily: MONO, fontSize: 13, color: '#C8BEA5', letterSpacing: '0.1em' }}>LECTURE EN PLEIN ÉCRAN…</div>}
           </div>
 
           {/* commandes */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, flexWrap: 'wrap', marginTop: 16 }}>
-            <button className="bk-ctrl" onClick={() => tourner(-1)} disabled={premier || !!flip}>‹ PAGE PRÉCÉDENTE</button>
-            {nbToc > 0 && <button className="bk-ctrl" onClick={() => aller(2)} disabled={!!flip}>📑 SOMMAIRE</button>}
-            <span style={{ fontFamily: MONO, fontSize: 12.5, color: '#C8BEA5', letterSpacing: '0.1em', minWidth: 150, textAlign: 'center' }}>{info}</span>
-            <button className="bk-ctrl" onClick={() => tourner(1)} disabled={dernier || !!flip}>PAGE SUIVANTE ›</button>
-          </div>
-          <div style={{ textAlign: 'center', marginTop: 8, fontFamily: MONO, fontSize: 11.5, color: '#C8BEA5', opacity: 0.7, letterSpacing: '0.08em' }}>
-            Cliquez sur une page, utilisez les flèches ← → du clavier ou balayez pour tourner les pages
-          </div>
+          {!plein && (
+            <>
+              <div style={{ marginTop: 16 }}>{commandes}</div>
+              <div style={{ textAlign: 'center', marginTop: 8, fontFamily: MONO, fontSize: 11.5, color: '#C8BEA5', opacity: 0.7, letterSpacing: '0.08em' }}>
+                Cliquez sur une page, utilisez les flèches ← → du clavier ou balayez pour tourner les pages · ⛶ plein écran pour agrandir et zoomer
+              </div>
+            </>
+          )}
+
+          {/* plein écran + zoom */}
+          {plein && createPortal(
+            <div ref={racinePlein} style={{ position: 'fixed', inset: 0, zIndex: 100000, display: 'flex', flexDirection: 'column', userSelect: 'none', background: 'radial-gradient(ellipse at 50% 40%, #3a2a1a 0%, #20150c 70%, #150d07 100%)' }}>
+              <div style={{ height: 48, flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '0 14px', borderBottom: '1px solid rgba(209,183,124,0.25)', background: 'rgba(0,0,0,0.35)' }}>
+                <span style={{ fontFamily: DISPLAY, fontSize: 16, color: GOLD, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>{cours.icon} {cours.titre}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 'none' }}>
+                  <button className="bk-ctrl bk-zoom" onClick={() => zoomer(zoom - 0.25)} disabled={zoom <= ZOOM_MIN} aria-label="Dézoomer" title="Dézoomer ( - )">−</button>
+                  <span style={{ fontFamily: MONO, fontSize: 12.5, color: '#C8BEA5', minWidth: 46, textAlign: 'center' }}>{pct} %</span>
+                  <button className="bk-ctrl bk-zoom" onClick={() => zoomer(zoom + 0.25)} disabled={zoom >= ZOOM_MAX} aria-label="Zoomer" title="Zoomer ( + )">+</button>
+                  <button className="bk-ctrl" style={{ padding: '7px 12px' }} onClick={() => zoomer(1)} disabled={zoom === 1} title="Ajuster à l’écran ( 0 )">AJUSTER</button>
+                  <button className="bk-ctrl" style={{ padding: '7px 14px', marginLeft: 8 }} onClick={fermerPlein} title="Quitter le plein écran ( Échap )">✕ FERMER</button>
+                </div>
+              </div>
+              <div
+                ref={panRef}
+                onMouseDown={e => {
+                  if (e.button !== 0) return;
+                  const el = panRef.current;
+                  aBouge.current = false;
+                  if (el && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1)) pan.current = { x: e.clientX, y: e.clientY, sl: el.scrollLeft, st: el.scrollTop };
+                }}
+                onMouseMove={e => {
+                  const p = pan.current, el = panRef.current;
+                  if (!p || !el || e.buttons !== 1) return;
+                  const dx = e.clientX - p.x, dy = e.clientY - p.y;
+                  if (Math.abs(dx) + Math.abs(dy) > 4) aBouge.current = true;
+                  el.scrollLeft = p.sl - dx;
+                  el.scrollTop = p.st - dy;
+                }}
+                onMouseUp={() => { pan.current = null; }}
+                onMouseLeave={() => { pan.current = null; }}
+                style={{ flex: 1, minHeight: 0, overflow: 'auto', display: 'flex' }}>
+                <div style={{ margin: 'auto', padding: 12, flex: 'none' }}>{livre}</div>
+              </div>
+              <div style={{ height: 64, flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderTop: '1px solid rgba(209,183,124,0.25)', background: 'rgba(0,0,0,0.35)' }}>
+                {commandes}
+              </div>
+            </div>,
+            document.body,
+          )}
         </>
       )}
     </div>
