@@ -911,7 +911,7 @@ function ProtocoleSanitaireDocument() {
 }
 
 type ShelfItem = { id: string; icon: string; t1: string; t2?: string; col?: string };
-const SHELF_ORDER = ['Doctrine & Enseignement', 'Guides & Manuels', 'Pharmacie', 'Chirurgie & Antisepsie', 'Obstétrique & Physiologie', 'Maladies & Traumatismes'];
+const SHELF_ORDER = Array.from(new Set(COURS.map(c => c.shelf)));
 const BUILTIN_SHELVES: { label: string; items: ShelfItem[] }[] = [
   { label: 'Documents Officiels', items: [
     { id: 'reglement-interne',     icon: '⚖',  t1: 'Règlement',      t2: 'Interne',         col: 'rouge' },
