@@ -10,6 +10,10 @@ export const dynamic = 'force-dynamic';
 
 const CAISSE_EDITOR_ROLES = ['redm_directeur', 'redm_co_directeur', 'redm_medecin_chef'];
 
+/* Équipe de chaque semaine : { 'YYYY-MM-DD' (lundi): [{ discord_id, nom, rpOk, numero_compte, roles, rate }] } */
+const ROSTER_KEY = 'redm_caisses_roster';
+interface RosterEntry { discord_id: string; nom: string; rpOk: boolean; numero_compte: string; roles: string[]; rate: number; }
+
 function db() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -62,7 +66,8 @@ export async function GET(req: NextRequest) {
   const byUser: Record<string, string[]> = {};
   for (const c of caisses ?? []) (byUser[c.discord_id] ??= []).push(c.date);
 
-  const result = staff.map(m => {
+  /* Équipe actuelle (nom prénom RP, grade, tarif) */
+  const live: RosterEntry[] = staff.map(m => {
     const roles: string[] = m.roles ?? [];
     let rate = 0;
     for (const r of roles) {
@@ -70,17 +75,65 @@ export async function GET(req: NextRequest) {
       if (v != null && v > rate) rate = v;
     }
     const p = rp[m.discord_id] ?? { prenom_rp: '', nom_rp: '' };
-    const nom = [p.prenom_rp, p.nom_rp].filter(Boolean).join(' ') || m.username;
-    const dates = (byUser[m.discord_id] ?? []).sort();
+    const nomRp = [p.prenom_rp, p.nom_rp].filter(Boolean).join(' ');
     return {
       discord_id: m.discord_id,
-      nom,
+      nom: nomRp || m.username,
+      rpOk: !!nomRp,
       numero_compte: compte[m.discord_id] ?? '',
       roles,
       rate,
+    };
+  });
+
+  /* Traçabilité : l'équipe de chaque semaine est conservée (nom RP, grade et tarif de l'époque).
+     Dès qu'une personne n'est plus dans l'équipe (renvoyée / retirée), elle disparaît de toutes les semaines. */
+  let roster: RosterEntry[] = live;
+  if (from && to && live.length > 0) {
+    const { data: rosterRow } = await supabase.from('site_config').select('value').eq('key', ROSTER_KEY).maybeSingle();
+    const stored: Record<string, RosterEntry[]> = rosterRow?.value && typeof rosterRow.value === 'object' && !Array.isArray(rosterRow.value) ? rosterRow.value : {};
+    const liveById = new Map(live.map(e => [e.discord_id, e]));
+
+    /* 1. on retire des semaines enregistrées ceux qui ne sont plus dans l'équipe */
+    const next: Record<string, RosterEntry[]> = {};
+    for (const [wk, entries] of Object.entries(stored)) {
+      if (!Array.isArray(entries)) continue;
+      next[wk] = entries.filter(e => e && liveById.has(e.discord_id));
+    }
+
+    /* 2. semaine en cours (ou presque) : l'équipe actuelle ; semaine passée : l'équipe enregistrée */
+    const limiteSemaineEnCours = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    if (to >= limiteSemaineEnCours || !next[from]) {
+      next[from] = live;
+      roster = live;
+    } else {
+      roster = next[from].map(e => {
+        const l = liveById.get(e.discord_id)!;
+        return {
+          ...e,
+          numero_compte: l.numero_compte || e.numero_compte || '',
+          ...(!e.rpOk && l.rpOk ? { nom: l.nom, rpOk: true } : {}),   // le nom RP a été renseigné depuis
+        };
+      });
+      next[from] = roster;
+    }
+
+    if (JSON.stringify(next) !== JSON.stringify(stored)) {
+      await supabase.from('site_config').upsert({ key: ROSTER_KEY, value: next }, { onConflict: 'key' });
+    }
+  }
+
+  const result = roster.map(e => {
+    const dates = (byUser[e.discord_id] ?? []).sort();
+    return {
+      discord_id: e.discord_id,
+      nom: e.nom,
+      numero_compte: e.numero_compte ?? '',
+      roles: e.roles,
+      rate: e.rate,
       dates,
       count: dates.length,
-      salaire: Math.round(dates.length * rate * 100) / 100,
+      salaire: Math.round(dates.length * e.rate * 100) / 100,
     };
   }).sort((a, b) => b.rate - a.rate || a.nom.localeCompare(b.nom));
 
