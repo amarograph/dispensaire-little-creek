@@ -37,6 +37,7 @@ interface Facture {
   prestations: (string | PrestationItem)[]; montant: number;
   payeur: Payeur; statut: StatutPaiement; notes: string; createdAt: string;
   estCommande?: boolean;
+  reduction?: string; reductionPct?: number;
 }
 interface SemaineArchivee {
   id: string; weekLabel: string; weekStart: string;
@@ -211,6 +212,7 @@ export default function ArchivesCaisseComptabilitePage() {
                     <div style={{ fontFamily:DISPLAY, fontSize:20, color:T.text, marginBottom:6 }}>{f.medecin || '— Non assigné —'}</div>
                     <div style={{ display:'flex', gap:6, flexWrap:'wrap', alignItems:'center' }}>
                       {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'2px 8px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
+                      {f.reduction && <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', background:'rgba(136,170,192,0.12)', padding:'2px 8px', border:'1px solid rgba(136,170,192,0.4)' }}>🐴 {f.reduction} −{f.reductionPct ?? 10} %</span>}
                       {pres.map((p,i) => {
                         const cat = tarifs[p.id];
                         const nom = p.nom ?? cat?.nom ?? p.id;

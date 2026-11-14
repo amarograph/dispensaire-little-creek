@@ -40,6 +40,7 @@ interface Facture {
   prestations: (string | PrestationItem)[]; montant: number;
   payeur: Payeur; statut: StatutPaiement; notes: string; createdAt: string;
   estCommande?: boolean;
+  reduction?: string; reductionPct?: number;
 }
 interface SemaineArchivee {
   id: string; weekLabel: string; weekStart: string;
@@ -103,13 +104,14 @@ function salairesByMedecin(factures: Facture[], tarifs: Record<string, TarifCate
     const key = (f.medecin ?? '').trim() || '— Non assigné —';
     if (!map[key]) map[key] = { medecin: key, actes: 0, ca: 0, salaire: 0 };
     const s = map[key];
+    const fr = 1 - (f.reductionPct ?? 0) / 100;   // réduction (ex. Écurie de Little Creek −10 %)
     s.actes++;
     normPrestations(f.prestations).forEach(p => {
       if (p.prix != null) return; // achat manuel : ne concerne pas le salaire d'un médecin
       const t = tarifs[p.id];
       if (!t || t.type !== 'vente') return;
-      s.ca      += t.prix * p.qty;
-      s.salaire += t.prix * p.qty * t.pctMedecin / 100;
+      s.ca      += t.prix * p.qty * fr;
+      s.salaire += t.prix * p.qty * fr * t.pctMedecin / 100;
     });
   });
   return Object.values(map).sort((a,b) => b.ca - a.ca);
@@ -122,13 +124,14 @@ function tresorerie(factures: Facture[], tarifs: Record<string, TarifCategory>):
   let ventes = 0, achats = 0, solde = 0;
   factures.forEach(f => {
     if (f.statut === 'ANNULÉ') return;
+    const fr = 1 - (f.reductionPct ?? 0) / 100;   // la réduction ne touche que les ventes / commandes
     normPrestations(f.prestations).forEach(p => {
       if (p.prix != null) { achats += p.prix * p.qty; solde -= p.prix * p.qty; return; }
       const t = tarifs[p.id]; if (!t) return;
       if (t.type === 'achat') { achats += t.prix * p.qty; solde -= t.prix * p.qty; }
       else {
         const pctDisp = f.estCommande ? 100 : t.pctDispensaire;
-        ventes += t.prix * p.qty; solde += t.prix * p.qty * pctDisp / 100;
+        ventes += t.prix * p.qty * fr; solde += t.prix * p.qty * fr * pctDisp / 100;
       }
     });
   });
@@ -339,6 +342,7 @@ export default function DirectionComptabilitePage() {
             </div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
               {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
+              {f.reduction && <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', background:'rgba(136,170,192,0.12)', padding:'1px 7px', border:'1px solid rgba(136,170,192,0.4)' }}>🐴 {f.reduction} −{f.reductionPct ?? 10} %</span>}
               {pres.map((p,i) => {
                 const cat = tarifs[p.id];
                 const nom = p.nom ?? cat?.nom ?? p.id;

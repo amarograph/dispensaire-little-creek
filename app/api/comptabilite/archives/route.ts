@@ -13,6 +13,7 @@ interface Facture {
   prestations: (string | PrestationItem)[]; montant: number;
   payeur: string; statut: string; notes: string; createdAt: string;
   estCommande?: boolean;
+  reduction?: string; reductionPct?: number;
 }
 interface SemaineArchivee {
   id: string; weekLabel: string; weekStart: string;

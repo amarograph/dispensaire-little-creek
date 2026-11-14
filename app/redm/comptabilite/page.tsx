@@ -26,6 +26,8 @@ function categoriesToMap(categories: TarifCategory[]): Record<string, TarifCateg
   return m;
 }
 const PAYEURS: Payeur[] = ['Civil', 'Shérif', 'Mairie West Elizabeth'];
+/* Réductions applicables aux ventes et commandes : retirées du montant total, et donc aussi de la part qui va dans la caisse du dispensaire */
+const REDUCTIONS: { nom: string; pct: number }[] = [{ nom: 'Écurie de Little Creek', pct: 10 }];
 
 interface PrestationItem { id: string; qty: number; nom?: string; prix?: number; }
 function normPrestations(raw: unknown): PrestationItem[] {
@@ -43,6 +45,7 @@ interface Facture {
   prestations: (string | PrestationItem)[]; montant: number;
   payeur: Payeur; statut: StatutPaiement; notes: string; createdAt: string;
   estCommande?: boolean;
+  reduction?: string; reductionPct?: number;
 }
 interface SemaineArchivee {
   id: string; weekLabel: string; weekStart: string;
@@ -132,7 +135,7 @@ const STATUT_COL: Record<StatutPaiement, string>  = { 'PAYÉ': '#A8B991', 'EN AT
 const STATUT_ICON: Record<StatutPaiement, string> = { 'PAYÉ': '✔', 'EN ATTENTE': '⏳', 'ANNULÉ': '✕' };
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid rgba(139,90,43,0.30)`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
 const lbl: React.CSSProperties = { fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 5, display: 'block' };
-const EMPTY_FORM = { medecin: '', patientNom: '', dateSeance: '', prestations: [{ id: 'Consultation', qty: 1 }] as PrestationItem[], payeur: 'Civil' as Payeur, statut: 'EN ATTENTE' as StatutPaiement, notes: '' };
+const EMPTY_FORM = { medecin: '', patientNom: '', dateSeance: '', prestations: [{ id: 'Consultation', qty: 1 }] as PrestationItem[], payeur: 'Civil' as Payeur, statut: 'EN ATTENTE' as StatutPaiement, notes: '', reduction: '' };
 
 const ASSIGNE_AUTRE_ROLES = ['redm_medecin_chef', 'redm_co_directeur', 'redm_directeur'];
 
@@ -157,13 +160,16 @@ export default function CaisseComptabilitePage() {
 
   const todayMonday = getMondayOf(new Date());
   const currentKey  = mondayISO(todayMonday);
-  const montantAuto = calcMontant(form.prestations, tarifs);
+  const montantBrut = calcMontant(form.prestations, tarifs);
+  const reducPct    = typeFiltre === 'achat' ? 0 : (REDUCTIONS.find(r => r.nom === form.reduction)?.pct ?? 0);
+  const facteurReduc = 1 - reducPct / 100;
+  const montantAuto = Math.round(montantBrut * facteurReduc * 100) / 100;
   /* Part qui revient au dispensaire : % défini dans les tarifs (100 % pour une commande) ; rien pour un achat */
   const partDispensaire = typeFiltre === 'achat' ? 0 : Math.round(form.prestations.reduce((sum, x) => {
     const t = tarifs[x.id];
     if (x.prix != null || !t || t.type === 'achat') return sum;
     return sum + t.prix * x.qty * (typeFiltre === 'commande' ? 100 : t.pctDispensaire) / 100;
-  }, 0) * 100) / 100;
+  }, 0) * facteurReduc * 100) / 100;
   const categoriesSorted = Object.values(tarifs).sort((a,b) => a.ordre - b.ordre);
   const categoriesVenteTout = categoriesSorted.filter(c => c.type === 'vente');
   const categoriesVente     = categoriesVenteTout.filter(c => !c.commandeSeulement);
@@ -273,14 +279,15 @@ export default function CaisseComptabilitePage() {
     const pres = normPrestations(f.prestations);
     const t: TypeNote = f.estCommande ? 'commande' : (pres[0]?.prix != null || tarifs[pres[0]?.id]?.type === 'achat') ? 'achat' : 'vente';
     setTypeFiltre(t);
-    setForm({ medecin: peutAssignerAutrui ? (f.medecin??defaultMedecin) : defaultMedecin, patientNom:f.patientNom, dateSeance:f.dateSeance, prestations:pres, payeur:f.payeur??'Civil', statut:f.statut, notes:f.notes });
+    setForm({ medecin: peutAssignerAutrui ? (f.medecin??defaultMedecin) : defaultMedecin, patientNom:f.patientNom, dateSeance:f.dateSeance, prestations:pres, payeur:f.payeur??'Civil', statut:f.statut, notes:f.notes, reduction: f.reduction ?? '' });
   }
   function resetForm() { setForm({ ...EMPTY_FORM, medecin:defaultMedecin, dateSeance:rpDate() }); setTypeFiltre('vente'); }
   function cancelEdit() { setEditing(null); resetForm(); }
 
   async function submit() {
     const medecin = peutAssignerAutrui ? form.medecin : defaultMedecin;
-    const base = { medecin, patientNom:form.patientNom, dateSeance:form.dateSeance, prestations:form.prestations, montant:montantAuto, payeur:form.payeur, statut:form.statut, notes:form.notes, estCommande: typeFiltre === 'commande' };
+    const base = { medecin, patientNom:form.patientNom, dateSeance:form.dateSeance, prestations:form.prestations, montant:montantAuto, payeur:form.payeur, statut:form.statut, notes:form.notes, estCommande: typeFiltre === 'commande',
+      reduction: reducPct > 0 ? form.reduction : undefined, reductionPct: reducPct > 0 ? reducPct : undefined };
     const fac: Facture = editing ? { ...editing, ...base } : { id: uid(), createdAt: new Date().toISOString(), ...base };
     setItems(p => editing ? p.map(h=>h.id===fac.id?fac:h) : [fac,...p]);
     setEditing(null);
@@ -326,6 +333,7 @@ export default function CaisseComptabilitePage() {
             <div style={{ fontFamily:DISPLAY, fontSize: 18, color:T.text, marginBottom:4 }}>{f.medecin || '— Non assigné —'}</div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
               {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
+              {f.reduction && <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', background:'rgba(136,170,192,0.12)', padding:'1px 7px', border:'1px solid rgba(136,170,192,0.4)' }}>🐴 {f.reduction} −{f.reductionPct ?? 10} %</span>}
               {pres.map((p,i) => {
                 const cat = tarifs[p.id];
                 const nom = p.nom ?? cat?.nom ?? p.id;
@@ -472,6 +480,23 @@ export default function CaisseComptabilitePage() {
                   {form.prestations.length < 10 && <button onClick={addPrestation} style={{ fontFamily:MONO, fontSize: 14, padding:'5px', cursor:'pointer', background:'transparent', color:T.dim, border:`1px dashed ${T.border}` }}>+ AJOUTER UN ÉLÉMENT</button>}
                 </div>
               </div>
+
+              {typeFiltre !== 'achat' && (
+                <div>
+                  <label style={lbl}>RÉDUCTION</label>
+                  <select style={{...inp,cursor:'pointer'}} value={form.reduction} onChange={e=>setForm(f=>({...f,reduction:e.target.value}))}>
+                    <option value="">Aucune</option>
+                    {REDUCTIONS.map(r => <option key={r.nom} value={r.nom}>{r.nom} (−{r.pct} %)</option>)}
+                  </select>
+                </div>
+              )}
+
+              {reducPct > 0 && (
+                <div style={{ background:'rgba(136,170,192,0.10)', border:'1px solid rgba(136,170,192,0.35)', padding:'8px 13px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                  <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', letterSpacing:'0.08em' }}>🐴 RÉDUCTION −{reducPct} %</span>
+                  <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0' }}>{fmt$(montantBrut)} → −{fmt$(Math.round((montantBrut - montantAuto) * 100) / 100)}</span>
+                </div>
+              )}
 
               <div style={{ background:'rgba(0,0,0,0.22)', border:`1px solid ${T.border}`, padding:'9px 13px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                 <span style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em' }}>MONTANT TOTAL</span>
