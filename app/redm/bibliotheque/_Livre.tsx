@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
+
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { Bloc, Cours } from './_cours';
@@ -175,7 +177,7 @@ function Cover({ cours }: { cours: Cours }) {
       <div style={{ position: 'absolute', inset: 30, border: `1px solid ${GOLD}66`, borderRadius: 4 }} />
       <div style={{ position: 'absolute', inset: '0 0 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '0 15%' }}>
         <div style={{ fontFamily: MONO, fontSize: 12, color: GOLD, letterSpacing: '0.28em', marginBottom: 18 }}>✦ {cours.kicker} ✦</div>
-        <div style={{ fontSize: 52, marginBottom: 14, filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.5))' }}>{cours.icon}</div>
+        <div style={{ fontSize: 52, marginBottom: 14, filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.5))' }}><Ico v={cours.icon} size={72} fallback={cours.icon} /></div>
         <div style={{ fontFamily: DISPLAY, fontSize: 30, color: GOLD, lineHeight: 1.3, textShadow: '0 2px 4px rgba(0,0,0,0.6)' }}>{cours.titre}</div>
         <div style={{ width: 90, height: 1, background: `linear-gradient(to right, transparent, ${GOLD}, transparent)`, margin: '20px 0 14px' }} />
         <div style={{ fontFamily: MONO, fontSize: 11.5, color: `${GOLD}cc`, letterSpacing: '0.2em' }}>DISPENSAIRE DE LITTLE CREEK</div>
@@ -196,7 +198,7 @@ function PageBody({ def, idx, ctx }: { def: PageDef; idx: number; ctx: Ctx }) {
         <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap: 14 }}>
           <Ornement c={c} />
           <div style={{ fontFamily: MONO, fontSize: 12, color: c, letterSpacing: '0.24em' }}>{cours.kicker}</div>
-          <div style={{ fontSize: 40 }}>{cours.icon}</div>
+          <div style={{ fontSize: 40 }}><Ico v={cours.icon} size={56} fallback={cours.icon} /></div>
           <div style={{ fontFamily: DISPLAY, fontSize: 25, color: INK, lineHeight: 1.3 }}>{cours.titre}</div>
           {cours.sous && <div style={{ fontFamily: BODY, fontSize: 17, fontStyle: 'italic', color: SOFT, lineHeight: 1.4 }}>{cours.sous}</div>}
           <div style={{ width: 100, height: 1, background: `linear-gradient(to right, transparent, ${c}, transparent)` }} />
@@ -558,7 +560,7 @@ export function Livre({ cours }: { cours: Cours }) {
   const commandes = (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
       <button className="bk-ctrl" onClick={() => tourner(-1)} disabled={premier || !!flip}>‹ PAGE PRÉCÉDENTE</button>
-      {nbToc > 0 && <button className="bk-ctrl" onClick={() => aller(2)} disabled={!!flip}>📑 SOMMAIRE</button>}
+      {nbToc > 0 && <button className="bk-ctrl" onClick={() => aller(2)} disabled={!!flip}><Emblem name="livre" size={21} inline />SOMMAIRE</button>}
       <span style={{ fontFamily: MONO, fontSize: 12.5, color: '#C8BEA5', letterSpacing: '0.1em', minWidth: 150, textAlign: 'center' }}>{info}</span>
       <button className="bk-ctrl" onClick={() => tourner(1)} disabled={dernier || !!flip}>PAGE SUIVANTE ›</button>
       {!plein && <button className="bk-ctrl" onClick={() => setPlein(true)} title="Lire en plein écran, avec zoom">⛶ PLEIN ÉCRAN</button>}
@@ -607,7 +609,7 @@ export function Livre({ cours }: { cours: Cours }) {
           {plein && createPortal(
             <div ref={racinePlein} style={{ position: 'fixed', inset: 0, zIndex: 100000, display: 'flex', flexDirection: 'column', userSelect: 'none', background: 'radial-gradient(ellipse at 50% 40%, #3a2a1a 0%, #20150c 70%, #150d07 100%)' }}>
               <div style={{ height: 48, flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '0 14px', borderBottom: '1px solid rgba(209,183,124,0.25)', background: 'rgba(0,0,0,0.35)' }}>
-                <span style={{ fontFamily: DISPLAY, fontSize: 16, color: GOLD, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>{cours.icon} {cours.titre}</span>
+                <span style={{ fontFamily: DISPLAY, fontSize: 16, color: GOLD, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}><Ico v={cours.icon} size={22} inline fallback={cours.icon} />{cours.titre}</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 'none' }}>
                   <button className="bk-ctrl bk-zoom" onClick={() => zoomer(zoom - 0.25)} disabled={zoom <= ZOOM_MIN} aria-label="Dézoomer" title="Dézoomer ( - )">−</button>
                   <span style={{ fontFamily: MONO, fontSize: 12.5, color: '#C8BEA5', minWidth: 46, textAlign: 'center' }}>{pct} %</span>

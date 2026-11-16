@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect } from 'react';
 import './bibliotheque.css';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -120,7 +122,7 @@ function RegSectionHeader({ num, title, icon, col }: { num: string; title: strin
       </div>
       <div>
         <div style={{ fontFamily: MONO, fontSize: 14, color: col, letterSpacing: '0.22em', marginBottom: 2 }}>CHAPITRE {num}</div>
-        <div style={{ fontFamily: DISPLAY, fontSize: 21, color: T.sepia, letterSpacing: '0.06em' }}>{icon} {title}</div>
+        <div style={{ fontFamily: DISPLAY, fontSize: 21, color: T.sepia, letterSpacing: '0.06em' }}><Ico v={icon} size={29} inline fallback={icon} />{title}</div>
       </div>
       <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, ${col}60, transparent)`, marginLeft: 8 }} />
     </div>
@@ -171,7 +173,7 @@ function ReglementDocument() {
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderBottom: pos.includes('bottom') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderLeft: pos.includes('left') ? '2px solid rgba(209,183,124,0.45)' : 'none', borderRight: pos.includes('right') ? '2px solid rgba(209,183,124,0.45)' : 'none' }} />
         ))}
         <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.3em', marginBottom: 10 }}>✦ DOCUMENT OFFICIEL ✦</div>
-        <h2 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 8px', letterSpacing: '0.05em' }}>📜 Règlement Général du Dispensaire</h2>
+        <h2 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 8px', letterSpacing: '0.05em' }}><Emblem name="livre" size={48} inline />Règlement Général du Dispensaire</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>Révisé et approuvé en l'an de grâce 1890</div>
         <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>SOUS LA DIRECTION DU DOCTEUR FRANÇOIS DE MILLET · MÉDECIN FORMÉ À PARIS</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${T.gold}, transparent)`, margin: '0 auto 14px' }} />
@@ -210,7 +212,7 @@ function ReglementDocument() {
         <RegList items={['Respect', 'Patience', 'Discrétion', 'Courtoisie', 'Sang-froid']} />
         <RegPara>Les querelles, insultes, comportements agressifs ou attitudes portant atteinte à la réputation du dispensaire sont strictement interdits.</RegPara>
         <div style={{ background: 'rgba(139,64,64,0.10)', border: '1px solid rgba(139,64,64,0.30)', padding: '14px 20px' }}>
-          <div style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 6 }}>⚠ AVERTISSEMENT</div>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: '#DF9A88', letterSpacing: '0.14em', marginBottom: 6 }}><Emblem name="alerte" size={20} inline />AVERTISSEMENT</div>
           <RegPara>L'état d'ivresse, l'usage abusif de substances altérant le jugement ou toute négligence mettant en danger un patient pourront entraîner des <strong style={{ color: '#DF9A88' }}>sanctions immédiates</strong>.</RegPara>
         </div>
       </div>
@@ -479,7 +481,7 @@ function ProtocoleEpidemieDocument() {
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${PEC}80` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${PEC}80` : 'none', borderLeft: pos.includes('left') ? `2px solid ${PEC}80` : 'none', borderRight: pos.includes('right') ? `2px solid ${PEC}80` : 'none' }} />
         ))}
         <div style={{ fontFamily: MONO, fontSize: 14, color: PEC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ PROTOCOLE SANITAIRE — URGENCE MAXIMALE ✦</div>
-        <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: PEC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>⚠️ Gestion d&apos;une Épidémie</h2>
+        <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: PEC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}><Emblem name="alerte" size={45} inline />Gestion d&apos;une Épidémie</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>À l&apos;usage du personnel médical du Dispensaire</div>
         <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${PEC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
@@ -530,9 +532,9 @@ function ProtocoleEpidemieDocument() {
             {pecTitle('ARTICLE III', 'Triage des Patients')}
             <RegPara>Tous les patients sont évalués dès leur arrivée et répartis en trois catégories :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 12, marginTop: 14 }}>
-              {pecTriage('#3A7A3A', '🟢 CAS LÉGERS', ['Soins ambulatoires.', 'Retour au domicile avec surveillance.'])}
-              {pecTriage('#8A7A10', '🟡 CAS SUSPECTS', ['Isolement immédiat.', 'Examens complémentaires.', 'Observation quotidienne.'])}
-              {pecTriage('#8A1010', '🔴 CAS GRAVES', ['Hospitalisation immédiate.', 'Surveillance permanente.', 'Traitements intensifs selon les moyens disponibles.'])}
+              {pecTriage('#3A7A3A', '● CAS LÉGERS', ['Soins ambulatoires.', 'Retour au domicile avec surveillance.'])}
+              {pecTriage('#8A7A10', '● CAS SUSPECTS', ['Isolement immédiat.', 'Examens complémentaires.', 'Observation quotidienne.'])}
+              {pecTriage('#8A1010', '● CAS GRAVES', ['Hospitalisation immédiate.', 'Surveillance permanente.', 'Traitements intensifs selon les moyens disponibles.'])}
             </div>
           </>)}
 
@@ -636,9 +638,9 @@ function ProtocoleEpidemieDocument() {
                 <p style={{ fontFamily: BODY, fontSize: 14, color: T.muted, marginTop: 6, lineHeight: 1.5 }}>Les urgences vitales restent prioritaires.</p>
               </>)}
               <div>
-                {pecTriage('#3A7A3A', '🟢 CAS LÉGERS', ['Soins ambulatoires.', 'Retour au domicile avec surveillance.'])}
-                {pecTriage('#8A7A10', '🟡 CAS SUSPECTS', ['Isolement immédiat.', 'Observation médicale quotidienne.'])}
-                {pecTriage('#8A1010', '🔴 CAS GRAVES', ['Hospitalisation.', 'Surveillance permanente.', 'Traitements intensifs selon les ressources disponibles.'])}
+                {pecTriage('#3A7A3A', '● CAS LÉGERS', ['Soins ambulatoires.', 'Retour au domicile avec surveillance.'])}
+                {pecTriage('#8A7A10', '● CAS SUSPECTS', ['Isolement immédiat.', 'Observation médicale quotidienne.'])}
+                {pecTriage('#8A1010', '● CAS GRAVES', ['Hospitalisation.', 'Surveillance permanente.', 'Traitements intensifs selon les ressources disponibles.'])}
               </div>
             </div>
           </RegBlock>
@@ -719,7 +721,7 @@ function ProtocoleSanitaireDocument() {
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${PSC}70` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${PSC}70` : 'none', borderLeft: pos.includes('left') ? `2px solid ${PSC}70` : 'none', borderRight: pos.includes('right') ? `2px solid ${PSC}70` : 'none' }} />
         ))}
         <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.3em', marginBottom: 10 }}>✦ PROTOCOLE SANITAIRE OFFICIEL ✦</div>
-        <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: PSC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}>🛡️ Gestion d&apos;un Risque Sanitaire</h2>
+        <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: PSC_LIGHT, margin: '0 0 8px', letterSpacing: '0.04em' }}><Emblem name="caducee" size={45} inline />Gestion d&apos;un Risque Sanitaire</h2>
         <div style={{ fontFamily: DISPLAY, fontSize: 17, color: T.muted, marginBottom: 6 }}>À l&apos;usage du personnel médical du Dispensaire</div>
         <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>COMTÉ DE WEST ELIZABETH - DISPENSAIRE DE LITTLE CREEK - L'AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${PSC_LIGHT}, transparent)`, margin: '0 auto 18px' }} />
@@ -808,9 +810,9 @@ function ProtocoleSanitaireDocument() {
             {pscTitle('ARTICLE VII', 'Évolution du Risque')}
             <RegPara>Le Risque Sanitaire fait l&apos;objet d&apos;une réévaluation quotidienne. Trois situations sont possibles :</RegPara>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 12, marginTop: 14 }}>
-              {pscAlert('#3A7A3A', '🟢 AMÉLIORATION', ['Diminution progressive des nouveaux cas.', 'Absence de propagation.', 'Retour progressif au fonctionnement habituel.'])}
-              {pscAlert('#8A7A10', '🟡 STABILISATION', ['Nombre de cas inchangé.', 'Maintien des mesures de surveillance.', 'Poursuite des investigations.'])}
-              {pscAlert('#8A1010', '🔴 AGGRAVATION', ["Lorsque les cas augmentent rapidement, que plusieurs villes sont touchées ou que la mortalité s'élève de manière inhabituelle, le Directeur Médical peut déclarer un Risque Sanitaire Critique, première étape précédant une éventuelle déclaration d'épidémie."])}
+              {pscAlert('#3A7A3A', '● AMÉLIORATION', ['Diminution progressive des nouveaux cas.', 'Absence de propagation.', 'Retour progressif au fonctionnement habituel.'])}
+              {pscAlert('#8A7A10', '● STABILISATION', ['Nombre de cas inchangé.', 'Maintien des mesures de surveillance.', 'Poursuite des investigations.'])}
+              {pscAlert('#8A1010', '● AGGRAVATION', ["Lorsque les cas augmentent rapidement, que plusieurs villes sont touchées ou que la mortalité s'élève de manière inhabituelle, le Directeur Médical peut déclarer un Risque Sanitaire Critique, première étape précédant une éventuelle déclaration d'épidémie."])}
             </div>
           </>)}
 
@@ -886,9 +888,9 @@ function ProtocoleSanitaireDocument() {
           <div style={{ marginBottom: 28 }}>
             <div style={{ fontFamily: MONO, fontSize: 14, color: PSC_LIGHT, letterSpacing: '0.22em', marginBottom: 12 }}>ÉVOLUTION DU RISQUE</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 12 }}>
-              {pscAlert('#3A7A3A', '🟢 AMÉLIORATION', ['Baisse du nombre de cas.', 'Absence de propagation.', 'Retour progressif au fonctionnement normal.'])}
-              {pscAlert('#8A7A10', '🟡 STABILISATION', ['Nombre de cas stable.', 'Maintien de la surveillance.', 'Poursuite des investigations.'])}
-              {pscAlert('#8A1010', '🔴 AGGRAVATION → RISQUE CRITIQUE', ['Cas qui augmentent rapidement.', 'Plusieurs villes touchées.', 'Mortalité en hausse.', 'Le Directeur Médical peut déclarer un Risque Sanitaire Critique, étape précédant une éventuelle Épidémie.'])}
+              {pscAlert('#3A7A3A', '● AMÉLIORATION', ['Baisse du nombre de cas.', 'Absence de propagation.', 'Retour progressif au fonctionnement normal.'])}
+              {pscAlert('#8A7A10', '● STABILISATION', ['Nombre de cas stable.', 'Maintien de la surveillance.', 'Poursuite des investigations.'])}
+              {pscAlert('#8A1010', '● AGGRAVATION → RISQUE CRITIQUE', ['Cas qui augmentent rapidement.', 'Plusieurs villes touchées.', 'Mortalité en hausse.', 'Le Directeur Médical peut déclarer un Risque Sanitaire Critique, étape précédant une éventuelle Épidémie.'])}
             </div>
           </div>
 
@@ -970,7 +972,7 @@ function Book({ icon, t1, t2, col, selected, onClick }: { icon: string; t1: stri
         <div style={{ position: 'absolute', top: 3,    right: 3, width: 5, height: 5, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%,#c09020,#6a4208)', boxShadow: '0 1px 2px rgba(74,62,32,0.14)' }} />
         <div style={{ position: 'absolute', bottom: 3, left:  3, width: 5, height: 5, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%,#c09020,#6a4208)', boxShadow: '0 1px 2px rgba(74,62,32,0.14)' }} />
         <div style={{ position: 'absolute', bottom: 3, right: 3, width: 5, height: 5, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%,#c09020,#6a4208)', boxShadow: '0 1px 2px rgba(74,62,32,0.14)' }} />
-        <span style={{ display: 'block', fontSize: 14, color: '#9a7828', marginBottom: 3, position: 'relative', zIndex: 1 }}>{icon}</span>
+        <span style={{ display: 'block', fontSize: 14, color: '#9a7828', marginBottom: 3, position: 'relative', zIndex: 1 }}><Ico v={icon} size={20} fallback={icon} /></span>
         <span style={{ display: 'block', fontFamily: DISPLAY, fontSize: 14, color: '#D1B77C', lineHeight: 1.55, textShadow: '0 1px 2px rgba(0,0,0,0.8)', position: 'relative', zIndex: 1 }}>{t1}</span>
         {t2 && <span style={{ display: 'block', fontFamily: DISPLAY, fontSize: 14, color: '#D1B77C', lineHeight: 1.55, textShadow: '0 1px 2px rgba(0,0,0,0.8)', position: 'relative', zIndex: 1 }}>{t2}</span>}
       </div>
@@ -1199,7 +1201,7 @@ export default function BibliothequePage() {
       {openCat && !OFFICIAL_IDS.includes(openCat.id) && !COURS_BY_ID.has(openCat.id) && (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24, flexWrap: 'wrap' }}>
-            <div style={{ width: 50, height: 50, background: 'rgba(209,183,124,0.08)', border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>{openCat.icon}</div>
+            <div style={{ width: 50, height: 50, background: 'rgba(209,183,124,0.08)', border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}><Ico v={openCat.icon} size={34} fallback={openCat.icon} /></div>
             {renamingCat === openCat.id ? (
               <input
                 style={{ ...inp, width: 'auto', flex: '1 1 240px', fontSize: 20, fontFamily: DISPLAY }}
@@ -1259,7 +1261,7 @@ export default function BibliothequePage() {
 
           {openCat.documents.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '60px 0' }}>
-              <div style={{ fontSize: 48, marginBottom: 16 }}>{openCat.icon}</div>
+              <div style={{ fontSize: 48, marginBottom: 16 }}><Ico v={openCat.icon} size={67} fallback={openCat.icon} /></div>
               <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, letterSpacing: '0.06em' }}>AUCUN DOCUMENT DANS CETTE CATÉGORIE</div>
             </div>
           ) : (

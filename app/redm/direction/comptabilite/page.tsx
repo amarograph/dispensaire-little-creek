@@ -1,6 +1,6 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -343,15 +343,15 @@ export default function DirectionComptabilitePage() {
               <span style={{ fontFamily:DISPLAY, fontSize: 17, color:T.text }}>{f.medecin || '— Non assigné —'}</span>
             </div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
-              {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
-              {f.reduction && <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', background:'rgba(136,170,192,0.12)', padding:'1px 7px', border:'1px solid rgba(136,170,192,0.4)' }}>🐴 {f.reduction} −{f.reductionPct ?? 10} %</span>}
+              {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}><Emblem name="registre" size={20} inline />COMMANDE</span>}
+              {f.reduction && <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', background:'rgba(136,170,192,0.12)', padding:'1px 7px', border:'1px solid rgba(136,170,192,0.4)' }}>{f.reduction} −{f.reductionPct ?? 10} %</span>}
               {pres.map((p,i) => {
                 const cat = tarifs[p.id];
                 const nom = p.nom ?? cat?.nom ?? p.id;
                 const isAchat = p.prix != null || cat?.type === 'achat';
                 return (
                   <span key={i} style={{ fontFamily:MONO, fontSize: 14, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
-                    {isAchat ? '🛒 ' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''}
+                    {isAchat ? '' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''}
                   </span>
                 );
               })}
@@ -360,7 +360,7 @@ export default function DirectionComptabilitePage() {
           </div>
           <div style={{ fontFamily:DISPLAY, fontSize: 19, color:col, flexShrink:0, minWidth:65, textAlign:'right' }}>{fmt$(f.montant)}</div>
           <div style={{ fontFamily:MONO, fontSize: 14, padding:'4px 8px', background:col+'18', color:col, border:`1px solid ${col}50`, flexShrink:0 }}>
-            {STATUT_ICON[f.statut]} {f.statut}
+            <Ico v={STATUT_ICON[f.statut]} size={21} inline fallback={STATUT_ICON[f.statut]} />{f.statut}
           </div>
         </div>
       </div>
@@ -379,17 +379,17 @@ export default function DirectionComptabilitePage() {
             <button
               onClick={()=>router.push('/redm/direction/tarifs')}
               style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'9px 20px', cursor:'pointer', background:'rgba(209,183,124,0.12)', color:T.gold, border:`1px solid rgba(209,183,124,0.40)`, display:'flex', alignItems:'center', gap:8 }}>
-              🏷 TARIFS
+              <Emblem name="argent" size={21} inline />TARIFS
             </button>
             <button
               onClick={()=>router.push('/redm/direction/comptabilite/archives')}
               style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'9px 20px', cursor:'pointer', background:'rgba(74,96,72,0.18)', color:'#6A9A68', border:`1px solid rgba(74,96,72,0.50)`, display:'flex', alignItems:'center', gap:8 }}>
-              📦 ARCHIVES
+              <Emblem name="registre" size={21} inline />ARCHIVES
               {archives.length > 0 && <span style={{ fontFamily:MONO, fontSize: 14, color:'#6A9A68', background:'rgba(74,96,72,0.30)', padding:'1px 7px', borderRadius:2 }}>{archives.length}</span>}
             </button>
           </div>
         </div>
-        <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="grimoire" size={53} />Comptabilité</h1>
+        <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="registre" size={53} />Comptabilité</h1>
         <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
           REGISTRE HEBDOMADAIRE & SALAIRES DES MÉDECINS — D&apos;APRÈS « COMPTABILITÉ »
         </p>
@@ -401,7 +401,7 @@ export default function DirectionComptabilitePage() {
           {/* Trésorerie du dispensaire */}
           <div>
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)` }}>
-              <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>🏦 TRÉSORERIE DU DISPENSAIRE</span>
+              <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}><Emblem name="argent" size={21} inline />TRÉSORERIE DU DISPENSAIRE</span>
             </div>
 
             <div style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`5px solid ${soldeDispensaire>=0 ? '#A8B991' : '#8B4040'}`, padding:'22px 24px', textAlign:'center', marginBottom:10 }}>
@@ -485,7 +485,7 @@ export default function DirectionComptabilitePage() {
           {/* Registre des caisses (self-service du personnel) */}
           <div>
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)`, flexWrap:'wrap', gap:10 }}>
-              <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>💵 REGISTRE DES CAISSES — {fmtDayShort(caisseDays[0])} AU {fmtDayShort(caisseDays[6])}</span>
+              <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}><Emblem name="argent" size={21} inline />REGISTRE DES CAISSES — {fmtDayShort(caisseDays[0])} AU {fmtDayShort(caisseDays[6])}</span>
               <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                 <button onClick={() => setCaisseMonday(m => addDaysReal(m, -7))} style={{ fontFamily:MONO, fontSize: 14, padding:'7px 12px', cursor:'pointer', background:T.card, border:`1px solid ${T.border}`, color:T.gold }}>◀</button>
                 {!caisseIsThisWeek && (
@@ -567,7 +567,7 @@ export default function DirectionComptabilitePage() {
           {/* Semaine en cours */}
           <div>
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)` }}>
-              <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>📅 {weekLabel(todayMonday)} — SEMAINE EN COURS</span>
+              <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}><Emblem name="calendrier" size={21} inline />{weekLabel(todayMonday)} — SEMAINE EN COURS</span>
             </div>
 
             {/* Stats semaine */}
@@ -588,7 +588,7 @@ export default function DirectionComptabilitePage() {
 
             {/* Salaires de la semaine */}
             <div style={{ marginBottom:24 }}>
-              <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}>💰 Salaires de la semaine</div>
+              <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}><Emblem name="argent" size={31} inline />Salaires de la semaine</div>
               {salaires.length === 0 ? (
                 <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucun acte enregistré cette semaine</div>
               ) : (
@@ -619,7 +619,7 @@ export default function DirectionComptabilitePage() {
 
             {/* Registre de la semaine */}
             <div style={{ marginBottom:24 }}>
-              <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}>📋 Registre de la semaine</div>
+              <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}><Emblem name="registre" size={31} inline />Registre de la semaine</div>
               {semaineActuelle.length === 0 ? (
                 <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucune facture cette semaine</div>
               ) : (
@@ -632,7 +632,7 @@ export default function DirectionComptabilitePage() {
             {/* Facture Shérif */}
             <div style={{ marginBottom:24 }}>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
-                <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text }}>⭐ Facture Shérif</div>
+                <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text }}>★ Facture Shérif</div>
                 <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.gold }}>{fmt$(totalFactureSherif)}</div>
               </div>
               {factureSherif.length === 0 ? (
@@ -647,7 +647,7 @@ export default function DirectionComptabilitePage() {
             {/* Facture Mairie West Elizabeth */}
             <div>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
-                <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text }}>🏛 Facture Mairie West Elizabeth</div>
+                <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text }}><Emblem name="caducee" size={31} inline />Facture Mairie West Elizabeth</div>
                 <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.gold }}>{fmt$(totalFactureMairie)}</div>
               </div>
               {factureMairie.length === 0 ? (
@@ -666,7 +666,7 @@ export default function DirectionComptabilitePage() {
               <button
                 onClick={() => router.push('/redm/direction/comptabilite/archives')}
                 style={{ fontFamily:MONO, fontSize: 14, letterSpacing:'0.12em', padding:'11px 28px', cursor:'pointer', background:'rgba(74,96,72,0.15)', color:'#6A9A68', border:`1px solid rgba(74,96,72,0.40)` }}>
-                📦 VOIR LES SEMAINES ARCHIVÉES ({archives.length})
+                <Emblem name="registre" size={21} inline />VOIR LES SEMAINES ARCHIVÉES ({archives.length})
               </button>
             </div>
           )}

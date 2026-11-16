@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { submitReport } from '@/actions/reports';
@@ -129,7 +131,7 @@ export function DynamicForm({
                 Génération du PDF...
               </>
             ) : (
-              <>📄 Générer et Archiver</>
+              <><Emblem name="registre" size={21} inline />Générer et Archiver</>
             )}
           </button>
           <button

@@ -1,7 +1,8 @@
+import Emblem from '@/app/redm/_components/Emblem';
 export default function AccessDenied() {
   return (
     <div style={{ fontFamily: "'Cormorant Garamond', 'Georgia', serif", textAlign: 'center', padding: '60px 20px' }}>
-      <div style={{ fontSize: 40, marginBottom: 14 }}>⛔</div>
+      <div style={{ fontSize: 40, marginBottom: 14 }}><Emblem name="alerte" size={56} inline /></div>
       <h1 style={{ fontFamily: "'Central Station', 'Georgia', serif", fontSize: 24, color: '#EADCB9', marginBottom: 8 }}>
         Accès refusé
       </h1>

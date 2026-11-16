@@ -1,6 +1,6 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
@@ -69,7 +69,7 @@ export default function ObstetriqueDocumentationPage() {
         onBack={() => { setCertDoc(null); setCertPat(null); }}
         extraButtons={certPat ? (
           <button onClick={() => router.push(`/redm/obstetrique/patientes/${certPat.id}`)}
-            style={{ fontFamily: MONO, fontSize: 14, background: `${color}22`, border: `1px solid ${color}55`, color, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>📋 VOIR DOSSIER</button>
+            style={{ fontFamily: MONO, fontSize: 14, background: `${color}22`, border: `1px solid ${color}55`, color, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}><Emblem name="registre" size={20} inline />VOIR DOSSIER</button>
         ) : undefined}
       />
     );
@@ -86,14 +86,14 @@ export default function ObstetriqueDocumentationPage() {
           <button onClick={() => router.push('/redm/obstetrique')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>OBSTÉTRIQUE · DOCUMENTATION</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="livres" size={60} />Documentation</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="livre" size={60} />Documentation</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginTop: 8 }}>FORMULAIRES & DOCUMENTS OFFICIELS · 1890</p>
       </div>
 
       {/* ── FORMULAIRES ── */}
       <div style={{ marginBottom: 44 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-          <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.gold }}>📋 Formulaires</span>
+          <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.gold }}><Emblem name="registre" size={31} inline />Formulaires</span>
           <div style={{ flex: 1, height: 1, background: 'rgba(209,183,124,0.25)' }} />
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
@@ -107,7 +107,7 @@ export default function ObstetriqueDocumentationPage() {
             return (
               <div key={m.id} onClick={() => router.push(m.href)} onMouseEnter={() => setHover(m.id)} onMouseLeave={() => setHover(null)}
                 style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? m.color + '90' : T.border}`, borderLeft: `4px solid ${h ? m.color : m.color + '60'}`, padding: '28px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
-                <div style={{ fontSize: 42, marginBottom: 14 }}>{m.icon}</div>
+                <div style={{ fontSize: 42, marginBottom: 14 }}><Ico v={m.icon} size={59} fallback={m.icon} /></div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                   <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}>{m.label}</span>
                   <span style={{ fontFamily: MONO, fontSize: 14, padding: '2px 7px', background: m.color + '22', color: m.color, border: `1px solid ${m.color}55`, letterSpacing: '0.1em', flexShrink: 0 }}>{m.badge}</span>
@@ -142,7 +142,7 @@ export default function ObstetriqueDocumentationPage() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL_SUIVI}15`, color: COL_SUIVI, border: `1px solid ${COL_SUIVI}40` }}>📄 VOIR</button>
+                <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL_SUIVI}15`, color: COL_SUIVI, border: `1px solid ${COL_SUIVI}40` }}><Emblem name="registre" size={20} inline />VOIR</button>
                 {delDoc === doc.id
                   ? <><button onClick={() => deleteDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button>
                       <button onClick={() => setDelDoc(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 8px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
@@ -173,7 +173,7 @@ export default function ObstetriqueDocumentationPage() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL_RX}15`, color: COL_RX, border: `1px solid ${COL_RX}40` }}>📄 VOIR</button>
+                <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL_RX}15`, color: COL_RX, border: `1px solid ${COL_RX}40` }}><Emblem name="registre" size={20} inline />VOIR</button>
                 {delDoc === doc.id
                   ? <><button onClick={() => deleteDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button>
                       <button onClick={() => setDelDoc(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 8px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
@@ -204,7 +204,7 @@ export default function ObstetriqueDocumentationPage() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL_ACC}15`, color: COL_ACC, border: `1px solid ${COL_ACC}40` }}>📄 VOIR</button>
+                <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL_ACC}15`, color: COL_ACC, border: `1px solid ${COL_ACC}40` }}><Emblem name="registre" size={20} inline />VOIR</button>
                 {delDoc === doc.id
                   ? <><button onClick={() => deleteDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button>
                       <button onClick={() => setDelDoc(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 8px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
@@ -228,7 +228,7 @@ function ResultsSection({ icon, title, color, badge, count, onNew, newLabel, emp
   return (
     <div style={{ marginBottom: 28 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-        <span style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}>{icon} {title}</span>
+        <span style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}><Ico v={icon} size={28} inline fallback={icon} />{title}</span>
         <span style={{ fontFamily: MONO, fontSize: 14, padding: '2px 7px', background: color + '22', color, border: `1px solid ${color}55` }}>{badge}</span>
         <div style={{ flex: 1, height: 1, background: 'rgba(209,183,124,0.20)' }} />
       </div>

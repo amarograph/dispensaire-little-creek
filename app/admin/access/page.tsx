@@ -1,3 +1,4 @@
+import Emblem from '@/app/redm/_components/Emblem';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
@@ -50,7 +51,7 @@ export default async function AccessRequestsPage() {
           </Link>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>DISPENSAIRE · DIRECTION · VALIDATION WHITELIST</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.gold, margin: 0 }}>📋 Demandes d&apos;accès</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.gold, margin: 0 }}><Emblem name="registre" size={50} inline />Demandes d&apos;accès</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
           VALIDATION DES NOUVEAUX MEMBRES ET ATTRIBUTION DES RÔLES
         </p>

@@ -1,6 +1,6 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useRouter } from 'next/navigation';
 import { RichEditor, RichContent, templateToRich } from '@/app/redm/_components/RichDoc';
@@ -447,7 +447,7 @@ export default function DocumentationPage() {
       `}</style>
       <div className="no-print" style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
         <button onClick={() => { setCertDoc(null); setCertPat(null); }} style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
-        <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>🖨 IMPRIMER</button>
+        <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>IMPRIMER</button>
       </div>
       <div ref={printRef} className="print-area" style={{ background: '#FFFFFF', border: '2px solid #C8BEA5', padding: '52px 60px', maxWidth: 800, margin: '0 auto', color: '#1A1A1A', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
@@ -497,14 +497,14 @@ export default function DocumentationPage() {
           <button onClick={() => router.push('/redm/cabinet')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>CABINET · DOCUMENTATION</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="livres" size={60} />Documentation</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="livre" size={60} />Documentation</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginTop: 8 }}>FORMULAIRES & DOCUMENTS OFFICIELS · 1890</p>
       </div>
 
       {/* ── FORMULAIRES ── */}
       <div style={{ marginBottom: 44 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-          <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.gold }}>📋 Formulaires</span>
+          <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.gold }}><Emblem name="registre" size={31} inline />Formulaires</span>
           <div style={{ flex: 1, height: 1, background: 'rgba(209,183,124,0.25)' }} />
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
@@ -515,7 +515,7 @@ export default function DocumentationPage() {
             return (
               <div key={m.id} onClick={() => router.push(m.href)} onMouseEnter={() => setHover(m.id)} onMouseLeave={() => setHover(null)}
                 style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? m.color + '90' : T.border}`, borderLeft: `4px solid ${h ? m.color : m.color + '60'}`, padding: '28px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
-                <div style={{ fontSize: 42, marginBottom: 14 }}>{m.icon}</div>
+                <div style={{ fontSize: 42, marginBottom: 14 }}><Ico v={m.icon} size={59} fallback={m.icon} /></div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                   <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}>{m.label}</span>
                   <span style={{ fontFamily: MONO, fontSize: 14, padding: '2px 7px', background: m.color + '22', color: m.color, border: `1px solid ${m.color}55`, letterSpacing: '0.1em', flexShrink: 0 }}>{m.badge}</span>
@@ -531,7 +531,7 @@ export default function DocumentationPage() {
           {(() => { const h = hover === 'synthese'; return (
             <div onClick={() => router.push('/redm/cabinet/documentation/synthese-consultation')} onMouseEnter={() => setHover('synthese')} onMouseLeave={() => setHover(null)}
               style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? COL_S + '90' : T.border}`, borderLeft: `4px solid ${h ? COL_S : COL_S + '60'}`, padding: '28px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
-              <div style={{ fontSize: 42, marginBottom: 14 }}>📋</div>
+              <div style={{ fontSize: 42, marginBottom: 14 }}><Emblem name="registre" size={56} inline /></div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                 <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}>Synthèse de consultation</span>
                 <span style={{ fontFamily: MONO, fontSize: 14, padding: '2px 7px', background: COL_S + '22', color: COL_S, border: `1px solid ${COL_S}55`, letterSpacing: '0.1em', flexShrink: 0 }}>SYN</span>
@@ -546,7 +546,7 @@ export default function DocumentationPage() {
           {(() => { const h = hover === 'prescription'; return (
             <div onClick={() => router.push('/redm/cabinet/documentation/prescription-medicale')} onMouseEnter={() => setHover('prescription')} onMouseLeave={() => setHover(null)}
               style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? COL_P + '90' : T.border}`, borderLeft: `4px solid ${h ? COL_P : COL_P + '60'}`, padding: '28px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
-              <div style={{ fontSize: 42, marginBottom: 14 }}>💊</div>
+              <div style={{ fontSize: 42, marginBottom: 14 }}><Emblem name="flacons" size={56} inline /></div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                 <span style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}>Prescription médicale</span>
                 <span style={{ fontFamily: MONO, fontSize: 14, padding: '2px 7px', background: COL_P + '22', color: COL_P, border: `1px solid ${COL_P}55`, letterSpacing: '0.1em', flexShrink: 0 }}>RX</span>
@@ -587,7 +587,7 @@ export default function DocumentationPage() {
               <div style={{ fontFamily: MONO, fontSize: 14, color: vc, background: vc + '18', border: `1px solid ${vc}40`, padding: '5px 14px', flexShrink: 0 }}>{ex.verdict}</div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                 <button onClick={() => startEditExam(ex)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: 'rgba(209,183,124,0.10)', color: T.gold, border: `1px solid rgba(209,183,124,0.3)` }}>✎</button>
-                <button onClick={() => router.push(`/redm/cabinet/documentation/examen-psychique?id=${ex.id}&view=letter`)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL}15`, color: COL, border: `1px solid ${COL}40` }}>📄 CERTIFICAT</button>
+                <button onClick={() => router.push(`/redm/cabinet/documentation/examen-psychique?id=${ex.id}&view=letter`)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL}15`, color: COL, border: `1px solid ${COL}40` }}><Emblem name="registre" size={20} inline />CERTIFICAT</button>
                 {delExam === ex.id
                   ? <><button onClick={() => deleteExam(ex.id)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button>
                       <button onClick={() => setDelExam(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 8px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
@@ -618,7 +618,7 @@ export default function DocumentationPage() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL_S}15`, color: COL_S, border: `1px solid ${COL_S}40` }}>📄 VOIR</button>
+                <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL_S}15`, color: COL_S, border: `1px solid ${COL_S}40` }}><Emblem name="registre" size={20} inline />VOIR</button>
                 {delDoc === doc.id
                   ? <><button onClick={() => deleteDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button>
                       <button onClick={() => setDelDoc(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 8px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
@@ -649,7 +649,7 @@ export default function DocumentationPage() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL_P}15`, color: COL_P, border: `1px solid ${COL_P}40` }}>📄 VOIR</button>
+                <button onClick={() => openCert(doc)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: `${COL_P}15`, color: COL_P, border: `1px solid ${COL_P}40` }}><Emblem name="registre" size={20} inline />VOIR</button>
                 {delDoc === doc.id
                   ? <><button onClick={() => deleteDoc(doc.id)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 10px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button>
                       <button onClick={() => setDelDoc(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '6px 8px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
@@ -669,7 +669,7 @@ export default function DocumentationPage() {
             <div style={{ padding: '24px 28px 18px', borderBottom: `1px solid ${T.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
               <div>
                 <div style={{ fontFamily: DISPLAY, fontSize: 22, color: createType === 'Synthèse de consultation' ? COL_S : COL_P }}>
-                  {createType === 'Synthèse de consultation' ? '📋' : '💊'} {createType}
+                  {createType === 'Synthèse de consultation' ? <Emblem name="registre" size={22} inline /> : <Emblem name="flacons" size={22} inline />}{createType}
                 </div>
                 <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 4 }}>Nouveau document — rattacher à un patient</div>
               </div>
@@ -686,7 +686,7 @@ export default function DocumentationPage() {
                   {(['existing', 'new'] as const).map(opt => (
                     <button key={opt} onClick={() => setUseExisting(opt === 'existing')}
                       style={{ flex: 1, fontFamily: MONO, fontSize: 14, padding: '8px', cursor: 'pointer', letterSpacing: '0.08em', border: 'none', background: (opt === 'existing') === useExisting ? 'rgba(209,183,124,0.18)' : 'transparent', color: (opt === 'existing') === useExisting ? T.gold : T.dim, borderBottom: (opt === 'existing') === useExisting ? `2px solid ${T.gold}` : '2px solid transparent' }}>
-                      {opt === 'existing' ? '👤 PATIENT EXISTANT' : '✚ NOUVEAU PATIENT'}
+                      {opt === 'existing' ? 'PATIENT EXISTANT' : '✚ NOUVEAU PATIENT'}
                     </button>
                   ))}
                 </div>
@@ -796,7 +796,7 @@ function ResultsSection({ icon, title, color, badge, count, onNew, newLabel, emp
   return (
     <div style={{ marginBottom: 28 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-        <span style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}>{icon} {title}</span>
+        <span style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold }}><Ico v={icon} size={28} inline fallback={icon} />{title}</span>
         <span style={{ fontFamily: MONO, fontSize: 14, padding: '2px 7px', background: color + '22', color, border: `1px solid ${color}55` }}>{badge}</span>
         <div style={{ flex: 1, height: 1, background: 'rgba(209,183,124,0.20)' }} />
       </div>

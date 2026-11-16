@@ -1,6 +1,8 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import IcoPicker from '@/app/redm/_components/IcoPicker';
+
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -80,7 +82,7 @@ export default function EvenementsPage() {
             </p>
           </div>
           {canEdit && (
-            <button onClick={() => { setError(''); setEdit({ nom: '', icon: '🎉', description: '' }); }}
+            <button onClick={() => { setError(''); setEdit({ nom: '', icon: 'courrier', description: '' }); }}
               style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '12px 26px', cursor: 'pointer', background: 'rgba(232,160,76,0.18)', color: '#E8A04C', border: '2px solid rgba(232,160,76,0.55)' }}>
               ✚ NOUVEAU DOSSIER
             </button>
@@ -88,7 +90,7 @@ export default function EvenementsPage() {
         </div>
       </div>
 
-      {error && <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}>⚠ {error}</div>}
+      {error && <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}><Emblem name="alerte" size={20} inline />{error}</div>}
 
       {loading ? (
         <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 48, textAlign: 'center', fontFamily: MONO, fontSize: 14, color: T.dim }}>⟳ CHARGEMENT...</div>
@@ -96,7 +98,7 @@ export default function EvenementsPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 20 }}>
           <div onMouseEnter={() => setHover('__roues')} onMouseLeave={() => setHover(null)} onClick={() => router.push('/redm/evenements/roues')}
             style={{ background: hover === '__roues' ? '#254B5C' : T.card, border: `2px solid ${hover === '__roues' ? '#E8A04C90' : T.border}`, borderLeft: '4px solid #E8A04C', padding: '26px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: hover === '__roues' ? 'translateY(-2px)' : 'none', boxShadow: hover === '__roues' ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)' }}>
-            <div style={{ fontSize: 46, marginBottom: 12 }}>🎡</div>
+            <div style={{ fontSize: 46, marginBottom: 12 }}></div>
             <div style={{ fontFamily: DISPLAY, fontSize: 26, color: T.text, marginBottom: 6 }}>La roue des gains</div>
             <div style={{ fontFamily: BODY, fontSize: 16, color: T.dim, lineHeight: 1.5, marginBottom: 12 }}>Créez autant de roues que vous voulez pour tirer les lots au sort : vrai tour de roue, tirage équitable, et choix de retirer la case après chaque tour.</div>
             <span style={{ fontFamily: MONO, fontSize: 14, color: hover === '__roues' ? '#E8A04C' : T.dim, letterSpacing: '0.1em' }}>→ OUVRIR LES ROUES</span>
@@ -109,14 +111,14 @@ export default function EvenementsPage() {
               <div key={e.id} onMouseEnter={() => setHover(e.id)} onMouseLeave={() => setHover(null)} onClick={() => router.push(`/redm/evenements/${e.id}`)}
                 style={{ background: h ? '#254B5C' : T.card, border: `2px solid ${h ? col + '90' : T.border}`, borderLeft: `4px solid ${h ? col : col + '70'}`, padding: '26px 24px', cursor: 'pointer', transition: 'all 0.18s', transform: h ? 'translateY(-2px)' : 'none', boxShadow: h ? '0 8px 30px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.35)', opacity: masque && !h ? 0.8 : 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
-                  <div style={{ fontSize: 46, marginBottom: 12 }}>{e.icon}</div>
+                  <div style={{ fontSize: 46, marginBottom: 12 }}><Ico v={e.icon} size={64} fallback={e.icon} /></div>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8 }}>
                   <StatutPastille statut={e.statut} editable={canEdit} disabled={saving} onChange={s => appeler({ action: 'set_statut', id: e.id, statut: s })} />
                   {canEdit && (
                     <button onClick={ev => { ev.stopPropagation(); appeler({ action: 'set_visible', id: e.id, visible: masque }); }} disabled={saving}
                       title={masque ? 'Actuellement réservé à la direction — cliquer pour montrer à tout le monde' : 'Actuellement visible par tout le monde — cliquer pour réserver à la direction'}
                       style={{ fontFamily: MONO, fontSize: 13, letterSpacing: '0.06em', padding: '6px 12px', cursor: 'pointer', background: masque ? 'rgba(200,80,80,0.12)' : 'rgba(168,185,145,0.12)', color: masque ? '#DF9A88' : '#A8B991', border: `1px solid ${masque ? 'rgba(223,154,136,0.5)' : 'rgba(168,185,145,0.5)'}` }}>
-                      {masque ? '🔒 DIRECTION SEULE' : '👁 VISIBLE PAR TOUS'}
+                      {masque ? 'DIRECTION SEULE' : 'VISIBLE PAR TOUS'}
                     </button>
                   )}
                   </div>
@@ -124,10 +126,10 @@ export default function EvenementsPage() {
                 <div style={{ fontFamily: DISPLAY, fontSize: 26, color: T.text, marginBottom: 6 }}>{e.nom}</div>
                 {e.description && <div style={{ fontFamily: BODY, fontSize: 16, color: T.dim, lineHeight: 1.5, marginBottom: 12 }}>{e.description}</div>}
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: `${col}18`, padding: '3px 9px', border: `1px solid ${col}45` }}>🖼 {e.affiches.length} affiche{e.affiches.length > 1 ? 's' : ''}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: `${col}18`, padding: '3px 9px', border: `1px solid ${col}45` }}>👥 {e.participants.length} participant{e.participants.length > 1 ? 's' : ''}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: `${col}18`, padding: '3px 9px', border: `1px solid ${col}45` }}>🏆 {(e.recompenses ?? []).length} prix</span>
-                  <span style={{ fontFamily: MONO, fontSize: 13, color: T.muted, background: 'rgba(255,255,255,0.05)', padding: '3px 9px', border: `1px solid ${T.border}` }}>🧩 {e.enigmes.length} énigmes · {repondues} en jeu</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: `${col}18`, padding: '3px 9px', border: `1px solid ${col}45` }}>{e.affiches.length} affiche{e.affiches.length > 1 ? 's' : ''}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: `${col}18`, padding: '3px 9px', border: `1px solid ${col}45` }}><Emblem name="equipe" size={18} inline />{e.participants.length} participant{e.participants.length > 1 ? 's' : ''}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: `${col}18`, padding: '3px 9px', border: `1px solid ${col}45` }}><Emblem name="argent" size={18} inline />{(e.recompenses ?? []).length} prix</span>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: T.muted, background: 'rgba(255,255,255,0.05)', padding: '3px 9px', border: `1px solid ${T.border}` }}>{e.enigmes.length} énigmes · {repondues} en jeu</span>
                 </div>
                 <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontFamily: MONO, fontSize: 14, color: h ? col : T.dim, letterSpacing: '0.1em' }}>→ OUVRIR LE DOSSIER</span>
@@ -160,10 +162,10 @@ export default function EvenementsPage() {
             <div style={{ fontFamily: DISPLAY, fontSize: 24, color: '#E8A04C' }}>{edit.id ? '✎ Modifier le dossier' : '✚ Nouveau dossier'}</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 90px', gap: 10 }}>
               <div><label style={lbl}>NOM DE L&apos;ÉVÈNEMENT *</label><input style={inp} value={edit.nom} onChange={ev => setEdit(x => x ? { ...x, nom: ev.target.value } : x)} placeholder="ex : Noël 1890" autoFocus /></div>
-              <div><label style={lbl}>ICÔNE</label><input style={{ ...inp, textAlign: 'center' }} value={edit.icon} onChange={ev => setEdit(x => x ? { ...x, icon: ev.target.value } : x)} /></div>
+              <div><label style={lbl}>ICÔNE</label><IcoPicker value={edit.icon} onChange={v => setEdit(x => x ? { ...x, icon: v } : x)} size={36} /></div>
             </div>
             <div><label style={lbl}>DESCRIPTION</label><textarea style={{ ...inp, resize: 'vertical', minHeight: 80 }} value={edit.description} onChange={ev => setEdit(x => x ? { ...x, description: ev.target.value } : x)} /></div>
-            {error && <div style={{ padding: '8px 12px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}>⚠ {error}</div>}
+            {error && <div style={{ padding: '8px 12px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}><Emblem name="alerte" size={20} inline />{error}</div>}
             <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
               <button onClick={() => setEdit(null)} disabled={saving} style={{ fontFamily: MONO, fontSize: 14, padding: '11px 24px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>ANNULER</button>
               <button onClick={enregistrer} disabled={saving || !edit.nom.trim()} style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '11px 30px', cursor: 'pointer', background: 'rgba(232,160,76,0.2)', color: '#E8A04C', border: '2px solid rgba(232,160,76,0.55)', opacity: saving || !edit.nom.trim() ? 0.5 : 1 }}>

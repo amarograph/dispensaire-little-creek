@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -249,7 +251,7 @@ export default function AgendaDispensairePage() {
           <div>
             <h1 style={{ fontFamily: DISPLAY, fontSize: 33, color: T.gold, margin: 0, lineHeight: 1 }}>Agenda du Dispensaire</h1>
             <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 6, letterSpacing: '0.08em' }}>
-              🛋 Cabinet Thérapeutique et 🤰 Obstétrique apparaissent ici de façon anonymisée
+              <Emblem name="soins" size={21} inline />Cabinet Thérapeutique et <Emblem name="lit" size={21} inline />Obstétrique apparaissent ici de façon anonymisée
             </div>
           </div>
           <button onClick={openNew}
@@ -365,9 +367,9 @@ export default function AgendaDispensairePage() {
                           const isObstetrique = r.source === 'obstetrique';
                           const col = isCabinet ? '#AAB9C6' : isObstetrique ? OBS_COL : STATUT_COL[r.statut];
                           const label = isCabinet
-                            ? '🛋 Cabinet'
+                            ? 'Cabinet'
                             : isObstetrique
-                              ? `🤰 ${r.medecin || 'Obstétrique'}`
+                              ? `${r.medecin || 'Obstétrique'}`
                               : r.patientNom;
                           const titleText = isCabinet
                             ? `${r.heure} · Rendez-vous du Cabinet (anonymisé)`
@@ -420,11 +422,11 @@ export default function AgendaDispensairePage() {
         ))}
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <span style={{ display: 'inline-block', width: 3, height: 12, background: '#AAB9C6' }} />
-          <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.1em' }}>🛋 CABINET (anonymisé)</span>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.1em' }}><Emblem name="soins" size={20} inline />CABINET (anonymisé)</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <span style={{ display: 'inline-block', width: 3, height: 12, background: OBS_COL }} />
-          <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.1em' }}>🤰 OBSTÉTRIQUE (anonymisé)</span>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: T.muted, letterSpacing: '0.1em' }}><Emblem name="lit" size={20} inline />OBSTÉTRIQUE (anonymisé)</span>
         </div>
         <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginLeft: 'auto' }}>
           {rdvs.length} RDV total · cliquer un jour pour ajouter · cliquer un badge pour modifier
@@ -529,7 +531,7 @@ export default function AgendaDispensairePage() {
                       .map(s => <option key={s.discord_id} value={s.discord_id}>{s.nom}</option>)}
                   </select>
                 )}
-                {form.medecinDiscordId && <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginTop: 5 }}>🔔 {form.medecinsSup.length > 0 ? 'Rappel Discord envoyé à tous les médecins assignés' : 'Rappel Discord envoyé à ce soignant'} 1 h avant le rendez-vous.</div>}
+                {form.medecinDiscordId && <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, marginTop: 5 }}>{form.medecinsSup.length > 0 ? 'Rappel Discord envoyé à tous les médecins assignés' : 'Rappel Discord envoyé à ce soignant'} 1 h avant le rendez-vous.</div>}
               </div>
               <div>
                 <label style={lbl}>STATUT</label>
@@ -557,7 +559,7 @@ export default function AgendaDispensairePage() {
                   <button
                     onClick={e => cycleStatut(editing.id, e)}
                     style={{ flex: 1, fontFamily: MONO, fontSize: 14, padding: '8px', cursor: 'pointer', background: `${STATUT_COL[editing.statut]}18`, color: STATUT_COL[editing.statut], border: `1px solid ${STATUT_COL[editing.statut]}50`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                    {STATUT_ICON[editing.statut]} Changer statut → {STATUTS[(STATUTS.indexOf(editing.statut) + 1) % STATUTS.length]}
+                    <Ico v={STATUT_ICON[editing.statut]} size={21} inline fallback={STATUT_ICON[editing.statut]} />Changer statut → {STATUTS[(STATUTS.indexOf(editing.statut) + 1) % STATUTS.length]}
                   </button>
                   {delConfirm === editing.id
                     ? <button onClick={e => deleteRdv(editing.id, e)} style={{ fontFamily: MONO, fontSize: 14, padding: '8px 12px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060', whiteSpace: 'nowrap' }}>Confirmer ✕</button>

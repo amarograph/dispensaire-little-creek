@@ -125,7 +125,7 @@ export default function PatientesPage() {
     const data = await res.json();
     if (data.ok) {
       setDossiers(p => p.filter(x => x.id !== d.id));
-      showToast('📦 Dossier clôturé — visible dans Archives');
+      showToast('Dossier clôturé — visible dans Archives');
     } else showToast('✗ ' + (data.error ?? 'Erreur'));
     setArchConfirm(null);
   }
@@ -155,7 +155,7 @@ export default function PatientesPage() {
           <button onClick={() => router.push('/redm/obstetrique')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.16em' }}>OBSTÉTRIQUE · DOSSIERS PATIENTES</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 35, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="grimoire" size={53} />Dossiers Patientes</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 35, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="registre" size={53} />Dossiers Patientes</h1>
       </div>
 
       {/* Stats */}
@@ -178,7 +178,7 @@ export default function PatientesPage() {
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Rechercher une patiente…" style={{ ...inp, flex: 1 }} />
         <button onClick={() => router.push('/redm/obstetrique/archives/cloturees')}
           style={{ fontFamily: MONO, fontSize: 14, padding: '9px 18px', cursor: 'pointer', whiteSpace: 'nowrap', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, letterSpacing: '0.08em' }}>
-          🗄 Archives{archiveesCount > 0 ? ` (${archiveesCount})` : ''}
+          <Emblem name="registre" size={21} inline />Archives{archiveesCount > 0 ? ` (${archiveesCount})` : ''}
         </button>
         <button onClick={openNew} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '9px 20px', cursor: 'pointer', background: 'rgba(74,96,72,0.25)', color: '#A8B991', border: '1px solid rgba(74,96,72,0.5)', whiteSpace: 'nowrap' }}>✚ NOUVEAU DOSSIER</button>
       </div>
@@ -218,7 +218,7 @@ export default function PatientesPage() {
                     <button onClick={() => openEdit(d)} title="Modifier" style={{ fontFamily: MONO, fontSize: 14, padding: '5px 8px', cursor: 'pointer', background: 'rgba(209,183,124,0.10)', color: T.gold, border: `1px solid rgba(209,183,124,0.3)` }}>✎</button>
                     {archConfirm === d.id
                       ? <><button onClick={() => archiveDossier(d)} style={{ fontFamily: MONO, fontSize: 14, padding: '5px 7px', cursor: 'pointer', background: 'rgba(90,74,106,0.25)', color: '#9A8AB0', border: '1px solid rgba(90,74,106,0.55)' }}>CLÔTURER</button><button onClick={() => setArchConfirm(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '5px 6px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
-                      : <button onClick={() => setArchConfirm(d.id)} title="Clôturer le dossier" style={{ fontFamily: MONO, fontSize: 14, padding: '5px 8px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>📦</button>}
+                      : <button onClick={() => setArchConfirm(d.id)} title="Clôturer le dossier" style={{ fontFamily: MONO, fontSize: 14, padding: '5px 8px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}><Emblem name="registre" size={20} inline /></button>}
                     {delConfirm === d.id
                       ? <><button onClick={() => { deleteDossier(d.id); setDelConfirm(null); }} style={{ fontFamily: MONO, fontSize: 14, padding: '5px 8px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>OK?</button><button onClick={() => setDelConfirm(null)} style={{ fontFamily: MONO, fontSize: 14, padding: '5px 6px', cursor: 'pointer', background: 'transparent', color: T.dim, border: `1px solid ${T.border}` }}>✕</button></>
                       : <button onClick={() => setDelConfirm(d.id)} style={{ fontFamily: MONO, fontSize: 14, padding: '5px 8px', cursor: 'pointer', background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)' }}>✕</button>}
@@ -245,7 +245,7 @@ export default function PatientesPage() {
             <div style={{ flex: 1, overflowY: 'auto', padding: '20px 26px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
 
               {/* IDENTITÉ */}
-              <div style={sec}>👤 IDENTITÉ</div>
+              <div style={sec}><Emblem name="personnel" size={21} inline />IDENTITÉ</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                 <div><label style={lbl}>PRÉNOM</label><input style={inp} value={form.patientPrenom} onChange={e => setForm(f=>({...f,patientPrenom:e.target.value}))} placeholder="Prénom" /></div>
                 <div><label style={lbl}>NOM *</label><input style={inp} value={form.patientNom} onChange={e => setForm(f=>({...f,patientNom:e.target.value}))} placeholder="Nom de famille" /></div>
@@ -266,13 +266,13 @@ export default function PatientesPage() {
               <div><label style={lbl}>MOTIF / TERME DE GROSSESSE</label><input style={inp} value={form.plainte} onChange={e => setForm(f=>({...f,plainte:e.target.value}))} placeholder="Motif de la visite, semaines de grossesse…" /></div>
 
               {/* INFORMATIONS */}
-              <div style={{ ...sec, marginTop: 8 }}>📜 INFORMATIONS</div>
+              <div style={{ ...sec, marginTop: 8 }}><Emblem name="livre" size={21} inline />INFORMATIONS</div>
               <div><label style={lbl}>ANTÉCÉDENTS OBSTÉTRICAUX</label><textarea style={{...inp,resize:'vertical',minHeight:70,lineHeight:1.6}} value={form.antecedentsObstetricaux} onChange={e => setForm(f=>({...f,antecedentsObstetricaux:e.target.value}))} placeholder="Grossesses, accouchements et fausses couches passés…" /></div>
               <div><label style={lbl}>ANTÉCÉDENTS FAMILIAUX</label><textarea style={{...inp,resize:'vertical',minHeight:60,lineHeight:1.6}} value={form.antecedentsFamiliaux} onChange={e => setForm(f=>({...f,antecedentsFamiliaux:e.target.value}))} placeholder="Contexte familial, héréditaire…" /></div>
               <div><label style={lbl}>ÉVÉNEMENTS RÉCENTS / COMPLICATIONS</label><textarea style={{...inp,resize:'vertical',minHeight:60,lineHeight:1.6}} value={form.evenementsRecents} onChange={e => setForm(f=>({...f,evenementsRecents:e.target.value}))} placeholder="Saignements, douleurs, chocs…" /></div>
 
               {/* RISQUE DE GROSSESSE */}
-              <div style={{ ...sec, marginTop: 8 }}>⚖ NIVEAU DE RISQUE DE LA GROSSESSE</div>
+              <div style={{ ...sec, marginTop: 8 }}><Emblem name="livre" size={21} inline />NIVEAU DE RISQUE DE LA GROSSESSE</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 {RISQUES.map(r => {
                   const on = form.risqueGrossesse === r.val;
@@ -286,11 +286,11 @@ export default function PatientesPage() {
               </div>
 
               {/* NOTE OBSTÉTRICIEN */}
-              <div style={{ ...sec, marginTop: 8 }}>✍ NOTE DE L&apos;OBSTÉTRICIEN</div>
+              <div style={{ ...sec, marginTop: 8 }}><Emblem name="courrier" size={21} inline />NOTE DE L&apos;OBSTÉTRICIEN</div>
               <div><textarea style={{...inp,resize:'vertical',minHeight:80,lineHeight:1.7}} value={form.noteObstetricien} onChange={e => setForm(f=>({...f,noteObstetricien:e.target.value}))} placeholder="Impressions cliniques, observations…" /></div>
 
               {/* TRAITEMENT */}
-              <div style={{ ...sec, marginTop: 8 }}>💊 TRAITEMENT &amp; STATUT</div>
+              <div style={{ ...sec, marginTop: 8 }}><Emblem name="flacons" size={21} inline />TRAITEMENT &amp; STATUT</div>
               <div><label style={lbl}>TRAITEMENT / CONSEILS</label><textarea style={{...inp,resize:'vertical',minHeight:70,lineHeight:1.6}} value={form.traitement} onChange={e => setForm(f=>({...f,traitement:e.target.value}))} placeholder="Remèdes, recommandations…" /></div>
               <div><label style={lbl}>PROCHAINE CONSULTATION</label><input style={inp} value={form.prochaine} onChange={e => setForm(f=>({...f,prochaine:e.target.value}))} placeholder="Date ou note de suivi" /></div>
               <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>

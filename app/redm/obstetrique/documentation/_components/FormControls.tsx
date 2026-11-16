@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
+
 import { MONO, T } from '../_lib/shared';
 
 /* ══ Bloc de section (toujours visible, rien de replié) ══ */
@@ -9,9 +11,9 @@ export function FormSection({ icon, title, color, alerte, children }: {
   return (
     <div style={{ border: `1px solid ${alerte ? 'rgba(180,70,70,0.5)' : T.border}`, background: T.card }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderBottom: `1px solid ${alerte ? 'rgba(180,70,70,0.4)' : T.border}` }}>
-        <span style={{ fontSize: 16 }}>{icon}</span>
+        <span style={{ fontSize: 16 }}><Ico v={icon} size={22} fallback={icon} /></span>
         <span style={{ fontFamily: MONO, fontSize: 14, color: alerte ? '#DF9A88' : color, letterSpacing: '0.08em', flex: 1 }}>{title}</span>
-        {alerte && <span style={{ fontFamily: MONO, fontSize: 13, color: '#DF9A88', background: 'rgba(139,64,64,0.18)', padding: '1px 7px', border: '1px solid rgba(139,64,64,0.4)' }}>⚠</span>}
+        {alerte && <span style={{ fontFamily: MONO, fontSize: 13, color: '#DF9A88', background: 'rgba(139,64,64,0.18)', padding: '1px 7px', border: '1px solid rgba(139,64,64,0.4)' }}><Emblem name="alerte" size={18} inline /></span>}
       </div>
       <div style={{ padding: '12px 14px 14px', display: 'flex', flexDirection: 'column', gap: 10 }}>{children}</div>
     </div>

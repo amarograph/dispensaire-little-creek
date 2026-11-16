@@ -1,5 +1,7 @@
 'use client';
 
+import { Ico } from '@/app/redm/_components/Emblem';
+
 import { useEffect, useState } from 'react';
 import type { Bloc, Cours } from './_cours';
 import { Livre } from './_Livre';
@@ -106,7 +108,7 @@ function CoursContinu({ cours }: { cours: Cours }) {
           <div key={pos} style={{ position: 'absolute', top: pos.includes('top') ? 12 : 'auto', bottom: pos.includes('bottom') ? 12 : 'auto', left: pos.includes('left') ? 12 : 'auto', right: pos.includes('right') ? 12 : 'auto', width: 28, height: 28, borderTop: pos.includes('top') ? `2px solid ${c}90` : 'none', borderBottom: pos.includes('bottom') ? `2px solid ${c}90` : 'none', borderLeft: pos.includes('left') ? `2px solid ${c}90` : 'none', borderRight: pos.includes('right') ? `2px solid ${c}90` : 'none' }} />
         ))}
         <div style={{ fontFamily: MONO, fontSize: 14, color: l, letterSpacing: '0.3em', marginBottom: 10 }}>✦ {cours.kicker} ✦</div>
-        <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: l, margin: '0 0 8px', letterSpacing: '0.04em', lineHeight: 1.25 }}>{cours.icon} {cours.titre}</h2>
+        <h2 style={{ fontFamily: DISPLAY, fontSize: 32, color: l, margin: '0 0 8px', letterSpacing: '0.04em', lineHeight: 1.25 }}><Ico v={cours.icon} size={45} inline fallback={cours.icon} />{cours.titre}</h2>
         {cours.sous && <div style={{ fontFamily: DISPLAY, fontSize: 18, color: T.muted, marginBottom: 6 }}>{cours.sous}</div>}
         <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 14 }}>DISPENSAIRE DE LITTLE CREEK · L’AN 1890</div>
         <div style={{ width: 120, height: 1, background: `linear-gradient(to right, transparent, ${l}, transparent)`, margin: '0 auto' }} />
@@ -164,7 +166,7 @@ export function CoursDocument({ cours }: { cours: Cours }) {
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 14 }}>
         {(['livre', 'continu'] as const).map(m => (
           <button key={m} onClick={() => choisir(m)} style={{ fontFamily: MONO, fontSize: 13, letterSpacing: '0.1em', padding: '7px 16px', cursor: 'pointer', background: mode === m ? 'rgba(209,183,124,0.14)' : 'transparent', color: mode === m ? '#D1B77C' : T.muted, border: `1px solid ${mode === m ? '#D1B77C' : T.border}` }}>
-            {m === 'livre' ? '📖 LIVRE' : '📜 LECTURE CONTINUE'}
+            {m === 'livre' ? 'LIVRE' : 'LECTURE CONTINUE'}
           </button>
         ))}
       </div>

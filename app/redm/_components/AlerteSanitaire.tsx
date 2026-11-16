@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { DEFAULT_DISPENSAIRE_STATUS, type DispensaireStatus } from '../_lib/sanitaireListes';
@@ -138,7 +140,7 @@ export default function AlerteSanitaire() {
         }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-              <span style={{ fontSize: 20, lineHeight: 1.4 }}>⚠</span>
+              <span style={{ fontSize: 20, lineHeight: 1.4 }}><Emblem name="alerte" size={28} inline /></span>
               <div>
                 <div style={{ fontFamily: MONO, fontSize: 14, color: sevColor, letterSpacing: '0.14em', marginBottom: 6, textTransform: 'uppercase' }}>
                   {TITLES[key]}{critique ? ' — CRITIQUE' : ''}

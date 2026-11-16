@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
+
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { RichEditor, templateToRich, isRichEmpty } from '@/app/redm/_components/RichDoc';
@@ -111,7 +113,7 @@ export function ObsDocEditor({ type, icon, color, colorText, libreTemplate, canG
       doc={savedDoc} patiente={savedPat} color={color}
       onBack={() => router.push('/redm/obstetrique/documentation')}
       extraButtons={<>
-        <button onClick={() => router.push(`/redm/obstetrique/patientes/${savedPat.id}`)} style={{ fontFamily: MONO, fontSize: 14, background: `${color}22`, border: `1px solid ${color}55`, color: colorText, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>📋 VOIR DOSSIER</button>
+        <button onClick={() => router.push(`/redm/obstetrique/patientes/${savedPat.id}`)} style={{ fontFamily: MONO, fontSize: 14, background: `${color}22`, border: `1px solid ${color}55`, color: colorText, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}><Emblem name="registre" size={20} inline />VOIR DOSSIER</button>
         <button onClick={() => window.location.reload()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(209,183,124,0.15)', border: '1px solid rgba(209,183,124,0.4)', color: T.gold, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>{nouveauLabel}</button>
       </>}
     />
@@ -132,13 +134,13 @@ export function ObsDocEditor({ type, icon, color, colorText, libreTemplate, canG
         </button>
         <div>
           <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.18em', marginBottom: 4 }}>OBSTÉTRIQUE · DOCUMENTATION</div>
-          <div style={{ fontFamily: DISPLAY, fontSize: 32, color, lineHeight: 1 }}>{icon} {type}</div>
+          <div style={{ fontFamily: DISPLAY, fontSize: 32, color, lineHeight: 1 }}><Ico v={icon} size={45} inline fallback={icon} />{type}</div>
         </div>
       </div>
 
       {/* ── Bascule des deux versions ── */}
       <div style={{ display: 'inline-flex', border: `1px solid ${T.border}`, marginBottom: 20, overflow: 'hidden' }}>
-        {([['guide', '🗂 MODE GUIDÉ', 'Scénarios et menus déroulants'], ['libre', '✍ RÉDACTION LIBRE', 'Tout écrire soi-même']] as const).map(([id, label, sub], i) => {
+        {([['guide', 'MODE GUIDÉ', 'Scénarios et menus déroulants'], ['libre', 'RÉDACTION LIBRE', 'Tout écrire soi-même']] as const).map(([id, label, sub], i) => {
           const on = mode === id;
           return (
             <button key={id} onClick={() => setMode(id)}
@@ -167,7 +169,7 @@ export function ObsDocEditor({ type, icon, color, colorText, libreTemplate, canG
               {([true, false] as const).map(isEx => (
                 <button key={String(isEx)} onClick={() => setUseExisting(isEx)}
                   style={{ fontFamily: MONO, fontSize: 14, padding: '9px 22px', cursor: 'pointer', border: 'none', letterSpacing: '0.08em', background: useExisting === isEx ? color + '25' : 'transparent', color: useExisting === isEx ? colorText : T.dim, borderRight: isEx ? `1px solid ${T.border}` : 'none' }}>
-                  {isEx ? '👤 Patiente existante' : '✚ Nouvelle patiente'}
+                  {isEx ? 'Patiente existante' : '✚ Nouvelle patiente'}
                 </button>
               ))}
             </div>
@@ -175,7 +177,7 @@ export function ObsDocEditor({ type, icon, color, colorText, libreTemplate, canG
             {useExisting ? (
               <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
                 <div style={{ width: 340, flexShrink: 0 }}>
-                  <input style={{ ...inp, marginBottom: 8 }} placeholder="🔍 Rechercher…" value={search} onChange={e => setSearch(e.target.value)} />
+                  <input style={{ ...inp, marginBottom: 8 }} placeholder="Rechercher…" value={search} onChange={e => setSearch(e.target.value)} />
                   <div style={{ border: `1px solid ${T.border}`, maxHeight: 240, overflowY: 'auto' }}>
                     {!hydrated
                       ? <div style={{ padding: 16, fontFamily: MONO, fontSize: 14, color: T.dim, textAlign: 'center' }}>Chargement…</div>
@@ -252,7 +254,7 @@ export function ObsDocEditor({ type, icon, color, colorText, libreTemplate, canG
         )}
 
         {saveError && (
-          <div style={{ padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}>⚠ {saveError}</div>
+          <div style={{ padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}><Emblem name="alerte" size={20} inline />{saveError}</div>
         )}
 
         {enEdition && (

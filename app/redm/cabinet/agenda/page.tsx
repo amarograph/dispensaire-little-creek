@@ -1,5 +1,7 @@
 'use client';
 
+import { Ico } from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect, useCallback } from 'react';
 import { DateRpField, HeureField, TypeSelect } from '@/app/redm/_components/AgendaFields';
 import { useRouter } from 'next/navigation';
@@ -214,7 +216,7 @@ export default function AgendaPage() {
           <div>
             <h1 style={{ fontFamily: DISPLAY, fontSize: 33, color: T.gold, margin: 0, lineHeight: 1 }}>Agenda des Rendez-vous</h1>
             <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 6, letterSpacing: '0.08em' }}>
-              🔔 Notification Discord automatique 4h avant chaque rendez-vous · données sauvegardées sur le serveur
+              Notification Discord automatique 4h avant chaque rendez-vous · données sauvegardées sur le serveur
             </div>
           </div>
           <button onClick={openNew}
@@ -424,7 +426,7 @@ export default function AgendaPage() {
               </div>
 
               <div style={{ background: 'rgba(88,120,88,0.12)', border: '1px solid rgba(88,120,88,0.3)', padding: '10px 14px', fontFamily: MONO, fontSize: 14, color: '#6A9A6A', letterSpacing: '0.08em' }}>
-                🔔 Une notification Discord sera envoyée automatiquement 4h avant ce rendez-vous, même si le site est fermé
+                Une notification Discord sera envoyée automatiquement 4h avant ce rendez-vous, même si le site est fermé
               </div>
 
               <div style={{ display: 'flex', gap: 8 }}>
@@ -442,7 +444,7 @@ export default function AgendaPage() {
                   <button
                     onClick={e => cycleStatut(editing.id, e)}
                     style={{ flex: 1, fontFamily: MONO, fontSize: 14, padding: '8px', cursor: 'pointer', background: `${STATUT_COL[editing.statut]}18`, color: STATUT_COL[editing.statut], border: `1px solid ${STATUT_COL[editing.statut]}50`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                    {STATUT_ICON[editing.statut]} Changer statut → {STATUTS[(STATUTS.indexOf(editing.statut) + 1) % STATUTS.length]}
+                    <Ico v={STATUT_ICON[editing.statut]} size={21} inline fallback={STATUT_ICON[editing.statut]} />Changer statut → {STATUTS[(STATUTS.indexOf(editing.statut) + 1) % STATUTS.length]}
                   </button>
                   {delConfirm === editing.id
                     ? <button onClick={e => deleteRdv(editing.id, e)} style={{ fontFamily: MONO, fontSize: 14, padding: '8px 12px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060', whiteSpace: 'nowrap' }}>Confirmer ✕</button>

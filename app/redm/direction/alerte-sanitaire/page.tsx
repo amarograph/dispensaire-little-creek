@@ -1,6 +1,6 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -76,7 +76,7 @@ export default function AlerteSanitairePage() {
       <div style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `4px solid ${sanitaireColor(entry)}`, padding: '20px 24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap', marginBottom: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontSize: 22 }}>{icon}</span>
+            <span style={{ fontSize: 22 }}><Ico v={icon} size={31} fallback={icon} /></span>
             <span style={{ fontFamily: DISPLAY, fontSize: 20, color: T.text }}>{title}</span>
           </div>
           <span style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.08em', color: sanitaireColor(entry) }}>
@@ -101,7 +101,7 @@ export default function AlerteSanitairePage() {
                 color: entry.critique ? '#E86060' : T.gold,
                 border: `1px solid ${entry.critique ? 'rgba(200,48,48,0.5)' : 'rgba(209,183,124,0.35)'}`,
               }}>
-              {entry.critique ? '⚠ CRITIQUE' : 'MARQUER CRITIQUE'}
+              {entry.critique ? 'CRITIQUE' : 'MARQUER CRITIQUE'}
             </button>
           )}
         </div>
@@ -118,7 +118,7 @@ export default function AlerteSanitairePage() {
           <button onClick={() => router.push('/redm/direction')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>DIRECTION · ALERTE SANITAIRE</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 35, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="lanterne" size={53} />Alerte Sanitaire</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 35, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="alerte" size={53} />Alerte Sanitaire</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
           ÉPIDÉMIES & RISQUES SANITAIRES — ACCÈS DIRECTION UNIQUEMENT
         </p>
@@ -126,7 +126,7 @@ export default function AlerteSanitairePage() {
 
       {!canAccess ? (
         <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 24, fontFamily: MONO, fontSize: 14, color: '#E88060' }}>
-          ⚠ Accès refusé.
+          <Emblem name="alerte" size={21} inline />Accès refusé.
           <div style={{ marginTop: 8, color: T.muted, fontSize: 14 }}>Seuls la direction et la co-direction peuvent consulter et modifier ces paramètres.</div>
         </div>
       ) : loading ? (
@@ -135,7 +135,7 @@ export default function AlerteSanitairePage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {error && (
             <div style={{ background: 'rgba(139,64,64,0.12)', border: '1px solid rgba(139,64,64,0.35)', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, fontFamily: MONO, fontSize: 14, color: '#E88060' }}>
-              <span>⚠ {error}</span>
+              <span><Emblem name="alerte" size={21} inline />{error}</span>
               <button onClick={() => setError('')} style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button>
             </div>
           )}

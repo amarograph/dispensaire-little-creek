@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { canRead, isAdmin } from '@/lib/permissions';
 import { useRedmSession } from './RedmSessionProvider';
-import Emblem from './Emblem';
 
 // Lien "Direction" — visible pour le Directeur, le Co-Directeur, le Médecin en Chef (lecture) et l'admin.
 export default function DirectionNav() {
@@ -14,7 +13,7 @@ export default function DirectionNav() {
 
   return (
     <Link href="/redm/direction">
-      <Emblem name="caducee" size={30} />Direction
+      Direction
     </Link>
   );
 }

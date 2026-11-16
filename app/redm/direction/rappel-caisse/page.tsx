@@ -92,13 +92,13 @@ export default function RappelCaissePage() {
           <button onClick={() => router.push('/redm/direction')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.16em' }}>DISPENSAIRE · DIRECTION · RAPPEL DE CAISSE</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="agenda" size={57} />Rappel de caisse</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="montre" size={57} />Rappel de caisse</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
           MESSAGE DISCORD AUTOMATIQUE À UNE HEURE PRÉCISE · TAGUE LE RÔLE CHOISI OU LES PRÉPARATEURS
         </p>
       </div>
 
-      {error && <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}>⚠ {error}</div>}
+      {error && <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}><Emblem name="alerte" size={20} inline />{error}</div>}
       {info && <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(168,185,145,0.10)', border: '1px solid rgba(168,185,145,0.4)', color: '#A8B991', fontFamily: MONO, fontSize: 14 }}>{info}</div>}
 
       {!cfg ? (
@@ -108,7 +108,7 @@ export default function RappelCaissePage() {
 
           {!webhookOk && (
             <div style={{ padding: '12px 16px', background: 'rgba(232,184,96,0.08)', border: '1px solid rgba(232,184,96,0.4)', fontFamily: MONO, fontSize: 13, color: '#E8B860', lineHeight: 1.7 }}>
-              ⚠ Le salon Discord n&apos;est pas encore branché : créez un webhook dans le salon voulu, puis ajoutez son adresse dans Vercel sous le nom
+              <Emblem name="alerte" size={21} inline />Le salon Discord n&apos;est pas encore branché : créez un webhook dans le salon voulu, puis ajoutez son adresse dans Vercel sous le nom
               <b> DISCORD_CAISSE_WEBHOOK_URL </b> et redéployez. Tant que ce n&apos;est pas fait, aucun message ne part.
             </div>
           )}
@@ -150,7 +150,7 @@ export default function RappelCaissePage() {
             <div style={{ marginTop: 22, paddingTop: 18, borderTop: `1px solid ${T.border}` }}>
               <label style={lbl}>QUI EST TAGUÉ</label>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
-                {([['role', '🏷 Un rôle Discord (tous ses membres)'], ['individuel', '👤 Chaque préparateur individuellement']] as const).map(([id, label]) => {
+                {([['role', 'Un rôle Discord (tous ses membres)'], ['individuel', 'Chaque préparateur individuellement']] as const).map(([id, label]) => {
                   const on = cfg.mode === id;
                   return (
                     <button key={id} type="button" disabled={!canEdit} onClick={() => setCfg({ ...cfg, mode: id })}
@@ -163,7 +163,7 @@ export default function RappelCaissePage() {
                   <label style={lbl}>IDENTIFIANT DU RÔLE DISCORD</label>
                   <input style={inp} value={cfg.roleId} disabled={!canEdit} onChange={e => setCfg({ ...cfg, roleId: e.target.value.replace(/\D/g, '') })} placeholder="ex : 1561880592801464461" autoComplete="off" />
                   <div style={{ fontFamily: MONO, fontSize: 13, color: cfg.roleId.length >= 15 ? T.dim : '#E8B860', marginTop: 6, lineHeight: 1.6 }}>
-                    {cfg.roleId.length >= 15 ? '⚠ Tous les membres qui ont ce rôle sur Discord sont prévenus par une seule mention — pas seulement les préparateurs de caisse. Si ce rôle regroupe tout le dispensaire (ex. « Membres Dispensaire LC »), tout le monde recevra la notification. Pour ne prévenir que les préparateurs, choisissez « Chaque préparateur individuellement » ou indiquez l’identifiant d’un rôle réservé aux préparateurs.' : '⚠ Identifiant manquant ou trop court : les préparateurs seront tagués individuellement.'}
+                    {cfg.roleId.length >= 15 ? 'Tous les membres qui ont ce rôle sur Discord sont prévenus par une seule mention — pas seulement les préparateurs de caisse. Si ce rôle regroupe tout le dispensaire (ex. « Membres Dispensaire LC »), tout le monde recevra la notification. Pour ne prévenir que les préparateurs, choisissez « Chaque préparateur individuellement » ou indiquez l’identifiant d’un rôle réservé aux préparateurs.' : 'Identifiant manquant ou trop court : les préparateurs seront tagués individuellement.'}
                   </div>
                 </div>
               )}
@@ -177,7 +177,7 @@ export default function RappelCaissePage() {
               </span>
             </label>
             <div style={{ marginTop: 14, fontFamily: MONO, fontSize: 13, color: T.dim }}>
-              👥 {nbPrep} préparateur{nbPrep > 1 ? 's' : ''} de caisse concerné{nbPrep > 1 ? 's' : ''} (rôle « Préparateur de caisse »).
+              <Emblem name="equipe" size={21} inline />{nbPrep} préparateur{nbPrep > 1 ? 's' : ''} de caisse concerné{nbPrep > 1 ? 's' : ''} (rôle « Préparateur de caisse »).
               {cfg.derniereDate && <span> · Dernier envoi : {cfg.derniereDate.split('-').reverse().join('/')}</span>}
             </div>
           </div>
@@ -201,14 +201,14 @@ export default function RappelCaissePage() {
                 {saving ? '⟳ ENREGISTREMENT…' : '✔ ENREGISTRER'}
               </button>
               <button onClick={() => tester(false)} disabled={testing || !webhookOk} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 24px', cursor: webhookOk ? 'pointer' : 'not-allowed', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, opacity: testing || !webhookOk ? 0.5 : 1 }}>
-                {testing ? '⟳ ENVOI…' : '🧪 ENVOYER UN MESSAGE DE TEST'}
+                {testing ? '⟳ ENVOI…' : 'ENVOYER UN MESSAGE DE TEST'}
               </button>
               <button onClick={() => tester(true)} disabled={testing || !webhookOk} title="Vous seul êtes prévenu (votre propre mention) ; le rôle n'est pas touché" style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 24px', cursor: webhookOk ? 'pointer' : 'not-allowed', background: 'rgba(232,184,96,0.10)', color: '#E8B860', border: '1px solid rgba(232,184,96,0.45)', opacity: testing || !webhookOk ? 0.5 : 1 }}>
-                🔔 TEST AVEC NOTIFICATION (MOI SEUL)
+                TEST AVEC NOTIFICATION (MOI SEUL)
               </button>
               {cfg.mode === 'role' && (
                 <button onClick={testerRole} disabled={testing || !webhookOk || cfg.roleId.length < 15} title="Prévient réellement tous les membres du rôle : à utiliser avec un rôle de test" style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 24px', cursor: webhookOk ? 'pointer' : 'not-allowed', background: 'rgba(200,80,80,0.10)', color: '#DF9A88', border: '1px solid rgba(200,80,80,0.45)', opacity: testing || !webhookOk || cfg.roleId.length < 15 ? 0.5 : 1 }}>
-                  ⚠ TEST RÉEL DU RÔLE
+                  <Emblem name="alerte" size={21} inline />TEST RÉEL DU RÔLE
                 </button>
               )}
             </div>

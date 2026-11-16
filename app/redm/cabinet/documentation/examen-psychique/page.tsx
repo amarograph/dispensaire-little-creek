@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -265,16 +267,16 @@ export default function ExamenPsychiquePage() {
         {/* Actions */}
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 60 }}>
           <button onClick={() => setView('letter')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: `${COL}22`, color: COL, border: `1px solid ${COL}55`, flex: 1 }}>
-            📄 VOIR LE CERTIFICAT
+            <Emblem name="registre" size={21} inline />VOIR LE CERTIFICAT
           </button>
           <button onClick={() => setView('archives')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'rgba(209,183,124,0.12)', color: T.gold, border: `1px solid rgba(209,183,124,0.4)`, flex: 1 }}>
-            📁 ARCHIVES
+            <Emblem name="registre" size={21} inline />ARCHIVES
           </button>
           <button onClick={reset} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'rgba(74,96,72,0.2)', color: '#A8B991', border: '1px solid rgba(74,96,72,0.4)', flex: 1 }}>
             ✚ NOUVEL EXAMEN
           </button>
           <button onClick={() => router.push('/redm/cabinet/patients')} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', padding: '13px 22px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}`, flex: 1 }}>
-            👤 VOIR LE DOSSIER
+            <Emblem name="personnel" size={21} inline />VOIR LE DOSSIER
           </button>
         </div>
       </div>
@@ -316,8 +318,8 @@ export default function ExamenPsychiquePage() {
 
         <div className="no-print" style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
           <button onClick={() => searchParams.get('id') ? router.push('/redm/cabinet/documentation') : setView('result')} style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
-          <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: `${COL}22`, border: `1px solid ${COL}55`, color: COL, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>🖨 IMPRIMER</button>
-          <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#526C45', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>💾 ENREGISTRER PNG</button>
+          <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: `${COL}22`, border: `1px solid ${COL}55`, color: COL, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>IMPRIMER</button>
+          <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#526C45', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>ENREGISTRER PNG</button>
         </div>
 
         {/* Certificat */}
@@ -404,7 +406,7 @@ export default function ExamenPsychiquePage() {
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
       <div style={{ marginBottom: 28, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
         <button onClick={() => setView('form')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
-        <span style={{ fontFamily: DISPLAY, fontSize: 26, color: T.gold }}>📁 Archives — Examens Psychiques</span>
+        <span style={{ fontFamily: DISPLAY, fontSize: 26, color: T.gold }}><Emblem name="registre" size={36} inline />Archives — Examens Psychiques</span>
         <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginLeft: 'auto' }}>{archives.length} examen{archives.length !== 1 ? 's' : ''}</span>
       </div>
       {archives.length === 0
@@ -428,7 +430,7 @@ export default function ExamenPsychiquePage() {
                   </div>
                   <button onClick={() => { setCurrent(ex); setView('letter'); }}
                     style={{ fontFamily: MONO, fontSize: 14, background: `${COL}18`, border: `1px solid ${COL}40`, color: COL, padding: '8px 14px', cursor: 'pointer', flexShrink: 0, letterSpacing: '0.08em' }}>
-                    📄 CERTIFICAT
+                    <Emblem name="registre" size={21} inline />CERTIFICAT
                   </button>
                 </div>
               );
@@ -455,7 +457,7 @@ export default function ExamenPsychiquePage() {
           </button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: COL, letterSpacing: '0.16em' }}>CABINET · DOCUMENTATION · EXAMEN PSYCHIQUE</span>
           <button onClick={() => setView('archives')} style={{ marginLeft: 'auto', fontFamily: MONO, fontSize: 14, background: 'rgba(209,183,124,0.10)', border: `1px solid rgba(209,183,124,0.3)`, color: T.gold, padding: '8px 16px', cursor: 'pointer', letterSpacing: '0.1em' }}>
-            📁 ARCHIVES ({archives.length})
+            <Emblem name="registre" size={21} inline />ARCHIVES ({archives.length})
           </button>
         </div>
         <div style={{ background: T.card, border: `1px solid ${T.border}`, borderTop: `4px solid ${COL}`, padding: '28px 32px', textAlign: 'center' }}>
@@ -469,7 +471,7 @@ export default function ExamenPsychiquePage() {
       {/* Identité */}
       <div style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `4px solid ${COL}`, marginBottom: 24, overflow: 'hidden' }}>
         <div style={{ padding: '14px 24px', borderBottom: `1px solid ${T.border}`, background: COL + '12' }}>
-          <span style={{ fontFamily: MONO, fontSize: 15, color: COL, letterSpacing: '0.14em' }}>👤 IDENTITÉ DU SUJET</span>
+          <span style={{ fontFamily: MONO, fontSize: 15, color: COL, letterSpacing: '0.14em' }}><Emblem name="personnel" size={21} inline />IDENTITÉ DU SUJET</span>
         </div>
         <div style={{ padding: '24px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 18 }}>
           <div><label style={lbl}>NOM *</label><input style={inp} value={nom} onChange={e => setNom(e.target.value)} placeholder="Nom de famille" /></div>
@@ -527,7 +529,7 @@ export default function ExamenPsychiquePage() {
       {/* Champs conclusion médecin */}
       <div style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `4px solid ${T.gold}`, marginBottom: 24, overflow: 'hidden' }}>
         <div style={{ padding: '14px 24px', borderBottom: `1px solid ${T.border}`, background: T.gold + '10' }}>
-          <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.14em' }}>✍ CONCLUSION DU MÉDECIN</span>
+          <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.14em' }}><Emblem name="courrier" size={20} inline />CONCLUSION DU MÉDECIN</span>
         </div>
         <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: 18 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>

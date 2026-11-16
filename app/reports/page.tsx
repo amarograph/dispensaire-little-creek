@@ -1,5 +1,7 @@
 'use client';
 
+import { Ico } from '@/app/redm/_components/Emblem';
+
 import { useRouter } from 'next/navigation';
 
 const templates = [
@@ -30,7 +32,7 @@ export default function ReportsPage() {
             onClick={() => router.push(`/reports/${t.id}`)}
             className="bg-slate-800/50 border border-slate-700 hover:border-amber-700 hover:bg-amber-950/30 rounded-xl p-5 transition group text-left"
           >
-            <div className="text-3xl mb-3">{t.icon}</div>
+            <div className="text-3xl mb-3"><Ico v={t.icon} size={21} fallback={t.icon} /></div>
             <h2 className="text-sm font-semibold text-amber-200 group-hover:text-amber-400 transition">
               {t.title}
             </h2>

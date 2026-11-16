@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -91,7 +93,7 @@ export default function ArchivesPage() {
               className="w-full mt-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
             >
               <option value="all">Tous</option>
-              <option value="redm">⚕️ RedM</option>
+              <option value="redm">RedM</option>
             </select>
           </div>
           <div>
@@ -134,7 +136,7 @@ export default function ArchivesPage() {
         <div className="text-center py-12 text-gray-500">Chargement...</div>
       ) : archives.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
-          <div className="text-4xl mb-3">🗄️</div>
+          <div className="text-4xl mb-3"><Emblem name="registre" size={21} inline /></div>
           <p>Aucune archive trouvée.</p>
         </div>
       ) : (
@@ -150,7 +152,7 @@ export default function ArchivesPage() {
             >
               <div className="flex items-start gap-4">
                 <div className="text-2xl">
-                  ⚕️
+                  <Emblem name="caducee" size={21} inline />
                 </div>
                 <div>
                   <div className="font-medium text-white">
@@ -185,14 +187,14 @@ export default function ArchivesPage() {
                   disabled={loadingPdf === archive.id}
                   className="text-sm bg-blue-600/20 hover:bg-blue-600/40 text-blue-400 px-3 py-1.5 rounded-lg transition"
                 >
-                  {loadingPdf === archive.id ? '⟳' : '👁 Voir'}
+                  {loadingPdf === archive.id ? '⟳' : 'Voir'}
                 </button>
                 {archive.template_id && (
                   <button
                     onClick={() => duplicateReport(archive)}
                     className="text-sm bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition"
                   >
-                    📋 Dupliquer
+                    <Emblem name="registre" size={21} inline />Dupliquer
                   </button>
                 )}
               </div>

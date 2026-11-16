@@ -1,5 +1,7 @@
 'use client';
 
+import { Ico } from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 
@@ -39,7 +41,7 @@ function Block({ icon, title, color, children }: { icon: string; title: string; 
   return (
     <div style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `3px solid ${color}`, marginBottom: 14, overflow: 'hidden' }}>
       <div style={{ padding: '10px 20px', borderBottom: `1px solid ${T.border}`, background: color + '10', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span style={{ fontSize: 19 }}>{icon}</span>
+        <span style={{ fontSize: 19 }}><Ico v={icon} size={27} fallback={icon} /></span>
         <span style={{ fontFamily: MONO, fontSize: 14, color, letterSpacing: '0.14em' }}>{title}</span>
       </div>
       <div style={{ padding: '16px 20px' }}>{children}</div>

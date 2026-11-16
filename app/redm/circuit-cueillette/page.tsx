@@ -1,6 +1,8 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import IcoPicker from '@/app/redm/_components/IcoPicker';
+
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -156,7 +158,7 @@ export default function CircuitCueillettePage() {
       </div>
 
       {erreur && !edit && (
-        <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}>⚠ {erreur}</div>
+        <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}><Emblem name="alerte" size={20} inline />{erreur}</div>
       )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 18, opacity: loaded ? 1 : 0.6 }}>
@@ -170,7 +172,7 @@ export default function CircuitCueillettePage() {
                 <img src={c.image} alt={c.nom} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               </div>
               <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 20 }}>{c.icon}</span>
+                <span style={{ fontSize: 20 }}><Ico v={c.icon} size={28} fallback={c.icon} /></span>
                 <span style={{ fontFamily: DISPLAY, fontSize: 19, color: '#EADCB9', flex: 1 }}>{c.nom}</span>
                 {canEdit && (delConfirm === c.id ? (
                   <>
@@ -188,13 +190,13 @@ export default function CircuitCueillettePage() {
           ) : (
             /* Case vide : carte de la plante à venir */
             <div key={c.id} style={{ background: 'rgba(24,55,70,0.55)', border: '1px dashed rgba(74,122,64,0.45)', minHeight: 262, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, padding: 20, textAlign: 'center' }}>
-              <div style={{ fontSize: 38, opacity: 0.55 }}>{c.icon}</div>
+              <div style={{ fontSize: 38, opacity: 0.55 }}><Ico v={c.icon} size={53} fallback={c.icon} /></div>
               <div style={{ fontFamily: DISPLAY, fontSize: 20, color: '#EADCB9' }}>{c.nom}</div>
               <div style={{ fontFamily: MONO, fontSize: 13, color: '#C8BEA5', letterSpacing: '0.1em' }}>CARTE À VENIR</div>
               {canEdit && (
                 <div style={{ display: 'flex', gap: 8, marginTop: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
                   <button onClick={() => { setErreur(''); setEdit({ id: c.id, nom: c.nom, icon: c.icon, dataUrl: '', apercu: '' }); }}
-                    style={{ ...petit, fontSize: 14, padding: '8px 16px', background: 'rgba(122,170,112,0.15)', color: GREEN, border: '1px solid rgba(122,170,112,0.5)' }}>📷 AJOUTER LA CARTE</button>
+                    style={{ ...petit, fontSize: 14, padding: '8px 16px', background: 'rgba(122,170,112,0.15)', color: GREEN, border: '1px solid rgba(122,170,112,0.5)' }}>AJOUTER LA CARTE</button>
                   {delConfirm === c.id ? (
                     <>
                       <button onClick={() => supprimer(c.id)} style={{ ...petit, background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060' }}>SUPPRIMER ?</button>
@@ -210,7 +212,7 @@ export default function CircuitCueillettePage() {
         ))}
 
         {canEdit && (
-          <div onClick={() => { setErreur(''); setEdit({ nom: '', icon: '🌿', dataUrl: '', apercu: '' }); }}
+          <div onClick={() => { setErreur(''); setEdit({ nom: '', icon: 'mortier', dataUrl: '', apercu: '' }); }}
             style={{ border: '2px dashed rgba(122,170,112,0.5)', minHeight: 262, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer', color: GREEN, background: 'rgba(122,170,112,0.05)' }}>
             <div style={{ fontSize: 40, lineHeight: 1 }}>＋</div>
             <div style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.12em' }}>NOUVELLE PLANTE</div>
@@ -230,7 +232,7 @@ export default function CircuitCueillettePage() {
               </div>
               <div>
                 <label style={{ fontFamily: MONO, fontSize: 13, color: '#C8BEA5', letterSpacing: '0.12em', display: 'block', marginBottom: 5 }}>ICÔNE</label>
-                <input style={{ ...champ, textAlign: 'center' }} value={edit.icon} onChange={e => setEdit(x => x ? { ...x, icon: e.target.value } : x)} />
+                <IcoPicker value={edit.icon} onChange={v => setEdit(x => x ? { ...x, icon: v } : x)} size={36} />
               </div>
             </div>
             <div>
@@ -245,10 +247,10 @@ export default function CircuitCueillettePage() {
                 <div style={{ border: '1px dashed rgba(74,122,64,0.45)', padding: '28px 10px', textAlign: 'center', fontFamily: MONO, fontSize: 13, color: '#C8BEA5' }}>Aucune image pour l&apos;instant</div>
               )}
               <button onClick={() => fileRef.current?.click()} style={{ ...petit, fontSize: 14, padding: '9px 16px', marginTop: 8, background: 'rgba(122,170,112,0.15)', color: GREEN, border: '1px solid rgba(122,170,112,0.5)' }}>
-                📷 {edit.apercu ? 'CHANGER L’IMAGE' : 'CHOISIR UNE IMAGE'}
+                {edit.apercu ? 'CHANGER L’IMAGE' : 'CHOISIR UNE IMAGE'}
               </button>
             </div>
-            {erreur && <div style={{ padding: '8px 12px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 13 }}>⚠ {erreur}</div>}
+            {erreur && <div style={{ padding: '8px 12px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 13 }}><Emblem name="alerte" size={18} inline />{erreur}</div>}
             <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
               <button onClick={() => setEdit(null)} disabled={saving} style={{ ...petit, fontSize: 14, padding: '10px 20px', background: 'transparent', color: '#C8BEA5', border: '1px solid rgba(74,122,64,0.35)' }}>ANNULER</button>
               <button onClick={enregistrer} disabled={saving || !edit.nom.trim()}
@@ -270,7 +272,7 @@ export default function CircuitCueillettePage() {
 
           <div onClick={e => e.stopPropagation()}
             style={{ position: 'absolute', top: 0, left: 0, right: 0, display: 'flex', alignItems: 'center', gap: 10, padding: '12px 18px', background: 'linear-gradient(rgba(0,0,0,0.7), transparent)', zIndex: 2, flexWrap: 'wrap' }}>
-            <div style={{ fontFamily: DISPLAY, fontSize: 22, color: '#EADCB9', flex: 1, minWidth: 160 }}>{ouvert.icon} {ouvert.nom}</div>
+            <div style={{ fontFamily: DISPLAY, fontSize: 22, color: '#EADCB9', flex: 1, minWidth: 160 }}><Ico v={ouvert.icon} size={31} inline fallback={ouvert.icon} />{ouvert.nom}</div>
             {nbGalerie > 1 && <span style={{ fontFamily: MONO, fontSize: 14, color: '#C8BEA5' }}>{(idx ?? 0) + 1} / {nbGalerie}</span>}
             <button style={btn} title="Dézoomer (−)" onClick={() => changerZoom(z => z / 1.4)}>−</button>
             <span style={{ fontFamily: MONO, fontSize: 14, color: '#EADCB9', minWidth: 52, textAlign: 'center' }}>{Math.round(zoom * 100)} %</span>

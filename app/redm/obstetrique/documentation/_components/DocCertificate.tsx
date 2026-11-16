@@ -37,8 +37,8 @@ export function DocCertificate({ doc, patiente, color, onBack, extraButtons }: {
       <div className="no-print" style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
         <button onClick={onBack} style={{ ...btn, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px' }}>← RETOUR</button>
         {extraButtons}
-        <button onClick={() => window.print()} style={{ ...btn, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC' }}>🖨 IMPRIMER</button>
-        <button onClick={saveAsPng} style={{ ...btn, background: `${color}22`, border: `1px solid ${color}70`, color }}>💾 ENREGISTRER PNG</button>
+        <button onClick={() => window.print()} style={{ ...btn, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC' }}>IMPRIMER</button>
+        <button onClick={saveAsPng} style={{ ...btn, background: `${color}22`, border: `1px solid ${color}70`, color }}>ENREGISTRER PNG</button>
       </div>
       <div ref={printRef} className="print-area" style={{ background: '#FFFFFF', border: '2px solid #C8BEA5', padding: '52px 60px', width: 794, maxWidth: '100%', boxSizing: 'border-box', margin: '0 auto', color: '#1A1A1A', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>

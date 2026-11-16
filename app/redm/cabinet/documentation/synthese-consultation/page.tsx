@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { RichEditor, RichContent, templateToRich } from '@/app/redm/_components/RichDoc';
@@ -264,9 +266,9 @@ export default function SyntheseConsultationPage() {
       `}</style>
       <div className="no-print" style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
         <button onClick={() => router.push('/redm/cabinet/documentation')} style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
-        <button onClick={() => router.push(`/redm/cabinet/patients/${savedPat.id}`)} style={{ fontFamily: MONO, fontSize: 14, background: `${COL}22`, border: `1px solid ${COL}55`, color: COL, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>📋 VOIR DOSSIER</button>
-        <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>🖨 IMPRIMER</button>
-        <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#526C45', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>💾 ENREGISTRER PNG</button>
+        <button onClick={() => router.push(`/redm/cabinet/patients/${savedPat.id}`)} style={{ fontFamily: MONO, fontSize: 14, background: `${COL}22`, border: `1px solid ${COL}55`, color: COL, padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}><Emblem name="registre" size={20} inline />VOIR DOSSIER</button>
+        <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>IMPRIMER</button>
+        <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#526C45', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>ENREGISTRER PNG</button>
       </div>
       <div ref={printRef} className="print-area" style={{ background: '#FFFFFF', border: '2px solid #C8BEA5', padding: '52px 60px', width: 794, maxWidth: 794, margin: '0 auto', color: '#1A1A1A', fontFamily: "'Libre Baskerville', 'Courier New', monospace" }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
@@ -307,7 +309,7 @@ export default function SyntheseConsultationPage() {
         </button>
         <div>
           <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.18em', marginBottom: 4 }}>CABINET · DOCUMENTATION</div>
-          <div style={{ fontFamily: DISPLAY, fontSize: 32, color: COL, lineHeight: 1 }}>📋 Synthèse de consultation</div>
+          <div style={{ fontFamily: DISPLAY, fontSize: 32, color: COL, lineHeight: 1 }}><Emblem name="registre" size={45} inline />Synthèse de consultation</div>
         </div>
       </div>
 
@@ -323,7 +325,7 @@ export default function SyntheseConsultationPage() {
               {([true, false] as const).map(isEx => (
                 <button key={String(isEx)} onClick={() => setUseExisting(isEx)}
                   style={{ fontFamily: MONO, fontSize: 14, padding: '9px 22px', cursor: 'pointer', border: 'none', letterSpacing: '0.08em', background: useExisting === isEx ? COL + '25' : 'transparent', color: useExisting === isEx ? COL : T.dim, borderRight: isEx ? `1px solid ${T.border}` : 'none', transition: 'all 0.15s' }}>
-                  {isEx ? '👤 Patient existant' : '✚ Nouveau patient'}
+                  {isEx ? 'Patient existant' : '✚ Nouveau patient'}
                 </button>
               ))}
             </div>
@@ -333,7 +335,7 @@ export default function SyntheseConsultationPage() {
                 <div style={{ width: 280, flexShrink: 0 }}>
                   <input
                     style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(0,0,0,0.3)', border: `1px solid ${T.border}`, color: T.text, padding: '9px 14px', outline: 'none', width: '100%', boxSizing: 'border-box', marginBottom: 8 }}
-                    placeholder="🔍 Rechercher…" value={search} onChange={e => setSearch(e.target.value)} />
+                    placeholder="Rechercher…" value={search} onChange={e => setSearch(e.target.value)} />
                   <div style={{ border: `1px solid ${T.border}`, maxHeight: 200, overflowY: 'auto' }}>
                     {!hydrated
                       ? <div style={{ padding: 16, fontFamily: MONO, fontSize: 14, color: T.dim, textAlign: 'center' }}>Chargement…</div>
@@ -416,7 +418,7 @@ export default function SyntheseConsultationPage() {
         {/* ── Erreur ── */}
         {saveError && (
           <div style={{ padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}>
-            ⚠ {saveError}
+            <Emblem name="alerte" size={21} inline />{saveError}
           </div>
         )}
 

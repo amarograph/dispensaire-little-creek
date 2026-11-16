@@ -1,5 +1,7 @@
 'use client';
 
+import { Ico } from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect } from 'react';
 import { DateRpField, HeureField, TypeSelect } from '@/app/redm/_components/AgendaFields';
 import { useRouter } from 'next/navigation';
@@ -454,7 +456,7 @@ export default function ObstetriqueAgendaPage() {
                   <button
                     onClick={e => cycleStatut(editing.id, e)}
                     style={{ flex: 1, fontFamily: MONO, fontSize: 14, padding: '8px', cursor: 'pointer', background: `${STATUT_COL[editing.statut]}18`, color: STATUT_COL[editing.statut], border: `1px solid ${STATUT_COL[editing.statut]}50`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                    {STATUT_ICON[editing.statut]} Changer statut → {STATUTS[(STATUTS.indexOf(editing.statut) + 1) % STATUTS.length]}
+                    <Ico v={STATUT_ICON[editing.statut]} size={21} inline fallback={STATUT_ICON[editing.statut]} />Changer statut → {STATUTS[(STATUTS.indexOf(editing.statut) + 1) % STATUTS.length]}
                   </button>
                   {delConfirm === editing.id
                     ? <button onClick={e => deleteRdv(editing.id, e)} style={{ fontFamily: MONO, fontSize: 14, padding: '8px 12px', cursor: 'pointer', background: '#8B404025', color: '#DF9A88', border: '1px solid #8B404060', whiteSpace: 'nowrap' }}>Confirmer ✕</button>

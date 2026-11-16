@@ -33,7 +33,7 @@ export default function AdminButton({ style }: { style?: React.CSSProperties }) 
         ...style,
       }}
     >
-      ⚙ ADMIN
+      ADMIN
     </Link>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -142,7 +142,7 @@ export default function DirectionTarifsPage() {
           <button onClick={()=>router.push('/redm/direction')} style={{ fontFamily:MONO, fontSize:15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily:MONO, fontSize:14, color:T.gold, letterSpacing:'0.18em' }}>DIRECTION · TARIFS & RÉPARTITION</span>
         </div>
-        <h1 style={{ fontFamily:DISPLAY, fontSize:35, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="coffret" size={53} />Tarifs & Répartition</h1>
+        <h1 style={{ fontFamily:DISPLAY, fontSize:35, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="argent" size={53} />Tarifs & Répartition</h1>
         <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
           CATÉGORIES, PRIX ET PARTAGE DES HONORAIRES — ACCÈS DIRECTION UNIQUEMENT
         </p>
@@ -150,7 +150,7 @@ export default function DirectionTarifsPage() {
 
       {error ? (
         <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:24, fontFamily:MONO, fontSize: 14, color:'#E88060' }}>
-          ⚠ {error}
+          <Emblem name="alerte" size={21} inline />{error}
           <div style={{ marginTop:8, color:T.muted, fontSize: 14 }}>Seuls la direction et la co-direction peuvent consulter et modifier ces paramètres.</div>
         </div>
       ) : loading ? (
@@ -159,7 +159,7 @@ export default function DirectionTarifsPage() {
         <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
           {actionError && (
             <div style={{ background:'rgba(139,64,64,0.12)', border:'1px solid rgba(139,64,64,0.35)', padding:'12px 16px', display:'flex', justifyContent:'space-between', alignItems:'center', gap:12, fontFamily:MONO, fontSize: 14, color:'#E88060' }}>
-              <span>⚠ {actionError}</span>
+              <span><Emblem name="alerte" size={21} inline />{actionError}</span>
               <button onClick={()=>setActionError('')} style={{ fontFamily:MONO, fontSize: 14, background:'transparent', border:'none', color:T.muted, cursor:'pointer' }}>✕</button>
             </div>
           )}
@@ -178,19 +178,19 @@ export default function DirectionTarifsPage() {
                         style={{ fontFamily:MONO, fontSize:12, width:22, height:18, cursor: i===tarifs.length-1 ? 'default' : 'pointer', background:'transparent', color: i===tarifs.length-1 ? T.dim+'50' : T.dim, border:`1px solid ${T.border}`, padding:0, display:'flex', alignItems:'center', justifyContent:'center' }}>▼</button>
                     </div>
                   )}
-                  <span style={{ fontSize:24 }}>{TYPE_ICON[t.type]}</span>
+                  <span style={{ fontSize:24 }}><Ico v={TYPE_ICON[t.type]} size={34} fallback={TYPE_ICON[t.type]} /></span>
                   {canEdit ? (
                     <>
                       <input style={{ ...inp, flex:'1 1 220px', fontFamily:DISPLAY, fontSize:20, padding:'8px 12px' }} value={t.nom} onChange={e=>update(t.id,{nom:e.target.value})} placeholder="Nom de la catégorie" />
                       <select style={{ ...inp, width:160, cursor:'pointer' }} value={t.type} onChange={e=>update(t.id,{type:e.target.value as TypeCategorie})}>
-                        <option value="vente">💰 Vente</option>
-                        <option value="achat">🛒 Achat</option>
+                        <option value="vente">Vente</option>
+                        <option value="achat">Achat</option>
                       </select>
                     </>
                   ) : (
                     <>
                       <span style={{ flex:'1 1 220px', fontFamily:DISPLAY, fontSize:20, color:T.text }}>{t.nom}</span>
-                      <span style={{ fontFamily:MONO, fontSize: 14, color:T.muted, letterSpacing:'0.08em' }}>{isVente ? '💰 Vente' : '🛒 Achat'}</span>
+                      <span style={{ fontFamily:MONO, fontSize: 14, color:T.muted, letterSpacing:'0.08em' }}>{isVente ? 'Vente' : 'Achat'}</span>
                     </>
                   )}
                 </div>
@@ -243,7 +243,7 @@ export default function DirectionTarifsPage() {
                   </div>
                 )}
                 {!canEdit && isVente && t.commandeSeulement && (
-                  <div style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.06em', marginBottom:14 }}>📦 COMMANDE UNIQUEMENT</div>
+                  <div style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.06em', marginBottom:14 }}><Emblem name="registre" size={20} inline />COMMANDE UNIQUEMENT</div>
                 )}
 
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, flexWrap:'wrap' }}>

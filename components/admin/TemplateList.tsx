@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import Link from 'next/link';
 import { useState } from 'react';
 import { updateTemplate, deleteTemplate } from '@/actions/templates';
@@ -30,7 +32,7 @@ export function TemplateList({
   if (!templates.length) {
     return (
       <div className="text-center py-16 text-gray-500">
-        <div className="text-4xl mb-3">📄</div>
+        <div className="text-4xl mb-3"><Emblem name="registre" size={21} inline /></div>
         <p>Aucun template pour cet univers.</p>
       </div>
     );

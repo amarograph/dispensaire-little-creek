@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState } from 'react';
 import { ObsDocEditor } from '../_components/ObsDocEditor';
 import {
@@ -27,7 +29,7 @@ export default function PrescriptionMedicalePage() {
       guidedTop={<>
           {/* SCÉNARIO — tout en haut */}
           <div style={{ background: T.card, border: `2px solid ${COL_RX}70`, padding: '16px 18px' }}>
-            <div style={{ fontFamily: MONO, fontSize: 14, color: COL_RX, letterSpacing: '0.12em', marginBottom: 10 }}>🗂 SCÉNARIO *</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: COL_RX, letterSpacing: '0.12em', marginBottom: 10 }}><Emblem name="registre" size={20} inline />SCÉNARIO *</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {RX_SCENARIOS.map(s => {
                 const on = scenarioId === s.id;

@@ -1,5 +1,7 @@
 'use client';
 
+import { Ico } from '@/app/redm/_components/Emblem';
+
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -29,7 +31,7 @@ export function Navbar({ user }: { user: User }) {
         <div className="flex items-center justify-between h-16">
 
           <Link href="/redm" className="flex items-center gap-2">
-            <span className="text-2xl">{uData.icon}</span>
+            <span className="text-2xl"><Ico v={uData.icon} size={21} fallback={uData.icon} /></span>
             <div>
               <div className="text-sm font-bold text-white leading-tight">
                 Dispensaire de Little Creek
@@ -40,16 +42,16 @@ export function Navbar({ user }: { user: User }) {
 
           <div className="flex items-center gap-1">
             <Link href="/redm/certificats" className={`px-3 py-2 rounded-lg text-sm transition ${isActive('/redm/certificats')}`}>
-              📜 Certificats
+              Certificats
             </Link>
             <Link href="/redm/archives" className={`px-3 py-2 rounded-lg text-sm transition ${isActive('/redm/archives')}`}>
-              🗄️ Archives
+              Archives
             </Link>
             <Link href="/redm/bibliotheque" className={`px-3 py-2 rounded-lg text-sm transition ${isActive('/redm/bibliotheque')}`}>
-              📚 Bibliothèque
+              Bibliothèque
             </Link>
             <Link href="/admin" className={`px-3 py-2 rounded-lg text-sm transition ${isActive('/admin')}`}>
-              ⚙️ Admin
+              Admin
             </Link>
           </div>
 

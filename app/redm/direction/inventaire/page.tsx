@@ -1,6 +1,6 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -33,7 +33,7 @@ export default function InventairePage() {
       .then(d => {
         const cats: StockCategorie[] = Array.isArray(d.categories) ? d.categories : [];
         setCategories(cats);
-        const low = cats.flatMap(c => c.items.filter(it => it.quantite < SEUIL_ALERTE).map(it => ({ id: uid(), titre: `${c.icon} ${c.nom} — ${it.intitule || 'Article sans nom'}`, quantite: it.quantite })));
+        const low = cats.flatMap(c => c.items.filter(it => it.quantite < SEUIL_ALERTE).map(it => ({ id: uid(), titre: `${c.nom} — ${it.intitule || 'Article sans nom'}`, quantite: it.quantite })));
         setToasts(low);
       })
       .catch(() => setError("Accès refusé ou impossible de charger l'inventaire."))
@@ -52,7 +52,7 @@ export default function InventairePage() {
         {toasts.map(t => (
           <div key={t.id} style={{ background: T.card, border: '1px solid rgba(168,32,32,0.5)', borderLeft: '4px solid #EADCB9', padding: '14px 18px', boxShadow: '0 6px 24px rgba(74,62,32,0.14)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <span style={{ fontFamily: MONO, fontSize: 14, color: '#C87060', letterSpacing: '0.16em' }}>⚠ STOCK FAIBLE</span>
+              <span style={{ fontFamily: MONO, fontSize: 14, color: '#C87060', letterSpacing: '0.16em' }}><Emblem name="alerte" size={20} inline />STOCK FAIBLE</span>
               <button onClick={() => setToasts(prev => prev.filter(x => x.id !== t.id))} style={{ background: 'none', border: 'none', color: T.muted, cursor: 'pointer', fontFamily: MONO, fontSize: 14, padding: 0 }}>✕</button>
             </div>
             <div style={{ fontFamily: BODY, fontSize: 15, color: T.text }}>{t.titre}</div>
@@ -72,10 +72,10 @@ export default function InventairePage() {
 
       {/* Bandeau */}
       <div style={{ marginBottom: 30 }}>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.gold, margin: '0 0 6px' , display:'flex', alignItems:'center', gap:12 }}><Emblem name="coffret" size={54} />Inventaire</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.gold, margin: '0 0 6px' , display:'flex', alignItems:'center', gap:12 }}><Emblem name="mallette" size={54} />Inventaire</h1>
         <div style={{ fontFamily: BODY, fontSize: 16, color: T.muted }}>Consultation en lecture seule — modifications via le Gestionnaire de Stockage</div>
         <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
-          ⚠ UNE ALERTE EST ENVOYÉE DÈS QU'UN ARTICLE DESCEND SOUS {SEUIL_ALERTE} UNITÉS
+          <Emblem name="alerte" size={21} inline />UNE ALERTE EST ENVOYÉE DÈS QU'UN ARTICLE DESCEND SOUS {SEUIL_ALERTE} UNITÉS
         </div>
       </div>
 
@@ -102,7 +102,7 @@ export default function InventairePage() {
             {categories.map(cat => (
               <div key={cat.id} style={{ background: T.card, border: `1px solid ${T.border}`, padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ width: 40, height: 40, background: 'rgba(209,183,124,0.08)', border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 19, flexShrink: 0 }}>{cat.icon}</div>
+                  <div style={{ width: 40, height: 40, background: 'rgba(209,183,124,0.08)', border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 19, flexShrink: 0 }}><Ico v={cat.icon} size={27} fallback={cat.icon} /></div>
                   <h2 style={{ fontFamily: DISPLAY, fontSize: 19, color: T.gold, margin: 0, flex: 1 }}>{cat.nom}</h2>
                   <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', flexShrink: 0 }}>{cat.items.length} ART.</span>
                 </div>

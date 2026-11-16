@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
+
 import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
@@ -163,18 +165,18 @@ export default function RouePage() {
           <span style={{ fontFamily: MONO, fontSize: 14, color: COL, letterSpacing: '0.16em' }}>DISPENSAIRE · ÉVÈNEMENTS · ROUE DES GAINS</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
-          <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: COL, margin: 0 }}>{roue.icon} {roue.nom}</h1>
+          <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: COL, margin: 0 }}><Ico v={roue.icon} size={56} inline fallback={roue.icon} />{roue.nom}</h1>
           {canStructure && (
             <button onClick={() => appeler({ action: 'set_visible', visible: !roue.visible })}
               style={{ fontFamily: MONO, fontSize: 13, letterSpacing: '0.06em', padding: '8px 16px', cursor: 'pointer', background: roue.visible ? 'rgba(168,185,145,0.12)' : 'rgba(200,80,80,0.12)', color: roue.visible ? OK : KO, border: `1px solid ${roue.visible ? 'rgba(168,185,145,0.5)' : 'rgba(223,154,136,0.5)'}` }}>
-              {roue.visible ? '👁 VISIBLE PAR TOUS — RÉSERVER À LA DIRECTION' : '🔒 RÉSERVÉE À LA DIRECTION — MONTRER À TOUS'}
+              {roue.visible ? 'VISIBLE PAR TOUS — RÉSERVER À LA DIRECTION' : 'RÉSERVÉE À LA DIRECTION — MONTRER À TOUS'}
             </button>
           )}
         </div>
         {roue.description && <p style={{ fontFamily: BODY, fontSize: 18, color: T.dim, marginTop: 8, maxWidth: 900 }}>{roue.description}</p>}
       </div>
 
-      {error && <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: KO, fontFamily: MONO, fontSize: 14, display: 'flex', justifyContent: 'space-between' }}><span>⚠ {error}</span><button onClick={() => setError('')} style={{ background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button></div>}
+      {error && <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: KO, fontFamily: MONO, fontSize: 14, display: 'flex', justifyContent: 'space-between' }}><span><Emblem name="alerte" size={20} inline />{error}</span><button onClick={() => setError('')} style={{ background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button></div>}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 28, alignItems: 'start' }}>
         {/* ── La roue ── */}
@@ -188,7 +190,7 @@ export default function RouePage() {
             )}
             <button onClick={tourner} disabled={!peutTourner}
               style={{ fontFamily: DISPLAY, fontSize: 28, letterSpacing: '0.1em', padding: '16px 30px', cursor: peutTourner ? 'pointer' : 'not-allowed', background: peutTourner ? 'rgba(232,160,76,0.25)' : 'rgba(255,255,255,0.05)', color: peutTourner ? COL : T.dim, border: `3px solid ${peutTourner ? COL : T.border}`, opacity: peutTourner ? 1 : 0.7 }}>
-              {anim ? '🎡 ÇA TOURNE…' : actifs.length === 0 ? 'AUCUNE CASE' : enAttente ? 'RÉPONDEZ À LA QUESTION' : '🎡 TOURNER LA ROUE'}
+              {anim ? 'ÇA TOURNE…' : actifs.length === 0 ? 'AUCUNE CASE' : enAttente ? 'RÉPONDEZ À LA QUESTION' : 'TOURNER LA ROUE'}
             </button>
             <div style={{ fontFamily: MONO, fontSize: 13, color: T.dim, textAlign: 'center' }}>
               {actifs.length} case{actifs.length > 1 ? 's' : ''} sur la roue{retirees.length > 0 ? ` · ${retirees.length} retirée${retirees.length > 1 ? 's' : ''}` : ''} · chaque case a la même chance
@@ -211,7 +213,7 @@ export default function RouePage() {
           )}
 
           <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '18px 20px' }}>
-            <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text, marginBottom: 4 }}>🎯 Cases en jeu ({actifs.length})</div>
+            <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text, marginBottom: 4 }}>Cases en jeu ({actifs.length})</div>
             {canStructure && groupes.length > 0 && <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, marginBottom: 10, lineHeight: 1.6 }}>Les exemplaires d’une même case sont répartis autour de la roue. « ＋ » en ajoute un, « × » permet de fixer le nombre exact (ex : 10).</div>}
             {groupes.length === 0 ? (
               <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>{canStructure ? 'Aucune case — ajoutez-en ci-dessus.' : 'Aucune case pour le moment.'}</div>
@@ -247,7 +249,7 @@ export default function RouePage() {
           {retirees.length > 0 && (
             <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '18px 20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
-                <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}>🚫 Cases retirées ({retirees.length})</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}><Emblem name="alerte" size={31} inline />Cases retirées ({retirees.length})</div>
                 {canStructure && <button onClick={() => appeler({ action: 'reset_segments' }).then(r => { if (r.ok) { setDuree(0); setRot(0); } })} style={{ ...petit, background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>↺ TOUT REMETTRE</button>}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: 220, overflowY: 'auto' }}>
@@ -263,7 +265,7 @@ export default function RouePage() {
 
           <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '18px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
-              <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}>📜 Historique des tirages ({roue.historique.length})</div>
+              <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}><Emblem name="livre" size={31} inline />Historique des tirages ({roue.historique.length})</div>
               {canStructure && roue.historique.some(t => t.retire !== null) && (
                 <button onClick={() => { if (window.confirm('Effacer l’historique des tirages ?')) appeler({ action: 'clear_historique' }); }} style={{ ...petit, background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)' }}>EFFACER</button>
               )}
@@ -279,7 +281,7 @@ export default function RouePage() {
                       <b style={{ color: COL }}>{t.label}</b>{t.participant ? <span style={{ color: T.muted }}> — {t.participant}</span> : null}
                     </span>
                     <span style={{ fontFamily: MONO, fontSize: 12, color: t.retire === null ? COL : t.retire ? KO : OK, whiteSpace: 'nowrap' }}>
-                      {t.retire === null ? '⏳ EN ATTENTE' : t.retire ? '🚫 RETIRÉE' : '↺ GARDÉE'}
+                      {t.retire === null ? 'EN ATTENTE' : t.retire ? 'RETIRÉE' : '↺ GARDÉE'}
                     </span>
                   </div>
                 ))}
@@ -293,12 +295,12 @@ export default function RouePage() {
       {enAttente && !anim && canSpin && createPortal(
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.82)', zIndex: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div style={{ background: '#102B3B', border: `3px solid ${COL}`, width: '100%', maxWidth: 600, padding: '34px 34px 28px', textAlign: 'center', boxShadow: '0 0 60px rgba(232,160,76,0.35)' }}>
-            <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.18em' }}>🎉 LA ROUE S’EST ARRÊTÉE SUR</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.18em' }}>LA ROUE S’EST ARRÊTÉE SUR</div>
             {enAttente.participant && <div style={{ fontFamily: BODY, fontSize: 19, color: T.muted, marginTop: 6 }}>pour <b style={{ color: T.text }}>{enAttente.participant}</b></div>}
             <div style={{ fontFamily: DISPLAY, fontSize: 48, color: COL, lineHeight: 1.15, margin: '18px 0 26px', overflowWrap: 'anywhere' }}>{enAttente.label}</div>
             <div style={{ fontFamily: DISPLAY, fontSize: 24, color: T.text, marginBottom: 18 }}>Faut-il retirer cette case de la roue ?</div>
             <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <button disabled={saving} onClick={() => repondre(true)} style={{ fontFamily: MONO, fontSize: 16, letterSpacing: '0.08em', padding: '14px 26px', cursor: 'pointer', background: 'rgba(223,154,136,0.18)', color: KO, border: `2px solid rgba(223,154,136,0.6)`, opacity: saving ? 0.6 : 1 }}>🚫 OUI, RETIRER LA CASE</button>
+              <button disabled={saving} onClick={() => repondre(true)} style={{ fontFamily: MONO, fontSize: 16, letterSpacing: '0.08em', padding: '14px 26px', cursor: 'pointer', background: 'rgba(223,154,136,0.18)', color: KO, border: `2px solid rgba(223,154,136,0.6)`, opacity: saving ? 0.6 : 1 }}><Emblem name="alerte" size={22} inline />OUI, RETIRER LA CASE</button>
               <button disabled={saving} onClick={() => repondre(false)} style={{ fontFamily: MONO, fontSize: 16, letterSpacing: '0.08em', padding: '14px 26px', cursor: 'pointer', background: 'rgba(168,185,145,0.18)', color: OK, border: `2px solid rgba(168,185,145,0.6)`, opacity: saving ? 0.6 : 1 }}>↺ NON, LA GARDER</button>
             </div>
           </div>

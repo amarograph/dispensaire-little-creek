@@ -1,6 +1,6 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -61,7 +61,7 @@ function Section({ icon, title, color = T.gold, children }: { icon: string; titl
   return (
     <div style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `4px solid ${color}`, marginBottom: 22, overflow: 'hidden' }}>
       <div style={{ padding: '14px 28px', borderBottom: `1px solid ${T.border}`, background: color + '10', display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span style={{ fontSize: 24 }}>{icon}</span>
+        <span style={{ fontSize: 24 }}><Ico v={icon} size={34} fallback={icon} /></span>
         <span style={{ fontFamily: MONO, fontSize: 16, color, letterSpacing: '0.14em' }}>{title}</span>
       </div>
       <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>
@@ -162,7 +162,7 @@ export default function NouveauDossierPage() {
           </button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.16em' }}>CABINET · DOSSIERS · NOUVEAU</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="grimoire" size={57} />Nouveau Dossier Patient</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="registre" size={57} />Nouveau Dossier Patient</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 10 }}>DISPENSAIRE THÉRAPEUTIQUE · 1890</p>
       </div>
 

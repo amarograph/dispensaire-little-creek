@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useEffect, useRef, useState } from 'react';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
 import { isAdmin as checkIsAdmin } from '@/lib/permissions';
@@ -161,7 +163,7 @@ function CropModal({ file, onConfirm, onCancel }: {
         {/* Slider de zoom */}
         <div style={{ marginTop: 24, width: CROP_D, display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{ fontFamily: MONO, fontSize: 10, color: '#C8BEA5', letterSpacing: '0.12em', flexShrink: 0 }}>
-            🔍 ZOOM
+            ZOOM
           </span>
           <input
             type="range"
@@ -369,7 +371,7 @@ export default function ProfilMedecinPage() {
                 border: '1px dashed rgba(180,160,113,0.35)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontFamily: DISPLAY, fontSize: 28, color: 'rgba(180,160,113,0.5)',
-              }}>⚕</div>
+              }}><Emblem name="caducee" size={21} inline /></div>
             )}
             {/* Overlay au survol */}
             {!uploading && (
@@ -381,7 +383,7 @@ export default function ProfilMedecinPage() {
                 fontFamily: MONO, fontSize: 10, color: '#EADCB9',
                 letterSpacing: '0.1em', flexDirection: 'column', gap: 4,
               }}>
-                <span style={{ fontSize: 18 }}>📷</span>
+                <span style={{ fontSize: 18 }}></span>
                 <span>MODIFIER</span>
               </div>
             )}
@@ -443,7 +445,7 @@ export default function ProfilMedecinPage() {
 
         {/* Identité */}
         <div style={card}>
-          <div style={secTitle}>⚕ {isPrepOnly ? 'Identité' : 'Identité du praticien'}</div>
+          <div style={secTitle}><Emblem name="caducee" size={21} inline />{isPrepOnly ? 'Identité' : 'Identité du praticien'}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div>
@@ -498,7 +500,7 @@ export default function ProfilMedecinPage() {
                     background: 'rgba(180,160,113,0.10)', border: '1px dashed rgba(180,160,113,0.30)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontFamily: DISPLAY, fontSize: 18, color: 'rgba(180,160,113,0.4)',
-                  }}>⚕</div>
+                  }}><Emblem name="caducee" size={21} inline /></div>
                 )}
                 <button
                   onClick={() => fileInputRef.current?.click()}
@@ -511,7 +513,7 @@ export default function ProfilMedecinPage() {
                     cursor: uploading ? 'default' : 'pointer',
                   }}
                 >
-                  {uploading ? 'UPLOAD EN COURS…' : '📷 CHOISIR UNE PHOTO'}
+                  {uploading ? 'UPLOAD EN COURS…' : 'CHOISIR UNE PHOTO'}
                 </button>
                 {profile.portrait_url && (
                   <button

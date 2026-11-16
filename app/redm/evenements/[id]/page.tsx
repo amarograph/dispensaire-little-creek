@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
+
 import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
@@ -245,24 +247,24 @@ export default function EvenementPage() {
           <span style={{ fontFamily: MONO, fontSize: 14, color: col, letterSpacing: '0.16em' }}>DISPENSAIRE · ÉVÈNEMENTS · {ev.nom.toUpperCase()}</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
-          <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: col, margin: 0 }}>{ev.icon} {ev.nom}</h1>
+          <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: col, margin: 0 }}><Ico v={ev.icon} size={56} inline fallback={ev.icon} />{ev.nom}</h1>
           <StatutPastille statut={ev.statut} editable={canStructure} onChange={s => appeler({ action: 'set_statut', statut: s })} />
           {canStructure && (
             <button onClick={() => appeler({ action: 'set_visible', visible: ev.visible === false })}
               title={ev.visible === false ? 'Réservé à la direction — cliquer pour montrer à tout le monde' : 'Visible par tout le monde — cliquer pour réserver à la direction'}
               style={{ fontFamily: MONO, fontSize: 13, letterSpacing: '0.06em', padding: '8px 16px', cursor: 'pointer', background: ev.visible === false ? 'rgba(200,80,80,0.12)' : 'rgba(168,185,145,0.12)', color: ev.visible === false ? KO : OK, border: `1px solid ${ev.visible === false ? 'rgba(223,154,136,0.5)' : 'rgba(168,185,145,0.5)'}` }}>
-              {ev.visible === false ? '🔒 RÉSERVÉ À LA DIRECTION — MONTRER À TOUS' : '👁 VISIBLE PAR TOUS — RÉSERVER À LA DIRECTION'}
+              {ev.visible === false ? 'RÉSERVÉ À LA DIRECTION — MONTRER À TOUS' : 'VISIBLE PAR TOUS — RÉSERVER À LA DIRECTION'}
             </button>
           )}
         </div>
         {ev.description && <p style={{ fontFamily: BODY, fontSize: 18, color: T.dim, marginTop: 8, maxWidth: 900 }}>{ev.description}</p>}
       </div>
 
-      {error && <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: KO, fontFamily: MONO, fontSize: 14, display: 'flex', justifyContent: 'space-between' }}><span>⚠ {error}</span><button onClick={() => setError('')} style={{ background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button></div>}
+      {error && <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: KO, fontFamily: MONO, fontSize: 14, display: 'flex', justifyContent: 'space-between' }}><span><Emblem name="alerte" size={20} inline />{error}</span><button onClick={() => setError('')} style={{ background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button></div>}
 
       {/* Onglets */}
       <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: 24, borderBottom: `1px solid ${T.border}` }}>
-        {([['affiches', `🖼 AFFICHES (${ev.affiches.length})`], ['registre', `👥 REGISTRE DES PARTICIPANTS (${ev.participants.length})`], ['recompenses', `🏆 RÉCOMPENSES / PRIX (${(ev.recompenses ?? []).length})`]] as const).map(([k, label]) => {
+        {([['affiches', `AFFICHES (${ev.affiches.length})`], ['registre', `REGISTRE DES PARTICIPANTS (${ev.participants.length})`], ['recompenses', `RÉCOMPENSES / PRIX (${(ev.recompenses ?? []).length})`]] as const).map(([k, label]) => {
           const on = tab === k;
           return <button key={k} onClick={() => setTab(k)} style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.08em', padding: '13px 28px', cursor: 'pointer', background: on ? `${col}18` : 'transparent', color: on ? col : T.dim, border: 'none', borderBottom: `3px solid ${on ? col : 'transparent'}` }}>{label}</button>;
         })}
@@ -334,10 +336,10 @@ export default function EvenementPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 18 }}>
               {(ev.recompenses ?? []).map(r => (
                 <div key={r.id} style={{ background: T.card, border: `1px solid ${T.border}`, borderTop: `4px solid ${col}`, padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {r.rang && <div style={{ fontFamily: MONO, fontSize: 13, color: col, letterSpacing: '0.12em' }}>🏆 {r.rang.toUpperCase()}</div>}
+                  {r.rang && <div style={{ fontFamily: MONO, fontSize: 13, color: col, letterSpacing: '0.12em' }}><Emblem name="argent" size={18} inline />{r.rang.toUpperCase()}</div>}
                   <div style={{ fontFamily: DISPLAY, fontSize: 26, color: T.text }}>{r.titre}</div>
                   {r.description && <div style={{ fontFamily: BODY, fontSize: 17, color: T.muted, lineHeight: 1.5, whiteSpace: 'pre-line' }}>{r.description}</div>}
-                  {r.gagnant && <div style={{ fontFamily: MONO, fontSize: 14, color: OK, marginTop: 6 }}>🏅 Gagnant : <b>{r.gagnant}</b></div>}
+                  {r.gagnant && <div style={{ fontFamily: MONO, fontSize: 14, color: OK, marginTop: 6 }}><Emblem name="argent" size={20} inline />Gagnant : <b>{r.gagnant}</b></div>}
                   {canStructure && (
                     <div style={{ display: 'flex', gap: 6, marginTop: 10, justifyContent: 'flex-end' }}>
                       {delR === r.id ? (
@@ -380,19 +382,19 @@ export default function EvenementPage() {
 
           {egalite && (
             <div style={{ marginBottom: 18, padding: '12px 18px', background: `${col}14`, border: `2px solid ${col}70`, fontFamily: MONO, fontSize: 14, color: T.text, lineHeight: 1.6 }}>
-              ⚖ <b style={{ color: col }}>ÉGALITÉ À {n}/{n}</b> — {resume.parfaits} participants ont tout bon : les énigmes de départage s&apos;affichent sur leurs fiches.
+              <Emblem name="livre" size={21} inline /><b style={{ color: col }}>ÉGALITÉ À {n}/{n}</b> — {resume.parfaits} participants ont tout bon : les énigmes de départage s&apos;affichent sur leurs fiches.
             </div>
           )}
 
           {/* Barre d'outils */}
           <div style={{ display: 'flex', gap: 10, marginBottom: 18, flexWrap: 'wrap' }}>
-            <input style={{ ...inp, flex: 1, minWidth: 220 }} placeholder="🔍 Rechercher un participant…" value={search} onChange={e => setSearch(e.target.value)} />
+            <input style={{ ...inp, flex: 1, minWidth: 220 }} placeholder="Rechercher un participant…" value={search} onChange={e => setSearch(e.target.value)} />
             <select style={{ ...inp, width: 210, cursor: 'pointer' }} value={tri} onChange={e => setTri(e.target.value as typeof tri)}>
               <option value="recent">Plus récents d&apos;abord</option>
               <option value="score">Classement (meilleur score)</option>
               <option value="nom">Ordre alphabétique</option>
             </select>
-            {canStructure && <button onClick={() => { setCollage(''); setInfoCollage(''); setEditBonus((ev.bonus ?? []).map(x => ({ ...x }))); setEditEnigmes(ev.enigmes.map(x => ({ ...x }))); }} style={{ fontFamily: MONO, fontSize: 14, padding: '10px 18px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>🧩 ÉDITER LES ÉNIGMES</button>}
+            {canStructure && <button onClick={() => { setCollage(''); setInfoCollage(''); setEditBonus((ev.bonus ?? []).map(x => ({ ...x }))); setEditEnigmes(ev.enigmes.map(x => ({ ...x }))); }} style={{ fontFamily: MONO, fontSize: 14, padding: '10px 18px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>ÉDITER LES ÉNIGMES</button>}
             {canRegistre && <button onClick={() => setNouveau({ prenom: '', nom: '' })} style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.1em', padding: '10px 24px', cursor: 'pointer', background: `${col}22`, color: col, border: `2px solid ${col}70` }}>✚ NOUVELLE FICHE</button>}
           </div>
 
@@ -411,7 +413,7 @@ export default function EvenementPage() {
           {/* Énigmes et réponses (pour juger : ✔ bonne / ✕ fausse) — réponses masquées tant qu'on ne clique pas */}
           <div style={{ background: T.card, border: `1px solid ${T.border}`, marginBottom: 18 }}>
             <div onClick={() => setVoirEnigmes(v => !v)} style={{ padding: '12px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
-              <span style={{ fontFamily: DISPLAY, fontSize: 20, color: T.text }}>📜 Les énigmes et leurs réponses</span>
+              <span style={{ fontFamily: DISPLAY, fontSize: 20, color: T.text }}><Emblem name="livre" size={28} inline />Les énigmes et leurs réponses</span>
               <span style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>{voirEnigmes ? '▲ MASQUER' : '▼ AFFICHER'}</span>
             </div>
             {voirEnigmes && (
@@ -419,7 +421,7 @@ export default function EvenementPage() {
                 <div>
                   <button onClick={() => setReponsesVisibles(rv => rv.size === n + bonusListe.length ? new Set() : new Set(Array.from({ length: n + bonusListe.length }, (_, i) => i)))}
                     style={{ fontFamily: MONO, fontSize: 13, padding: '6px 12px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>
-                    {reponsesVisibles.size === n + bonusListe.length ? '🙈 MASQUER TOUTES LES RÉPONSES' : '👁 AFFICHER TOUTES LES RÉPONSES'}
+                    {reponsesVisibles.size === n + bonusListe.length ? 'MASQUER TOUTES LES RÉPONSES' : 'AFFICHER TOUTES LES RÉPONSES'}
                   </button>
                 </div>
                 {[...ev.enigmes.map((en, i) => ({ en, cle: i, label: `${en.date ? `${en.date} — ` : ''}${i === n - 1 ? 'ÉNIGME FINALE' : `ÉNIGME ${romain(i)}`}`, depart: false })),
@@ -431,7 +433,7 @@ export default function EvenementPage() {
                       {en.enonce && <div style={{ fontFamily: BODY, fontSize: 17, color: T.muted, fontStyle: 'italic', lineHeight: 1.55, whiteSpace: 'pre-line', marginTop: 3 }}>« {en.enonce} »</div>}
                       <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 10 }}>
                         <button onClick={() => setReponsesVisibles(rv => { const s = new Set(rv); if (s.has(cle)) s.delete(cle); else s.add(cle); return s; })}
-                          style={{ fontFamily: MONO, fontSize: 13, padding: '4px 10px', cursor: 'pointer', background: 'transparent', color: OK, border: '1px solid rgba(168,185,145,0.4)' }}>{vue ? '🙈' : '👁 Réponse'}</button>
+                          style={{ fontFamily: MONO, fontSize: 13, padding: '4px 10px', cursor: 'pointer', background: 'transparent', color: OK, border: '1px solid rgba(168,185,145,0.4)' }}>{vue ? 'Masquer' : 'Réponse'}</button>
                         {vue && <span style={{ fontFamily: DISPLAY, fontSize: 18, color: OK }}>{en.reponse || '— non renseignée —'}</span>}
                       </div>
                     </div>
@@ -453,7 +455,7 @@ export default function EvenementPage() {
                 return (
                   <div key={p.id} style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `4px solid ${s.bonnes === n ? OK : s.repondues > 0 ? col : T.border}`, padding: '16px 20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 14 }}>
-                      {tri === 'score' && <span style={{ fontFamily: DISPLAY, fontSize: 22, color: rang < 3 ? col : T.dim, minWidth: 34 }}>{rang === 0 ? '🥇' : rang === 1 ? '🥈' : rang === 2 ? '🥉' : `#${rang + 1}`}</span>}
+                      {tri === 'score' && <span style={{ fontFamily: DISPLAY, fontSize: 22, color: rang < 3 ? col : T.dim, minWidth: 34 }}>{rang === 0 ? '1er' : rang === 1 ? '2e' : rang === 2 ? '3e' : `#${rang + 1}`}</span>}
                       <div style={{ flex: 1, minWidth: 200 }}>
                         <div style={{ fontFamily: DISPLAY, fontSize: 23, color: T.text }}>{nomComplet || '— sans nom —'}</div>
                         {p.notes && <div style={{ fontFamily: BODY, fontSize: 15, color: T.dim, fontStyle: 'italic', marginTop: 2 }}>{p.notes}</div>}
@@ -507,7 +509,7 @@ export default function EvenementPage() {
                       return (
                         <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px dashed ${col}80` }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 10 }}>
-                            <span style={{ fontFamily: MONO, fontSize: 14, color: col, letterSpacing: '0.1em' }}>⚖ DÉPARTAGE</span>
+                            <span style={{ fontFamily: MONO, fontSize: 14, color: col, letterSpacing: '0.1em' }}><Emblem name="livre" size={20} inline />DÉPARTAGE</span>
                             <span style={{ fontFamily: MONO, fontSize: 14, color: OK, background: 'rgba(168,185,145,0.10)', padding: '3px 10px', border: '1px solid rgba(168,185,145,0.4)' }}>✔ {sb.bonnes}</span>
                             <span style={{ fontFamily: MONO, fontSize: 14, color: KO, background: 'rgba(223,154,136,0.10)', padding: '3px 10px', border: '1px solid rgba(223,154,136,0.4)' }}>✕ {sb.fausses}</span>
                             <span style={{ fontFamily: DISPLAY, fontSize: 22, color: col }}>{sb.bonnes}/{sb.total}</span>
@@ -598,10 +600,10 @@ export default function EvenementPage() {
       {editEnigmes && createPortal(
         <div onClick={() => !saving && setEditEnigmes(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.78)', zIndex: 110, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '4vh 20px', overflowY: 'auto' }}>
           <div onClick={e => e.stopPropagation()} style={{ background: '#102B3B', border: `2px solid ${col}`, width: '100%', maxWidth: 900, padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <div style={{ fontFamily: DISPLAY, fontSize: 24, color: col }}>🧩 Énigmes et réponses</div>
+            <div style={{ fontFamily: DISPLAY, fontSize: 24, color: col }}>Énigmes et réponses</div>
 
             <details style={{ border: `1px solid ${T.border}`, padding: '10px 14px', background: 'rgba(0,0,0,0.15)' }}>
-              <summary style={{ fontFamily: MONO, fontSize: 14, color: T.gold, cursor: 'pointer' }}>📋 Coller toutes les énigmes d&apos;un coup</summary>
+              <summary style={{ fontFamily: MONO, fontSize: 14, color: T.gold, cursor: 'pointer' }}><Emblem name="registre" size={20} inline />Coller toutes les énigmes d&apos;un coup</summary>
               <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, margin: '10px 0', lineHeight: 1.6 }}>
                 Collez le texte au format « 25 octobre — Énigme I / titre / « énoncé » / Réponse : … ». Les énigmes reconnues remplissent les cases ci-dessous (à enregistrer ensuite).
               </div>
@@ -623,7 +625,7 @@ export default function EvenementPage() {
               </div>
             ))}
 
-            <div style={{ fontFamily: DISPLAY, fontSize: 21, color: KO, marginTop: 6 }}>⚖ Énigmes de départage (égalité à {editEnigmes.length}/{editEnigmes.length})</div>
+            <div style={{ fontFamily: DISPLAY, fontSize: 21, color: KO, marginTop: 6 }}><Emblem name="livre" size={29} inline />Énigmes de départage (égalité à {editEnigmes.length}/{editEnigmes.length})</div>
             <div style={{ fontFamily: MONO, fontSize: 12, color: T.dim, lineHeight: 1.6 }}>
               Affichées sur la fiche des participants à égalité parfaite. Deux énigmes ayant le même « choix » ne comptent qu’une fois (on peut noter les deux, seule la première notée compte).
             </div>

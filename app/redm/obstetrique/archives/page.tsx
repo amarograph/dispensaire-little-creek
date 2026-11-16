@@ -1,6 +1,6 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -38,7 +38,7 @@ export default function ObstetriqueArchivesHubPage() {
           </button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: '#D1B77C', letterSpacing: '0.18em' }}>OBSTÉTRIQUE · ARCHIVES</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#D1B77C', margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="livres" size={60} />Archives</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#D1B77C', margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="registre" size={60} />Archives</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: '#C8BEA5', letterSpacing: '0.12em', marginTop: 8 }}>
           MÉMOIRE DE L&apos;OBSTÉTRIQUE · 1890 — SÉLECTIONNEZ UNE SECTION
         </p>
@@ -63,7 +63,7 @@ export default function ObstetriqueArchivesHubPage() {
                 transform:   h ? 'translateY(-2px)' : 'none',
                 boxShadow:   h ? `0 8px 30px rgba(0,0,0,0.5), 0 0 20px ${m.color}20` : '0 2px 8px rgba(0,0,0,0.35)',
               }}>
-              <div style={{ fontSize: 45, marginBottom: 16 }}>{m.icon}</div>
+              <div style={{ fontSize: 45, marginBottom: 16 }}><Ico v={m.icon} size={63} fallback={m.icon} /></div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
                 <span style={{ fontFamily: DISPLAY, fontSize: 26, color: '#EADCB9' }}>{m.label}</span>
                 <span style={{ fontFamily: MONO, fontSize: 14, padding: '3px 8px', background: m.color + '22', color: m.color, border: `1px solid ${m.color + '55'}`, letterSpacing: '0.1em', flexShrink: 0 }}>{m.badge}</span>

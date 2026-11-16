@@ -1,6 +1,6 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -140,15 +140,15 @@ function RegistreLine({ f, tarifs, onToggle }: { f: Facture; tarifs: Record<stri
             <span style={{ fontFamily:DISPLAY, fontSize: 17, color:T.text }}>{f.medecin || '— Non assigné —'}</span>
           </div>
           <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
-            {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
-            {f.reduction && <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', background:'rgba(136,170,192,0.12)', padding:'1px 7px', border:'1px solid rgba(136,170,192,0.4)' }}>🐴 {f.reduction} −{f.reductionPct ?? 10} %</span>}
+            {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}><Emblem name="registre" size={20} inline />COMMANDE</span>}
+            {f.reduction && <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', background:'rgba(136,170,192,0.12)', padding:'1px 7px', border:'1px solid rgba(136,170,192,0.4)' }}>{f.reduction} −{f.reductionPct ?? 10} %</span>}
             {pres.map((p,i) => {
               const cat = tarifs[p.id];
               const nom = p.nom ?? cat?.nom ?? p.id;
               const isAchat = p.prix != null || cat?.type === 'achat';
               return (
                 <span key={i} style={{ fontFamily:MONO, fontSize: 14, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
-                  {isAchat ? '🛒 ' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''}
+                  {isAchat ? '' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''}
                 </span>
               );
             })}
@@ -157,7 +157,7 @@ function RegistreLine({ f, tarifs, onToggle }: { f: Facture; tarifs: Record<stri
         </div>
         <div style={{ fontFamily:DISPLAY, fontSize: 19, color:col, flexShrink:0, minWidth:65, textAlign:'right' }}>{fmt$(f.montant)}</div>
         <div style={{ fontFamily:MONO, fontSize: 14, padding:'4px 8px', background:col+'18', color:col, border:`1px solid ${col}50`, flexShrink:0 }}>
-          {STATUT_ICON[f.statut]} {f.statut}
+          <Ico v={STATUT_ICON[f.statut]} size={21} inline fallback={STATUT_ICON[f.statut]} />{f.statut}
         </div>
         {onToggle && f.statut !== 'ANNULÉ' && (
           <button onClick={() => onToggle(f)} title={f.statut === 'PAYÉ' ? 'Remettre en attente' : 'Marquer comme payée'}
@@ -305,7 +305,7 @@ export default function DirectionComptabiliteArchivesPage() {
             )}
           </div>
           <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.14em', marginBottom:6 }}>ARCHIVES · DÉTAIL SEMAINE</div>
-          <h1 style={{ fontFamily:DISPLAY, fontSize:30, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="agenda" size={45} />{openArc.weekLabel}</h1>
+          <h1 style={{ fontFamily:DISPLAY, fontSize:30, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="calendrier" size={45} />{openArc.weekLabel}</h1>
         </div>
 
         {/* Stats semaine */}
@@ -330,7 +330,7 @@ export default function DirectionComptabiliteArchivesPage() {
             const col = PAYEUR_COL[b.key];
             return (
               <div key={b.key} style={{ background:`${col}12`, border:`1px solid ${col}45`, borderTop:`3px solid ${col}`, padding:'12px 16px' }}>
-                <div style={{ fontFamily:MONO, fontSize: 14, color:col, letterSpacing:'0.12em', marginBottom:4 }}>{b.icon} {b.key.toUpperCase()}</div>
+                <div style={{ fontFamily:MONO, fontSize: 14, color:col, letterSpacing:'0.12em', marginBottom:4 }}><Ico v={b.icon} size={20} inline fallback={b.icon} />{b.key.toUpperCase()}</div>
                 <div style={{ fontFamily:DISPLAY, fontSize:26, color:col }}>{fmt$(st.total)}</div>
                 <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3 }}>
                   {st.actes} acte(s)
@@ -344,7 +344,7 @@ export default function DirectionComptabiliteArchivesPage() {
 
         {/* Salaires de la semaine */}
         <div style={{ marginBottom:24 }}>
-          <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}>💰 Salaires de la semaine</div>
+          <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}><Emblem name="argent" size={31} inline />Salaires de la semaine</div>
           {salaires.length === 0 ? (
             <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Aucun acte enregistré cette semaine</div>
           ) : (
@@ -373,7 +373,7 @@ export default function DirectionComptabiliteArchivesPage() {
 
         {/* Registre des caisses de la semaine */}
         <div style={{ marginBottom:24 }}>
-          <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}>💵 Registre des caisses</div>
+          <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text, marginBottom:10 }}><Emblem name="argent" size={31} inline />Registre des caisses</div>
           {caissesLoading ? (
             <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, padding:'20px', textAlign:'center', border:`1px dashed ${T.border}` }}>Chargement…</div>
           ) : caissesStaff.length === 0 ? (
@@ -432,7 +432,7 @@ export default function DirectionComptabiliteArchivesPage() {
           return (
             <div key={b.key} style={{ marginBottom:24 }}>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, flexWrap:'wrap', marginBottom:10, paddingBottom:8, borderBottom:`2px solid ${col}60` }}>
-                <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text }}>{b.icon} {b.titre}</div>
+                <div style={{ fontFamily:DISPLAY, fontSize: 22, color:T.text }}><Ico v={b.icon} size={31} inline fallback={b.icon} />{b.titre}</div>
                 <div style={{ display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
                   {canEdit && st.attente > 0 && (
                     <button onClick={() => changeStatut(openArc.id, list, 'PAYÉ')}
@@ -445,7 +445,7 @@ export default function DirectionComptabiliteArchivesPage() {
                     <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim }}>
                       {institution ? 'À FACTURER (EN ATTENTE)' : 'TOTAL'}
                       {st.percu > 0 && <span style={{ color:'#A8B991', marginLeft:8 }}>· ✔ {fmt$(st.percu)} payé</span>}
-                      {!institution && st.attente > 0 && <span style={{ color:'#D1B77C', marginLeft:8 }}>· ⏳ {fmt$(st.attente)} en attente</span>}
+                      {!institution && st.attente > 0 && <span style={{ color:'#D1B77C', marginLeft:8 }}>· <Emblem name="montre" size={21} inline />{fmt$(st.attente)} en attente</span>}
                     </div>
                   </div>
                 </div>
@@ -475,7 +475,7 @@ export default function DirectionComptabiliteArchivesPage() {
           <button onClick={()=>router.push('/redm/direction/comptabilite')} style={{ fontFamily:MONO, fontSize:15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.16em' }}>DIRECTION · COMPTABILITÉ · ARCHIVES</span>
         </div>
-        <h1 style={{ fontFamily:DISPLAY, fontSize:35, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="livres" size={53} />Registres archivés</h1>
+        <h1 style={{ fontFamily:DISPLAY, fontSize:35, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="registre" size={53} />Registres archivés</h1>
         <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
           HISTORIQUE DES SEMAINES CLOSES & SALAIRES VERSÉS
         </p>
@@ -502,7 +502,7 @@ export default function DirectionComptabiliteArchivesPage() {
           const col = PAYEUR_COL[b.key];
           return (
             <div key={b.key} style={{ background:`${col}12`, border:`1px solid ${col}45`, borderTop:`3px solid ${col}`, padding:'12px 16px' }}>
-              <div style={{ fontFamily:MONO, fontSize: 14, color:col, letterSpacing:'0.12em', marginBottom:4 }}>{b.icon} {b.key.toUpperCase()}</div>
+              <div style={{ fontFamily:MONO, fontSize: 14, color:col, letterSpacing:'0.12em', marginBottom:4 }}><Ico v={b.icon} size={20} inline fallback={b.icon} />{b.key.toUpperCase()}</div>
               <div style={{ fontFamily:DISPLAY, fontSize:26, color:col }}>{fmt$(b.total)}</div>
               <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginTop:3 }}>
                 {b.actes} acte(s)
@@ -518,7 +518,7 @@ export default function DirectionComptabiliteArchivesPage() {
       {canEdit && totalAttente > 0 && (
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, flexWrap:'wrap', marginBottom:20, padding:'12px 18px', background:'rgba(168,185,145,0.08)', border:'1px solid rgba(168,185,145,0.35)' }}>
           <span style={{ fontFamily:MONO, fontSize: 14, color:T.muted }}>
-            ⏳ <b style={{ color:'#D1B77C' }}>{fmt$(totalAttente)}</b> encore en attente sur l&apos;ensemble des archives (Civil, Shérif et Mairie)
+            <Emblem name="montre" size={21} inline /><b style={{ color:'#D1B77C' }}>{fmt$(totalAttente)}</b> encore en attente sur l&apos;ensemble des archives (Civil, Shérif et Mairie)
           </span>
           {confirmTout === 'global'
             ? <span style={{ display:'flex', gap:8 }}>
@@ -533,7 +533,7 @@ export default function DirectionComptabiliteArchivesPage() {
       <div style={{ marginBottom:20 }}>
         <input
           style={{ fontFamily:MONO, fontSize:15, background:'rgba(0,0,0,0.25)', border:`1px solid ${T.border}`, color:T.text, padding:'11px 18px', outline:'none', width:'100%', boxSizing:'border-box' }}
-          placeholder="🔍  Rechercher une semaine, un patient, un médecin…"
+          placeholder=" Rechercher une semaine, un patient, un médecin…"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
@@ -562,7 +562,7 @@ export default function DirectionComptabiliteArchivesPage() {
                   <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
                     <div style={{ display:'flex', alignItems:'center', gap:10 }}>
                       <span style={{ fontFamily:DISPLAY, fontSize:19, color: allDone ? '#6A9A68' : T.gold }}>
-                        {allDone ? '✔' : '📅'} {arc.weekLabel}
+                        {allDone ? '✔ ' : <Emblem name="calendrier" size={22} inline />}{arc.weekLabel}
                       </span>
                       {allDone && <span style={{ fontFamily:MONO, fontSize: 14, color:'#A8B991', background:'rgba(74,96,72,0.20)', padding:'2px 8px', border:'1px solid rgba(74,96,72,0.40)' }}>SOLDÉ</span>}
                     </div>
@@ -572,10 +572,10 @@ export default function DirectionComptabiliteArchivesPage() {
                         const st = statsOf(arc.factures.filter(f => bucket(f) === b.key));
                         if (st.actes === 0) return null;
                         const col = PAYEUR_COL[b.key];
-                        return <span key={b.key} style={{ fontFamily:MONO, fontSize: 14, color:col, background:`${col}18`, padding:'1px 7px', border:`1px solid ${col}40` }}>{b.key} ×{st.actes}{b.key !== 'Civil' && st.attente > 0 ? ` · ⏳ ${fmt$(st.attente)}` : ''}</span>;
+                        return <span key={b.key} style={{ fontFamily:MONO, fontSize: 14, color:col, background:`${col}18`, padding:'1px 7px', border:`1px solid ${col}40` }}>{b.key} ×{st.actes}{b.key !== 'Civil' && st.attente > 0 ? ` · ${fmt$(st.attente)}` : ''}</span>;
                       })}
                       {salaires.map(s => (
-                        <span key={s.medecin} style={{ fontFamily:MONO, fontSize: 14, color:'#BAAAC6', background:'rgba(155,106,200,0.12)', padding:'1px 7px', border:'1px solid rgba(155,106,200,0.35)' }}>👤 {s.medecin} · {fmt$(s.salaire)}</span>
+                        <span key={s.medecin} style={{ fontFamily:MONO, fontSize: 14, color:'#BAAAC6', background:'rgba(155,106,200,0.12)', padding:'1px 7px', border:'1px solid rgba(155,106,200,0.35)' }}><Emblem name="personnel" size={20} inline />{s.medecin} · {fmt$(s.salaire)}</span>
                       ))}
                     </div>
                   </div>
@@ -607,7 +607,7 @@ export default function DirectionComptabiliteArchivesPage() {
                     </div>
                     <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, display:'flex', gap:10 }}>
                       {arc.totalPercu > 0 && <span style={{color:'#A8B991'}}>✔ {fmt$(arc.totalPercu)}</span>}
-                      {arc.totalAttente > 0 && <span style={{color:'#D1B77C'}}>⏳ {fmt$(arc.totalAttente)}</span>}
+                      {arc.totalAttente > 0 && <span style={{color:'#D1B77C'}}><Emblem name="montre" size={21} inline />{fmt$(arc.totalAttente)}</span>}
                     </div>
                     <div style={{ fontFamily:MONO, fontSize: 14, color:'rgba(209,183,124,0.5)', marginTop:2 }}>
                       VOIR LE DÉTAIL →

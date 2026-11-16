@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { RichEditor, RichContent, templateToRich, isRichEmpty, plainLength } from '@/app/redm/_components/RichDoc';
@@ -289,7 +291,7 @@ function Block({ icon, title, color, children }: { icon: string; title: string; 
   return (
     <div style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `3px solid ${color}`, marginBottom: 14, overflow: 'hidden' }}>
       <div style={{ padding: '10px 20px', borderBottom: `1px solid ${T.border}`, background: color + '10', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span style={{ fontSize: 19 }}>{icon}</span>
+        <span style={{ fontSize: 19 }}><Ico v={icon} size={27} fallback={icon} /></span>
         <span style={{ fontFamily: MONO, fontSize: 14, color, letterSpacing: '0.14em' }}>{title}</span>
       </div>
       <div style={{ padding: '16px 20px' }}>{children}</div>
@@ -521,8 +523,8 @@ export default function PatientDetailPage() {
 
       <div className="no-print" style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
         <button onClick={() => setCertDoc(null)} style={{ fontFamily: MONO, fontSize: 14, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
-        <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>🖨 IMPRIMER</button>
-        <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#526C45', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>💾 ENREGISTRER PNG</button>
+        <button onClick={() => window.print()} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(107,122,187,0.22)', border: '1px solid rgba(107,122,187,0.55)', color: '#8899CC', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>IMPRIMER</button>
+        <button onClick={saveAsPng} style={{ fontFamily: MONO, fontSize: 14, background: 'rgba(122,154,106,0.18)', border: '1px solid rgba(122,154,106,0.5)', color: '#526C45', padding: '9px 22px', cursor: 'pointer', letterSpacing: '0.1em' }}>ENREGISTRER PNG</button>
       </div>
 
       {/* Certificat */}
@@ -627,9 +629,9 @@ export default function PatientDetailPage() {
       {/* ── Onglets ── */}
       <div style={{ display: 'flex', gap: 0, marginBottom: 22, borderBottom: `1px solid ${T.border}` }}>
         {([
-          ['dossier',     '📋 DOSSIER',     T.gold,    null],
-          ['documents',   '📄 DOCUMENTS',   T.gold,    docs.length],
-          ['facturation', '💰 FACTURATION', '#D1B77C', factures.length],
+          ['dossier',     'DOSSIER',     T.gold,    null],
+          ['documents',   'DOCUMENTS',   T.gold,    docs.length],
+          ['facturation', 'FACTURATION', '#D1B77C', factures.length],
         ] as const).map(([key, label, col, cnt]) => {
           const on = tab === key;
           return (
@@ -685,7 +687,7 @@ export default function PatientDetailPage() {
 
           {docsError && (
             <div style={{ marginBottom: 16, padding: '12px 16px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14, display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span>⚠ Erreur chargement documents : {docsError}</span>
+              <span><Emblem name="alerte" size={21} inline />Erreur chargement documents : {docsError}</span>
               <button onClick={() => {
                 setDocsError('');
                 setDocsLoading(true);
@@ -730,7 +732,7 @@ export default function PatientDetailPage() {
                       </div>
                       <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }} onClick={e => e.stopPropagation()}>
                         <button onClick={() => setCertDoc(doc)}
-                          style={{ fontFamily: MONO, fontSize: 14, padding: '5px 10px', cursor: 'pointer', background: 'rgba(107,122,187,0.12)', color: '#8899CC', border: `1px solid rgba(107,122,187,0.35)` }}>📄</button>
+                          style={{ fontFamily: MONO, fontSize: 14, padding: '5px 10px', cursor: 'pointer', background: 'rgba(107,122,187,0.12)', color: '#8899CC', border: `1px solid rgba(107,122,187,0.35)` }}><Emblem name="registre" size={20} inline /></button>
                         <button onClick={() => openEditDoc(doc)}
                           style={{ fontFamily: MONO, fontSize: 14, padding: '5px 10px', cursor: 'pointer', background: 'rgba(209,183,124,0.10)', color: T.gold, border: `1px solid rgba(209,183,124,0.3)` }}>✎</button>
                         {delDocConfirm === doc.id
@@ -820,7 +822,7 @@ export default function PatientDetailPage() {
                         </div>
                         {/* Statut */}
                         <div style={{ fontFamily: MONO, fontSize: 14, color: col, background: `${col}18`, padding: '5px 10px', border: `1px solid ${col}50`, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 4 }}>
-                          {PAI_ICON[f.statut]} {f.statut}
+                          <Ico v={PAI_ICON[f.statut]} size={21} inline fallback={PAI_ICON[f.statut]} />{f.statut}
                         </div>
                       </div>
                     </div>
@@ -859,7 +861,7 @@ export default function PatientDetailPage() {
                     value={docType}
                     onChange={e => handleDocTypeChange(e.target.value as DocType)}>
                     {DOC_TYPES.map(t => (
-                      <option key={t} value={t}>{DOC_ICONS[t]} {t}</option>
+                      <option key={t} value={t}>{t}</option>
                     ))}
                   </select>
                 </div>
@@ -892,7 +894,7 @@ export default function PatientDetailPage() {
             <div style={{ padding: '16px 28px 24px', borderTop: `1px solid ${T.border}`, flexShrink: 0 }}>
               {docError && (
                 <div style={{ marginBottom: 10, padding: '8px 14px', background: 'rgba(200,80,80,0.12)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}>
-                  ⚠ {docError}
+                  <Emblem name="alerte" size={21} inline />{docError}
                 </div>
               )}
               <button onClick={submitDoc} disabled={!docTitre.trim() || docSaving}

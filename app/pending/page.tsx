@@ -1,3 +1,4 @@
+import Emblem from '@/app/redm/_components/Emblem';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { getMemberStatus } from '@/lib/auth';
@@ -22,7 +23,7 @@ export default async function PendingPage() {
   return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md text-center">
-        <div className="text-5xl mb-4">{rejected ? '⛔' : '⏳'}</div>
+        <div className="text-5xl mb-4">{rejected ? <Emblem name="alerte" size={72} /> : <Emblem name="montre" size={72} />}</div>
         <h1 className="text-2xl font-bold text-white mb-2">
           {rejected ? 'Accès refusé' : 'En attente de validation'}
         </h1>

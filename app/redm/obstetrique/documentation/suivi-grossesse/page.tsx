@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState } from 'react';
 import { ObsDocEditor } from '../_components/ObsDocEditor';
 import { FormSection, MultiToggle } from '../_components/FormControls';
@@ -33,7 +35,7 @@ export default function SuiviGrossessePage() {
       guidedTop={<>
           {/* SCÉNARIO — tout en haut */}
           <div style={{ background: T.card, border: `2px solid ${COL_SUIVI}70`, padding: '16px 18px' }}>
-            <div style={{ fontFamily: MONO, fontSize: 14, color: COL_SUIVI, letterSpacing: '0.12em', marginBottom: 10 }}>🗂 SCÉNARIO *</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: COL_SUIVI, letterSpacing: '0.12em', marginBottom: 10 }}><Emblem name="registre" size={20} inline />SCÉNARIO *</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {SUIVI_SCENARIOS.map(s => {
                 const on = scenarioId === s.id;
@@ -58,7 +60,7 @@ export default function SuiviGrossessePage() {
             )}
             {scenario?.prioritaires && (
               <div style={{ marginTop: 8, padding: '10px 12px', background: 'rgba(139,64,64,0.10)', border: '1px solid rgba(139,64,64,0.4)', fontFamily: MONO, fontSize: 13, color: '#DF9A88', letterSpacing: '0.02em' }}>
-                ⚠ Priorité : vérifier en particulier l&apos;état général, les saignements, les douleurs, les contractions, les mouvements de l&apos;enfant et les battements du cœur.
+                <Emblem name="alerte" size={21} inline />Priorité : vérifier en particulier l&apos;état général, les saignements, les douleurs, les contractions, les mouvements de l&apos;enfant et les battements du cœur.
               </div>
             )}
           </div>

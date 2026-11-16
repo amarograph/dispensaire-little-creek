@@ -111,7 +111,7 @@ export default function ObstetriqueArchivesCloturees() {
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.16em' }}>OBSTÉTRIQUE · ARCHIVES CLÔTURÉES</span>
         </div>
         <div>
-          <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0, lineHeight: 1.1 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="livres" size={57} />Archives Clôturées</h1>
+          <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0, lineHeight: 1.1 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="registre" size={57} />Archives Clôturées</h1>
           <div style={{ fontFamily: MONO, fontSize: 14, color: T.muted, marginTop: 8, letterSpacing: '0.08em' }}>
             Dossiers clôturés (statut CLÔTURÉE) · {dossiers.length} dossier{dossiers.length > 1 ? 's' : ''}
           </div>

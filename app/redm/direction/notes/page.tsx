@@ -1,6 +1,6 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo } from 'react';
@@ -126,7 +126,7 @@ export default function RegistreNotesPage() {
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
           <div>
-            <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="grimoire" size={57} />Registre des notes</h1>
+            <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="notes" size={57} />Registre des notes</h1>
             <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
               NOTES, DÉCISIONS ET COMPTES-RENDUS DE LA DIRECTION · VISIBLES PAR LA DIRECTION UNIQUEMENT
             </p>
@@ -142,7 +142,7 @@ export default function RegistreNotesPage() {
 
       {/* Onglets : notes libres / comptes & codes (confidentiel) */}
       <div style={{ display: 'flex', gap: 0, marginBottom: 22, borderBottom: `1px solid ${T.border}` }}>
-        {([['notes', '📝 NOTES'], ['codes', '🔐 COMPTES & CODES']] as const).map(([id, label]) => {
+        {([['notes', 'NOTES'], ['codes', 'COMPTES & CODES']] as const).map(([id, label]) => {
           const on = vue === id;
           return (
             <button key={id} onClick={() => setVue(id)}
@@ -156,7 +156,7 @@ export default function RegistreNotesPage() {
       {vue === 'codes' ? <CodesSection /> : (<>
       {error && (
         <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14, display: 'flex', justifyContent: 'space-between' }}>
-          <span>⚠ {error}</span><button onClick={() => setError('')} style={{ background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button>
+          <span><Emblem name="alerte" size={21} inline />{error}</span><button onClick={() => setError('')} style={{ background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button>
         </div>
       )}
 
@@ -177,7 +177,7 @@ export default function RegistreNotesPage() {
 
       {/* Filtres */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
-        <input style={{ ...inp, flex: 1, minWidth: 260 }} placeholder="🔍 Rechercher dans les titres, le contenu, l'auteur…" value={search} onChange={e => setSearch(e.target.value)} />
+        <input style={{ ...inp, flex: 1, minWidth: 260 }} placeholder="Rechercher dans les titres, le contenu, l'auteur…" value={search} onChange={e => setSearch(e.target.value)} />
         <select style={{ ...inp, width: 190, cursor: 'pointer' }} value={ordre} onChange={e => setOrdre(e.target.value as 'recent' | 'ancien')}>
           <option value="recent">Plus récentes d&apos;abord</option>
           <option value="ancien">Plus anciennes d&apos;abord</option>
@@ -191,7 +191,7 @@ export default function RegistreNotesPage() {
           return (
             <button key={c || 'tous'} onClick={() => setFiltre(c)}
               style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.08em', padding: '9px 16px', cursor: 'pointer', background: on ? `${col}18` : 'transparent', color: on ? col : T.dim, border: 'none', borderBottom: `3px solid ${on ? col : 'transparent'}`, whiteSpace: 'nowrap', flexShrink: 0 }}>
-              {c ? `${CAT_ICON[c]} ${c}` : 'TOUTES'}
+              {c ? c : 'TOUTES'}
               <span style={{ marginLeft: 6, color: col, background: `${col}22`, padding: '1px 6px' }}>{cnt}</span>
             </button>
           );
@@ -215,9 +215,9 @@ export default function RegistreNotesPage() {
                 <div onClick={() => basculer(n.id)} style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', flexWrap: 'wrap' }}>
                   <div style={{ flex: 1, minWidth: 220 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 4 }}>
-                      {n.epinglee && <span title="Épinglée" style={{ fontSize: 16 }}>📌</span>}
+                      {n.epinglee && <span title="Épinglée" style={{ fontSize: 16 }}><Emblem name="notes" size={22} inline /></span>}
                       <span style={{ fontFamily: DISPLAY, fontSize: 21, color: T.text }}>{n.titre}</span>
-                      <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: `${col}18`, padding: '2px 8px', border: `1px solid ${col}40` }}>{CAT_ICON[n.categorie]} {n.categorie}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 13, color: col, background: `${col}18`, padding: '2px 8px', border: `1px solid ${col}40` }}><Ico v={CAT_ICON[n.categorie]} size={20} inline fallback={CAT_ICON[n.categorie]} />{n.categorie}</span>
                     </div>
                     <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim }}>
                       {rpDisplay(n.date)} · par {n.auteur}{n.modifieePar ? ` · modifiée par ${n.modifieePar}` : ''}
@@ -232,7 +232,7 @@ export default function RegistreNotesPage() {
                     ) : (
                       <>
                         <button title={n.epinglee ? 'Désépingler' : 'Épingler en haut'} onClick={() => appeler({ action: 'pin', id: n.id, epinglee: !n.epinglee })}
-                          style={{ ...petit, background: n.epinglee ? 'rgba(232,184,96,0.18)' : 'transparent', color: n.epinglee ? '#E8B860' : T.dim, border: `1px solid ${n.epinglee ? '#E8B86070' : T.border}` }}>📌</button>
+                          style={{ ...petit, background: n.epinglee ? 'rgba(232,184,96,0.18)' : 'transparent', color: n.epinglee ? '#E8B860' : T.dim, border: `1px solid ${n.epinglee ? '#E8B86070' : T.border}` }}><Emblem name="notes" size={21} inline /></button>
                         <button title="Modifier" onClick={() => { setError(''); setEdit({ id: n.id, titre: n.titre, categorie: n.categorie, contenu: n.contenu, date: n.date, epinglee: n.epinglee }); }}
                           style={{ ...petit, background: 'rgba(209,183,124,0.10)', color: T.gold, border: '1px solid rgba(209,183,124,0.3)' }}>✎</button>
                         <button title="Supprimer" onClick={() => setDelConfirm(n.id)} style={{ ...petit, background: 'transparent', color: '#8B6060', border: '1px solid rgba(139,64,64,0.3)' }}>✕</button>
@@ -263,7 +263,7 @@ export default function RegistreNotesPage() {
               <div><label style={lbl}>TITRE *</label><input style={inp} value={edit.titre} onChange={e => setEdit(x => x ? { ...x, titre: e.target.value } : x)} placeholder="Objet de la note" autoFocus /></div>
               <div><label style={lbl}>CATÉGORIE</label>
                 <select style={{ ...inp, cursor: 'pointer' }} value={edit.categorie} onChange={e => setEdit(x => x ? { ...x, categorie: e.target.value } : x)}>
-                  {CATEGORIES.map(c => <option key={c} value={c}>{CAT_ICON[c]} {c}</option>)}
+                  {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
               <div><label style={lbl}>DATE (RP)</label><input style={inp} value={edit.date} onChange={e => setEdit(x => x ? { ...x, date: e.target.value } : x)} placeholder="JJ/MM/AAAA" /></div>
@@ -274,9 +274,9 @@ export default function RegistreNotesPage() {
             </div>
             <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: MONO, fontSize: 14, color: T.muted, cursor: 'pointer' }}>
               <input type="checkbox" checked={edit.epinglee} onChange={e => setEdit(x => x ? { ...x, epinglee: e.target.checked } : x)} style={{ width: 18, height: 18, cursor: 'pointer' }} />
-              📌 Épingler cette note en haut du registre
+              <Emblem name="notes" size={21} inline />Épingler cette note en haut du registre
             </label>
-            {error && <div style={{ padding: '8px 12px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}>⚠ {error}</div>}
+            {error && <div style={{ padding: '8px 12px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}><Emblem name="alerte" size={20} inline />{error}</div>}
             <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
               <button onClick={() => setEdit(null)} disabled={saving} style={{ fontFamily: MONO, fontSize: 14, padding: '11px 24px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>ANNULER</button>
               <button onClick={enregistrer} disabled={saving || !edit.titre.trim()}

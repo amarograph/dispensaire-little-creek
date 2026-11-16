@@ -1,5 +1,7 @@
 'use client';
 
+import { Ico } from '@/app/redm/_components/Emblem';
+
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -134,7 +136,7 @@ export default function Notifier() {
             }}>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom: 8 }}>
                 <div style={{ display:'flex', alignItems:'center', gap: 8 }}>
-                  <span style={{ fontSize: 16 }}>{s.icon}</span>
+                  <span style={{ fontSize: 16 }}><Ico v={s.icon} size={22} fallback={s.icon} /></span>
                   <span style={{ fontFamily: MONO, fontSize: 14, color: s.acc, letterSpacing: '0.16em' }}>
                     {s.label}
                   </span>

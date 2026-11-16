@@ -1,6 +1,8 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import IcoPicker from '@/app/redm/_components/IcoPicker';
+
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -72,7 +74,7 @@ const DEFAULT_CATEGORIES: StockCategorie[] = [
   { id: 'materiels-medicaux', nom: 'Matériels médicaux', icon: '💊', items: MATERIELS_MEDICAUX_DEFAULT },
 ];
 
-const ICONS = ['📦', '🌿', '💊', '🧪', '🩹', '🗃', '🧰', '⚗', '🧴', '📋'];
+const ICONS = ['registre', 'mortier', 'flacons', 'bandages', 'mallette', 'instruments', 'caducee', 'livre'];
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -172,7 +174,7 @@ export default function StockagePage() {
     const cat = categories.find(c => c.id === catId);
     const item = cat?.items.find(i => i.id === itemId);
     if (cat && item && item.quantite >= SEUIL_ALERTE && q < SEUIL_ALERTE) {
-      pushToast(`${cat.icon} ${cat.nom} — ${item.intitule || 'Article sans nom'}`, q);
+      pushToast(`${cat.nom} — ${item.intitule || 'Article sans nom'}`, q);
     }
     setCategories(prev => prev.map(c => c.id !== catId ? c : { ...c, items: c.items.map(it => it.id === itemId ? { ...it, quantite: q } : it) }));
   }
@@ -202,7 +204,7 @@ export default function StockagePage() {
         {toasts.map(t => (
           <div key={t.id} style={{ background: T.card, border: '1px solid rgba(168,32,32,0.5)', borderLeft: '4px solid #EADCB9', padding: '14px 18px', boxShadow: '0 6px 24px rgba(74,62,32,0.14)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <span style={{ fontFamily: MONO, fontSize: 14, color: '#C87060', letterSpacing: '0.16em' }}>⚠ STOCK FAIBLE</span>
+              <span style={{ fontFamily: MONO, fontSize: 14, color: '#C87060', letterSpacing: '0.16em' }}><Emblem name="alerte" size={20} inline />STOCK FAIBLE</span>
               <button onClick={() => setToasts(prev => prev.filter(x => x.id !== t.id))} style={{ background: 'none', border: 'none', color: T.muted, cursor: 'pointer', fontFamily: MONO, fontSize: 14, padding: 0 }}>✕</button>
             </div>
             <div style={{ fontFamily: BODY, fontSize: 15, color: T.text }}>{t.titre}</div>
@@ -222,23 +224,23 @@ export default function StockagePage() {
 
       {/* Bandeau */}
       <div style={{ marginBottom: 30 }}>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.gold, margin: '0 0 6px' , display:'flex', alignItems:'center', gap:12 }}><Emblem name="mortier" size={54} />Gestionnaire de Stockage</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.gold, margin: '0 0 6px' , display:'flex', alignItems:'center', gap:12 }}><Emblem name="flacons" size={54} />Gestionnaire de Stockage</h1>
         <div style={{ fontFamily: BODY, fontSize: 16, color: T.muted }}>Inventaire et réapprovisionnement du dispensaire</div>
         <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
-          ⚠ UNE ALERTE EST ENVOYÉE DÈS QU'UN ARTICLE DESCEND SOUS {SEUIL_ALERTE} UNITÉS
+          <Emblem name="alerte" size={21} inline />UNE ALERTE EST ENVOYÉE DÈS QU'UN ARTICLE DESCEND SOUS {SEUIL_ALERTE} UNITÉS
         </div>
       </div>
 
       {/* Dépôts récents déclarés par le personnel */}
       {depots.length > 0 && (
         <div style={{ marginBottom: 26 }}>
-          <div style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.12em', marginBottom: 8 }}>📥 DÉPÔTS RÉCENTS DÉCLARÉS PAR LE PERSONNEL</div>
+          <div style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.12em', marginBottom: 8 }}><Emblem name="courrier" size={20} inline />DÉPÔTS RÉCENTS DÉCLARÉS PAR LE PERSONNEL</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5, maxHeight: 240, overflowY: 'auto' }}>
             {depots.map(d => (
               <div key={d.id} style={{ display: 'flex', alignItems: 'center', gap: 10, background: T.card, border: `1px solid ${T.border}`, borderLeft: '3px solid #A8B991', padding: '7px 12px' }}>
                 <span style={{ fontFamily: MONO, fontSize: 13, color: T.dim, minWidth: 70, flexShrink: 0 }}>{d.date}</span>
                 <span style={{ fontFamily: BODY, fontSize: 15, color: T.text, flex: 1, minWidth: 0 }}>+{d.quantite} × {d.item} <span style={{ color: T.dim }}>({d.categorie})</span></span>
-                <span style={{ fontFamily: MONO, fontSize: 13, color: '#BAAAC6', flexShrink: 0 }}>👤 {d.auteur}</span>
+                <span style={{ fontFamily: MONO, fontSize: 13, color: '#BAAAC6', flexShrink: 0 }}><Emblem name="personnel" size={18} inline />{d.auteur}</span>
                 {canEdit && (
                   delDepotConfirm === d.id ? (
                     <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
@@ -263,7 +265,7 @@ export default function StockagePage() {
         {categories.map(cat => (
           <div key={cat.id} style={{ background: T.card, border: `1px solid ${T.border}`, padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 40, height: 40, background: 'rgba(209,183,124,0.08)', border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 19, flexShrink: 0 }}>{cat.icon}</div>
+              <div style={{ width: 40, height: 40, background: 'rgba(209,183,124,0.08)', border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 19, flexShrink: 0 }}><Ico v={cat.icon} size={27} fallback={cat.icon} /></div>
               {renamingCat === cat.id ? (
                 <input
                   style={{ ...inp, flex: 1, fontSize: 17, fontFamily: DISPLAY }}
@@ -343,9 +345,7 @@ export default function StockagePage() {
           <div style={{ background: T.card, border: `1px solid ${T.gold}`, padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div>
               <label style={lbl}>ICÔNE</label>
-              <select style={{ ...inp, width: '100%' }} value={newCatIcon} onChange={e => setNewCatIcon(e.target.value)}>
-                {ICONS.map(ic => <option key={ic} value={ic}>{ic}</option>)}
-              </select>
+              <IcoPicker value={newCatIcon} onChange={setNewCatIcon} size={34} noms={['registre', 'mortier', 'flacons', 'bandages', 'mallette', 'instruments', 'caducee', 'livre']} />
             </div>
             <div>
               <label style={lbl}>NOM DE LA CATÉGORIE</label>

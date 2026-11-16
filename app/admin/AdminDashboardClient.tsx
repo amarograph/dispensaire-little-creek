@@ -145,7 +145,7 @@ function MaintenancePanel() {
   return (
     <div className="space-y-4">
       <div className="bg-red-950/20 border border-red-900/40 rounded-xl p-5">
-        <div className="text-sm font-medium text-red-400 mb-1">🗑 Réinitialiser la Comptabilité</div>
+        <div className="text-sm font-medium text-red-400 mb-1">Réinitialiser la Comptabilité</div>
         <p className="text-xs text-gray-400 mb-4">
           Efface définitivement le registre de « Comptabilité » (factures en cours et semaines archivées) sur cet appareil.
           Cette action est irréversible.
@@ -190,7 +190,7 @@ export default function AdminDashboardClient({ members }: { members: Member[] })
         </div>
         <div className="flex items-center gap-2">
           <Link href="/redm" className="text-xs bg-gray-900 border border-gray-800 hover:border-gray-600 text-gray-400 px-4 py-2 rounded-lg transition">
-            🏠 Accueil
+            Accueil
           </Link>
         </div>
       </div>

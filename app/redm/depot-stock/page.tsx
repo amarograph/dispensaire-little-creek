@@ -101,7 +101,7 @@ export default function DepotStockPage() {
           <div>
             <label style={lbl}>CATÉGORIE</label>
             <select style={{ ...inp, cursor: 'pointer' }} value={categorieId} onChange={e => { setCategorieId(e.target.value); setItemChoice(''); }}>
-              {categories.map(c => <option key={c.id} value={c.id}>{c.icon} {c.nom}</option>)}
+              {categories.map(c => <option key={c.id} value={c.id}>{c.nom}</option>)}
             </select>
           </div>
 

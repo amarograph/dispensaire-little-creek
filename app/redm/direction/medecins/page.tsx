@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
@@ -88,7 +90,7 @@ function FichePanel({ medecin, onClose, onSave, saving }: {
             {form.portrait_url ? (
               <img src={form.portrait_url} alt="" style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', border: `2px solid ${gc}60`, flexShrink: 0 }} />
             ) : (
-              <div style={{ width: 80, height: 80, borderRadius: '50%', background: gc + '18', border: `2px dashed ${gc}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontFamily: DISPLAY, fontSize: 28, color: gc + '60' }}>⚕</div>
+              <div style={{ width: 80, height: 80, borderRadius: '50%', background: gc + '18', border: `2px dashed ${gc}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontFamily: DISPLAY, fontSize: 28, color: gc + '60' }}><Emblem name="caducee" size={39} inline /></div>
             )}
             <div style={{ flex: 1 }}>
               <label style={lbl}>Portrait (URL)</label>
@@ -299,7 +301,7 @@ export default function MedecinsPage() {
 
       {error ? (
         <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 24, fontFamily: MONO, fontSize: 14, color: '#E88060', borderRadius: 6 }}>
-          ⚠ {error}
+          <Emblem name="alerte" size={21} inline />{error}
         </div>
       ) : loading ? (
         <div style={{ padding: 60, textAlign: 'center', fontFamily: MONO, fontSize: 14, color: T.dim }}>⟳ CHARGEMENT…</div>
@@ -341,7 +343,7 @@ export default function MedecinsPage() {
                   {m.portrait_url ? (
                     <img src={m.portrait_url} alt="" style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', border: `2px solid ${gc}60`, flexShrink: 0 }} />
                   ) : (
-                    <div style={{ width: 52, height: 52, borderRadius: '50%', background: gc + '12', border: `2px dashed ${gc}35`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontFamily: DISPLAY, fontSize: 20, color: gc + '55' }}>⚕</div>
+                    <div style={{ width: 52, height: 52, borderRadius: '50%', background: gc + '12', border: `2px dashed ${gc}35`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontFamily: DISPLAY, fontSize: 20, color: gc + '55' }}><Emblem name="caducee" size={28} inline /></div>
                   )}
 
                   {/* Nom RP + discord */}

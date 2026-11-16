@@ -1,6 +1,6 @@
 'use client';
 
-import Emblem from '@/app/redm/_components/Emblem';
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -334,8 +334,8 @@ export default function CaisseComptabilitePage() {
           <div style={{ flex:1, minWidth:0 }}>
             <div style={{ fontFamily:DISPLAY, fontSize: 18, color:T.text, marginBottom:4 }}>{f.medecin || '— Non assigné —'}</div>
             <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
-              {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}>📦 COMMANDE</span>}
-              {f.reduction && <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', background:'rgba(136,170,192,0.12)', padding:'1px 7px', border:'1px solid rgba(136,170,192,0.4)' }}>🐴 {f.reduction} −{f.reductionPct ?? 10} %</span>}
+              {f.estCommande && <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, background:'rgba(209,183,124,0.14)', padding:'1px 7px', border:`1px solid rgba(209,183,124,0.4)` }}><Emblem name="registre" size={20} inline />COMMANDE</span>}
+              {f.reduction && <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', background:'rgba(136,170,192,0.12)', padding:'1px 7px', border:'1px solid rgba(136,170,192,0.4)' }}>{f.reduction} −{f.reductionPct ?? 10} %</span>}
               {pres.map((p,i) => {
                 const cat = tarifs[p.id];
                 const nom = p.nom ?? cat?.nom ?? p.id;
@@ -343,7 +343,7 @@ export default function CaisseComptabilitePage() {
                 const isAchat = p.prix != null || cat?.type === 'achat';
                 return (
                   <span key={i} style={{ fontFamily:MONO, fontSize: 14, color: isAchat ? '#C8845A' : T.gold, background: isAchat ? 'rgba(200,132,90,0.10)' : 'rgba(209,183,124,0.10)', padding:'1px 7px' }}>
-                    {isAchat ? '🛒 ' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$(prix * p.qty)}</span>
+                    {isAchat ? '' : ''}{nom}{p.qty > 1 ? ` ×${p.qty}` : ''} <span style={{color:T.muted}}>{fmt$(prix * p.qty)}</span>
                   </span>
                 );
               })}
@@ -353,7 +353,7 @@ export default function CaisseComptabilitePage() {
           <div style={{ fontFamily:DISPLAY, fontSize: 20, color:col, flexShrink:0, minWidth:70, textAlign:'right' }}>{fmt$(f.montant)}</div>
           <div style={{ display:'flex', gap:5, flexShrink:0 }}>
             <button onClick={()=>cycleStatut(f.id)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 8px', cursor:'pointer', background:col+'18', color:col, border:`1px solid ${col}50`, display:'flex', alignItems:'center', gap:3 }}>
-              {STATUT_ICON[f.statut]} {f.statut}
+              <Ico v={STATUT_ICON[f.statut]} size={21} inline fallback={STATUT_ICON[f.statut]} />{f.statut}
             </button>
             <button onClick={()=>startEdit(f)} style={{ fontFamily:MONO, fontSize: 14, padding:'4px 7px', cursor:'pointer', background:'rgba(209,183,124,0.10)', color:T.gold, border:`1px solid rgba(209,183,124,0.3)` }}>✎</button>
             {delConfirm===f.id
@@ -375,7 +375,7 @@ export default function CaisseComptabilitePage() {
           <button onClick={()=>router.push('/redm')} style={{ fontFamily:MONO, fontSize: 15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.16em' }}>DISPENSAIRE · COMPTABILITÉ</span>
         </div>
-        <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="grimoire" size={53} />Comptabilité</h1>
+        <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="registre" size={53} />Comptabilité</h1>
         <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
           REGISTRE DES HONORAIRES, FACTURES ET RECETTES DU DISPENSAIRE
         </p>
@@ -383,7 +383,7 @@ export default function CaisseComptabilitePage() {
 
       {oldLocalData && (
         <div style={{ background:'rgba(209,183,124,0.10)', border:'1px solid rgba(209,183,124,0.4)', padding:'16px 20px', marginBottom:20, display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
-          <span style={{ fontSize:22 }}>📦</span>
+          <span style={{ fontSize:22 }}><Emblem name="registre" size={31} inline /></span>
           <div style={{ flex:1, minWidth:260 }}>
             <div style={{ fontFamily:DISPLAY, fontSize:17, color:T.gold, marginBottom:3 }}>Anciennes données locales trouvées sur ce navigateur</div>
             <div style={{ fontFamily:MONO, fontSize:14, color:T.dim }}>
@@ -440,17 +440,17 @@ export default function CaisseComptabilitePage() {
                   <button
                     onClick={()=>{ setTypeFiltre('vente'); setForm(f=>({...f, prestations:[{ id: categoriesVente[0]?.id ?? 'Consultation', qty:1 }]})); }}
                     style={{ flex:1, fontFamily:MONO, fontSize: 14, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='vente' ? 'rgba(90,152,88,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='vente' ? '#5A9858' : T.border}`, color: typeFiltre==='vente' ? '#A8B991' : T.dim }}>
-                    💰 VENTE
+                    <Emblem name="argent" size={21} inline />VENTE
                   </button>
                   <button
                     onClick={()=>{ setTypeFiltre('commande'); setForm(f=>({...f, prestations:[{ id: categoriesCommande[0]?.id ?? 'Consultation', qty:1 }]})); }}
                     style={{ flex:1, fontFamily:MONO, fontSize: 14, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='commande' ? 'rgba(209,183,124,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='commande' ? T.gold : T.border}`, color: typeFiltre==='commande' ? T.gold : T.dim }}>
-                    📦 COMMANDE
+                    <Emblem name="registre" size={21} inline />COMMANDE
                   </button>
                   <button
                     onClick={()=>{ setTypeFiltre('achat'); setForm(f=>({...f, prestations:[{ id: uid(), qty:1, nom:'', prix:0 }]})); }}
                     style={{ flex:1, fontFamily:MONO, fontSize: 14, letterSpacing:'0.06em', padding:'9px 4px', cursor:'pointer', background: typeFiltre==='achat' ? 'rgba(200,132,90,0.18)' : 'transparent', border:`1px solid ${typeFiltre==='achat' ? '#C8845A' : T.border}`, color: typeFiltre==='achat' ? '#C8845A' : T.dim }}>
-                    🛒 ACHAT
+                    <Emblem name="argent" size={21} inline />ACHAT
                   </button>
                 </div>
                 <label style={lbl}>ÉLÉMENT(S)</label>
@@ -495,7 +495,7 @@ export default function CaisseComptabilitePage() {
 
               {reducPct > 0 && (
                 <div style={{ background:'rgba(136,170,192,0.10)', border:'1px solid rgba(136,170,192,0.35)', padding:'8px 13px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', letterSpacing:'0.08em' }}>🐴 RÉDUCTION −{reducPct} %</span>
+                  <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0', letterSpacing:'0.08em' }}>RÉDUCTION −{reducPct} %</span>
                   <span style={{ fontFamily:MONO, fontSize: 14, color:'#88AAC0' }}>{fmt$(montantBrut)} → −{fmt$(Math.round((montantBrut - montantAuto) * 100) / 100)}</span>
                 </div>
               )}
@@ -507,7 +507,7 @@ export default function CaisseComptabilitePage() {
 
               {partDispensaire > 0 && (
                 <div style={{ background:'rgba(168,185,145,0.10)', border:'1px solid rgba(168,185,145,0.35)', padding:'9px 13px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <span style={{ fontFamily:MONO, fontSize: 14, color:'#A8B991', letterSpacing:'0.1em' }}>🏥 PART DU DISPENSAIRE</span>
+                  <span style={{ fontFamily:MONO, fontSize: 14, color:'#A8B991', letterSpacing:'0.1em' }}><Emblem name="caducee" size={20} inline />PART DU DISPENSAIRE</span>
                   <span style={{ fontFamily:DISPLAY, fontSize: 24, color:'#A8B991' }}>{fmt$(partDispensaire)}</span>
                 </div>
               )}
@@ -522,12 +522,12 @@ export default function CaisseComptabilitePage() {
               {form.payeur !== 'Civil' && (
                 <div style={{ display:'flex', gap:8 }}>
                   <div style={{ flex:1, background:'rgba(0,0,0,0.22)', border:`1px solid ${form.payeur==='Mairie West Elizabeth' ? T.gold : T.border}`, padding:'9px 12px' }}>
-                    <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.08em', marginBottom:4 }}>🏛 TOTAL MAIRIE</div>
+                    <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.08em', marginBottom:4 }}><Emblem name="caducee" size={18} inline />TOTAL MAIRIE</div>
                     <div style={{ fontFamily:DISPLAY, fontSize: 20, color:T.gold }}>{fmt$(totalMairie.montant)}</div>
                     <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim }}>{totalMairie.count} acte(s) cette semaine</div>
                   </div>
                   <div style={{ flex:1, background:'rgba(0,0,0,0.22)', border:`1px solid ${form.payeur==='Shérif' ? T.gold : T.border}`, padding:'9px 12px' }}>
-                    <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.08em', marginBottom:4 }}>⭐ TOTAL SHÉRIF</div>
+                    <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim, letterSpacing:'0.08em', marginBottom:4 }}>★ TOTAL SHÉRIF</div>
                     <div style={{ fontFamily:DISPLAY, fontSize: 20, color:T.gold }}>{fmt$(totalSherif.montant)}</div>
                     <div style={{ fontFamily:MONO, fontSize: 13, color:T.dim }}>{totalSherif.count} acte(s) cette semaine</div>
                   </div>
@@ -557,7 +557,7 @@ export default function CaisseComptabilitePage() {
                 <div>
                   <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10, paddingBottom:8, borderBottom:`2px solid rgba(209,183,124,0.40)` }}>
                     <div>
-                      <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}>📅 {weekLabel(todayMonday)}</span>
+                      <span style={{ fontFamily:MONO, fontSize: 15, color:T.gold, letterSpacing:'0.14em' }}><Emblem name="calendrier" size={21} inline />{weekLabel(todayMonday)}</span>
                       <span style={{ fontFamily:MONO, fontSize: 14, color:T.dim, marginLeft:10 }}>SEMAINE EN COURS</span>
                     </div>
                     {allByWeek[currentKey] && <span style={{ fontFamily:MONO, fontSize: 14, color:'#A8B991' }}>{allByWeek[currentKey].factures.length} acte(s) · {fmt$(allByWeek[currentKey].factures.filter(f=>f.statut==='PAYÉ').reduce((s,f)=>s+f.montant,0))} perçu</span>}

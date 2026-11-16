@@ -1,3 +1,4 @@
+import { Ico } from '@/app/redm/_components/Emblem';
 import Link from 'next/link';
 
 const redmSections = [
@@ -24,7 +25,7 @@ export default function DashboardPage() {
             href={s.href}
             className="bg-gray-900 border border-gray-800 hover:border-red-700 rounded-xl p-6 transition group"
           >
-            <div className="text-4xl mb-4">{s.icon}</div>
+            <div className="text-4xl mb-4"><Ico v={s.icon} size={21} fallback={s.icon} /></div>
             <h2 className="text-lg font-semibold group-hover:text-red-400 transition">
               {s.title}
             </h2>

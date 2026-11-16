@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -95,7 +97,7 @@ export default function JournalPage() {
       </div>
 
       <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.text, margin: '0 0 6px' }}>
-        📜 Journal d'activité
+        <Emblem name="livre" size={21} inline />Journal d'activité
       </h1>
       <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.14em', marginBottom: 28 }}>
         HISTORIQUE DES ACTIONS DE LA DIRECTION — DISPENSAIRE
@@ -114,7 +116,7 @@ export default function JournalPage() {
               padding: '6px 14px', cursor: 'pointer', borderRadius: 4,
               transition: 'all 0.15s',
             }}>
-              {c.icon} {c.label.toUpperCase()}
+              <Ico v={c.icon} size={21} inline fallback={c.icon} />{c.label.toUpperCase()}
             </button>
           );
         })}
@@ -124,7 +126,7 @@ export default function JournalPage() {
       {noTable && (
         <div style={{ background: 'rgba(200,100,40,0.10)', border: '1px solid rgba(200,100,40,0.35)', borderRadius: 8, padding: '20px 24px', marginBottom: 24 }}>
           <p style={{ fontFamily: MONO, fontSize: 14, color: '#D48040', letterSpacing: '0.1em', margin: 0 }}>
-            ⚠ TABLE MANQUANTE — Exécuter la migration SQL dans Supabase :
+            <Emblem name="alerte" size={21} inline />TABLE MANQUANTE — Exécuter la migration SQL dans Supabase :
           </p>
           <pre style={{ fontFamily: MONO, fontSize: 14, color: '#A87050', marginTop: 12, overflowX: 'auto', lineHeight: 1.7 }}>{`CREATE TABLE IF NOT EXISTS public.redm_logs (
   id               UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -214,7 +216,7 @@ CREATE POLICY "service role full access" ON public.redm_logs USING (true) WITH C
                   color: cat.color, padding: '3px 8px', borderRadius: 3,
                   whiteSpace: 'nowrap', display: 'inline-block',
                 }}>
-                  {cat.icon} {cat.label.toUpperCase()}
+                  <Ico v={cat.icon} size={21} inline fallback={cat.icon} />{cat.label.toUpperCase()}
                 </span>
 
                 {/* Description */}

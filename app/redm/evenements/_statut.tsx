@@ -1,5 +1,7 @@
 'use client';
 
+import { Ico } from '@/app/redm/_components/Emblem';
+
 const MONO = "'Libre Baskerville', 'Courier New', monospace";
 
 export type Statut = 'a_faire' | 'en_cours' | 'termine';
@@ -21,11 +23,11 @@ export function StatutPastille({ statut, editable, disabled, onChange }: { statu
     fontFamily: MONO, fontSize: 13, letterSpacing: '0.08em', padding: '6px 12px', whiteSpace: 'nowrap',
     background: `${m.color}20`, color: m.color, border: `1px solid ${m.color}80`,
   };
-  if (!editable) return <span style={style}>{m.icon} {m.label.toUpperCase()}</span>;
+  if (!editable) return <span style={style}><Ico v={m.icon} size={21} inline fallback={m.icon} />{m.label.toUpperCase()}</span>;
   return (
     <select value={m.id} disabled={disabled} onClick={e => e.stopPropagation()} onChange={e => onChange?.(e.target.value as Statut)}
       title="Changer l'avancement du dossier" style={{ ...style, cursor: 'pointer', outline: 'none' }}>
-      {STATUTS.map(s => <option key={s.id} value={s.id} style={{ background: '#102B3B', color: '#EADCB9' }}>{s.icon} {s.label.toUpperCase()}</option>)}
+      {STATUTS.map(s => <option key={s.id} value={s.id} style={{ background: '#102B3B', color: '#EADCB9' }}>{s.label.toUpperCase()}</option>)}
     </select>
   );
 }

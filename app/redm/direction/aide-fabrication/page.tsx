@@ -193,7 +193,7 @@ export default function AideFabricationPage() {
       </div>
 
       {error ? (
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 24, fontFamily: MONO, fontSize: 14, color: '#E88060' }}>⚠ {error}</div>
+        <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 24, fontFamily: MONO, fontSize: 14, color: '#E88060' }}><Emblem name="alerte" size={20} inline />{error}</div>
       ) : loading ? (
         <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: 48, textAlign: 'center', fontFamily: MONO, fontSize: 14, color: T.dim }}>⟳ CHARGEMENT...</div>
       ) : (
@@ -201,7 +201,7 @@ export default function AideFabricationPage() {
 
           {/* ── Calculateur ── */}
           <div style={{ background: T.card, border: `2px solid ${T.gold}70`, padding: '22px 24px' }}>
-            <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold, marginBottom: 16 }}>🧮 Calculateur</div>
+            <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.gold, marginBottom: 16 }}><Emblem name="registre" size={28} inline />Calculateur</div>
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12, alignItems: 'end', marginBottom: 14 }}>
               <div>
                 <label style={lbl}>OBJET À FABRIQUER</label>
@@ -234,7 +234,7 @@ export default function AideFabricationPage() {
             {resultat && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginTop: 18, paddingTop: 18, borderTop: `1px solid ${T.border}` }}>
                 <div>
-                  <div style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.12em', marginBottom: 10 }}>📋 ÉTAPES DE FABRICATION</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.12em', marginBottom: 10 }}><Emblem name="registre" size={20} inline />ÉTAPES DE FABRICATION</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {Object.values(resultat.steps).map((s, i) => (
                       <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, background: 'rgba(0,0,0,0.18)', border: `1px solid ${T.border}`, padding: '9px 14px', flexWrap: 'wrap' }}>
@@ -249,7 +249,7 @@ export default function AideFabricationPage() {
                   </div>
                 </div>
                 <div>
-                  <div style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.12em', marginBottom: 10 }}>{NO_DECOMPOSE.has(cibleNom) ? '📦 COMPOSANTS À AVOIR PRÉPARÉS' : '🌿 MATIÈRES PREMIÈRES AU TOTAL'}</div>
+                  <div style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.12em', marginBottom: 10 }}>{NO_DECOMPOSE.has(cibleNom) ? 'COMPOSANTS À AVOIR PRÉPARÉS' : 'MATIÈRES PREMIÈRES AU TOTAL'}</div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 6 }}>
                     {Object.entries(resultat.raw).sort((a, b) => b[1] - a[1]).map(([nom, q]) => (
                       <div key={nom} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(209,183,124,0.08)', border: `1px solid rgba(209,183,124,0.3)`, padding: '9px 14px' }}>
@@ -275,7 +275,7 @@ export default function AideFabricationPage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {actionError && (
                     <div style={{ background: 'rgba(139,64,64,0.12)', border: '1px solid rgba(139,64,64,0.35)', padding: '10px 14px', display: 'flex', justifyContent: 'space-between', fontFamily: MONO, fontSize: 14, color: '#E88060' }}>
-                      <span>⚠ {actionError}</span>
+                      <span><Emblem name="alerte" size={21} inline />{actionError}</span>
                       <button onClick={() => setActionError('')} style={{ background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button>
                     </div>
                   )}

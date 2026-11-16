@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem, { Ico } from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -72,20 +74,20 @@ export function CodesSection() {
   return (
     <div>
       <div style={{ background: 'rgba(232,184,96,0.08)', border: '1px solid rgba(232,184,96,0.35)', padding: '10px 16px', marginBottom: 18, fontFamily: MONO, fontSize: 13, color: '#E8B860', letterSpacing: '0.04em', lineHeight: 1.6 }}>
-        🔒 Section confidentielle : visible uniquement par le directeur, le co-directeur et les admins. Les codes sont masqués par défaut
+        Section confidentielle : visible uniquement par le directeur, le co-directeur et les admins. Les codes sont masqués par défaut
         et ne sont jamais écrits dans le Journal d&apos;activité.
       </div>
 
       {error && (
         <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14, display: 'flex', justifyContent: 'space-between' }}>
-          <span>⚠ {error}</span><button onClick={() => setError('')} style={{ background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button>
+          <span><Emblem name="alerte" size={21} inline />{error}</span><button onClick={() => setError('')} style={{ background: 'transparent', border: 'none', color: T.muted, cursor: 'pointer' }}>✕</button>
         </div>
       )}
 
       <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
-        <input style={{ ...inp, flex: 1, minWidth: 240 }} placeholder="🔍 Rechercher une entreprise, un coffre…" value={search} onChange={e => setSearch(e.target.value)} autoComplete="off" />
+        <input style={{ ...inp, flex: 1, minWidth: 240 }} placeholder="Rechercher une entreprise, un coffre…" value={search} onChange={e => setSearch(e.target.value)} autoComplete="off" />
         <button onClick={() => setTout(t => !t)} style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '0.08em', padding: '10px 18px', cursor: 'pointer', background: tout ? 'rgba(232,184,96,0.18)' : 'transparent', color: tout ? '#E8B860' : T.muted, border: `1px solid ${tout ? '#E8B86070' : T.border}` }}>
-          {tout ? '🙈 TOUT MASQUER' : '👁 TOUT AFFICHER'}
+          {tout ? 'TOUT MASQUER' : 'TOUT AFFICHER'}
         </button>
         <button onClick={() => { setError(''); setEdit({ type: 'Numéro de compte entreprise', nom: '', valeur: '', precision: '' }); }}
           style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', padding: '10px 24px', cursor: 'pointer', background: 'rgba(209,183,124,0.18)', color: T.gold, border: '2px solid rgba(209,183,124,0.55)' }}>
@@ -104,7 +106,7 @@ export function CodesSection() {
             return (
               <div key={type}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 10, paddingBottom: 8, borderBottom: `2px solid ${col}60` }}>
-                  <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}>{TYPE_ICON[type]} {TYPE_NOM[type]} <span style={{ fontFamily: MONO, fontSize: 14, color: col, marginLeft: 8 }}>{liste.length}</span></div>
+                  <div style={{ fontFamily: DISPLAY, fontSize: 22, color: T.text }}><Ico v={TYPE_ICON[type]} size={31} inline fallback={TYPE_ICON[type]} />{TYPE_NOM[type]} <span style={{ fontFamily: MONO, fontSize: 14, color: col, marginLeft: 8 }}>{liste.length}</span></div>
                   <button onClick={() => { setError(''); setEdit({ type, nom: '', valeur: '', precision: '' }); }}
                     style={{ ...petit, background: `${col}18`, color: col, border: `1px solid ${col}50` }}>✚ AJOUTER ICI</button>
                 </div>
@@ -122,8 +124,8 @@ export function CodesSection() {
                           {e.valeur ? (estVisible(e.id) ? e.valeur : '••••••') : <span style={{ fontSize: 13, letterSpacing: '0.05em', color: T.dim }}>non renseigné</span>}
                         </div>
                         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                          <button title={estVisible(e.id) ? 'Masquer' : 'Afficher'} onClick={() => basculer(e.id)} style={{ ...petit, background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>{estVisible(e.id) ? '🙈' : '👁'}</button>
-                          <button title="Copier" disabled={!e.valeur} onClick={() => copier(e)} style={{ ...petit, background: 'transparent', color: copie === e.id ? '#A8B991' : T.muted, border: `1px solid ${T.border}` }}>{copie === e.id ? '✔' : '📋'}</button>
+                          <button title={estVisible(e.id) ? 'Masquer' : 'Afficher'} onClick={() => basculer(e.id)} style={{ ...petit, background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>{estVisible(e.id) ? 'MASQUER' : 'VOIR'}</button>
+                          <button title="Copier" disabled={!e.valeur} onClick={() => copier(e)} style={{ ...petit, background: 'transparent', color: copie === e.id ? '#A8B991' : T.muted, border: `1px solid ${T.border}` }}>{copie === e.id ? '✔' : 'COPIER'}</button>
                           <button title="Modifier" onClick={() => { setError(''); setEdit({ id: e.id, type: e.type, nom: e.nom, valeur: e.valeur, precision: e.precision }); }} style={{ ...petit, background: 'rgba(209,183,124,0.10)', color: T.gold, border: '1px solid rgba(209,183,124,0.3)' }}>✎</button>
                           {delConfirm === e.id ? (
                             <>
@@ -151,7 +153,7 @@ export function CodesSection() {
             <div>
               <label style={lbl}>TYPE</label>
               <select style={{ ...inp, cursor: 'pointer' }} value={edit.type} onChange={ev => setEdit(x => x ? { ...x, type: ev.target.value } : x)}>
-                {TYPES.map(t => <option key={t} value={t}>{TYPE_ICON[t]} {t}</option>)}
+                {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
             <div>
@@ -166,7 +168,7 @@ export function CodesSection() {
               <label style={lbl}>PRÉCISION (OPTIONNEL)</label>
               <textarea style={{ ...inp, resize: 'vertical', minHeight: 70 }} value={edit.precision} onChange={ev => setEdit(x => x ? { ...x, precision: ev.target.value } : x)} placeholder="Propriétaire, emplacement, remarque…" />
             </div>
-            {error && <div style={{ padding: '8px 12px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}>⚠ {error}</div>}
+            {error && <div style={{ padding: '8px 12px', background: 'rgba(200,80,80,0.10)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}><Emblem name="alerte" size={20} inline />{error}</div>}
             <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
               <button onClick={() => setEdit(null)} disabled={saving} style={{ fontFamily: MONO, fontSize: 14, padding: '11px 24px', cursor: 'pointer', background: 'transparent', color: T.muted, border: `1px solid ${T.border}` }}>ANNULER</button>
               <button onClick={enregistrer} disabled={saving || !edit.nom.trim()}
