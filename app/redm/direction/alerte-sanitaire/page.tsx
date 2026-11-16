@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
@@ -116,7 +118,7 @@ export default function AlerteSanitairePage() {
           <button onClick={() => router.push('/redm/direction')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>DIRECTION · ALERTE SANITAIRE</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 35, color: T.gold, margin: 0 }}>🚨 Alerte Sanitaire</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 35, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="lanterne" size={53} />Alerte Sanitaire</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
           ÉPIDÉMIES & RISQUES SANITAIRES — ACCÈS DIRECTION UNIQUEMENT
         </p>

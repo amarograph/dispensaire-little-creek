@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -36,7 +38,7 @@ export default function ObstetriqueArchivesHubPage() {
           </button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: '#D1B77C', letterSpacing: '0.18em' }}>OBSTÉTRIQUE · ARCHIVES</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#D1B77C', margin: 0 }}>🗄 Archives</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#D1B77C', margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="livres" size={60} />Archives</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: '#C8BEA5', letterSpacing: '0.12em', marginTop: 8 }}>
           MÉMOIRE DE L&apos;OBSTÉTRIQUE · 1890 — SÉLECTIONNEZ UNE SECTION
         </p>

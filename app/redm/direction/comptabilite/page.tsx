@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
@@ -387,7 +389,7 @@ export default function DirectionComptabilitePage() {
             </button>
           </div>
         </div>
-        <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 }}>📊 Comptabilité</h1>
+        <h1 style={{ fontFamily:DISPLAY, fontSize: 35, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="grimoire" size={53} />Comptabilité</h1>
         <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
           REGISTRE HEBDOMADAIRE & SALAIRES DES MÉDECINS — D&apos;APRÈS « COMPTABILITÉ »
         </p>

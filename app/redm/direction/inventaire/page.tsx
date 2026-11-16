@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -70,7 +72,7 @@ export default function InventairePage() {
 
       {/* Bandeau */}
       <div style={{ marginBottom: 30 }}>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.gold, margin: '0 0 6px' }}>🔒 Inventaire</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.gold, margin: '0 0 6px' , display:'flex', alignItems:'center', gap:12 }}><Emblem name="coffret" size={54} />Inventaire</h1>
         <div style={{ fontFamily: BODY, fontSize: 16, color: T.muted }}>Consultation en lecture seule — modifications via le Gestionnaire de Stockage</div>
         <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
           ⚠ UNE ALERTE EST ENVOYÉE DÈS QU'UN ARTICLE DESCEND SOUS {SEUIL_ALERTE} UNITÉS

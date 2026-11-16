@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -145,7 +147,7 @@ export default function NouveauDossierPage() {
           </button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.16em' }}>OBSTÉTRIQUE · DOSSIERS · NOUVEAU</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0 }}>📋 Nouveau Dossier Patiente</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="grimoire" size={57} />Nouveau Dossier Patiente</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 10 }}>DISPENSAIRE · OBSTÉTRIQUE · 1890</p>
       </div>
 

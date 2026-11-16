@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -134,7 +136,7 @@ export default function ArchivesCaisseComptabilitePage() {
             <button onClick={()=>router.push('/redm/comptabilite')} style={{ fontFamily:MONO, fontSize:14, background:'transparent', border:'none', color:T.dim, padding:'8px 12px', cursor:'pointer', letterSpacing:'0.08em' }}>COMPTABILITÉ</button>
           </div>
           <div style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.14em', marginBottom:6 }}>ARCHIVES · DÉTAIL SEMAINE</div>
-          <h1 style={{ fontFamily:DISPLAY, fontSize:30, color:T.gold, margin:0 }}>📅 {openArc.weekLabel}</h1>
+          <h1 style={{ fontFamily:DISPLAY, fontSize:30, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="agenda" size={45} />{openArc.weekLabel}</h1>
         </div>
 
         {/* Stats semaine */}
@@ -278,7 +280,7 @@ export default function ArchivesCaisseComptabilitePage() {
           <button onClick={()=>router.push('/redm/comptabilite')} style={{ fontFamily:MONO, fontSize:15, background:'transparent', border:`1px solid ${T.border}`, color:T.muted, padding:'8px 18px', cursor:'pointer', letterSpacing:'0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily:MONO, fontSize: 14, color:T.gold, letterSpacing:'0.16em' }}>COMPTABILITÉ · ARCHIVES</span>
         </div>
-        <h1 style={{ fontFamily:DISPLAY, fontSize:35, color:T.gold, margin:0 }}>📦 Archives des comptes</h1>
+        <h1 style={{ fontFamily:DISPLAY, fontSize:35, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="livres" size={53} />Archives des comptes</h1>
       </div>
 
       {/* Stats globales */}

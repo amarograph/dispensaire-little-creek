@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -30,7 +32,7 @@ export default function CabinetPage() {
           </button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: '#D1B77C', letterSpacing: '0.18em' }}>DISPENSAIRE · CABINET THÉRAPEUTIQUE</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#D1B77C', margin: 0 }}>🛋 Cabinet Thérapeutique</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: '#D1B77C', margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="lanterne" size={60} />Cabinet Thérapeutique</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: '#C8BEA5', letterSpacing: '0.12em', marginTop: 8 }}>
           SOINS DE L&apos;ÂME · 1890 — SÉLECTIONNEZ UNE SECTION
         </p>

@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -86,7 +88,7 @@ export default function DepotStockPage() {
       </div>
 
       <div style={{ marginBottom: 26 }}>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 6px' }}>📥 Déposer du Stock</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 34, color: T.gold, margin: '0 0 6px' , display:'flex', alignItems:'center', gap:12 }}><Emblem name="mortier" size={51} />Déposer du Stock</h1>
         <div style={{ fontFamily: BODY, fontSize: 16, color: T.muted }}>
           Déclarez ce que vous avez ramené — ajouté immédiatement à l&apos;inventaire du dispensaire.
         </div>

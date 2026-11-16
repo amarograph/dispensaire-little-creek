@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import Emblem, { type EmblemName } from './_components/Emblem';
 import { isAdmin as checkIsAdmin, canRead } from '@/lib/permissions';
 import { DEFAULT_DISPENSAIRE_STATUS, sanitaireColor, sanitaireLabel, type DispensaireStatus } from './_lib/sanitaireListes';
 
@@ -11,15 +12,15 @@ const BODY    = "'Cormorant Garamond', 'Georgia', serif";
 const MONO    = "'Libre Baskerville', 'Courier New', monospace";
 
 const MODULES = [
-  { id: 'registre-caisses', href: '/redm/registre-caisses', icon: '📖', label: 'Registre des Caisses', sub: 'SUIVI HEBDOMADAIRE', desc: "Faire sa caisse du jour et suivre son nombre de caisses et son salaire de la semaine.", color: '#B7C3A4', badge: 'RGC' },
-  { id: 'comptabilite', href: '/redm/comptabilite',  icon: '💰', label: 'Comptabilité', sub: 'HONORAIRES & RECETTES', desc: 'Enregistrer les honoraires, suivre les paiements et consulter les comptes du dispensaire.', color: '#D1B77C', badge: 'FIN' },
-  { id: 'depot-stock',  href: '/redm/depot-stock',   icon: '📥', label: 'Dépôt de Stock', sub: 'RÉAPPROVISIONNEMENT', desc: "Déclarer les plantes, matériaux ou produits ramenés — ajoutés immédiatement à l'inventaire.", color: '#A8B991', badge: 'STK' },
-  { id: 'bibliotheque', href: '/redm/bibliotheque',  icon: '📚', label: 'Bibliothèque',           sub: 'TRAITÉS & MANUELS', desc: "Traités médicaux, formulaires de remèdes et guides de soins de l'époque.",    color: '#AAB9C6', badge: 'REF' },
-  { id: 'agenda',       href: '/redm/agenda',        icon: '📅', label: 'Agenda',                 sub: 'RENDEZ-VOUS',       desc: 'Planifier et consulter les rendez-vous du dispensaire. RDV du cabinet anonymisés.', color: '#A8B991', badge: 'AGD' },
-  { id: 'evenements',   href: '/redm/evenements',    icon: '📣', label: 'Évènements',             sub: 'DOSSIERS & ANIMATIONS', desc: "Dossiers des évènements du dispensaire (Halloween…) : affiches, registre des participants avec leurs résultats aux énigmes, et récompenses.", color: '#E8A04C', badge: 'EVT' },
-  { id: 'cabinet',      href: '/redm/cabinet',       icon: '🛋', label: 'Cabinet Thérapeutique',  sub: "SOINS DE L'ÂME",   desc: "Suivi psychologique, consultations de l'esprit et thérapies de l'époque.",   color: '#A8B991', badge: 'PSY' },
-  { id: 'obstetrique',  href: '/redm/obstetrique',   icon: '🤱', label: 'Obstétrique',            sub: 'ACCÈS RÉSERVÉ',    desc: 'Suivi de grossesse, accouchements et soins maternels — obstétricien, direction & co-direction.', color: '#A8B991', badge: 'OBS' },
-  { id: 'direction',    href: '/redm/direction',     icon: '🏛', label: 'Direction',              sub: 'ACCÈS RÉSERVÉ',     desc: 'Comptabilité et gestion administrative du dispensaire — direction & co-direction.', color: '#D1B77C', badge: 'DIR' },
+  { id: 'registre-caisses', href: '/redm/registre-caisses', icon: 'coffret', label: 'Registre des Caisses', sub: 'SUIVI HEBDOMADAIRE', desc: "Faire sa caisse du jour et suivre son nombre de caisses et son salaire de la semaine.", color: '#B7C3A4', badge: 'RGC' },
+  { id: 'comptabilite', href: '/redm/comptabilite',  icon: 'grimoire', label: 'Comptabilité', sub: 'HONORAIRES & RECETTES', desc: 'Enregistrer les honoraires, suivre les paiements et consulter les comptes du dispensaire.', color: '#D1B77C', badge: 'FIN' },
+  { id: 'depot-stock',  href: '/redm/depot-stock',   icon: 'mortier', label: 'Dépôt de Stock', sub: 'RÉAPPROVISIONNEMENT', desc: "Déclarer les plantes, matériaux ou produits ramenés — ajoutés immédiatement à l'inventaire.", color: '#A8B991', badge: 'STK' },
+  { id: 'bibliotheque', href: '/redm/bibliotheque',  icon: 'livres', label: 'Bibliothèque',           sub: 'TRAITÉS & MANUELS', desc: "Traités médicaux, formulaires de remèdes et guides de soins de l'époque.",    color: '#AAB9C6', badge: 'REF' },
+  { id: 'agenda',       href: '/redm/agenda',        icon: 'agenda', label: 'Agenda',                 sub: 'RENDEZ-VOUS',       desc: 'Planifier et consulter les rendez-vous du dispensaire. RDV du cabinet anonymisés.', color: '#A8B991', badge: 'AGD' },
+  { id: 'evenements',   href: '/redm/evenements',    icon: 'courrier', label: 'Évènements',             sub: 'DOSSIERS & ANIMATIONS', desc: "Dossiers des évènements du dispensaire (Halloween…) : affiches, registre des participants avec leurs résultats aux énigmes, et récompenses.", color: '#E8A04C', badge: 'EVT' },
+  { id: 'cabinet',      href: '/redm/cabinet',       icon: 'lanterne', label: 'Cabinet Thérapeutique',  sub: "SOINS DE L'ÂME",   desc: "Suivi psychologique, consultations de l'esprit et thérapies de l'époque.",   color: '#A8B991', badge: 'PSY' },
+  { id: 'obstetrique',  href: '/redm/obstetrique',   icon: 'coiffe', label: 'Obstétrique',            sub: 'ACCÈS RÉSERVÉ',    desc: 'Suivi de grossesse, accouchements et soins maternels — obstétricien, direction & co-direction.', color: '#A8B991', badge: 'OBS' },
+  { id: 'direction',    href: '/redm/direction',     icon: 'dispensaire', label: 'Direction',              sub: 'ACCÈS RÉSERVÉ',     desc: 'Comptabilité et gestion administrative du dispensaire — direction & co-direction.', color: '#D1B77C', badge: 'DIR' },
 ];
 
 const DEFAULT_DISPENSAIRE = {
@@ -200,7 +201,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
             onMouseEnter={e => (e.currentTarget.style.background = '#254B5C')}
             onMouseLeave={e => (e.currentTarget.style.background = CARD_BG)}
           >
-            <div style={{ width: 46, height: 46, background: 'rgba(209,183,124,0.12)', border: '1px solid rgba(209,183,124,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>⚖</div>
+            <div style={{ width: 46, height: 46, background: 'rgba(209,183,124,0.12)', border: '1px solid rgba(209,183,124,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}><Emblem name="livres" size={40} /></div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontFamily: DISPLAY, fontSize: 19, color: '#D1B77C', lineHeight: 1.3 }}>Règlement Interne du Dispensaire</div>
               <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#C8BEA5' }}>Préambule et 10 chapitres — conduite, hygiène, soins, discipline</div>
@@ -215,7 +216,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
             onMouseEnter={e => (e.currentTarget.style.background = '#254B5C')}
             onMouseLeave={e => (e.currentTarget.style.background = CARD_BG)}
           >
-            <div style={{ width: 46, height: 46, background: 'rgba(209,183,124,0.12)', border: '1px solid rgba(209,183,124,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>⚕</div>
+            <div style={{ width: 46, height: 46, background: 'rgba(209,183,124,0.12)', border: '1px solid rgba(209,183,124,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}><Emblem name="caducee" size={40} /></div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontFamily: DISPLAY, fontSize: 19, color: '#D1B77C', lineHeight: 1.3 }}>Serment d'Hippocrate</div>
               <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#C8BEA5' }}>Prêté par Apollon, Esculape, Hygie et Panacée</div>
@@ -230,7 +231,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
             onMouseEnter={e => (e.currentTarget.style.background = '#254B5C')}
             onMouseLeave={e => (e.currentTarget.style.background = CARD_BG)}
           >
-            <div style={{ width: 46, height: 46, background: 'rgba(74,122,64,0.14)', border: '1px solid rgba(74,122,64,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>🌿</div>
+            <div style={{ width: 46, height: 46, background: 'rgba(74,122,64,0.14)', border: '1px solid rgba(74,122,64,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}><Emblem name="mortier" size={40} /></div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontFamily: DISPLAY, fontSize: 19, color: '#B7C3A4', lineHeight: 1.3 }}>Circuit de Cueillette</div>
               <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 15, color: '#C8BEA5' }}>Parcours de récolte des plantes médicinales du comté</div>
@@ -241,7 +242,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
           {/* ── PROCHAINS RENDEZ-VOUS ── */}
           <div style={{ ...PANEL, overflow: 'hidden' }}>
             <div style={{ ...PANEL_HEAD, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span>📅 Prochains Rendez-vous</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><Emblem name="agenda" size={30} />Prochains Rendez-vous</span>
               <button onClick={() => router.push('/redm/agenda')}
                 style={{ fontFamily: MONO, fontSize: 14, padding: '5px 12px', cursor: 'pointer', background: 'rgba(209,183,124,0.12)', color: '#D1B77C', border: '1px solid rgba(209,183,124,0.35)', letterSpacing: '0.08em' }}>
                 + AGENDA
@@ -325,7 +326,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
 
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ width: 56, height: 56, background: m.color + '12', border: `1px solid ${m.color + '40'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 33 }}>
-                      {m.icon}
+                      <Emblem name={m.icon as EmblemName} size={50} />
                     </div>
                     <div style={{ fontFamily: BODY, fontWeight: 700, fontSize: 15, padding: '4px 10px', background: m.color + '18', color: m.color === '#D1B77C' ? '#D1B77C' : m.color, border: `1px solid ${m.color + '40'}`, letterSpacing: '0.10em', textTransform: 'uppercase' }}>
                       {m.badge}

@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
@@ -147,7 +149,7 @@ export default function CircuitCueillettePage() {
           </button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: GREEN, letterSpacing: '0.18em' }}>DISPENSAIRE · CIRCUIT DE CUEILLETTE</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: GREEN, margin: 0 }}>🌿 Circuit de Cueillette</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: GREEN, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="mortier" size={60} />Circuit de Cueillette</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: '#C8BEA5', letterSpacing: '0.12em', marginTop: 8 }}>
           PARCOURS DE RÉCOLTE DES PLANTES MÉDICINALES DU COMTÉ{canEdit ? ' · LA DIRECTION PEUT AJOUTER ET MODIFIER LES CARTES' : ''}
         </p>

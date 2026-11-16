@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRedmSession } from '@/app/redm/_components/RedmSessionProvider';
@@ -140,7 +142,7 @@ export default function RegistreCaissesPage() {
         </span>
       </div>
 
-      <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.text, margin: '0 0 6px' }}>💰 Registre des Caisses</h1>
+      <h1 style={{ fontFamily: DISPLAY, fontSize: 36, color: T.text, margin: '0 0 6px' , display:'flex', alignItems:'center', gap:12 }}><Emblem name="coffret" size={54} />Registre des Caisses</h1>
       <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginBottom: 28 }}>
         SUIVI HEBDOMADAIRE DE VOS CAISSES QUOTIDIENNES
       </p>

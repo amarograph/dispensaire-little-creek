@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -183,7 +185,7 @@ export default function PatientsPage() {
           <button onClick={() => router.push('/redm/cabinet')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '8px 18px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.16em' }}>CABINET · DOSSIERS PATIENTS</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 35, color: T.gold, margin: 0 }}>📋 Dossiers Patients</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 35, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="grimoire" size={53} />Dossiers Patients</h1>
       </div>
 
       {/* Stats */}

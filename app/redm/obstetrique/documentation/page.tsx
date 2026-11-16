@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import {
@@ -84,7 +86,7 @@ export default function ObstetriqueDocumentationPage() {
           <button onClick={() => router.push('/redm/obstetrique')} style={{ fontFamily: MONO, fontSize: 15, background: 'transparent', border: `1px solid ${T.border}`, color: T.muted, padding: '9px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>← RETOUR</button>
           <span style={{ fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.18em' }}>OBSTÉTRIQUE · DOCUMENTATION</span>
         </div>
-        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 }}>📁 Documentation</h1>
+        <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="livres" size={60} />Documentation</h1>
         <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginTop: 8 }}>FORMULAIRES & DOCUMENTS OFFICIELS · 1890</p>
       </div>
 

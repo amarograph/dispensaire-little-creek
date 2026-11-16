@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -76,7 +78,7 @@ export default function RouesPage() {
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
           <div>
-            <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 }}>🎡 La roue des gains</h1>
+            <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="lanterne" size={60} />La roue des gains</h1>
             <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginTop: 8 }}>
               UNE ROUE PAR TIRAGE DE LOTS · TIRAGE ÉQUITABLE · CASE RETIRÉE OU NON APRÈS CHAQUE TOUR
             </p>

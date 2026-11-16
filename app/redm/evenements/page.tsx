@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -72,7 +74,7 @@ export default function EvenementsPage() {
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
           <div>
-            <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 }}>📣 Évènements</h1>
+            <h1 style={{ fontFamily: DISPLAY, fontSize: 40, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="courrier" size={60} />Évènements</h1>
             <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.12em', marginTop: 8 }}>
               UN DOSSIER PAR ÉVÈNEMENT · AFFICHES · REGISTRE DES PARTICIPANTS · RÉCOMPENSES
             </p>

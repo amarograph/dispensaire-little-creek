@@ -1,5 +1,7 @@
 'use client';
 
+import Emblem from '@/app/redm/_components/Emblem';
+
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
@@ -124,7 +126,7 @@ export default function RegistreNotesPage() {
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
           <div>
-            <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0 }}>📝 Registre des notes</h1>
+            <h1 style={{ fontFamily: DISPLAY, fontSize: 38, color: T.gold, margin: 0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="grimoire" size={57} />Registre des notes</h1>
             <p style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em', marginTop: 8 }}>
               NOTES, DÉCISIONS ET COMPTES-RENDUS DE LA DIRECTION · VISIBLES PAR LA DIRECTION UNIQUEMENT
             </p>

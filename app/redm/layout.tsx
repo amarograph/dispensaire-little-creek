@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getMember } from '@/lib/auth';
 import AdminButton from '@/components/layout/AdminButton';
+import Emblem, { type EmblemName } from './_components/Emblem';
 import RPProfileButton from '@/components/layout/RPProfileButton';
 import ZoomPicker from '@/components/layout/ZoomPicker';
 import ZoomWrapper from '@/components/layout/ZoomWrapper';
@@ -36,18 +37,18 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
   const hasObstetriqueAccess = checkIsAdmin(roles) || canRead(roles, 'redm_obstetrique');
 
   const navItems = isPreparateurOnly
-    ? [{ href: '/redm/registre-caisses', label: 'Registre des Caisses', icon: '💰' }]
+    ? [{ href: '/redm/registre-caisses', label: 'Registre des Caisses', icon: 'coffret' as EmblemName }]
     : [
-        { href: '/redm',                  label: 'Accueil',               icon: '⌂'  },
-        ...(hasCaisseAccess ? [{ href: '/redm/registre-caisses', label: 'Registre des Caisses', icon: '💰' }] : []),
-        { href: '/redm/comptabilite',     label: 'Comptabilité',          icon: '💰' },
-        { href: '/redm/depot-stock',      label: 'Dépôt de Stock',        icon: '📥' },
-        { href: '/redm/bibliotheque',     label: 'Bibliothèque',          icon: '📚' },
-        { href: '/redm/agenda',           label: 'Agenda',                icon: '📅' },
-        { href: '/redm/evenements',       label: 'Évènements',            icon: '📣' },
-        { href: '/redm/cabinet',          label: 'Cabinet Thérapeutique', icon: '🛋' },
-        ...(hasObstetriqueAccess ? [{ href: '/redm/obstetrique', label: 'Obstétrique', icon: '🤱' }] : []),
-        ...(hasDirectionAccess ? [{ href: '/redm/direction', label: 'Direction', icon: '🏛' }] : []),
+        { href: '/redm',                  label: 'Accueil',               icon: 'dispensaire' as EmblemName },
+        ...(hasCaisseAccess ? [{ href: '/redm/registre-caisses', label: 'Registre des Caisses', icon: 'coffret' as EmblemName }] : []),
+        { href: '/redm/comptabilite',     label: 'Comptabilité',          icon: 'grimoire' as EmblemName },
+        { href: '/redm/depot-stock',      label: 'Dépôt de Stock',        icon: 'mortier' as EmblemName },
+        { href: '/redm/bibliotheque',     label: 'Bibliothèque',          icon: 'livres' as EmblemName },
+        { href: '/redm/agenda',           label: 'Agenda',                icon: 'agenda' as EmblemName },
+        { href: '/redm/evenements',       label: 'Évènements',            icon: 'courrier' as EmblemName },
+        { href: '/redm/cabinet',          label: 'Cabinet Thérapeutique', icon: 'lanterne' as EmblemName },
+        ...(hasObstetriqueAccess ? [{ href: '/redm/obstetrique', label: 'Obstétrique', icon: 'coiffe' as EmblemName }] : []),
+        ...(hasDirectionAccess ? [{ href: '/redm/direction', label: 'Direction', icon: 'caducee' as EmblemName }] : []),
       ];
 
   return (
@@ -299,7 +300,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
             <ZoomWrapper as="nav" className="redm-nav">
               {navItems.map(n => (
                 <Link key={n.href} href={n.href}>
-                  <span>{n.icon}</span>{n.label}
+                  <Emblem name={n.icon} size={30} />{n.label}
                 </Link>
               ))}
             </ZoomWrapper>
