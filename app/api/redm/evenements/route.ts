@@ -178,7 +178,7 @@ export async function POST(req: NextRequest) {
         if (!nom) return NextResponse.json({ error: 'Nom requis' }, { status: 400 });
         const e: Evenement = {
           id: `${nom.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'evenement'}-${Date.now().toString(36)}`,
-          nom, icon: String(body.icon || '🎉').slice(0, 4), couleur: '#E8A04C', visible: true, statut: 'a_faire',
+          nom, icon: String(body.icon || '🎉').slice(0, 20), couleur: '#E8A04C', visible: true, statut: 'a_faire',
           description: String(body.description ?? '').slice(0, 500),
           enigmes: Array.from({ length: NB_ENIGMES_DEFAUT }, VIDE), bonus: [], recompenses: [],
           affiches: [], participants: [], createdAt: new Date().toISOString(), auteur,
@@ -190,7 +190,7 @@ export async function POST(req: NextRequest) {
       case 'update_event': {
         const nom = String(body.nom ?? '').trim().slice(0, 80);
         if (!ev(body.id) || !nom) return NextResponse.json({ error: 'Évènement introuvable' }, { status: 404 });
-        next = maj(body.id, e => ({ ...e, nom, icon: String(body.icon || e.icon).slice(0, 4), description: String(body.description ?? e.description).slice(0, 500) }));
+        next = maj(body.id, e => ({ ...e, nom, icon: String(body.icon || e.icon).slice(0, 20), description: String(body.description ?? e.description).slice(0, 500) }));
         break;
       }
       case 'delete_event': {

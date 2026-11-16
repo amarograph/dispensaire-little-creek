@@ -62,10 +62,10 @@ export async function POST(req: NextRequest) {
       const idx = body.id ? current.findIndex(c => c.id === body.id) : -1;
       if (idx === -1) {
         const id = `${body.nom.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'plante'}-${Date.now().toString(36)}`;
-        next = [...current, { id, nom: body.nom.trim(), icon: (body.icon || '🌿').toString().slice(0, 4), image: image ?? '' }];
+        next = [...current, { id, nom: body.nom.trim(), icon: (body.icon || '🌿').toString().slice(0, 20), image: image ?? '' }];
         redmLog(actor, { action: 'cueillette_create', category: 'bibliotheque', description: `${actor.name} a ajouté la plante « ${body.nom.trim()} » au Circuit de Cueillette`, meta: { id } });
       } else {
-        next = current.map((c, i) => i !== idx ? c : { ...c, nom: body.nom.trim(), icon: body.icon ? body.icon.toString().slice(0, 4) : c.icon, image: image ?? c.image });
+        next = current.map((c, i) => i !== idx ? c : { ...c, nom: body.nom.trim(), icon: body.icon ? body.icon.toString().slice(0, 20) : c.icon, image: image ?? c.image });
         redmLog(actor, { action: 'cueillette_update', category: 'bibliotheque', description: `${actor.name} a modifié la carte « ${body.nom.trim()} » du Circuit de Cueillette${image ? ' (nouvelle image)' : ''}`, meta: { id: body.id } });
       }
     } else if (body.action === 'delete' && body.id) {

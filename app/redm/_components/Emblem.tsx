@@ -60,6 +60,11 @@ export function iconeDe(v?: string | null): EmblemName | null {
   if (!v) return null;
   const s = v.replace(/️/g, '').trim();
   if ((ICONES as Record<string, string>)[s]) return s as EmblemName;
+  /* noms d'icône tronqués à 4 lettres par l'ancienne limite de l'API (« arge », « cale »…) */
+  if (/^[a-z]{3,10}$/.test(s)) {
+    const m = ICONE_NOMS.filter(n => n.startsWith(s));
+    if (m.length === 1) return m[0];
+  }
   const first = Array.from(s)[0];
   return (first && EMOJI_TO_NAME[first]) || null;
 }

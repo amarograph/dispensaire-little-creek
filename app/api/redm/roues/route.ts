@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
         if (!nom) return NextResponse.json({ error: 'Nom requis' }, { status: 400 });
         const r: Roue = {
           id: `${nom.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'roue'}-${Date.now().toString(36)}`,
-          nom, icon: String(body.icon || '🎡').slice(0, 4), description: String(body.description ?? '').slice(0, 500),
+          nom, icon: String(body.icon || '🎡').slice(0, 20), description: String(body.description ?? '').slice(0, 500),
           visible: true, segments: [], historique: [], createdAt: new Date().toISOString(), auteur,
         };
         next = [...current, r];
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
       case 'update_roue': {
         const nom = String(body.nom ?? '').trim().slice(0, 80);
         if (!nom) return NextResponse.json({ error: 'Nom requis' }, { status: 400 });
-        next = maj(body.id, r => ({ ...r, nom, icon: String(body.icon || r.icon).slice(0, 4), description: String(body.description ?? r.description).slice(0, 500) }));
+        next = maj(body.id, r => ({ ...r, nom, icon: String(body.icon || r.icon).slice(0, 20), description: String(body.description ?? r.description).slice(0, 500) }));
         break;
       }
       case 'delete_roue': {
