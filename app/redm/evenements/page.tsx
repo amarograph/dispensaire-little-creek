@@ -160,7 +160,7 @@ export default function EvenementsPage() {
         <div onClick={() => !saving && setEdit(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.78)', zIndex: 110, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div onClick={ev => ev.stopPropagation()} style={{ background: '#102B3B', border: '2px solid #E8A04C', width: '100%', maxWidth: 520, padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ fontFamily: DISPLAY, fontSize: 24, color: '#E8A04C' }}>{edit.id ? '✎ Modifier le dossier' : '✚ Nouveau dossier'}</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 90px', gap: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div><label style={lbl}>NOM DE L&apos;ÉVÈNEMENT *</label><input style={inp} value={edit.nom} onChange={ev => setEdit(x => x ? { ...x, nom: ev.target.value } : x)} placeholder="ex : Noël 1890" autoFocus /></div>
               <div><label style={lbl}>ICÔNE</label><IcoPicker value={edit.icon} onChange={v => setEdit(x => x ? { ...x, icon: v } : x)} size={36} /></div>
             </div>

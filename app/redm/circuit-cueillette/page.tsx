@@ -225,7 +225,7 @@ export default function CircuitCueillettePage() {
         <div onClick={() => !saving && setEdit(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 110, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: '#183746', border: '1px solid rgba(122,170,112,0.5)', width: '100%', maxWidth: 520, padding: '24px 26px', display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ fontFamily: DISPLAY, fontSize: 24, color: '#EADCB9' }}>{edit.id ? '✎ Modifier la carte' : '＋ Nouvelle plante'}</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 90px', gap: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div>
                 <label style={{ fontFamily: MONO, fontSize: 13, color: '#C8BEA5', letterSpacing: '0.12em', display: 'block', marginBottom: 5 }}>NOM DE LA PLANTE *</label>
                 <input style={champ} value={edit.nom} onChange={e => setEdit(x => x ? { ...x, nom: e.target.value } : x)} placeholder="ex : Menthe sauvage" autoFocus />
