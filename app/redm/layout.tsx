@@ -300,7 +300,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
             <ZoomWrapper as="nav" className="redm-nav">
               {navItems.map(n => (
                 <Link key={n.href} href={n.href}>
-                  <Image src="/logo-dispensaire.webp" alt="" aria-hidden width={22} height={22} sizes="44px" draggable={false} style={{ width: 22, height: 22, objectFit: 'contain', flexShrink: 0 }} />
+                  <Image src="/logo-dispensaire.webp" alt="" aria-hidden width={16} height={16} sizes="32px" draggable={false} style={{ width: 16, height: 16, objectFit: 'contain', flexShrink: 0 }} />
                   {n.label}
                 </Link>
               ))}

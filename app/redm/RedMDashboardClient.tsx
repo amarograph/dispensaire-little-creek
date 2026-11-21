@@ -169,7 +169,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
 
           {/* ── EN-TÊTE ── */}
           <div style={{ ...PANEL, borderLeft: '4px solid #D1B77C', padding: '28px 34px', position: 'relative', overflow: 'hidden' }}>
-            <Image src="/logo-dispensaire.webp" alt="" aria-hidden width={110} height={110} sizes="220px" priority draggable={false} style={{ position: 'absolute', top: 14, right: 28, width: 110, height: 110, objectFit: 'contain', opacity: 0.9, pointerEvents: 'none', userSelect: 'none' }} />
+            <Image src="/logo-dispensaire.webp" alt="" aria-hidden width={72} height={72} sizes="144px" priority draggable={false} style={{ position: 'absolute', top: 16, right: 28, width: 72, height: 72, objectFit: 'contain', opacity: 0.9, pointerEvents: 'none', userSelect: 'none' }} />
 
             <div>
               <div style={{ fontFamily: MONO, fontSize: 17, color: '#C8BEA5', letterSpacing: '0.16em', marginBottom: 12, textTransform: 'uppercase' }}>
