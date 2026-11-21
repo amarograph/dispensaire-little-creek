@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dispensaire de Little Creek
 
-## Getting Started
+Site interne du dispensaire (RedM) : registre des caisses, comptabilité, stock, bibliothèque, agenda, cabinet thérapeutique, obstétrique, évènements et espace Direction.
 
-First, run the development server:
+**Stack** : Next.js 14 (App Router, TypeScript) · Supabase (auth Discord + base) · déploiement Vercel.
+
+## Démarrer en local
 
 ```bash
+npm install
+cp .env.example .env.local   # puis remplir les valeurs
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Vérification avant de publier :
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run typecheck   # doit afficher 0 erreur
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Variables d'environnement
 
-## Learn More
+Voir `.env.example`. `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET` et les webhooks Discord sont **secrets** : ne jamais les mettre dans le code ni dans une capture. Si l'un d'eux fuite, le régénérer (Supabase / Discord) puis mettre à jour Vercel.
 
-To learn more about Next.js, take a look at the following resources:
+## Déploiement
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+git push deploy main
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Organisation du code
 
-## Deploy on Vercel
+| Dossier | Contenu |
+|---|---|
+| `app/redm/` | Pages du dispensaire (accueil, comptabilité, direction, cabinet, obstétrique…) |
+| `app/api/` | Routes serveur : `api/redm/*` (personnel), `api/admin/*` (Direction), `api/cron/*` (tâches planifiées) |
+| `app/admin/` | Gestion des accès (whitelist) et tableau de bord développeur |
+| `lib/permissions.ts` | Rôles et accès par section |
+| `lib/supabase/middleware.ts` | Connexion obligatoire, validation du compte, contrôle d'accès par route |
+| `lib/redm-api-auth.ts` | Contrôle des rôles dans les API |
+| `lib/redm-log.ts` | Journal des actions (Direction › Journal) |
+| `docs/sql/` | Schéma et migrations Supabase, à exécuter dans l'éditeur SQL |
+| `public/icones/`, `public/logo-*.webp` | Icônes et logos |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Où sont stockées les données
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Tables dédiées : membres, tarifs (`redm_tarifs`), journal (`redm_logs`)…
+- Le reste (factures, archives, agenda, roues, évènements, stock, bibliothèque, réductions…) est stocké en JSON dans la table `site_config`, une clé par domaine. Chaque enregistrement lit puis réécrit le bloc complet : deux enregistrements simultanés sur la même clé peuvent s'écraser.
+
+## Tâches planifiées
+
+`/api/cron/rdv-rappels` envoie les rappels de rendez-vous sur Discord. Elle exige `CRON_SECRET`.
