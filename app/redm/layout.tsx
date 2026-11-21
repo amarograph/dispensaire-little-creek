@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/server';
 import { getMember } from '@/lib/auth';
 import AdminButton from '@/components/layout/AdminButton';
@@ -299,6 +300,7 @@ export default async function RedMLayout({ children }: { children: React.ReactNo
             <ZoomWrapper as="nav" className="redm-nav">
               {navItems.map(n => (
                 <Link key={n.href} href={n.href}>
+                  <Image src="/logo-dispensaire.webp" alt="" aria-hidden width={22} height={22} sizes="44px" draggable={false} style={{ width: 22, height: 22, objectFit: 'contain', flexShrink: 0 }} />
                   {n.label}
                 </Link>
               ))}

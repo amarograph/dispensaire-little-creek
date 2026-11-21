@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -168,7 +169,7 @@ export default function RedMDashboardClient({ roles, preview = false }: { roles:
 
           {/* ── EN-TÊTE ── */}
           <div style={{ ...PANEL, borderLeft: '4px solid #D1B77C', padding: '28px 34px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: 10, right: 28, fontFamily: DISPLAY, fontSize: 130, color: 'rgba(180,160,113,0.06)', lineHeight: 1, pointerEvents: 'none', userSelect: 'none' }}>✚</div>
+            <Image src="/logo-dispensaire.webp" alt="" aria-hidden width={110} height={110} sizes="220px" priority draggable={false} style={{ position: 'absolute', top: 14, right: 28, width: 110, height: 110, objectFit: 'contain', opacity: 0.9, pointerEvents: 'none', userSelect: 'none' }} />
 
             <div>
               <div style={{ fontFamily: MONO, fontSize: 17, color: '#C8BEA5', letterSpacing: '0.16em', marginBottom: 12, textTransform: 'uppercase' }}>
