@@ -22,7 +22,7 @@ interface Annuaire { parNom: Map<string, string[]>; therapeutes: string[]; }
 
 const KEY_COMMUN = 'redm_agenda_commun';
 const KEY_OBS    = 'redm_obstetrique_agenda';
-const KEY_CAB    = 'redm_cabinet_agenda';
+const KEY_CAB    = 'lc_cabinet_agenda';
 
 /* Décalage horaire de Paris à un instant donné, en minutes (gère l'heure d'été / d'hiver) */
 function parisOffsetMin(at: Date): number {

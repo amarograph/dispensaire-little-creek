@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   if (id) {
     const { data, error } = await supabase
-      .from('cabinet_dossiers')
+      .from('lc_cabinet_dossiers')
       .select('*')
       .eq('id', id)
       .single();
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   }
 
   let query = supabase
-    .from('cabinet_dossiers')
+    .from('lc_cabinet_dossiers')
     .select('*')
     .order('created_at', { ascending: false });
 
@@ -48,14 +48,14 @@ export async function POST(req: NextRequest) {
   if (body.reuseIfExists) {
     const cle = cleNom(body.patientPrenom, body.patientNom);
     if (cle) {
-      const { data: tous } = await supabase.from('cabinet_dossiers').select('*').order('created_at', { ascending: true });
+      const { data: tous } = await supabase.from('lc_cabinet_dossiers').select('*').order('created_at', { ascending: true });
       const existant = (tous ?? []).find(d => cleNom(d.patient_prenom, d.patient_nom) === cle);
       if (existant) return NextResponse.json({ dossier: existant, existant: true });
     }
   }
 
   const { data, error } = await supabase
-    .from('cabinet_dossiers')
+    .from('lc_cabinet_dossiers')
     .insert({
       owner_id:               ctx.discordId,
       patient_nom:            body.patientNom            ?? '',
@@ -115,7 +115,7 @@ export async function PATCH(req: NextRequest) {
   if (fields.statut                 !== undefined) update.statut                 = fields.statut;
   if (fields.confidentiel           !== undefined) update.confidentiel           = fields.confidentiel;
 
-  let query = supabase.from('cabinet_dossiers').update(update).eq('id', id);
+  let query = supabase.from('lc_cabinet_dossiers').update(update).eq('id', id);
   if (!ctx.isAdmin) query = query.eq('owner_id', ctx.discordId);
 
   const { error } = await query;
@@ -132,7 +132,7 @@ export async function DELETE(req: NextRequest) {
   if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 });
 
   const supabase = await createServiceClient();
-  let query = supabase.from('cabinet_dossiers').delete().eq('id', id);
+  let query = supabase.from('lc_cabinet_dossiers').delete().eq('id', id);
   if (!ctx.isAdmin) query = query.eq('owner_id', ctx.discordId);
 
   const { error } = await query;

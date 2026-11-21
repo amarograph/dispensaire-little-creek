@@ -4,7 +4,7 @@ import { getApiSession } from '@/lib/api-auth';
 import { createServiceClient } from '@/lib/supabase/server';
 import { redmLog } from '@/lib/redm-log';
 
-const KEY = 'redm_cabinet_examens_psychiques';
+const KEY = 'lc_cabinet_examens_psychiques';
 
 interface Reponses { [key: string]: number }
 interface Examen {

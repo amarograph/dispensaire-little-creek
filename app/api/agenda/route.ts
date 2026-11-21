@@ -3,7 +3,7 @@ import { createServiceClient } from '@/lib/supabase/server';
 import { keepRappelFlag } from '@/lib/rdv-rappel-flag';
 import { requireCabinetActor } from '@/lib/redm-api-auth';
 
-const KEY = 'redm_cabinet_agenda';
+const KEY = 'lc_cabinet_agenda';
 
 export async function GET() {
   const ctx = await requireCabinetActor();

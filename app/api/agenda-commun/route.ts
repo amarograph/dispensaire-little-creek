@@ -3,7 +3,7 @@ import { createServiceClient } from '@/lib/supabase/server';
 import { requireRedmStaff } from '@/lib/redm-api-auth';
 
 const KEY             = 'redm_agenda_commun';
-const CABINET_KEY     = 'redm_cabinet_agenda';
+const CABINET_KEY     = 'lc_cabinet_agenda';
 const OBSTETRIQUE_KEY = 'redm_obstetrique_agenda';
 
 interface RendezVous {

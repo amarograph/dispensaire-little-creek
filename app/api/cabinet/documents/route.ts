@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   const supabase = await createServiceClient();
 
   let query = supabase
-    .from('cabinet_documents')
+    .from('lc_cabinet_documents')
     .select('*')
     .order('created_at', { ascending: false });
 
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     // meme_nom=1 : inclut aussi les documents des autres dossiers portant le même nom et prénom
     let ids = [patient_id];
     if (req.nextUrl.searchParams.get('meme_nom') === '1') {
-      const { data: tous } = await supabase.from('cabinet_dossiers').select('id, patient_nom, patient_prenom');
+      const { data: tous } = await supabase.from('lc_cabinet_dossiers').select('id, patient_nom, patient_prenom');
       const moi = (tous ?? []).find(d => String(d.id) === patient_id);
       const cle = moi ? cleNom(moi.patient_prenom, moi.patient_nom) : '';
       if (cle) ids = (tous ?? []).filter(d => cleNom(d.patient_prenom, d.patient_nom) === cle).map(d => String(d.id));
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
 
   const supabase = await createServiceClient();
   const { data, error } = await supabase
-    .from('cabinet_documents')
+    .from('lc_cabinet_documents')
     .insert(row)
     .select()
     .single();
@@ -83,7 +83,7 @@ export async function PATCH(req: NextRequest) {
 
   const supabase = await createServiceClient();
   const { error } = await supabase
-    .from('cabinet_documents')
+    .from('lc_cabinet_documents')
     .update(update)
     .eq('id', id);
 
@@ -101,7 +101,7 @@ export async function DELETE(req: NextRequest) {
 
   const supabase = await createServiceClient();
   const { error } = await supabase
-    .from('cabinet_documents')
+    .from('lc_cabinet_documents')
     .delete()
     .eq('id', id);
 
