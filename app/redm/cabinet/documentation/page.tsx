@@ -313,13 +313,14 @@ export default function DocumentationPage() {
   /* ── Chargement ── */
   useEffect(() => {
     loadExams().then(setExams);
-    // Patients depuis Supabase
-    fetch('/api/cabinet/dossiers')
+    // Dossiers manquants créés (examens psychiques, documents orphelins) puis patients depuis Supabase
+    const sync = fetch('/api/cabinet/reconcilier', { method: 'POST' }).catch(() => {});
+    sync.then(() => fetch('/api/cabinet/dossiers'))
       .then(r => r.ok ? r.json() : { dossiers: [] })
       .then(data => { setPatients((data.dossiers ?? []).map(mapDossier)); })
       .catch(() => {});
     // Documents depuis Supabase
-    fetch('/api/cabinet/documents')
+    sync.then(() => fetch('/api/cabinet/documents'))
       .then(r => r.ok ? r.json() : { documents: [] })
       .then(data => { setAllDocs((data.documents ?? []).map(mapDoc)); })
       .catch(() => {})
@@ -361,6 +362,7 @@ export default function DocumentationPage() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            reuseIfExists: true,
             patientNom:    newNom.trim(),
             patientPrenom: newPrenom.trim(),
             patientAge:    newAge,

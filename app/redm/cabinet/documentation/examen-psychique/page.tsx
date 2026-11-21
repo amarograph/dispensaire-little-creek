@@ -176,25 +176,9 @@ export default function ExamenPsychiquePage() {
   function setReponse(key: string, val: number) { setReponses(r => ({ ...r, [key]: val })); }
 
   /* ── Créer dossier patient (registre partagé du Cabinet, pas un stockage local) ── */
-  async function createPatientDossier(ex: Examen) {
-    try {
-      await fetch('/api/cabinet/dossiers', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          patientNom:    ex.nom,
-          patientPrenom: ex.prenom,
-          patientAge:    ex.age,
-          dateConsult:   ex.date,
-          type:          'Première consultation',
-          plainte:       `Examen psychique & moral — ${ex.fonction}${ex.county ? ' du comté de ' + ex.county : ''}`,
-          equilibreNerveux: ex.score < 41 ? 'III' : ex.score < 76 ? 'II' : 'I',
-          noteThérapeute:   `Score examen psychique : ${ex.score}/${MAX_SCORE} — Verdict : ${ex.verdict}\n\n${ex.conclusion}`,
-          traitement:       ex.recommandations,
-          statut:           'EN COURS',
-          confidentiel:     true,
-        }),
-      });
-    } catch {}
+  async function createPatientDossier() {
+    // Le serveur crée le dossier à partir de l'examen s'il n'existe pas encore (aucun doublon).
+    try { await fetch('/api/cabinet/reconcilier', { method: 'POST' }).catch(() => {}); } catch {}
   }
 
   /* ── Soumettre ── */
@@ -212,7 +196,7 @@ export default function ExamenPsychiquePage() {
     setView('result');
     const result = await upsertExam(examen);
     if (result) setArchives(result);
-    await createPatientDossier(examen);
+    await createPatientDossier();
   }
 
   function reset() {

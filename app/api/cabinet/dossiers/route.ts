@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
 import { requireCabinetActor } from '@/lib/redm-api-auth';
+import { cleNom } from '@/lib/cabinet-nom';
 
 // ── GET : liste tous les dossiers (du thérapeute connecté) ────────────────────
 export async function GET(req: NextRequest) {
@@ -42,6 +43,16 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const supabase = await createServiceClient();
+
+  // Création automatique depuis un document : si ce patient a déjà un dossier, on le réutilise.
+  if (body.reuseIfExists) {
+    const cle = cleNom(body.patientPrenom, body.patientNom);
+    if (cle) {
+      const { data: tous } = await supabase.from('cabinet_dossiers').select('*').order('created_at', { ascending: true });
+      const existant = (tous ?? []).find(d => cleNom(d.patient_prenom, d.patient_nom) === cle);
+      if (existant) return NextResponse.json({ dossier: existant, existant: true });
+    }
+  }
 
   const { data, error } = await supabase
     .from('cabinet_dossiers')

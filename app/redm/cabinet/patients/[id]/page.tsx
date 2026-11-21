@@ -5,6 +5,7 @@ import Emblem, { Ico } from '@/app/redm/_components/Emblem';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { RichEditor, RichContent, templateToRich, isRichEmpty, plainLength } from '@/app/redm/_components/RichDoc';
+import { cleNom } from '@/lib/cabinet-nom';
 
 const DISPLAY = "'Central Station', 'Georgia', serif";
 const BODY    = "'Cormorant Garamond', 'Georgia', serif";
@@ -27,6 +28,38 @@ interface Document {
   id: string; patientId: string; type: DocType;
   titre: string; contenu: string; date: string; createdAt: string;
 }
+
+/* Examens psychiques (registre du Cabinet) : rattachés au dossier par nom et prénom */
+interface ExamenPsy {
+  id: string; nom: string; prenom: string; fonction: string; county: string;
+  date: string; score: number; verdict: string;
+}
+
+/* Fiche modifiable (encadré de gauche) */
+interface Fiche {
+  patientNom: string; patientPrenom: string; patientAge: string; patientMetier: string;
+  type: string; statut: string; confidentiel: boolean;
+  plainte: string; antecedentsPersonnels: string; antecedentsFamiliaux: string; evenementsRecents: string;
+  equilibreNerveux: Equilibre; noteThérapeute: string; traitement: string; prochaine: string;
+}
+function ficheDe(d: Dossier): Fiche {
+  return {
+    patientNom: d.patientNom, patientPrenom: d.patientPrenom, patientAge: d.patientAge, patientMetier: d.patientMetier,
+    type: d.type, statut: d.statut, confidentiel: d.confidentiel,
+    plainte: d.plainte, antecedentsPersonnels: d.antecedentsPersonnels, antecedentsFamiliaux: d.antecedentsFamiliaux,
+    evenementsRecents: d.evenementsRecents, equilibreNerveux: d.equilibreNerveux,
+    noteThérapeute: d.noteThérapeute, traitement: d.traitement, prochaine: d.prochaine,
+  };
+}
+const TYPES_SEANCE = ['Première consultation', 'Suivi', 'Urgence', 'Hypnose', 'Thérapie du deuil', 'Conseil spirituel'];
+const METIERS = [
+  "Sherif East Wellster's", 'Sherif West Elizabeth', 'Maire', 'Marshall',
+  'Fermier/ière', 'Médecin', 'Sans emploi', 'Salonnier/ière', 'Employé',
+  'Patron/ne', 'Directeur/rice de Dispensaire', 'Tanneur',
+  'Préparateur/rice de commande', 'Palefrenier/ière', 'Tisseur/euse',
+  'Boucher/ère', 'Distilleur', 'Casino',
+];
+const VERDICT_COL: Record<string, string> = { 'APTE': '#4A8048', 'À SURVEILLER': '#D1B77C', 'INAPTE': '#DF9A88' };
 
 /* ── Types comptabilité (registre partagé, voir /api/comptabilite) ── */
 type StatutPaiement = 'PAYÉ' | 'EN ATTENTE' | 'ANNULÉ';
@@ -310,6 +343,11 @@ export default function PatientDetailPage() {
   const [factures,  setFactures]  = useState<Facture[]>([]);
   const [tarifs,    setTarifs]    = useState<Record<string, { nom: string; prix: number }>>({});
   const [hydrated,  setHydrated]  = useState(false);
+  const [allExams,  setAllExams]  = useState<ExamenPsy[]>([]);
+  const [fiche,       setFiche]       = useState<Fiche | null>(null);
+  const [ficheSaving, setFicheSaving] = useState(false);
+  const [ficheSaved,  setFicheSaved]  = useState(false);
+  const [ficheError,  setFicheError]  = useState('');
 
   useEffect(() => {
     fetch('/api/redm/tarifs')
@@ -338,6 +376,11 @@ export default function PatientDetailPage() {
   const [expandedDoc,  setExpandedDoc]   = useState<string | null>(null);
   const [certDoc,      setCertDoc]       = useState<Document | null>(null);
     const printRef    = useRef<HTMLDivElement>(null);
+
+  function majFiche(patch: Partial<Fiche>) {
+    setFiche(prev => prev ? { ...prev, ...patch } : prev);
+    setFicheSaved(false);
+  }
 
   /* Onglet actif */
   const [tab, setTab] = useState<'dossier' | 'documents' | 'facturation'>('dossier');
@@ -371,11 +414,17 @@ export default function PatientDetailPage() {
           createdAt:             String(row.created_at             ?? ''),
         };
         setDossier(d);
+        setFiche(ficheDe(d));
+        // Examens psychiques portant le même nom et prénom
+        fetch('/api/cabinet/examens-psychiques')
+          .then(r => r.ok ? r.json() : [])
+          .then(list => { if (Array.isArray(list)) setAllExams(list); })
+          .catch(() => {});
 
         // Charge les documents depuis Supabase
         setDocsLoading(true);
         setDocsError('');
-        fetch(`/api/cabinet/documents?patient_id=${encodeURIComponent(String(row.id))}`)
+        fetch(`/api/cabinet/documents?patient_id=${encodeURIComponent(String(row.id))}&meme_nom=1`)
           .then(async r => {
             if (!r.ok) {
               let msg = `Erreur ${r.status}`;
@@ -475,6 +524,27 @@ export default function PatientDetailPage() {
       setDocError(err.message ?? 'Impossible de sauvegarder le document.');
     } finally {
       setDocSaving(false);
+    }
+  }
+
+  async function saveFiche() {
+    if (!dossier || !fiche) return;
+    if (!fiche.patientNom.trim()) { setFicheError('Le nom du patient est requis.'); return; }
+    setFicheSaving(true); setFicheError(''); setFicheSaved(false);
+    try {
+      const r = await fetch('/api/cabinet/dossiers', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: dossier.id, ...fiche, patientNom: fiche.patientNom.trim(), patientPrenom: fiche.patientPrenom.trim() }),
+      });
+      if (!r.ok) { let m = `Erreur ${r.status}`; try { const e = await r.json(); m = e.error ?? m; } catch {} throw new Error(m); }
+      setDossier({ ...dossier, ...fiche, patientNom: fiche.patientNom.trim(), patientPrenom: fiche.patientPrenom.trim(), statut: fiche.statut as Statut, type: fiche.type });
+      setFicheSaved(true);
+      setTimeout(() => setFicheSaved(false), 2500);
+    } catch (err: any) {
+      setFicheError(err.message ?? 'Impossible d\'enregistrer le dossier.');
+    } finally {
+      setFicheSaving(false);
     }
   }
 
@@ -582,6 +652,9 @@ export default function PatientDetailPage() {
   );
 
   const col = STATUT_COL[dossier.statut];
+  const cleDossier = cleNom(dossier.patientPrenom, dossier.patientNom);
+  const exams = allExams.filter(e => cleDossier && cleNom(e.prenom, e.nom) === cleDossier);
+  const nbDocs = docs.length + exams.length;
   const eq  = dossier.equilibreNerveux ? EQ_INFO[dossier.equilibreNerveux] : null;
 
   return (
@@ -620,8 +693,8 @@ export default function PatientDetailPage() {
           </div>
           {/* Compteur docs */}
           <div style={{ textAlign: 'center', flexShrink: 0 }}>
-            <div style={{ fontFamily: DISPLAY, fontSize: 35, color: T.gold }}>{docs.length}</div>
-            <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em' }}>DOCUMENT{docs.length !== 1 ? 'S' : ''}</div>
+            <div style={{ fontFamily: DISPLAY, fontSize: 35, color: T.gold }}>{nbDocs}</div>
+            <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.1em' }}>DOCUMENT{nbDocs !== 1 ? 'S' : ''}</div>
           </div>
         </div>
       </div>
@@ -630,7 +703,7 @@ export default function PatientDetailPage() {
       <div style={{ display: 'flex', gap: 0, marginBottom: 22, borderBottom: `1px solid ${T.border}` }}>
         {([
           ['dossier',     'DOSSIER',     T.gold,    null],
-          ['documents',   'DOCUMENTS',   T.gold,    docs.length],
+          ['documents',   'DOCUMENTS',   T.gold,    nbDocs],
           ['facturation', 'FACTURATION', '#D1B77C', factures.length],
         ] as const).map(([key, label, col, cnt]) => {
           const on = tab === key;
@@ -645,33 +718,96 @@ export default function PatientDetailPage() {
       </div>
 
       {/* ══ ONGLET DOSSIER ══ */}
-      {tab === 'dossier' && (
-        <div>
-          {dossier.plainte && <Block icon="🗣" title="PLAINTE / MOTIF" color={T.gold}><InfoLine label="" value={dossier.plainte} /></Block>}
+      {tab === 'dossier' && fiche && (
+        <div style={{ display: 'flex', gap: 22, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+          {/* ── Encadré de gauche : compléter le dossier ── */}
+          <div style={{ flex: '0 0 400px', maxWidth: '100%', background: T.card, border: `1px solid ${T.border}`, borderLeft: `4px solid ${T.gold}` }}>
+            <div style={{ padding: '12px 20px', borderBottom: `1px solid ${T.border}`, background: 'rgba(209,183,124,0.08)', fontFamily: MONO, fontSize: 14, color: T.gold, letterSpacing: '0.14em' }}>
+              COMPLÉTER LE DOSSIER
+            </div>
+            <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div><label style={lbl}>PRÉNOM</label><input style={inp} value={fiche.patientPrenom} onChange={e => majFiche({ patientPrenom: e.target.value })} /></div>
+                <div><label style={lbl}>NOM *</label><input style={inp} value={fiche.patientNom} onChange={e => majFiche({ patientNom: e.target.value })} /></div>
+                <div><label style={lbl}>ÂGE</label><input style={inp} value={fiche.patientAge} onChange={e => majFiche({ patientAge: e.target.value })} /></div>
+                <div><label style={lbl}>MÉTIER</label>
+                  <select style={{ ...inp, cursor: 'pointer' }} value={fiche.patientMetier} onChange={e => majFiche({ patientMetier: e.target.value })}>
+                    <option value="">—</option>
+                    {fiche.patientMetier && !METIERS.includes(fiche.patientMetier) && <option value={fiche.patientMetier}>{fiche.patientMetier}</option>}
+                    {METIERS.map(m => <option key={m} value={m}>{m}</option>)}
+                  </select>
+                </div>
+                <div><label style={lbl}>TYPE DE SUIVI</label>
+                  <select style={{ ...inp, cursor: 'pointer' }} value={fiche.type} onChange={e => majFiche({ type: e.target.value })}>
+                    {!TYPES_SEANCE.includes(fiche.type) && <option value={fiche.type}>{fiche.type}</option>}
+                    {TYPES_SEANCE.map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div><label style={lbl}>STATUT</label>
+                  <select style={{ ...inp, cursor: 'pointer' }} value={fiche.statut} onChange={e => majFiche({ statut: e.target.value })}>
+                    {!['EN COURS', 'TERMINÉE', 'ABANDONNÉE'].includes(fiche.statut) && <option value={fiche.statut}>{fiche.statut}</option>}
+                    <option>EN COURS</option><option>TERMINÉE</option><option>ABANDONNÉE</option>
+                  </select>
+                </div>
+              </div>
+            <div><label style={lbl}>PLAINTE / MOTIF</label><textarea style={{ ...inp, resize: 'vertical', minHeight: 78, lineHeight: 1.6 }} value={fiche.plainte} onChange={e => majFiche({ plainte: e.target.value })} /></div>
+            <div><label style={lbl}>ANTÉCÉDENTS PERSONNELS</label><textarea style={{ ...inp, resize: 'vertical', minHeight: 78, lineHeight: 1.6 }} value={fiche.antecedentsPersonnels} onChange={e => majFiche({ antecedentsPersonnels: e.target.value })} /></div>
+            <div><label style={lbl}>ANTÉCÉDENTS FAMILIAUX</label><textarea style={{ ...inp, resize: 'vertical', minHeight: 78, lineHeight: 1.6 }} value={fiche.antecedentsFamiliaux} onChange={e => majFiche({ antecedentsFamiliaux: e.target.value })} /></div>
+            <div><label style={lbl}>ÉVÉNEMENTS RÉCENTS</label><textarea style={{ ...inp, resize: 'vertical', minHeight: 78, lineHeight: 1.6 }} value={fiche.evenementsRecents} onChange={e => majFiche({ evenementsRecents: e.target.value })} /></div>
+            <div><label style={lbl}>ÉQUILIBRE NERVEUX</label>
+              <select style={{ ...inp, cursor: 'pointer' }} value={fiche.equilibreNerveux} onChange={e => majFiche({ equilibreNerveux: e.target.value as Equilibre })}>
+                <option value="">— Non évalué</option>
+                <option value="I">Degré I — Léger</option><option value="II">Degré II — Modéré</option><option value="III">Degré III — Grave</option>
+              </select>
+            </div>
+            <div><label style={lbl}>NOTE DU THÉRAPEUTE</label><textarea style={{ ...inp, resize: 'vertical', minHeight: 104, lineHeight: 1.6 }} value={fiche.noteThérapeute} onChange={e => majFiche({ noteThérapeute: e.target.value })} /></div>
+            <div><label style={lbl}>TRAITEMENT / CONSEILS</label><textarea style={{ ...inp, resize: 'vertical', minHeight: 78, lineHeight: 1.6 }} value={fiche.traitement} onChange={e => majFiche({ traitement: e.target.value })} /></div>
+            <div><label style={lbl}>PROCHAINE SÉANCE</label><input style={inp} value={fiche.prochaine} onChange={e => majFiche({ prochaine: e.target.value })} /></div>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: MONO, fontSize: 14, color: T.muted, cursor: 'pointer' }}>
+                <input type="checkbox" checked={fiche.confidentiel} onChange={e => majFiche({ confidentiel: e.target.checked })} /> Dossier confidentiel
+              </label>
+              {ficheError && <div style={{ padding: '8px 14px', background: 'rgba(200,80,80,0.12)', border: '1px solid rgba(200,80,80,0.35)', color: '#DF9A88', fontFamily: MONO, fontSize: 14 }}>{ficheError}</div>}
+              <button onClick={saveFiche} disabled={ficheSaving}
+                style={{ width: '100%', fontFamily: MONO, fontSize: 15, letterSpacing: '0.14em', padding: '13px', cursor: ficheSaving ? 'wait' : 'pointer', background: ficheSaved ? 'rgba(74,96,72,0.25)' : 'rgba(209,183,124,0.20)', color: ficheSaved ? '#6A9A68' : T.gold, border: `2px solid ${ficheSaved ? 'rgba(74,96,72,0.5)' : 'rgba(209,183,124,0.55)'}` }}>
+                {ficheSaving ? '⟳ ENREGISTREMENT...' : ficheSaved ? '✔ ENREGISTRÉ' : '✔ ENREGISTRER LE DOSSIER'}
+              </button>
+            </div>
+          </div>
 
-          {(dossier.antecedentsPersonnels || dossier.antecedentsFamiliaux || dossier.evenementsRecents) && (
-            <Block icon="📜" title="INFORMATIONS" color="#786030">
-              <InfoLine label="ANTÉCÉDENTS PERSONNELS"  value={dossier.antecedentsPersonnels} />
-              <InfoLine label="ANTÉCÉDENTS FAMILIAUX"   value={dossier.antecedentsFamiliaux} />
-              <InfoLine label="ÉVÉNEMENTS RÉCENTS"      value={dossier.evenementsRecents} />
-            </Block>
+          {/* ── À droite : synthèse du dossier ── */}
+          <div style={{ flex: '1 1 420px', minWidth: 0 }}>
+
+            {dossier.plainte && <Block icon="🗣" title="PLAINTE / MOTIF" color={T.gold}><InfoLine label="" value={dossier.plainte} /></Block>}
+
+            {(dossier.antecedentsPersonnels || dossier.antecedentsFamiliaux || dossier.evenementsRecents) && (
+              <Block icon="📜" title="INFORMATIONS" color="#786030">
+                <InfoLine label="ANTÉCÉDENTS PERSONNELS"  value={dossier.antecedentsPersonnels} />
+                <InfoLine label="ANTÉCÉDENTS FAMILIAUX"   value={dossier.antecedentsFamiliaux} />
+                <InfoLine label="ÉVÉNEMENTS RÉCENTS"      value={dossier.evenementsRecents} />
+              </Block>
+            )}
+
+            {eq && (
+              <Block icon="⚖" title="ÉTAT DE L'ÉQUILIBRE NERVEUX" color={eq.col}>
+                <div style={{ fontFamily: DISPLAY, fontSize: 22, color: eq.col, marginBottom: 6 }}>{eq.label}</div>
+                <div style={{ fontFamily: BODY, fontSize: 17, color: T.muted, fontStyle: 'italic', lineHeight: 1.6 }}>{eq.desc}</div>
+              </Block>
+            )}
+
+            {dossier.noteThérapeute && <Block icon="✍" title="NOTE DU THÉRAPEUTE" color="#6B4A78"><InfoLine label="" value={dossier.noteThérapeute} /></Block>}
+
+            {(dossier.traitement || dossier.prochaine) && (
+              <Block icon="💊" title="TRAITEMENT & RECOMMANDATIONS" color="#A8B991">
+                <InfoLine label="PRESCRIPTIONS / CONSEILS" value={dossier.traitement} />
+                <InfoLine label="PROCHAINE SÉANCE"          value={dossier.prochaine} />
+              </Block>
+            )}
+          {!dossier.plainte && !dossier.antecedentsPersonnels && !dossier.antecedentsFamiliaux && !dossier.evenementsRecents && !eq && !dossier.noteThérapeute && !dossier.traitement && !dossier.prochaine && (
+            <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '48px 20px', textAlign: 'center', fontFamily: MONO, fontSize: 15, color: T.dim, letterSpacing: '0.12em', lineHeight: 1.8 }}>
+              Dossier encore vide — complétez la fiche à gauche puis enregistrez
+            </div>
           )}
-
-          {eq && (
-            <Block icon="⚖" title="ÉTAT DE L'ÉQUILIBRE NERVEUX" color={eq.col}>
-              <div style={{ fontFamily: DISPLAY, fontSize: 22, color: eq.col, marginBottom: 6 }}>{eq.label}</div>
-              <div style={{ fontFamily: BODY, fontSize: 17, color: T.muted, fontStyle: 'italic', lineHeight: 1.6 }}>{eq.desc}</div>
-            </Block>
-          )}
-
-          {dossier.noteThérapeute && <Block icon="✍" title="NOTE DU THÉRAPEUTE" color="#6B4A78"><InfoLine label="" value={dossier.noteThérapeute} /></Block>}
-
-          {(dossier.traitement || dossier.prochaine) && (
-            <Block icon="💊" title="TRAITEMENT & RECOMMANDATIONS" color="#A8B991">
-              <InfoLine label="PRESCRIPTIONS / CONSEILS" value={dossier.traitement} />
-              <InfoLine label="PROCHAINE SÉANCE"          value={dossier.prochaine} />
-            </Block>
-          )}
+          </div>
         </div>
       )}
 
@@ -691,7 +827,7 @@ export default function PatientDetailPage() {
               <button onClick={() => {
                 setDocsError('');
                 setDocsLoading(true);
-                fetch(`/api/cabinet/documents?patient_id=${encodeURIComponent(dossier.id)}`)
+                fetch(`/api/cabinet/documents?patient_id=${encodeURIComponent(dossier.id)}&meme_nom=1`)
                   .then(async r => {
                     if (!r.ok) { let m = `Erreur ${r.status}`; try { const e = await r.json(); m = e.error ?? m; } catch {} throw new Error(m); }
                     return r.json();
@@ -704,11 +840,30 @@ export default function PatientDetailPage() {
             </div>
           )}
 
+          {exams.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 10 }}>
+              {exams.map(ex => {
+                const vc = VERDICT_COL[ex.verdict] ?? T.gold;
+                return (
+                  <div key={ex.id} style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `3px solid #6B7ABB`, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+                    <div style={{ flex: 1, minWidth: 200 }}>
+                      <div style={{ fontFamily: DISPLAY, fontSize: 20, color: T.text }}>Examen psychique &amp; moral</div>
+                      <div style={{ fontFamily: MONO, fontSize: 14, color: T.dim, marginTop: 2 }}>{rpDisplay(ex.date)} · {ex.fonction}{ex.county ? ` · ${ex.county}` : ''} · score {ex.score}</div>
+                    </div>
+                    <span style={{ fontFamily: MONO, fontSize: 14, color: vc, background: vc + '18', border: `1px solid ${vc}40`, padding: '5px 14px' }}>{ex.verdict}</span>
+                    <button onClick={() => router.push(`/redm/cabinet/documentation/examen-psychique?id=${ex.id}&view=letter`)}
+                      style={{ fontFamily: MONO, fontSize: 14, padding: '6px 12px', cursor: 'pointer', background: 'rgba(107,122,187,0.12)', color: '#8899CC', border: '1px solid rgba(107,122,187,0.35)' }}><Emblem name="registre" size={20} inline />CERTIFICAT</button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
           {docsLoading ? (
             <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '32px 20px', textAlign: 'center', fontFamily: MONO, fontSize: 14, color: T.dim, letterSpacing: '0.10em' }}>
               Chargement des documents…
             </div>
-          ) : docs.length === 0 && !docsError ? (
+          ) : docs.length === 0 && exams.length === 0 && !docsError ? (
             <div style={{ background: T.card, border: `1px solid ${T.border}`, padding: '48px 20px', textAlign: 'center', fontFamily: MONO, fontSize: 15, color: T.dim, letterSpacing: '0.12em' }}>
               Aucun document — créez le premier document de ce dossier
             </div>

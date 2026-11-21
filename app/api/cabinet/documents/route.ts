@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
 import { requireCabinetActor } from '@/lib/redm-api-auth';
+import { cleNom } from '@/lib/cabinet-nom';
 
 // ── GET : documents (d'un patient ou tous) ────────────────────────────────────
 export async function GET(req: NextRequest) {
@@ -16,7 +17,16 @@ export async function GET(req: NextRequest) {
     .order('created_at', { ascending: false });
 
   if (patient_id) {
-    query = query.eq('patient_id', patient_id);
+    // meme_nom=1 : inclut aussi les documents des autres dossiers portant le même nom et prénom
+    let ids = [patient_id];
+    if (req.nextUrl.searchParams.get('meme_nom') === '1') {
+      const { data: tous } = await supabase.from('cabinet_dossiers').select('id, patient_nom, patient_prenom');
+      const moi = (tous ?? []).find(d => String(d.id) === patient_id);
+      const cle = moi ? cleNom(moi.patient_prenom, moi.patient_nom) : '';
+      if (cle) ids = (tous ?? []).filter(d => cleNom(d.patient_prenom, d.patient_nom) === cle).map(d => String(d.id));
+      if (!ids.includes(patient_id)) ids.push(patient_id);
+    }
+    query = query.in('patient_id', ids);
   }
 
   const { data, error } = await query;

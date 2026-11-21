@@ -92,7 +92,9 @@ export default function PatientsPage() {
   function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(''), 3000); }
 
   useEffect(() => {
-    fetch('/api/cabinet/dossiers')
+    // Crée d'abord les dossiers manquants (examens psychiques, documents sans dossier)
+    fetch('/api/cabinet/reconcilier', { method: 'POST' }).catch(() => {})
+      .then(() => fetch('/api/cabinet/dossiers'))
       .then(r => r.json())
       .then(d => {
         // Convertit snake_case Supabase → camelCase attendu par l'UI
