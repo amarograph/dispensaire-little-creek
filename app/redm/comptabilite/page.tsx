@@ -28,8 +28,10 @@ function categoriesToMap(categories: TarifCategory[]): Record<string, TarifCateg
   return m;
 }
 const PAYEURS: Payeur[] = ['Civil', 'Shérif', 'Mairie West Elizabeth'];
-/* Réductions applicables aux ventes et commandes : retirées du montant total, et donc aussi de la part qui va dans la caisse du dispensaire */
-const REDUCTIONS: { nom: string; pct: number }[] = [{ nom: 'Écurie de Little Creek', pct: 10 }];
+/* Réductions applicables aux ventes et commandes : retirées du montant total, et donc aussi de la part qui va dans la caisse du dispensaire.
+   La liste est définie par la Direction (Direction › Tarifs › Réductions). */
+type Reduction = { nom: string; pct: number; actif?: boolean };
+const REDUCTIONS_DEFAUT: Reduction[] = [{ nom: 'Écurie de Little Creek', pct: 10 }];
 
 interface PrestationItem { id: string; qty: number; nom?: string; prix?: number; }
 function normPrestations(raw: unknown): PrestationItem[] {
@@ -155,6 +157,7 @@ export default function CaisseComptabilitePage() {
   const [delConfirm,     setDelConfirm]     = useState<string | null>(null);
   const [typeFiltre,     setTypeFiltre]     = useState<TypeNote>('vente');
   const [tarifs,         setTarifs]         = useState<Record<string, TarifCategory>>(() => categoriesToMap(DEFAULT_CATEGORIES));
+  const [reductions,     setReductions]     = useState<Reduction[]>(REDUCTIONS_DEFAUT);
 
   const [oldLocalData, setOldLocalData] = useState<{ factures: Facture[]; archives: SemaineArchivee[] } | null>(null);
   const [migrating,    setMigrating]    = useState(false);
@@ -163,7 +166,7 @@ export default function CaisseComptabilitePage() {
   const todayMonday = getMondayOf(new Date());
   const currentKey  = mondayISO(todayMonday);
   const montantBrut = calcMontant(form.prestations, tarifs);
-  const reducPct    = typeFiltre === 'achat' ? 0 : (REDUCTIONS.find(r => r.nom === form.reduction)?.pct ?? 0);
+  const reducPct    = typeFiltre === 'achat' ? 0 : (reductions.find(r => r.nom === form.reduction)?.pct ?? 0);
   const facteurReduc = 1 - reducPct / 100;
   const montantAuto = Math.round(montantBrut * facteurReduc * 100) / 100;
   /* Part qui revient au dispensaire : % défini dans les tarifs (100 % pour une commande) ; rien pour un achat */
@@ -235,7 +238,7 @@ export default function CaisseComptabilitePage() {
   useEffect(() => {
     fetch('/api/redm/tarifs')
       .then(r => r.json())
-      .then(d => { if (d.categories) setTarifs(categoriesToMap(d.categories)); })
+      .then(d => { if (d.categories) setTarifs(categoriesToMap(d.categories)); if (Array.isArray(d.reductions)) setReductions(d.reductions); })
       .catch(() => {});
   }, []);
 
@@ -281,6 +284,8 @@ export default function CaisseComptabilitePage() {
     const pres = normPrestations(f.prestations);
     const t: TypeNote = f.estCommande ? 'commande' : (pres[0]?.prix != null || tarifs[pres[0]?.id]?.type === 'achat') ? 'achat' : 'vente';
     setTypeFiltre(t);
+    /* une réduction retirée ou désactivée depuis reste applicable à cette facture */
+    if (f.reduction && !reductions.some(r => r.nom === f.reduction && r.actif !== false)) setReductions(p => [...p.filter(r => r.nom !== f.reduction), { nom: f.reduction!, pct: f.reductionPct ?? 10 }]);
     setForm({ medecin: peutAssignerAutrui ? (f.medecin??defaultMedecin) : defaultMedecin, patientNom:f.patientNom, dateSeance:f.dateSeance, prestations:pres, payeur:f.payeur??'Civil', statut:f.statut, notes:f.notes, reduction: f.reduction ?? '' });
   }
   function resetForm() { setForm({ ...EMPTY_FORM, medecin:defaultMedecin, dateSeance:rpDate() }); setTypeFiltre('vente'); }
@@ -488,7 +493,7 @@ export default function CaisseComptabilitePage() {
                   <label style={lbl}>RÉDUCTION</label>
                   <select style={{...inp,cursor:'pointer'}} value={form.reduction} onChange={e=>setForm(f=>({...f,reduction:e.target.value}))}>
                     <option value="">Aucune</option>
-                    {REDUCTIONS.map(r => <option key={r.nom} value={r.nom}>{r.nom} (−{r.pct} %)</option>)}
+                    {reductions.filter(r => r.actif !== false).map(r => <option key={r.nom} value={r.nom}>{r.nom} (−{r.pct} %)</option>)}
                   </select>
                 </div>
               )}

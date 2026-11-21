@@ -16,6 +16,8 @@ const T = { bg: '#102B3B', card: '#183746', border: 'rgba(139,90,43,0.30)', gold
 type TypeCategorie = 'vente' | 'achat';
 interface TarifCategory { id: string; nom: string; type: TypeCategorie; prix: number; pctDispensaire: number; pctMedecin: number; ordre: number; commandeSeulement?: boolean; }
 
+interface Reduction { nom: string; pct: number; actif: boolean; }
+
 const TYPE_ICON: Record<TypeCategorie, string> = { vente: '🩺', achat: '🛒' };
 
 const inp: React.CSSProperties = { fontFamily: MONO, fontSize: 16, background: 'rgba(0,0,0,0.25)', border: `1px solid ${T.border}`, color: T.text, padding: '9px 14px', outline: 'none', boxSizing: 'border-box', width: '100%' };
@@ -36,6 +38,11 @@ export default function DirectionTarifsPage() {
   const [delConfirm, setDelConfirm] = useState<string | null>(null);
   const [creating,   setCreating]   = useState(false);
   const [actionError, setActionError] = useState('');
+  const [onglet,     setOnglet]     = useState<'tarifs' | 'reductions'>('tarifs');
+  const [reductions, setReductions] = useState<Reduction[]>([]);
+  const [redSaving,  setRedSaving]  = useState(false);
+  const [redSaved,   setRedSaved]   = useState(false);
+  const [redDirty,   setRedDirty]   = useState(false);
 
   useEffect(() => {
     fetch('/api/admin/redm-tarifs')
@@ -44,6 +51,40 @@ export default function DirectionTarifsPage() {
       .catch(() => setError('Accès refusé ou erreur serveur.'))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    fetch('/api/redm/tarifs')
+      .then(r => r.json())
+      .then(d => { if (Array.isArray(d.reductions)) setReductions(d.reductions); })
+      .catch(() => {});
+  }, []);
+
+  function majReduction(i: number, patch: Partial<Reduction>) {
+    setReductions(prev => prev.map((r, k) => k === i ? { ...r, ...patch } : r));
+    setRedDirty(true); setRedSaved(false);
+  }
+  function ajouterReduction() {
+    setReductions(prev => [...prev, { nom: '', pct: 10, actif: true }]);
+    setRedDirty(true); setRedSaved(false);
+  }
+  function retirerReduction(i: number) {
+    setReductions(prev => prev.filter((_, k) => k !== i));
+    setRedDirty(true); setRedSaved(false);
+  }
+  async function enregistrerReductions() {
+    const propres = reductions.map(r => ({ ...r, nom: r.nom.trim() })).filter(r => r.nom);
+    setRedSaving(true); setActionError('');
+    try {
+      const r = await fetch('/api/redm/tarifs', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reductions: propres }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) { setActionError(d.error ? `Erreur lors de l'enregistrement : ${d.error}` : "Erreur lors de l'enregistrement."); return; }
+      setReductions(d.reductions ?? propres);
+      setRedDirty(false); setRedSaved(true);
+      setTimeout(() => setRedSaved(false), 2500);
+    } catch {
+      setActionError("Erreur réseau lors de l'enregistrement.");
+    } finally { setRedSaving(false); }
+  }
 
   function update(id: string, patch: Partial<TarifCategory>) {
     setTarifs(prev => prev.map(t => t.id === id ? { ...t, ...patch } : t));
@@ -144,7 +185,7 @@ export default function DirectionTarifsPage() {
         </div>
         <h1 style={{ fontFamily:DISPLAY, fontSize:35, color:T.gold, margin:0 , display:'flex', alignItems:'center', gap:12 }}><Emblem name="argent" size={53} />Tarifs & Répartition</h1>
         <p style={{ fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.1em', marginTop:8 }}>
-          CATÉGORIES, PRIX ET PARTAGE DES HONORAIRES — ACCÈS DIRECTION UNIQUEMENT
+          CATÉGORIES, PRIX, PARTAGE DES HONORAIRES ET RÉDUCTIONS — ACCÈS DIRECTION UNIQUEMENT
         </p>
       </div>
 
@@ -156,6 +197,77 @@ export default function DirectionTarifsPage() {
       ) : loading ? (
         <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:48, textAlign:'center', fontFamily:MONO, fontSize: 14, color:T.dim, letterSpacing:'0.12em' }}>⟳ CHARGEMENT...</div>
       ) : (
+        <>
+        <div style={{ display:'flex', gap:8, marginBottom:20, flexWrap:'wrap' }}>
+          {([['tarifs', 'TARIFS & RÉPARTITION'], ['reductions', 'RÉDUCTIONS (%)']] as const).map(([k, label]) => (
+            <button key={k} onClick={() => setOnglet(k)}
+              style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'11px 24px', cursor:'pointer',
+                background: onglet === k ? 'rgba(209,183,124,0.18)' : 'transparent', color: onglet === k ? T.gold : T.muted,
+                border: `1px solid ${onglet === k ? T.gold : T.border}` }}>{label}</button>
+          ))}
+        </div>
+
+        {onglet === 'reductions' && (
+          <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+            {actionError && (
+              <div style={{ background:'rgba(139,64,64,0.12)', border:'1px solid rgba(139,64,64,0.35)', padding:'12px 16px', display:'flex', justifyContent:'space-between', alignItems:'center', gap:12, fontFamily:MONO, fontSize: 14, color:'#E88060' }}>
+                <span><Emblem name="alerte" size={21} inline />{actionError}</span>
+                <button onClick={()=>setActionError('')} style={{ fontFamily:MONO, fontSize: 14, background:'transparent', border:'none', color:T.muted, cursor:'pointer' }}>✕</button>
+              </div>
+            )}
+            <div style={{ fontFamily:MONO, fontSize:14, color:T.dim, lineHeight:1.7, letterSpacing:'0.04em' }}>
+              Ces réductions apparaissent dans la liste « RÉDUCTION » des ventes et commandes de la Comptabilité. Le pourcentage est retiré du total <b style={{ color:T.text }}>et</b> de la part du dispensaire. Une facture déjà créée garde le pourcentage appliqué à l’époque.
+            </div>
+
+            {reductions.length === 0 && (
+              <div style={{ background:T.card, border:`1px solid ${T.border}`, padding:28, textAlign:'center', fontFamily:MONO, fontSize:14, color:T.dim }}>Aucune réduction pour l’instant.</div>
+            )}
+
+            {reductions.map((r, i) => (
+              <div key={i} style={{ background:T.card, border:`1px solid ${T.border}`, borderLeft:`4px solid ${r.actif ? '#88AAC0' : T.border}`, padding:'18px 22px', opacity: r.actif ? 1 : 0.7 }}>
+                {canEdit ? (
+                  <div style={{ display:'flex', alignItems:'flex-end', gap:14, flexWrap:'wrap' }}>
+                    <div style={{ flex:'1 1 240px' }}>
+                      <label style={lbl}>NOM DE LA RÉDUCTION</label>
+                      <input style={{ ...inp, fontFamily:DISPLAY, fontSize:20, padding:'8px 12px' }} value={r.nom} onChange={e=>majReduction(i,{nom:e.target.value})} placeholder="ex : Écurie de Little Creek" />
+                    </div>
+                    <div style={{ width:130 }}>
+                      <label style={lbl}>RÉDUCTION (%)</label>
+                      <input type="number" step="0.5" min="0" max="100" style={inp} value={r.pct} onChange={e=>majReduction(i,{pct:Math.max(0,Math.min(100,Number(e.target.value)))})} />
+                    </div>
+                    <button onClick={()=>majReduction(i,{actif:!r.actif})} title={r.actif ? 'Cliquer pour la désactiver' : 'Cliquer pour l’activer'}
+                      style={{ fontFamily:MONO, fontSize:13, letterSpacing:'0.08em', padding:'11px 16px', cursor:'pointer', background: r.actif ? 'rgba(168,185,145,0.14)' : 'rgba(200,80,80,0.12)', color: r.actif ? '#A8B991' : '#DF9A88', border:`1px solid ${r.actif ? 'rgba(168,185,145,0.5)' : 'rgba(223,154,136,0.5)'}` }}>
+                      {r.actif ? '● ACTIVE' : '○ DÉSACTIVÉE'}
+                    </button>
+                    <button onClick={()=>retirerReduction(i)} style={{ fontFamily:MONO, fontSize:14, padding:'11px 16px', cursor:'pointer', background:'transparent', color:'#8B6060', border:'1px solid rgba(139,64,64,0.3)' }}>✕ SUPPRIMER</button>
+                  </div>
+                ) : (
+                  <div style={{ display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
+                    <span style={{ flex:'1 1 240px', fontFamily:DISPLAY, fontSize:20, color:T.text }}>{r.nom}</span>
+                    <span style={{ fontFamily:MONO, fontSize:16, color:'#88AAC0' }}>−{r.pct} %</span>
+                    <span style={{ fontFamily:MONO, fontSize:13, color: r.actif ? '#A8B991' : '#DF9A88' }}>{r.actif ? '● ACTIVE' : '○ DÉSACTIVÉE'}</span>
+                  </div>
+                )}
+                <div style={{ fontFamily:MONO, fontSize:14, color:T.dim, marginTop:12, letterSpacing:'0.05em' }}>
+                  Exemple : pour 100,00 $ → le client paie <span style={{ color:T.gold }}>{fmt$(100 - r.pct)}</span> · si le dispensaire garde 50 %, sa part passe de 50,00 $ à <span style={{ color:T.gold }}>{fmt$((100 - r.pct) / 2)}</span>
+                </div>
+              </div>
+            ))}
+
+            {canEdit && (
+              <div style={{ display:'flex', gap:12, flexWrap:'wrap', alignItems:'center' }}>
+                <button onClick={ajouterReduction} style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'13px 24px', cursor:'pointer', background:'transparent', color:T.gold, border:'1px dashed rgba(209,183,124,0.4)' }}>+ NOUVELLE RÉDUCTION</button>
+                <button onClick={enregistrerReductions} disabled={redSaving || (!redDirty && !redSaved)}
+                  style={{ fontFamily:MONO, fontSize:14, letterSpacing:'0.12em', padding:'13px 28px', cursor: redDirty ? 'pointer' : 'default', background: redSaved ? 'rgba(74,96,72,0.25)' : 'rgba(120,96,48,0.30)', color: redSaved ? '#6A9A68' : T.gold, border:`1px solid ${redSaved ? 'rgba(74,96,72,0.5)' : 'rgba(120,96,48,0.55)'}`, opacity: redDirty || redSaved ? 1 : 0.5 }}>
+                  {redSaving ? '⟳ ENREGISTREMENT...' : redSaved ? '✔ ENREGISTRÉ' : '✔ ENREGISTRER LES RÉDUCTIONS'}
+                </button>
+                {redDirty && <span style={{ fontFamily:MONO, fontSize:13, color:'#E8A04C' }}>Modifications non enregistrées</span>}
+              </div>
+            )}
+          </div>
+        )}
+
+        {onglet === 'tarifs' && (
         <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
           {actionError && (
             <div style={{ background:'rgba(139,64,64,0.12)', border:'1px solid rgba(139,64,64,0.35)', padding:'12px 16px', display:'flex', justifyContent:'space-between', alignItems:'center', gap:12, fontFamily:MONO, fontSize: 14, color:'#E88060' }}>
@@ -278,6 +390,8 @@ export default function DirectionTarifsPage() {
             </button>
           )}
         </div>
+        )}
+        </>
       )}
     </div>
   );
